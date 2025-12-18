@@ -1,25 +1,55 @@
 import { extendTheme } from '@chakra-ui/react'
 
-// Classic Minimalist Wedding Theme
-// Inspired by garden wedding aesthetics with refined, luxurious restraint
+// Elegant Wedding Theme: Mexican-Belgian Heritage at a French Chateau
+// Blends warm terracotta tones with European sophistication
 const theme = extendTheme({
   fonts: {
-    heading: "'Playfair Display', serif",
-    body: "'Cormorant Garamond', 'Georgia', serif",
+    // Cormorant Garamond: French elegance, excellent for body text
+    // Montserrat: Modern, clean readability for UI elements
+    heading: "'Cormorant Garamond', 'Georgia', serif",
+    body: "'Montserrat', 'Helvetica Neue', sans-serif",
+    accent: "'Playfair Display', serif", // For special decorative text
   },
   colors: {
+    // Core palette: "Terracotta Elegance"
     neutral: {
-      light: '#E3DFCE',      // Warm cream - primary background
-      dark: '#0B1937',       // Deep navy - primary text
-      muted: 'rgba(11,25,55,0.6)', // Muted text
+      light: '#F5F1EB',      // Warm cream - primary background
+      dark: '#2C3E50',       // Deep navy - primary text
+      muted: 'rgba(44,62,80,0.6)', // Muted text
+      white: '#FEFEFE',      // Pure white for cards
     },
     primary: {
-      soft: '#94B1C8',       // Dusty blue - subtle accents, borders
-      deep: '#4C050C',       // Burgundy wine - rich accent, hover states
+      soft: '#C4A77D',       // Warm gold - elegant accents, borders
+      deep: '#8B4513',       // Terracotta - rich accent, hover states
+      gold: '#D4A574',       // Burnt sienna - highlight color
     },
+    // Mexican heritage colors (use as accents)
+    mexican: {
+      marigold: '#E8963A',   // Cempasúchil orange
+      pink: '#9B2335',       // Mexican pink / magenta
+      talavera: '#1E4D8C',   // Traditional Talavera blue
+      terracotta: '#CB6843', // Clay pottery tone
+      dahlia: '#C71585',     // Dahlia flower pink
+    },
+    // Belgian heritage colors (subtle, sophisticated)
+    belgian: {
+      lace: '#FAF8F5',       // Bruges lace white
+      chocolate: '#4A3728',  // Belgian chocolate brown
+      gold: '#C9A227',       // Antique gold (Art Nouveau)
+      charcoal: '#2D3436',   // Flemish painting darks
+    },
+    // French chateau aesthetic
+    chateau: {
+      stone: '#D4CFC4',      // Limestone walls
+      lavender: '#9B8AA4',   // Provence lavender
+      champagne: '#F7E7CE',  // Champagne toast
+      garden: '#6B705C',     // Formal garden sage
+      wine: '#722F37',       // Burgundy wine
+    },
+    // Legacy aliases for backward compatibility
     accent: {
-      sage: '#BCCA25',       // Chartreuse - use VERY sparingly (maybe not at all)
-      gold: '#B8A77C',       // Muted gold for subtle highlights
+      sage: '#6B705C',
+      gold: '#C4A77D',
     },
   },
   styles: {
@@ -29,7 +59,7 @@ const theme = extendTheme({
         color: 'neutral.dark',
         WebkitFontSmoothing: 'antialiased',
         MozOsxFontSmoothing: 'grayscale',
-        fontSize: '18px',
+        fontSize: '16px',
         lineHeight: 1.7,
       },
       'a': {
@@ -49,10 +79,10 @@ const theme = extendTheme({
     Button: {
       baseStyle: {
         borderRadius: 'none',
-        fontFamily: "'Cormorant Garamond', serif",
+        fontFamily: "'Montserrat', sans-serif",
         fontWeight: 500,
         textTransform: 'uppercase',
-        letterSpacing: '0.2em',
+        letterSpacing: '0.15em',
         fontSize: 'sm',
       },
       variants: {
@@ -78,6 +108,13 @@ const theme = extendTheme({
           fontWeight: 400,
           _hover: { color: 'primary.deep', bg: 'transparent' },
         },
+        cultural: {
+          bg: 'mexican.marigold',
+          color: 'neutral.white',
+          px: 10,
+          py: 6,
+          _hover: { bg: 'mexican.terracotta' },
+        },
       },
       defaultProps: {
         variant: 'outline',
@@ -85,7 +122,7 @@ const theme = extendTheme({
     },
     Heading: {
       baseStyle: {
-        fontFamily: "'Playfair Display', serif",
+        fontFamily: "'Cormorant Garamond', serif",
         color: 'neutral.dark',
         fontWeight: 400,
         letterSpacing: '0.02em',
@@ -94,12 +131,12 @@ const theme = extendTheme({
     Text: {
       baseStyle: {
         color: 'neutral.dark',
-        fontFamily: "'Cormorant Garamond', serif",
+        fontFamily: "'Montserrat', sans-serif",
       },
     },
     FormLabel: {
       baseStyle: {
-        fontFamily: "'Cormorant Garamond', serif",
+        fontFamily: "'Montserrat', sans-serif",
         textTransform: 'uppercase',
         letterSpacing: '0.15em',
         fontSize: 'xs',
@@ -111,7 +148,7 @@ const theme = extendTheme({
     Input: {
       baseStyle: {
         field: {
-          fontFamily: "'Cormorant Garamond', serif",
+          fontFamily: "'Montserrat', sans-serif",
           fontSize: 'md',
         },
       },
@@ -140,7 +177,7 @@ const theme = extendTheme({
     Select: {
       baseStyle: {
         field: {
-          fontFamily: "'Cormorant Garamond', serif",
+          fontFamily: "'Montserrat', sans-serif",
           fontSize: 'md',
         },
       },
@@ -167,7 +204,7 @@ const theme = extendTheme({
     },
     Textarea: {
       baseStyle: {
-        fontFamily: "'Cormorant Garamond', serif",
+        fontFamily: "'Montserrat', sans-serif",
         fontSize: 'md',
       },
       variants: {
@@ -192,7 +229,7 @@ const theme = extendTheme({
     Checkbox: {
       baseStyle: {
         label: {
-          fontFamily: "'Cormorant Garamond', serif",
+          fontFamily: "'Montserrat', sans-serif",
         },
         control: {
           borderColor: 'primary.soft',
