@@ -22,9 +22,9 @@ export const features = {
  */
 export const weddingConfig = {
   couple: {
-    person1: 'Sofia',
-    person2: 'Lucas',
-    initials: 'S & L',
+    person1: 'Carolina',
+    person2: 'Thomas',
+    initials: 'C & T',
   },
   date: {
     full: new Date('2026-10-18T16:00:00'),
