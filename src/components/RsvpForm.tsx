@@ -244,6 +244,30 @@ export default function RsvpForm() {
       timestamp: Date.now(),
     }
 
+    // Submit to Netlify Forms (works when deployed to Netlify)
+    const formData = new FormData()
+    formData.append('form-name', 'rsvp')
+    formData.append('firstName', entry.firstName)
+    formData.append('email', entry.email)
+    formData.append('likelihood', entry.likelihood)
+    formData.append('events', JSON.stringify(entry.events))
+    formData.append('accommodation', entry.accommodation || '')
+    formData.append('travelPlan', entry.travelPlan || '')
+    formData.append('guests', JSON.stringify(entry.guests))
+    formData.append('dietary', entry.dietary || '')
+    formData.append('songRequest', entry.songRequest || '')
+    formData.append('franceTips', String(entry.franceTips || false))
+    formData.append('additionalNotes', entry.additionalNotes || '')
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
+    }).catch(() => {
+      // Silently fail for local development - localStorage backup below
+    })
+
+    // Also save to localStorage (backup + local dev)
     if (existingIndex >= 0) {
       list[existingIndex] = { ...list[existingIndex], ...entry }
       saveRsvps(list)
@@ -297,10 +321,27 @@ export default function RsvpForm() {
 
         <Box
           as="form"
+          name="rsvp"
+          method="POST"
+          data-netlify="true"
           onSubmit={handleSubmit}
           bg="neutral.light"
           p={[8, 12]}
         >
+          {/* Hidden field for Netlify Forms */}
+          <input type="hidden" name="form-name" value="rsvp" />
+          {/* Hidden fields for Netlify to detect form structure at build time */}
+          <input type="hidden" name="firstName" />
+          <input type="hidden" name="email" />
+          <input type="hidden" name="likelihood" />
+          <input type="hidden" name="events" />
+          <input type="hidden" name="accommodation" />
+          <input type="hidden" name="travelPlan" />
+          <input type="hidden" name="guests" />
+          <input type="hidden" name="dietary" />
+          <input type="hidden" name="songRequest" />
+          <input type="hidden" name="franceTips" />
+          <input type="hidden" name="additionalNotes" />
           <Stack spacing={8}>
             <FormControl isInvalid={!!errors.firstName}>
               <FormLabel>Your Name</FormLabel>
