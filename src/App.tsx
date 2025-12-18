@@ -26,6 +26,7 @@ import LanguageSwitcher from './components/LanguageSwitcher'
 import Hero from './components/Hero'
 import Timeline from './components/Timeline'
 import Countdown from './components/Countdown'
+import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { features } from './config'
 
 // Elegant thin decorative divider - classic minimalist style
@@ -157,26 +158,28 @@ export default function App() {
           <Container maxW="container.lg">
             <VStack spacing={16}>
               {/* Section Header */}
-              <VStack spacing={4} textAlign="center" maxW="600px">
-                <Text 
-                  fontSize="xs" 
-                  textTransform="uppercase" 
-                  letterSpacing="0.35em" 
-                  color="primary.soft"
-                  fontWeight="500"
-                >
-                  {t('story.label')}
-                </Text>
-                <Heading 
-                  as="h2" 
-                  fontFamily="heading" 
-                  fontSize={["3xl", "4xl"]} 
-                  fontWeight="400"
-                >
-                  {t('story.title')}
-                </Heading>
-                <ElegantDivider my={2} />
-              </VStack>
+              <ScrollReveal>
+                <VStack spacing={4} textAlign="center" maxW="600px">
+                  <Text 
+                    fontSize="xs" 
+                    textTransform="uppercase" 
+                    letterSpacing="0.35em" 
+                    color="primary.soft"
+                    fontWeight="500"
+                  >
+                    {t('story.label')}
+                  </Text>
+                  <Heading 
+                    as="h2" 
+                    fontFamily="heading" 
+                    fontSize={["3xl", "4xl"]} 
+                    fontWeight="400"
+                  >
+                    {t('story.title')}
+                  </Heading>
+                  <ElegantDivider my={2} />
+                </VStack>
+              </ScrollReveal>
               
               {/* Story Content - Elegant Layout */}
               <Flex 
@@ -185,7 +188,7 @@ export default function App() {
                 align="center"
                 maxW="1000px"
               >
-                <Box flex={1} maxW={["100%", "100%", "450px"]}>
+                <ScrollReveal variants={fadeInLeft} flex={1} maxW={["100%", "100%", "450px"]}>
                   <Image 
                     src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop" 
                     alt="Sofia and Lucas" 
@@ -193,24 +196,26 @@ export default function App() {
                     h={["300px", "400px", "500px"]}
                     objectFit="cover"
                   />
-                </Box>
-                <VStack flex={1} align={["center", "center", "flex-start"]} spacing={6} textAlign={["center", "center", "left"]}>
-                  <Text fontSize="lg" lineHeight="1.9">
-                    {t('story.paragraph1')}
-                  </Text>
-                  <Text fontSize="lg" lineHeight="1.9">
-                    {t('story.paragraph2')}
-                  </Text>
-                  <Text 
-                    fontFamily="heading" 
-                    fontStyle="italic" 
-                    fontSize="xl"
-                    color="primary.deep" 
-                    mt={4}
-                  >
-                    "{t('story.quote')}"
-                  </Text>
-                </VStack>
+                </ScrollReveal>
+                <ScrollReveal variants={fadeInRight} flex={1}>
+                  <VStack align={["center", "center", "flex-start"]} spacing={6} textAlign={["center", "center", "left"]}>
+                    <Text fontSize="lg" lineHeight="1.9">
+                      {t('story.paragraph1')}
+                    </Text>
+                    <Text fontSize="lg" lineHeight="1.9">
+                      {t('story.paragraph2')}
+                    </Text>
+                    <Text 
+                      fontFamily="heading" 
+                      fontStyle="italic" 
+                      fontSize="xl"
+                      color="primary.deep" 
+                      mt={4}
+                    >
+                      "{t('story.quote')}"
+                    </Text>
+                  </VStack>
+                </ScrollReveal>
               </Flex>
             </VStack>
           </Container>
@@ -224,132 +229,145 @@ export default function App() {
           <Container maxW="container.lg">
             <VStack spacing={16}>
               {/* Section Header */}
-              <VStack spacing={4} textAlign="center">
-                <Text 
-                  fontSize="xs" 
-                  textTransform="uppercase" 
-                  letterSpacing="0.35em" 
-                  color="primary.soft"
-                  fontWeight="500"
-                >
-                  {t('details.label')}
-                </Text>
-                <Heading 
-                  as="h2" 
-                  fontFamily="heading" 
-                  fontSize={["3xl", "4xl"]} 
-                  fontWeight="400"
-                >
-                  {t('details.title')}
-                </Heading>
-                <ElegantDivider my={2} />
-              </VStack>
+              <ScrollReveal>
+                <VStack spacing={4} textAlign="center">
+                  <Text 
+                    fontSize="xs" 
+                    textTransform="uppercase" 
+                    letterSpacing="0.35em" 
+                    color="primary.soft"
+                    fontWeight="500"
+                  >
+                    {t('details.label')}
+                  </Text>
+                  <Heading 
+                    as="h2" 
+                    fontFamily="heading" 
+                    fontSize={["3xl", "4xl"]} 
+                    fontWeight="400"
+                  >
+                    {t('details.title')}
+                  </Heading>
+                  <ElegantDivider my={2} />
+                </VStack>
+              </ScrollReveal>
 
               {/* Event Cards - Refined Minimal Design */}
-              <SimpleGrid columns={[1, 1, 3]} spacing={8} w="full" maxW="900px">
+              <StaggerContainer as={SimpleGrid} columns={[1, 1, 3]} spacing={8} w="full" maxW="900px">
                 {/* Friday */}
-                <VStack 
-                  p={10} 
-                  bg="white"
-                  textAlign="center"
-                  spacing={4}
-                  borderWidth="1px"
-                  borderColor="primary.soft"
-                >
-                  <Text 
-                    fontSize="xs" 
-                    textTransform="uppercase" 
-                    letterSpacing="0.3em" 
-                    color="primary.soft"
-                    fontWeight="500"
+                <StaggerItem>
+                  <VStack 
+                    p={10} 
+                    bg="white"
+                    textAlign="center"
+                    spacing={4}
+                    borderWidth="1px"
+                    borderColor="primary.soft"
+                    h="full"
                   >
-                    {t('details.friday')}
-                  </Text>
-                  <Heading 
-                    as="h3" 
-                    fontFamily="heading" 
-                    fontSize="xl" 
-                    fontWeight="400"
-                  >
-                    {t('details.welcomeDinner')}
-                  </Heading>
-                  <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
-                  <Text fontSize="sm" color="neutral.dark">{t('details.date.friday')}</Text>
-                  <Text fontSize="sm" color="neutral.muted">{t('details.time.dinner')}</Text>
-                </VStack>
+                    <Text 
+                      fontSize="xs" 
+                      textTransform="uppercase" 
+                      letterSpacing="0.3em" 
+                      color="primary.soft"
+                      fontWeight="500"
+                    >
+                      {t('details.friday')}
+                    </Text>
+                    <Heading 
+                      as="h3" 
+                      fontFamily="heading" 
+                      fontSize="xl" 
+                      fontWeight="400"
+                    >
+                      {t('details.welcomeDinner')}
+                    </Heading>
+                    <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
+                    <Text fontSize="sm" color="neutral.dark">{t('details.date.friday')}</Text>
+                    <Text fontSize="sm" color="neutral.muted">{t('details.time.dinner')}</Text>
+                  </VStack>
+                </StaggerItem>
 
                 {/* Saturday - Featured */}
-                <VStack 
-                  p={10} 
-                  bg="neutral.dark"
-                  textAlign="center"
-                  spacing={4}
-                >
-                  <Text 
-                    fontSize="xs" 
-                    textTransform="uppercase" 
-                    letterSpacing="0.3em" 
-                    color="primary.soft"
-                    fontWeight="500"
+                <StaggerItem>
+                  <VStack 
+                    p={10} 
+                    bg="neutral.dark"
+                    textAlign="center"
+                    spacing={4}
+                    h="full"
                   >
-                    {t('details.saturday')}
-                  </Text>
-                  <Heading 
-                    as="h3" 
-                    fontFamily="heading" 
-                    fontSize="xl" 
-                    fontWeight="400"
-                    color="neutral.light"
-                  >
-                    {t('details.theWedding')}
-                  </Heading>
-                  <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
-                  <Text fontSize="sm" color="neutral.light">{t('details.date.saturday')}</Text>
-                  <Text fontSize="sm" color="primary.soft">{t('details.time.ceremony')}</Text>
-                  <Text fontSize="sm" color="primary.soft">{t('details.time.reception')}</Text>
-                </VStack>
+                    <Text 
+                      fontSize="xs" 
+                      textTransform="uppercase" 
+                      letterSpacing="0.3em" 
+                      color="primary.soft"
+                      fontWeight="500"
+                    >
+                      {t('details.saturday')}
+                    </Text>
+                    <Heading 
+                      as="h3" 
+                      fontFamily="heading" 
+                      fontSize="xl" 
+                      fontWeight="400"
+                      color="neutral.light"
+                    >
+                      {t('details.theWedding')}
+                    </Heading>
+                    <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
+                    <Text fontSize="sm" color="neutral.light">{t('details.date.saturday')}</Text>
+                    <Text fontSize="sm" color="primary.soft">{t('details.time.ceremony')}</Text>
+                    <Text fontSize="sm" color="primary.soft">{t('details.time.reception')}</Text>
+                  </VStack>
+                </StaggerItem>
 
                 {/* Sunday */}
-                <VStack 
-                  p={10} 
-                  bg="white"
-                  textAlign="center"
-                  spacing={4}
-                  borderWidth="1px"
-                  borderColor="primary.soft"
-                >
-                  <Text 
-                    fontSize="xs" 
-                    textTransform="uppercase" 
-                    letterSpacing="0.3em" 
-                    color="primary.soft"
-                    fontWeight="500"
+                <StaggerItem>
+                  <VStack 
+                    p={10} 
+                    bg="white"
+                    textAlign="center"
+                    spacing={4}
+                    borderWidth="1px"
+                    borderColor="primary.soft"
+                    h="full"
                   >
-                    {t('details.sunday')}
-                  </Text>
-                  <Heading 
-                    as="h3" 
-                    fontFamily="heading" 
-                    fontSize="xl" 
-                    fontWeight="400"
-                  >
-                    {t('details.farewellBrunch')}
-                  </Heading>
-                  <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
-                  <Text fontSize="sm" color="neutral.dark">{t('details.date.sunday')}</Text>
-                  <Text fontSize="sm" color="neutral.muted">{t('details.time.brunch')}</Text>
-                </VStack>
-              </SimpleGrid>
+                    <Text 
+                      fontSize="xs" 
+                      textTransform="uppercase" 
+                      letterSpacing="0.3em" 
+                      color="primary.soft"
+                      fontWeight="500"
+                    >
+                      {t('details.sunday')}
+                    </Text>
+                    <Heading 
+                      as="h3" 
+                      fontFamily="heading" 
+                      fontSize="xl" 
+                      fontWeight="400"
+                    >
+                      {t('details.farewellBrunch')}
+                    </Heading>
+                    <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
+                    <Text fontSize="sm" color="neutral.dark">{t('details.date.sunday')}</Text>
+                    <Text fontSize="sm" color="neutral.muted">{t('details.time.brunch')}</Text>
+                  </VStack>
+                </StaggerItem>
+              </StaggerContainer>
 
               {/* Venue Info */}
-              <VStack spacing={2} textAlign="center" pt={8}>
-                <Text fontSize="sm" textTransform="uppercase" letterSpacing="0.2em" color="neutral.dark">
-                  {t('details.venueName')}
-                </Text>
-                <Text fontSize="sm" color="neutral.muted" fontStyle="italic">
-                  {t('details.venueAddress')}
-                </Text>
-              </VStack>
+              <ScrollReveal>
+                <VStack spacing={2} textAlign="center" pt={8}>
+                  <Text fontSize="sm" textTransform="uppercase" letterSpacing="0.2em" color="neutral.dark">
+                    {t('details.venueName')}
+                  </Text>
+                  <Text fontSize="sm" color="neutral.muted" fontStyle="italic">
+                    {t('details.venueAddress')}
+                  </Text>
+                </VStack>
+              </ScrollReveal>
             </VStack>
           </Container>
         </Box>
@@ -357,7 +375,9 @@ export default function App() {
         {/* RSVP Section */}
         <Box id="rsvp" py={[20, 28]} bg="white">
           <Container maxW="container.lg">
-            <RsvpForm />
+            <ScrollReveal variants={scaleIn}>
+              <RsvpForm />
+            </ScrollReveal>
           </Container>
         </Box>
       </Box>
@@ -370,27 +390,29 @@ export default function App() {
         bg="neutral.light"
       >
         <Container maxW="container.lg">
-          <VStack spacing={6}>
-            <Divider borderColor="primary.soft" w="80px" opacity={0.5} />
-            <Heading 
-              fontFamily="heading" 
-              fontSize="2xl" 
-              fontWeight="400" 
-              letterSpacing="0.1em"
-            >
-              {t('header.initials')}
-            </Heading>
-            <Text 
-              fontSize="sm" 
-              letterSpacing="0.15em"
-              textTransform="uppercase"
-            >
-              {t('footer.date')}
-            </Text>
-            <Text fontSize="xs" color="neutral.muted" mt={4}>
-              {t('footer.madeWith')}
-            </Text>
-          </VStack>
+          <ScrollReveal>
+            <VStack spacing={6}>
+              <Divider borderColor="primary.soft" w="80px" opacity={0.5} />
+              <Heading 
+                fontFamily="heading" 
+                fontSize="2xl" 
+                fontWeight="400" 
+                letterSpacing="0.1em"
+              >
+                {t('header.initials')}
+              </Heading>
+              <Text 
+                fontSize="sm" 
+                letterSpacing="0.15em"
+                textTransform="uppercase"
+              >
+                {t('footer.date')}
+              </Text>
+              <Text fontSize="xs" color="neutral.muted" mt={4}>
+                {t('footer.madeWith')}
+              </Text>
+            </VStack>
+          </ScrollReveal>
         </Container>
       </Box>
     </Box>

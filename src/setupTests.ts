@@ -51,6 +51,17 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   disconnect: jest.fn(),
 }))
 
+// Mock IntersectionObserver for Framer Motion scroll animations
+global.IntersectionObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+  root: null,
+  rootMargin: '',
+  thresholds: [],
+  takeRecords: jest.fn(() => []),
+}))
+
 // Mock fetch for Netlify Forms (returns a resolved promise)
 global.fetch = jest.fn(() =>
   Promise.resolve({
