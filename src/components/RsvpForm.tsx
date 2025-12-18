@@ -114,8 +114,8 @@ export default function RsvpForm() {
   function addGuest() {
     setGuests(prev => {
       const next = [...prev, { name: '' }]
-      // validate guests immediately
-      setTimeout(() => validateField('guests'), 0)
+      // validate guests immediately with new array
+      setTimeout(() => validateGuests(next), 0)
       return next
     })
   }
@@ -129,7 +129,7 @@ export default function RsvpForm() {
   function updateGuest(index: number, fields: Partial<Guest>) {
     setGuests(prev => {
       const next = prev.map((g, i) => (i === index ? { ...g, ...fields } : g))
-      setTimeout(() => validateField('guests'), 0)
+      setTimeout(() => validateGuests(next), 0)
       return next
     })
   }
@@ -137,7 +137,7 @@ export default function RsvpForm() {
   function removeGuest(index: number) {
     setGuests(prev => {
       const next = prev.filter((_, i) => i !== index)
-      setTimeout(() => validateField('guests'), 0)
+      setTimeout(() => validateGuests(next), 0)
       return next
     })
   }
@@ -202,6 +202,17 @@ export default function RsvpForm() {
     }
     setErrors(copy)
     return copy
+  }
+
+  // Validate guests with explicit array (to avoid stale closure)
+  function validateGuests(guestList: Guest[]) {
+    const copy = { ...errors }
+    if (guestList.length > 0 && guestList.some(g => !g.name.trim())) {
+      copy.guests = t('rsvp.validation.guestNameRequired')
+    } else {
+      delete copy.guests
+    }
+    setErrors(copy)
   }
 
   useEffect(() => {
