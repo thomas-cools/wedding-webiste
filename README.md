@@ -1,1 +1,1 @@
-# wedding-webiste
+# wedding-website
