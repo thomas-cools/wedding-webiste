@@ -147,6 +147,15 @@
     "date": "18 Octobre 2026",
     "madeWith": "Fait avec amour à Bruxelles & Mexico"
   },
+  "countdown": {
+    "label": "À Noter",
+    "title": "Avant le Grand Jour",
+    "celebrated": "Nous Sommes Mariés !",
+    "days": "Jours",
+    "hours": "Heures",
+    "minutes": "Minutes",
+    "seconds": "Secondes"
+  },
   "language": {
     "select": "Langue"
   }

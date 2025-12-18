@@ -147,6 +147,15 @@
     "date": "October 18, 2026",
     "madeWith": "Made with love in Brussels & Mexico City"
   },
+  "countdown": {
+    "label": "Save the Date",
+    "title": "Until We Say I Do",
+    "celebrated": "We're Married!",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
+  },
   "language": {
     "select": "Language"
   }

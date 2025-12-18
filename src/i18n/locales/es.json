@@ -147,6 +147,15 @@
     "date": "18 de Octubre, 2026",
     "madeWith": "Hecho con amor en Bruselas y Ciudad de México"
   },
+  "countdown": {
+    "label": "Reserva la Fecha",
+    "title": "Hasta Que Digamos Sí",
+    "celebrated": "¡Nos Casamos!",
+    "days": "Días",
+    "hours": "Horas",
+    "minutes": "Minutos",
+    "seconds": "Segundos"
+  },
   "language": {
     "select": "Idioma"
   }
