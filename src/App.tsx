@@ -12,7 +12,15 @@ import {
   HStack,
   Divider,
   SimpleGrid,
+  IconButton,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerBody,
+  useDisclosure,
 } from '@chakra-ui/react'
+import { HamburgerIcon } from '@chakra-ui/icons'
 import RsvpForm from './components/RsvpForm'
 import LanguageSwitcher from './components/LanguageSwitcher'
 import Hero from './components/Hero'
@@ -28,13 +36,14 @@ const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) =
 
 export default function App() {
   const { t } = useTranslation()
+  const { isOpen, onOpen, onClose } = useDisclosure()
   
   return (
     <Box minH="100vh" bg="neutral.light">
       {/* Minimal Elegant Header */}
       <Box 
         as="header" 
-        py={6} 
+        py={[4, 6]} 
         position="fixed" 
         top={0} 
         left={0} 
@@ -44,18 +53,19 @@ export default function App() {
         borderBottom="1px solid"
         borderColor="primary.soft"
       >
-        <Container maxW="container.xl">
+        <Container maxW="container.xl" px={[4, 6, 8]}>
           <Flex justify="space-between" align="center">
             <Text 
               fontFamily="heading" 
-              fontSize="lg" 
+              fontSize={["md", "lg"]}
               fontWeight="400" 
               letterSpacing="0.15em" 
               color="neutral.dark"
             >
               {t('header.initials')}
             </Text>
-            <HStack spacing={[4, 6, 10]}>
+            <HStack spacing={[2, 4, 10]}>
+              {/* Desktop Navigation */}
               <HStack spacing={10} display={["none", "none", "flex"]}>
                 <Button as="a" href="#story" variant="ghost" size="sm">
                   {t('header.ourStory')}
@@ -68,10 +78,71 @@ export default function App() {
                 </Button>
               </HStack>
               <LanguageSwitcher />
+              {/* Mobile Hamburger Menu */}
+              <IconButton
+                aria-label="Open menu"
+                icon={<HamburgerIcon />}
+                variant="ghost"
+                display={["flex", "flex", "none"]}
+                onClick={onOpen}
+                size="sm"
+              />
             </HStack>
           </Flex>
         </Container>
       </Box>
+
+      {/* Mobile Navigation Drawer */}
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent bg="neutral.light">
+          <DrawerCloseButton />
+          <DrawerBody pt={16}>
+            <VStack spacing={6} align="stretch">
+              <Button 
+                as="a" 
+                href="#story" 
+                variant="ghost" 
+                size="lg" 
+                justifyContent="flex-start"
+                onClick={onClose}
+              >
+                {t('header.ourStory')}
+              </Button>
+              <Button 
+                as="a" 
+                href="#details" 
+                variant="ghost" 
+                size="lg" 
+                justifyContent="flex-start"
+                onClick={onClose}
+              >
+                {t('header.details')}
+              </Button>
+              <Button 
+                as="a" 
+                href="#rsvp" 
+                variant="ghost" 
+                size="lg" 
+                justifyContent="flex-start"
+                onClick={onClose}
+              >
+                {t('header.rsvp')}
+              </Button>
+              <Divider borderColor="primary.soft" />
+              <Button
+                as="a"
+                href="#rsvp"
+                variant="primary"
+                size="lg"
+                onClick={onClose}
+              >
+                {t('hero.respond')}
+              </Button>
+            </VStack>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
 
       <Box as="main">
         {/* Hero Section */}

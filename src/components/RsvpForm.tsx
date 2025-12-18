@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
   Box,
   Stack,
+  Flex,
   FormControl,
   FormLabel,
   Input,
@@ -301,9 +302,9 @@ export default function RsvpForm() {
 
   return (
     <>
-      <Box as="section" py={4} maxW="container.sm" mx="auto">
+      <Box as="section" py={4} maxW="container.sm" mx="auto" px={[4, 0]}>
         {/* Section Header */}
-        <Box textAlign="center" mb={12}>
+        <Box textAlign="center" mb={[8, 12]}>
           <Text 
             fontSize="xs" 
             textTransform="uppercase" 
@@ -317,7 +318,7 @@ export default function RsvpForm() {
           <Heading 
             as="h2" 
             fontFamily="heading"
-            fontSize={["3xl", "4xl"]}
+            fontSize={["2xl", "3xl", "4xl"]}
             fontWeight="400"
             mb={4}
           >
@@ -326,7 +327,7 @@ export default function RsvpForm() {
           <Box my={6}>
             <Box as="hr" borderColor="primary.soft" w="120px" mx="auto" opacity={0.5} />
           </Box>
-          <Text color="neutral.dark" fontSize="md" maxW="500px" mx="auto" lineHeight="1.8">
+          <Text color="neutral.dark" fontSize={["sm", "md"]} maxW="500px" mx="auto" lineHeight="1.8" px={[2, 0]}>
             {t('rsvp.description')}
           </Text>
         </Box>
@@ -338,7 +339,7 @@ export default function RsvpForm() {
           data-netlify="true"
           onSubmit={handleSubmit}
           bg="neutral.light"
-          p={[8, 12]}
+          p={[5, 8, 12]}
         >
           {/* Hidden field for Netlify Forms */}
           <input type="hidden" name="form-name" value="rsvp" />
@@ -503,21 +504,42 @@ export default function RsvpForm() {
               <FormLabel>{t('rsvp.form.additionalGuests')}</FormLabel>
               <Stack spacing={4}>
                 {guests.map((g, i) => (
-                  <HStack key={i} spacing={4}>
-                    <Input 
-                      value={g.name} 
-                      onChange={e => updateGuest(i, { name: e.target.value })} 
-                      placeholder={t('rsvp.form.guestName', { number: i + 1 })} 
-                      flex={2}
-                    />
-                    <Input 
-                      value={g.dietary || ''} 
-                      onChange={e => updateGuest(i, { dietary: e.target.value })} 
-                      placeholder={t('rsvp.form.guestDietary')} 
-                      flex={1}
-                    />
-                    <Button size="sm" variant="ghost" onClick={() => removeGuest(i)}>{t('rsvp.form.remove')}</Button>
-                  </HStack>
+                  <Box 
+                    key={i} 
+                    p={4} 
+                    bg="white" 
+                    borderWidth="1px" 
+                    borderColor="primary.soft"
+                    borderRadius="md"
+                  >
+                    <Stack spacing={3}>
+                      <Input 
+                        value={g.name} 
+                        onChange={e => updateGuest(i, { name: e.target.value })} 
+                        placeholder={t('rsvp.form.guestName', { number: i + 1 })} 
+                      />
+                      <Flex 
+                        direction={["column", "row"]} 
+                        gap={3}
+                      >
+                        <Input 
+                          value={g.dietary || ''} 
+                          onChange={e => updateGuest(i, { dietary: e.target.value })} 
+                          placeholder={t('rsvp.form.guestDietary')} 
+                          flex={1}
+                        />
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          onClick={() => removeGuest(i)}
+                          colorScheme="red"
+                          alignSelf={["stretch", "center"]}
+                        >
+                          {t('rsvp.form.remove')}
+                        </Button>
+                      </Flex>
+                    </Stack>
+                  </Box>
                 ))}
 
                 <Button onClick={addGuest} variant="ghost" size="sm" alignSelf="flex-start">
