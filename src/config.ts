@@ -27,13 +27,13 @@ export const weddingConfig = {
     initials: 'C & T',
   },
   date: {
-    full: new Date('2026-10-18T16:00:00'),
-    display: 'October 18, 2026',
+    full: new Date('2026-08-26T16:00:00'),
+    display: 'August 26, 2026',
   },
   venue: {
     name: 'Château de Varennes',
     location: 'Burgundy, France',
     address: '21320 Pouilly-en-Auxois, Burgundy, France',
   },
-  rsvpDeadline: 'August 1, 2026',
+  rsvpDeadline: 'June 1, 2026',
 }

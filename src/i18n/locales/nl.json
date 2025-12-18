@@ -10,7 +10,7 @@
     "bride": "Carolina",
     "groom": "Thomas",
     "and": "&",
-    "date": "Achttien Oktober",
+    "date": "Zesentwintig Augustus",
     "year": "Tweeduizend Zesentwintig",
     "venue": "Château de Varennes · Bourgondië, Frankrijk",
     "respond": "Gelieve te Antwoorden"
@@ -25,16 +25,16 @@
   "details": {
     "label": "De Viering",
     "title": "Trouwweekend",
-    "friday": "Vrijdag",
-    "saturday": "Zaterdag",
-    "sunday": "Zondag",
+    "friday": "Dinsdag",
+    "saturday": "Woensdag",
+    "sunday": "Donderdag",
     "welcomeDinner": "Welkomstdiner",
     "theWedding": "Het Huwelijk",
     "farewellBrunch": "Afscheidsbrunch",
     "date": {
-      "friday": "17 Oktober 2026",
-      "saturday": "18 Oktober 2026",
-      "sunday": "19 Oktober 2026"
+      "friday": "25 Augustus 2026",
+      "saturday": "26 Augustus 2026",
+      "sunday": "27 Augustus 2026"
     },
     "time": {
       "dinner": "Zeven uur 's avonds",
@@ -48,7 +48,7 @@
   "rsvp": {
     "label": "Gelieve te Antwoorden",
     "title": "RSVP",
-    "description": "Laat ons weten of je bij onze huwelijksviering in Bourgondië aanwezig zult zijn. We vragen vriendelijk om voor 1 augustus 2026 te antwoorden.",
+    "description": "Laat ons weten of je bij onze huwelijksviering in Bourgondië aanwezig zult zijn. We vragen vriendelijk om voor 1 juni 2026 te antwoorden.",
     "form": {
       "yourName": "Je Naam",
       "namePlaceholder": "Volledige naam zoals je die op de plaatskaart wilt",
@@ -144,7 +144,7 @@
     }
   },
   "footer": {
-    "date": "18 Oktober 2026",
+    "date": "26 Augustus 2026",
     "madeWith": "Gemaakt met liefde in Brussel & Mexico-Stad"
   },
   "countdown": {

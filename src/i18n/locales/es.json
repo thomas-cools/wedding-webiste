@@ -10,7 +10,7 @@
     "bride": "Carolina",
     "groom": "Thomas",
     "and": "&",
-    "date": "Dieciocho de Octubre",
+    "date": "Veintiséis de Agosto",
     "year": "Dos Mil Veintiséis",
     "venue": "Château de Varennes · Borgoña, Francia",
     "respond": "Confirmar Asistencia"
@@ -25,16 +25,16 @@
   "details": {
     "label": "La Celebración",
     "title": "Fin de Semana de Boda",
-    "friday": "Viernes",
-    "saturday": "Sábado",
-    "sunday": "Domingo",
+    "friday": "Martes",
+    "saturday": "Miércoles",
+    "sunday": "Jueves",
     "welcomeDinner": "Cena de Bienvenida",
     "theWedding": "La Boda",
     "farewellBrunch": "Brunch de Despedida",
     "date": {
-      "friday": "17 de Octubre, 2026",
-      "saturday": "18 de Octubre, 2026",
-      "sunday": "19 de Octubre, 2026"
+      "friday": "25 de Agosto, 2026",
+      "saturday": "26 de Agosto, 2026",
+      "sunday": "27 de Agosto, 2026"
     },
     "time": {
       "dinner": "Siete de la noche",
@@ -48,7 +48,7 @@
   "rsvp": {
     "label": "Confirmar Asistencia",
     "title": "RSVP",
-    "description": "Por favor, háznos saber si nos acompañarás en nuestra celebración de boda en Borgoña. Te pedimos confirmar antes del 1 de agosto de 2026.",
+    "description": "Por favor, háznos saber si nos acompañarás en nuestra celebración de boda en Borgoña. Te pedimos confirmar antes del 1 de junio de 2026.",
     "form": {
       "yourName": "Tu Nombre",
       "namePlaceholder": "Nombre completo como te gustaría en la tarjeta de mesa",
@@ -144,7 +144,7 @@
     }
   },
   "footer": {
-    "date": "18 de Octubre, 2026",
+    "date": "26 de Agosto, 2026",
     "madeWith": "Hecho con amor en Bruselas y Ciudad de México"
   },
   "countdown": {

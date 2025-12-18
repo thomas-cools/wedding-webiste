@@ -10,7 +10,7 @@
     "bride": "Carolina",
     "groom": "Thomas",
     "and": "&",
-    "date": "October Eighteenth",
+    "date": "August Twenty-Sixth",
     "year": "Two Thousand Twenty-Six",
     "venue": "Château de Varennes · Burgundy, France",
     "respond": "Kindly Respond"
@@ -25,16 +25,16 @@
   "details": {
     "label": "The Celebration",
     "title": "Wedding Weekend",
-    "friday": "Friday",
-    "saturday": "Saturday",
-    "sunday": "Sunday",
+    "friday": "Tuesday",
+    "saturday": "Wednesday",
+    "sunday": "Thursday",
     "welcomeDinner": "Welcome Dinner",
     "theWedding": "The Wedding",
     "farewellBrunch": "Farewell Brunch",
     "date": {
-      "friday": "October 17, 2026",
-      "saturday": "October 18, 2026",
-      "sunday": "October 19, 2026"
+      "friday": "August 25, 2026",
+      "saturday": "August 26, 2026",
+      "sunday": "August 27, 2026"
     },
     "time": {
       "dinner": "Seven o'clock in the evening",
@@ -48,7 +48,7 @@
   "rsvp": {
     "label": "Kindly Respond",
     "title": "RSVP",
-    "description": "Please let us know if you'll be joining us for our wedding celebration in Burgundy. We kindly request your response by August 1, 2026.",
+    "description": "Please let us know if you'll be joining us for our wedding celebration in Burgundy. We kindly request your response by June 1, 2026.",
     "form": {
       "yourName": "Your Name",
       "namePlaceholder": "Full name as you'd like it on the place card",
@@ -144,7 +144,7 @@
     }
   },
   "footer": {
-    "date": "October 18, 2026",
+    "date": "August 26, 2026",
     "madeWith": "Made with love in Brussels & Mexico City"
   },
   "countdown": {

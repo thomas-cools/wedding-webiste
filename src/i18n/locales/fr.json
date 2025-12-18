@@ -10,7 +10,7 @@
     "bride": "Carolina",
     "groom": "Thomas",
     "and": "&",
-    "date": "Le Dix-huit Octobre",
+    "date": "Le Vingt-six Août",
     "year": "Deux Mille Vingt-Six",
     "venue": "Château de Varennes · Bourgogne, France",
     "respond": "Répondre S'il Vous Plaît"
@@ -25,16 +25,16 @@
   "details": {
     "label": "La Célébration",
     "title": "Week-end de Mariage",
-    "friday": "Vendredi",
-    "saturday": "Samedi",
-    "sunday": "Dimanche",
+    "friday": "Mardi",
+    "saturday": "Mercredi",
+    "sunday": "Jeudi",
     "welcomeDinner": "Dîner de Bienvenue",
     "theWedding": "Le Mariage",
     "farewellBrunch": "Brunch d'Adieu",
     "date": {
-      "friday": "17 Octobre 2026",
-      "saturday": "18 Octobre 2026",
-      "sunday": "19 Octobre 2026"
+      "friday": "25 Août 2026",
+      "saturday": "26 Août 2026",
+      "sunday": "27 Août 2026"
     },
     "time": {
       "dinner": "Dix-neuf heures",
@@ -48,7 +48,7 @@
   "rsvp": {
     "label": "Répondre S'il Vous Plaît",
     "title": "RSVP",
-    "description": "Merci de nous faire savoir si vous vous joindrez à nous pour notre célébration de mariage en Bourgogne. Nous vous prions de répondre avant le 1er août 2026.",
+    "description": "Merci de nous faire savoir si vous vous joindrez à nous pour notre célébration de mariage en Bourgogne. Nous vous prions de répondre avant le 1er juin 2026.",
     "form": {
       "yourName": "Votre Nom",
       "namePlaceholder": "Nom complet tel que vous le souhaitez sur le marque-place",
@@ -144,7 +144,7 @@
     }
   },
   "footer": {
-    "date": "18 Octobre 2026",
+    "date": "26 Août 2026",
     "madeWith": "Fait avec amour à Bruxelles & Mexico"
   },
   "countdown": {
