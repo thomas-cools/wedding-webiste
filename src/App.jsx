@@ -1,185 +1,407 @@
-import React, { useRef } from 'react'
+import React from 'react'
+import { 
+  Box, 
+  Text, 
+  Heading, 
+  Button, 
+  Image, 
+  Container, 
+  Flex, 
+  VStack, 
+  HStack,
+  Divider,
+  SimpleGrid,
+} from '@chakra-ui/react'
+import RsvpForm from './components/RsvpForm'
+
+// Elegant thin decorative divider - classic minimalist style
+const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
+  <Box my={8} {...props}>
+    <Divider borderColor={color} w={width} mx="auto" />
+  </Box>
+)
 
 export default function App() {
-  const formRef = useRef(null)
-
-  function handleSubmit(e) {
-    e.preventDefault()
-    const btn = formRef.current && formRef.current.querySelector('button')
-    if (!btn) return
-    const originalText = btn.innerText
-    btn.innerText = 'Sent!'
-    btn.style.backgroundColor = '#C06C5D'
-    btn.style.color = 'white'
-
-    setTimeout(() => {
-      alert('Thank you! This is a demo form.')
-      formRef.current && formRef.current.reset()
-      btn.innerText = originalText
-      btn.style.backgroundColor = 'white'
-      btn.style.color = 'var(--slate-blue)'
-    }, 500)
-  }
-
   return (
-    <>
-      <nav>
-        <div className="container">
-          <div className="logo">S &amp; L</div>
-          <div className="menu-toggle">☰</div>
-          <div className="nav-links">
-            <a href="#story">Our Story</a>
-            <a href="#schedule">Schedule</a>
-            <a href="#travel">Travel</a>
-            <a href="#rsvp">RSVP</a>
-          </div>
-        </div>
-      </nav>
+    <Box minH="100vh" bg="neutral.light">
+      {/* Minimal Elegant Header */}
+      <Box 
+        as="header" 
+        py={6} 
+        position="fixed" 
+        top={0} 
+        left={0} 
+        right={0} 
+        zIndex={100}
+        bg="neutral.light"
+        borderBottom="1px solid"
+        borderColor="primary.soft"
+      >
+        <Container maxW="container.xl">
+          <Flex justify="space-between" align="center">
+            <Text 
+              fontFamily="heading" 
+              fontSize="lg" 
+              fontWeight="400" 
+              letterSpacing="0.15em" 
+              color="neutral.dark"
+            >
+              S & L
+            </Text>
+            <HStack spacing={10} display={["none", "none", "flex"]}>
+              <Button as="a" href="#story" variant="ghost" size="sm">
+                Our Story
+              </Button>
+              <Button as="a" href="#details" variant="ghost" size="sm">
+                Details
+              </Button>
+              <Button as="a" href="#rsvp" variant="ghost" size="sm">
+                RSVP
+              </Button>
+            </HStack>
+          </Flex>
+        </Container>
+      </Box>
 
-      <header>
-        <div className="subtitle">October 18, 2026 &bull; Château de Varennes</div>
-        <h1>Sofia &amp; Lucas</h1>
-        <div className="hero-date">Une Célébration d’Amor &amp; Liefde</div>
-        <a href="#rsvp" className="btn btn-outline">RSVP Now</a>
-      </header>
+      <Box as="main">
+        {/* Hero Section - Full Height, Centered, Elegant */}
+        <Box 
+          minH="100vh" 
+          display="flex" 
+          alignItems="center" 
+          justifyContent="center"
+          textAlign="center"
+          px={6}
+          pt={20}
+        >
+          <VStack spacing={0} maxW="700px">
+            <Text 
+              fontSize="xs" 
+              textTransform="uppercase" 
+              letterSpacing="0.35em" 
+              color="neutral.dark"
+              fontWeight="500"
+              mb={8}
+            >
+              Together with their families
+            </Text>
+            
+            <Heading 
+              as="h1" 
+              fontFamily="heading" 
+              fontSize={["5xl", "6xl", "7xl"]}
+              fontWeight="400"
+              color="neutral.dark"
+              lineHeight="0.9"
+              letterSpacing="-0.02em"
+            >
+              Sofia
+            </Heading>
+            
+            <Text 
+              fontFamily="heading"
+              fontSize={["2xl", "3xl"]} 
+              fontStyle="italic" 
+              fontWeight="300" 
+              color="primary.soft"
+              my={4}
+            >
+              &
+            </Text>
+            
+            <Heading 
+              as="h1" 
+              fontFamily="heading" 
+              fontSize={["5xl", "6xl", "7xl"]}
+              fontWeight="400"
+              color="neutral.dark"
+              lineHeight="0.9"
+              letterSpacing="-0.02em"
+            >
+              Lucas
+            </Heading>
 
-      <section id="story">
-        <div className="container">
-          <div className="section-header">
-            <span>Two Worlds</span>
-            <h2>One Heart</h2>
-          </div>
-          <div className="story-grid">
-            <div className="story-text">
-              <p><span className="drop-cap">F</span>rom the vibrant streets of Mexico City to the cobbled squares of Brussels, our story is a map of two cultures finding a home in one another. We bonded over a shared love of art, deep conversation, and the debate over who makes the best chocolate (the verdict is still out).</p>
-              <p>We chose France as our gathering place—a neutral ground of beauty and wine—to celebrate the blending of our families. We invite you to an intimate weekend where the tequila flows as freely as the champagne.</p>
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Signature_sample.svg/1200px-Signature_sample.svg.png" style={{height:40, opacity:0.6, marginTop:20}} alt="Signature" />
-            </div>
-            <div className="story-img">
-              <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop" alt="Sofia and Lucas in Brussels" />
-            </div>
-          </div>
-        </div>
-      </section>
+            <ElegantDivider mt={12} mb={10} />
+            
+            <Text 
+              fontSize="sm" 
+              textTransform="uppercase" 
+              letterSpacing="0.25em" 
+              color="neutral.dark"
+              fontWeight="500"
+              mb={2}
+            >
+              October Eighteenth
+            </Text>
+            <Text 
+              fontSize="sm" 
+              textTransform="uppercase" 
+              letterSpacing="0.25em" 
+              color="neutral.dark"
+              fontWeight="500"
+              mb={6}
+            >
+              Two Thousand Twenty-Six
+            </Text>
+            <Text 
+              fontSize="md" 
+              color="neutral.dark" 
+              fontStyle="italic"
+              letterSpacing="0.05em"
+            >
+              Château de Varennes · Burgundy, France
+            </Text>
+            
+            <Button 
+              as="a" 
+              href="#rsvp" 
+              mt={12}
+              variant="outline"
+              size="lg"
+            >
+              Kindly Respond
+            </Button>
+          </VStack>
+        </Box>
 
-      <section id="schedule" className="bg-white">
-        <div className="container">
-          <div className="section-header">
-            <span>The Weekend</span>
-            <h2>Schedule of Events</h2>
-          </div>
-          <div className="timeline">
-            <div className="event">
-              <div className="event-time">
-                <h4>Friday, Oct 17</h4>
-                <span style={{color:'#888'}}>6:00 PM</span>
-              </div>
-              <div className="event-dot"></div>
-              <div className="event-detail">
-                <h3>The Welcome Fiesta</h3>
-                <p><strong>Dress Code:</strong> Tropical Chic</p>
-                <p>Join us in the Courtyard for Tacos, Frites, Mezcal, and Belgian Ale.</p>
-              </div>
-            </div>
+        {/* Story Section */}
+        <Box id="story" py={[20, 28]} bg="white">
+          <Container maxW="container.lg">
+            <VStack spacing={16}>
+              {/* Section Header */}
+              <VStack spacing={4} textAlign="center" maxW="600px">
+                <Text 
+                  fontSize="xs" 
+                  textTransform="uppercase" 
+                  letterSpacing="0.35em" 
+                  color="primary.soft"
+                  fontWeight="500"
+                >
+                  Our Story
+                </Text>
+                <Heading 
+                  as="h2" 
+                  fontFamily="heading" 
+                  fontSize={["3xl", "4xl"]} 
+                  fontWeight="400"
+                >
+                  Two Worlds, One Heart
+                </Heading>
+                <ElegantDivider my={2} />
+              </VStack>
+              
+              {/* Story Content - Elegant Layout */}
+              <Flex 
+                direction={["column", "column", "row"]} 
+                gap={[10, 10, 16]} 
+                align="center"
+                maxW="1000px"
+              >
+                <Box flex={1} maxW={["100%", "100%", "450px"]}>
+                  <Image 
+                    src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop" 
+                    alt="Sofia and Lucas" 
+                    w="100%"
+                    h={["300px", "400px", "500px"]}
+                    objectFit="cover"
+                  />
+                </Box>
+                <VStack flex={1} align={["center", "center", "flex-start"]} spacing={6} textAlign={["center", "center", "left"]}>
+                  <Text fontSize="lg" lineHeight="1.9">
+                    From the vibrant streets of Mexico City to the cobbled squares of Brussels, our story is a map of two cultures finding a home in one another.
+                  </Text>
+                  <Text fontSize="lg" lineHeight="1.9">
+                    We chose France as our gathering place—a neutral ground of beauty and wine—to celebrate the blending of our families and the beginning of our forever.
+                  </Text>
+                  <Text 
+                    fontFamily="heading" 
+                    fontStyle="italic" 
+                    fontSize="xl"
+                    color="primary.deep" 
+                    mt={4}
+                  >
+                    "Une Célébration d'Amor & Liefde"
+                  </Text>
+                </VStack>
+              </Flex>
+            </VStack>
+          </Container>
+        </Box>
 
-            <div className="event">
-              <div className="event-time">
-                <h4>Saturday, Oct 18</h4>
-                <span style={{color:'#888'}}>4:30 PM</span>
-              </div>
-              <div className="event-dot"></div>
-              <div className="event-detail">
-                <h3>Ceremony &amp; Reception</h3>
-                <p><strong>Dress Code:</strong> Black Tie Optional</p>
-                <p>Vows in the Gardens followed by dinner in the Orangery.</p>
-              </div>
-            </div>
+        {/* Details Section */}
+        <Box id="details" py={[20, 28]} bg="neutral.light">
+          <Container maxW="container.lg">
+            <VStack spacing={16}>
+              {/* Section Header */}
+              <VStack spacing={4} textAlign="center">
+                <Text 
+                  fontSize="xs" 
+                  textTransform="uppercase" 
+                  letterSpacing="0.35em" 
+                  color="primary.soft"
+                  fontWeight="500"
+                >
+                  The Celebration
+                </Text>
+                <Heading 
+                  as="h2" 
+                  fontFamily="heading" 
+                  fontSize={["3xl", "4xl"]} 
+                  fontWeight="400"
+                >
+                  Wedding Weekend
+                </Heading>
+                <ElegantDivider my={2} />
+              </VStack>
 
-            <div className="event">
-              <div className="event-time">
-                <h4>Sunday, Oct 19</h4>
-                <span style={{color:'#888'}}>11:00 AM</span>
-              </div>
-              <div className="event-dot"></div>
-              <div className="event-detail">
-                <h3>Recovery Brunch</h3>
-                <p><strong>Dress Code:</strong> Casual</p>
-                <p>Coffee, Croissants, and Chilaquiles before you depart.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+              {/* Event Cards - Refined Minimal Design */}
+              <SimpleGrid columns={[1, 1, 3]} spacing={8} w="full" maxW="900px">
+                {/* Friday */}
+                <VStack 
+                  p={10} 
+                  bg="white"
+                  textAlign="center"
+                  spacing={4}
+                  borderWidth="1px"
+                  borderColor="primary.soft"
+                >
+                  <Text 
+                    fontSize="xs" 
+                    textTransform="uppercase" 
+                    letterSpacing="0.3em" 
+                    color="primary.soft"
+                    fontWeight="500"
+                  >
+                    Friday
+                  </Text>
+                  <Heading 
+                    as="h3" 
+                    fontFamily="heading" 
+                    fontSize="xl" 
+                    fontWeight="400"
+                  >
+                    Welcome Dinner
+                  </Heading>
+                  <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
+                  <Text fontSize="sm" color="neutral.dark">October 17, 2026</Text>
+                  <Text fontSize="sm" color="neutral.muted">Seven o'clock in the evening</Text>
+                </VStack>
 
-      <section id="travel">
-        <div className="container">
-          <div className="section-header">
-            <span>The Journey</span>
-            <h2>Travel &amp; Stay</h2>
-          </div>
-          <div className="travel-grid">
-            <div className="travel-card">
-              <span className="icon">✈️</span>
-              <h3>Getting There</h3>
-              <p>Fly into <strong>Paris (CDG)</strong> or <strong>Lyon (LYS)</strong>. From there, the Château is a scenic 2-hour train ride or drive.</p>
-              <a href="#" style={{color:'var(--terracotta)', borderBottom:'1px solid'}}>View Map</a>
-            </div>
-            <div className="travel-card">
-              <span className="icon">🏰</span>
-              <h3>Accommodations</h3>
-              <p>We have reserved a block of rooms at the <em>Hôtel de la Poste</em> nearby. Shuttles provided on the wedding night.</p>
-              <a href="#" style={{color:'var(--terracotta)', borderBottom:'1px solid'}}>Book Room</a>
-            </div>
-            <div className="travel-card">
-              <span className="icon">💡</span>
-              <h3>Good to Know</h3>
-              <p>We embrace the Belgian love for long dinners and the Mexican stamina for late parties. Pace yourself!</p>
-            </div>
-          </div>
-        </div>
-      </section>
+                {/* Saturday - Featured */}
+                <VStack 
+                  p={10} 
+                  bg="neutral.dark"
+                  textAlign="center"
+                  spacing={4}
+                >
+                  <Text 
+                    fontSize="xs" 
+                    textTransform="uppercase" 
+                    letterSpacing="0.3em" 
+                    color="primary.soft"
+                    fontWeight="500"
+                  >
+                    Saturday
+                  </Text>
+                  <Heading 
+                    as="h3" 
+                    fontFamily="heading" 
+                    fontSize="xl" 
+                    fontWeight="400"
+                    color="neutral.light"
+                  >
+                    The Wedding
+                  </Heading>
+                  <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
+                  <Text fontSize="sm" color="neutral.light">October 18, 2026</Text>
+                  <Text fontSize="sm" color="primary.soft">Ceremony at four o'clock</Text>
+                  <Text fontSize="sm" color="primary.soft">Reception to follow</Text>
+                </VStack>
 
-      <section id="rsvp" className="rsvp-section">
-        <div className="container">
-          <div className="section-header">
-            <span>Join Us</span>
-            <h2>R.S.V.P.</h2>
-            <p>Please respond by August 1st, 2026</p>
-          </div>
-          <form id="rsvpForm" ref={formRef} onSubmit={handleSubmit}>
-            <div className="form-row">
-              <div className="form-group">
-                <input type="text" placeholder="First Name" required />
-              </div>
-              <div className="form-group">
-                <input type="text" placeholder="Last Name" required />
-              </div>
-            </div>
-            <div className="form-group">
-              <input type="email" placeholder="Email Address" required />
-            </div>
-            <div className="form-group">
-              <select required defaultValue="">
-                <option value="" disabled style={{color:'#555'}}>Will you be attending?</option>
-                <option value="yes" style={{color:'#000'}}>Joyfully Accepts</option>
-                <option value="no" style={{color:'#000'}}>Regretfully Declines</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <textarea rows="4" placeholder="Dietary Restrictions or Song Requests"></textarea>
-            </div>
-            <button type="submit" className="btn" style={{background:'white', color:'var(--slate-blue)', width:'100%'}}>Send RSVP</button>
-          </form>
-        </div>
-      </section>
+                {/* Sunday */}
+                <VStack 
+                  p={10} 
+                  bg="white"
+                  textAlign="center"
+                  spacing={4}
+                  borderWidth="1px"
+                  borderColor="primary.soft"
+                >
+                  <Text 
+                    fontSize="xs" 
+                    textTransform="uppercase" 
+                    letterSpacing="0.3em" 
+                    color="primary.soft"
+                    fontWeight="500"
+                  >
+                    Sunday
+                  </Text>
+                  <Heading 
+                    as="h3" 
+                    fontFamily="heading" 
+                    fontSize="xl" 
+                    fontWeight="400"
+                  >
+                    Farewell Brunch
+                  </Heading>
+                  <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
+                  <Text fontSize="sm" color="neutral.dark">October 19, 2026</Text>
+                  <Text fontSize="sm" color="neutral.muted">Eleven in the morning</Text>
+                </VStack>
+              </SimpleGrid>
 
-      <footer>
-        <div className="container">
-          <h3 style={{fontSize:'1.5rem', marginBottom:'1rem'}}>S &amp; L</h3>
-          <p style={{marginBottom:0}}>Made with Amor &amp; Liefde in France</p>
-          <p style={{opacity:0.5}}>&copy; 2026 Sofia &amp; Lucas</p>
-        </div>
-      </footer>
-    </>
+              {/* Venue Info */}
+              <VStack spacing={2} textAlign="center" pt={8}>
+                <Text fontSize="sm" textTransform="uppercase" letterSpacing="0.2em" color="neutral.dark">
+                  Château de Varennes
+                </Text>
+                <Text fontSize="sm" color="neutral.muted" fontStyle="italic">
+                  21320 Pouilly-en-Auxois, Burgundy, France
+                </Text>
+              </VStack>
+            </VStack>
+          </Container>
+        </Box>
+
+        {/* RSVP Section */}
+        <Box id="rsvp" py={[20, 28]} bg="white">
+          <Container maxW="container.lg">
+            <RsvpForm />
+          </Container>
+        </Box>
+      </Box>
+
+      {/* Footer - Minimal & Elegant */}
+      <Box 
+        as="footer" 
+        py={16} 
+        textAlign="center" 
+        bg="neutral.light"
+      >
+        <Container maxW="container.lg">
+          <VStack spacing={6}>
+            <Divider borderColor="primary.soft" w="80px" opacity={0.5} />
+            <Heading 
+              fontFamily="heading" 
+              fontSize="2xl" 
+              fontWeight="400" 
+              letterSpacing="0.1em"
+            >
+              S & L
+            </Heading>
+            <Text 
+              fontSize="sm" 
+              letterSpacing="0.15em"
+              textTransform="uppercase"
+            >
+              October 18, 2026
+            </Text>
+            <Text fontSize="xs" color="neutral.muted" mt={4}>
+              Made with love in Brussels & Mexico City
+            </Text>
+          </VStack>
+        </Container>
+      </Box>
+    </Box>
   )
 }
