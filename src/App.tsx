@@ -16,6 +16,7 @@ import {
 import RsvpForm from './components/RsvpForm'
 import LanguageSwitcher from './components/LanguageSwitcher'
 import Hero from './components/Hero'
+import Timeline from './components/Timeline'
 import { features } from './config'
 
 // Elegant thin decorative divider - classic minimalist style
@@ -139,6 +140,9 @@ export default function App() {
             </VStack>
           </Container>
         </Box>
+
+        {/* Timeline Section - Controlled by feature flag */}
+        {features.showTimeline && <Timeline />}
 
         {/* Details Section */}
         <Box id="details" py={[20, 28]} bg="neutral.light">

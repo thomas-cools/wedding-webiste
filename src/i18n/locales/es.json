@@ -106,6 +106,43 @@
       "thankYouUpdated": "Tu respuesta ha sido actualizada. Gracias."
     }
   },
+  "timeline": {
+    "label": "Nuestro Camino",
+    "title": "Cómo Llegamos Aquí",
+    "subtitle": "Desde un encuentro casual hasta el para siempre, estos son los momentos que nos unieron.",
+    "events": {
+      "met": {
+        "date": "Verano 2019",
+        "title": "El Primer Hola",
+        "description": "Un encuentro casual que lo cambiaría todo. Lo que comenzó como una presentación se convirtió en el inicio de nuestra historia.",
+        "location": "Bruselas, Bélgica"
+      },
+      "firstDate": {
+        "date": "Otoño 2019",
+        "title": "La Primera Cita",
+        "description": "El café se convirtió en cena, la cena en un paseo por la ciudad, y supimos que esto era algo especial.",
+        "location": "Bruselas, Bélgica"
+      },
+      "moved": {
+        "date": "Primavera 2021",
+        "title": "Construyendo Nuestro Hogar",
+        "description": "Dimos el salto y nos mudamos juntos, mezclando nuestras vidas, culturas y colecciones de libros.",
+        "location": "Bruselas, Bélgica"
+      },
+      "engaged": {
+        "date": "Invierno 2024",
+        "title": "La Propuesta",
+        "description": "Bajo un cielo lleno de estrellas, con manos temblorosas y el corazón lleno, la pregunta fue hecha y respondida con alegría.",
+        "location": "Ciudad de México, México"
+      },
+      "wedding": {
+        "date": "Octubre 2026",
+        "title": "La Boda",
+        "description": "Donde nuestras dos familias se convierten en una, en el corazón de Borgoña.",
+        "location": "Château de Varennes, Francia"
+      }
+    }
+  },
   "footer": {
     "date": "18 de Octubre, 2026",
     "madeWith": "Hecho con amor en Bruselas y Ciudad de México"

@@ -106,6 +106,43 @@
       "thankYouUpdated": "Your response has been updated. Thank you."
     }
   },
+  "timeline": {
+    "label": "Our Journey",
+    "title": "How We Got Here",
+    "subtitle": "From chance encounter to forever, these are the moments that brought us together.",
+    "events": {
+      "met": {
+        "date": "Summer 2019",
+        "title": "The First Hello",
+        "description": "A chance meeting that would change everything. What started as a casual introduction became the beginning of our story.",
+        "location": "Brussels, Belgium"
+      },
+      "firstDate": {
+        "date": "Autumn 2019",
+        "title": "The First Date",
+        "description": "Coffee turned into dinner, dinner turned into a walk through the city, and we knew this was something special.",
+        "location": "Brussels, Belgium"
+      },
+      "moved": {
+        "date": "Spring 2021",
+        "title": "Building Our Home",
+        "description": "We took the leap and moved in together, blending our lives, cultures, and collections of books.",
+        "location": "Brussels, Belgium"
+      },
+      "engaged": {
+        "date": "Winter 2024",
+        "title": "The Proposal",
+        "description": "Under a sky full of stars, with trembling hands and a full heart, the question was asked and answered with joy.",
+        "location": "Mexico City, Mexico"
+      },
+      "wedding": {
+        "date": "October 2026",
+        "title": "The Wedding",
+        "description": "Where our two families become one, in the heart of Burgundy.",
+        "location": "Château de Varennes, France"
+      }
+    }
+  },
   "footer": {
     "date": "October 18, 2026",
     "madeWith": "Made with love in Brussels & Mexico City"

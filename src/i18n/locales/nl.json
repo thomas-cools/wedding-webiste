@@ -106,6 +106,43 @@
       "thankYouUpdated": "Je antwoord is bijgewerkt. Bedankt."
     }
   },
+  "timeline": {
+    "label": "Onze Reis",
+    "title": "Hoe We Hier Kwamen",
+    "subtitle": "Van toevallige ontmoeting tot voor altijd, dit zijn de momenten die ons samenbrachten.",
+    "events": {
+      "met": {
+        "date": "Zomer 2019",
+        "title": "De Eerste Hallo",
+        "description": "Een toevallige ontmoeting die alles zou veranderen. Wat begon als een simpele kennismaking werd het begin van ons verhaal.",
+        "location": "Brussel, België"
+      },
+      "firstDate": {
+        "date": "Herfst 2019",
+        "title": "Het Eerste Afspraakje",
+        "description": "Koffie werd diner, diner werd een wandeling door de stad, en we wisten dat dit iets bijzonders was.",
+        "location": "Brussel, België"
+      },
+      "moved": {
+        "date": "Lente 2021",
+        "title": "Ons Thuis Bouwen",
+        "description": "We waagden de sprong en gingen samenwonen, onze levens, culturen en boekencollecties vermengend.",
+        "location": "Brussel, België"
+      },
+      "engaged": {
+        "date": "Winter 2024",
+        "title": "Het Aanzoek",
+        "description": "Onder een hemel vol sterren, met trillende handen en een vol hart, werd de vraag gesteld en met vreugde beantwoord.",
+        "location": "Mexico-Stad, Mexico"
+      },
+      "wedding": {
+        "date": "Oktober 2026",
+        "title": "Het Huwelijk",
+        "description": "Waar onze twee families één worden, in het hart van Bourgondië.",
+        "location": "Château de Varennes, Frankrijk"
+      }
+    }
+  },
   "footer": {
     "date": "18 Oktober 2026",
     "madeWith": "Gemaakt met liefde in Brussel & Mexico-Stad"
