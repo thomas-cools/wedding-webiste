@@ -28,8 +28,9 @@ A modern, elegant wedding website built with React, TypeScript, and Chakra UI. F
 | **[Chakra UI](https://chakra-ui.com/)** | Component Library | Accessible, themeable, elegant defaults |
 | **[Framer Motion](https://www.framer.com/motion/)** | Animations | Smooth, declarative animations |
 | **[Emotion](https://emotion.sh/)** | CSS-in-JS | Powers Chakra UI styling |
-| **[Jest](https://jestjs.io/)** | Testing Framework | Industry standard, great TypeScript support |
+| **[Jest](https://jestjs.io/)** | Unit Testing | Industry standard, great TypeScript support |
 | **[React Testing Library](https://testing-library.com/react)** | Component Testing | Tests components as users interact with them |
+| **[Playwright](https://playwright.dev/)** | E2E Testing | Cross-browser, responsive viewport testing |
 | **[Netlify Forms](https://www.netlify.com/products/forms/)** | Form Backend | Zero-config serverless form handling |
 
 ---
@@ -98,20 +99,28 @@ This starts the Vite development server at `http://localhost:5173` with hot modu
 | `dev` | `npm run dev` | Start development server with HMR |
 | `build` | `npm run build` | Create optimized production build in `dist/` |
 | `preview` | `npm run preview` | Preview production build locally |
-| `test` | `npm test` | Run all tests once |
-| `test:watch` | `npm run test:watch` | Run tests in watch mode |
-| `test:coverage` | `npm run test:coverage` | Run tests with coverage report |
+| `test` | `npm test` | Run all unit tests once |
+| `test:watch` | `npm run test:watch` | Run unit tests in watch mode |
+| `test:coverage` | `npm run test:coverage` | Run unit tests with coverage report |
+| `test:e2e` | `npm run test:e2e` | Run Playwright E2E tests |
+| `test:e2e:ui` | `npm run test:e2e:ui` | Open Playwright interactive UI |
+| `test:e2e:headed` | `npm run test:e2e:headed` | Run E2E tests with visible browser |
+| `test:e2e:debug` | `npm run test:e2e:debug` | Debug E2E tests with inspector |
+| `test:e2e:report` | `npm run test:e2e:report` | View HTML test report |
 
 ---
 
 ## Testing
 
-This project uses **Jest** with **React Testing Library** for testing.
+This project uses a two-tier testing strategy:
 
-### Run Tests
+- **Jest + React Testing Library** for unit and component tests
+- **Playwright** for end-to-end (E2E) and responsive design tests
+
+### Unit Tests (Jest)
 
 ```bash
-# Run all tests
+# Run all unit tests
 npm test
 
 # Run tests in watch mode (re-runs on file changes)
@@ -121,9 +130,56 @@ npm run test:watch
 npm run test:coverage
 ```
 
+Unit test files are located in `src/__tests__/` and follow the naming convention `*.test.tsx`.
+
+### E2E Tests (Playwright)
+
+```bash
+# Run all E2E tests
+npm run test:e2e
+
+# Open interactive UI mode
+npm run test:e2e:ui
+
+# Run with visible browser
+npm run test:e2e:headed
+
+# Debug tests with inspector
+npm run test:e2e:debug
+
+# View HTML test report after running tests
+npm run test:e2e:report
+```
+
+E2E test files are located in `tests/` and follow the naming convention `*.spec.ts`.
+
+#### Configured Viewports
+
+| Project | Device | Viewport |
+|---------|--------|----------|
+| Desktop Chrome | Desktop | 1280×720 |
+| Mobile Chrome | Pixel 5 | 393×851 |
+| Mobile Safari | iPhone 12 | 390×844 |
+| Tablet | iPad (gen 7) | 810×1080 |
+
+#### Test Coverage
+
+The E2E tests cover:
+
+- **Navigation**: Hamburger menu on mobile, horizontal nav on desktop
+- **Hero Section**: Full viewport height, content visibility
+- **RSVP Form**: Field accessibility, mobile layout, form submission
+- **Language Switcher**: Language change functionality
+- **Visual Regression**: Screenshot comparisons for hero and RSVP form
+- **Viewport Breakpoints**: 7 breakpoints from 320px to 1440px
+- **Accessibility**: Heading structure, keyboard navigation, image alt text
+
 ### Test File Naming
 
-Test files are located in `src/__tests__/` and follow the naming convention `*.test.tsx`.
+| Location | Pattern | Type |
+|----------|---------|------|
+| `src/__tests__/` | `*.test.tsx` | Unit/Component tests |
+| `tests/` | `*.spec.ts` | E2E/Integration tests |
 
 ### Writing Tests
 
