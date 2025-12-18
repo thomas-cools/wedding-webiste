@@ -1,0 +1,114 @@
+{
+  "header": {
+    "initials": "S & L",
+    "ourStory": "Our Story",
+    "details": "Details",
+    "rsvp": "RSVP"
+  },
+  "hero": {
+    "together": "Together with their families",
+    "and": "&",
+    "date": "October Eighteenth",
+    "year": "Two Thousand Twenty-Six",
+    "venue": "Château de Varennes · Burgundy, France",
+    "respond": "Kindly Respond"
+  },
+  "story": {
+    "label": "Our Story",
+    "title": "Two Worlds, One Heart",
+    "paragraph1": "From the vibrant streets of Mexico City to the cobbled squares of Brussels, our story is a map of two cultures finding a home in one another.",
+    "paragraph2": "We chose France as our gathering place—a neutral ground of beauty and wine—to celebrate the blending of our families and the beginning of our forever.",
+    "quote": "Une Célébration d'Amor & Liefde"
+  },
+  "details": {
+    "label": "The Celebration",
+    "title": "Wedding Weekend",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "welcomeDinner": "Welcome Dinner",
+    "theWedding": "The Wedding",
+    "farewellBrunch": "Farewell Brunch",
+    "date": {
+      "friday": "October 17, 2026",
+      "saturday": "October 18, 2026",
+      "sunday": "October 19, 2026"
+    },
+    "time": {
+      "dinner": "Seven o'clock in the evening",
+      "ceremony": "Ceremony at four o'clock",
+      "reception": "Reception to follow",
+      "brunch": "Eleven in the morning"
+    },
+    "venueName": "Château de Varennes",
+    "venueAddress": "21320 Pouilly-en-Auxois, Burgundy, France"
+  },
+  "rsvp": {
+    "label": "Kindly Respond",
+    "title": "RSVP",
+    "description": "Please let us know if you'll be joining us for our wedding celebration in Burgundy. We kindly request your response by August 1, 2026.",
+    "form": {
+      "yourName": "Your Name",
+      "namePlaceholder": "Full name as you'd like it on the place card",
+      "email": "Email Address",
+      "emailPlaceholder": "your@email.com",
+      "willYouJoin": "Will You Be Joining Us?",
+      "pleaseSelect": "Please select",
+      "joyfullyAccept": "Joyfully Accept",
+      "likelyAttend": "Likely to Attend",
+      "notYetCertain": "Not Yet Certain",
+      "regretfullyDecline": "Regretfully Decline",
+      "attendHint": "If attending, please indicate which events below.",
+      "eventsTitle": "Events You Plan to Attend",
+      "welcomeDinner": "Welcome Dinner · Friday Evening",
+      "weddingDay": "Wedding Ceremony & Reception · Saturday",
+      "farewellBrunch": "Farewell Brunch · Sunday Morning",
+      "willAttend": "Will Attend",
+      "arrivingLate": "Arriving Late",
+      "unableToAttend": "Unable to Attend",
+      "accommodation": "Accommodation",
+      "stayingChateau": "Staying at the Château",
+      "arrangingOwn": "Arranging Own Accommodation",
+      "wouldLikeRec": "Would Like Recommendations",
+      "travel": "Travel Arrangements",
+      "rentingCar": "Renting a Car",
+      "shuttleService": "Interested in Shuttle Service",
+      "stillPlanning": "Still Planning",
+      "dietary": "Dietary Requirements",
+      "dietaryPlaceholder": "Vegetarian, allergies, etc.",
+      "songRequest": "Song Request",
+      "songPlaceholder": "A song that will get you dancing",
+      "franceTips": "First time in France? Send me local recommendations.",
+      "additionalGuests": "Additional Guests",
+      "guestName": "Guest {{number}} name",
+      "guestDietary": "Dietary",
+      "remove": "Remove",
+      "addGuest": "+ Add Guest",
+      "additionalNotes": "Additional Notes",
+      "notesPlaceholder": "Anything else we should know",
+      "submit": "Submit Response"
+    },
+    "validation": {
+      "nameRequired": "Please enter your full name.",
+      "emailRequired": "Please enter a valid email.",
+      "likelihoodRequired": "Please indicate how likely you are to join us.",
+      "eventRequired": "Please select at least one event if you expect to join us.",
+      "guestNameRequired": "Please provide guest names or remove empty guests."
+    },
+    "success": {
+      "savedTitle": "Response saved",
+      "savedMessage": "Thanks! Your RSVP has been recorded.",
+      "updatedTitle": "Response updated",
+      "updatedMessage": "Thanks! Your RSVP has been updated.",
+      "thankYouSaved": "Thank you for your response. We look forward to celebrating with you.",
+      "thankYouUpdated": "Your response has been updated. Thank you."
+    }
+  },
+  "footer": {
+    "date": "October 18, 2026",
+    "madeWith": "Made with love in Brussels & Mexico City"
+  },
+  "language": {
+    "select": "Language"
+  }
+}

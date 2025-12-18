@@ -16,6 +16,7 @@ import {
   HStack,
   useToast,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 type Guest = { name: string; dietary?: string }
 
@@ -65,6 +66,7 @@ function saveRsvps(list: Rsvp[]) {
 }
 
 export default function RsvpForm() {
+  const { t } = useTranslation()
   const toast = useToast()
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
@@ -143,17 +145,17 @@ export default function RsvpForm() {
   function validate() {
     const errs: Record<string, string> = {}
 
-    if (!firstName.trim()) errs.firstName = 'Please enter your full name.'
-    if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) errs.email = 'Please enter a valid email.'
-    if (!likelihood) errs.likelihood = 'Please indicate how likely you are to join us.'
+    if (!firstName.trim()) errs.firstName = t('rsvp.validation.nameRequired')
+    if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) errs.email = t('rsvp.validation.emailRequired')
+    if (!likelihood) errs.likelihood = t('rsvp.validation.likelihoodRequired')
 
     // If the guest indicates they expect to attend (definitely/highly_likely), require at least one event selection
     if (likelihood === 'definitely' || likelihood === 'highly_likely') {
       const anyEvent = Object.values(events).some(v => v === 'yes' || v === 'arriving_late')
-      if (!anyEvent) errs.events = 'Please select at least one event if you expect to join us.'
+      if (!anyEvent) errs.events = t('rsvp.validation.eventRequired')
     }
 
-    if (guests.some(g => !g.name.trim())) errs.guests = 'Please provide guest names or remove empty guests.'
+    if (guests.some(g => !g.name.trim())) errs.guests = t('rsvp.validation.guestNameRequired')
 
     setErrors(errs)
     return errs
@@ -163,20 +165,20 @@ export default function RsvpForm() {
     const copy = { ...errors }
     switch (field) {
       case 'firstName':
-        if (!firstName.trim()) copy.firstName = 'Please enter your full name.'
+        if (!firstName.trim()) copy.firstName = t('rsvp.validation.nameRequired')
         else delete copy.firstName
         break
       case 'email':
-        if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) copy.email = 'Please enter a valid email.'
+        if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) copy.email = t('rsvp.validation.emailRequired')
         else delete copy.email
         break
       case 'likelihood':
-        if (!likelihood) copy.likelihood = 'Please indicate how likely you are to join us.'
+        if (!likelihood) copy.likelihood = t('rsvp.validation.likelihoodRequired')
         else delete copy.likelihood
         // also revalidate events when likelihood changes
         if (likelihood === 'definitely' || likelihood === 'highly_likely') {
           const anyEvent = Object.values(events).some(v => v === 'yes' || v === 'arriving_late')
-          if (!anyEvent) copy.events = 'Please select at least one event if you expect to join us.'
+          if (!anyEvent) copy.events = t('rsvp.validation.eventRequired')
           else delete copy.events
         } else {
           delete copy.events
@@ -185,14 +187,14 @@ export default function RsvpForm() {
       case 'events':
         if (likelihood === 'definitely' || likelihood === 'highly_likely') {
           const anyEvent = Object.values(events).some(v => v === 'yes' || v === 'arriving_late')
-          if (!anyEvent) copy.events = 'Please select at least one event if you expect to join us.'
+          if (!anyEvent) copy.events = t('rsvp.validation.eventRequired')
           else delete copy.events
         } else {
           delete copy.events
         }
         break
       case 'guests':
-        if (guests.some(g => !g.name.trim())) copy.guests = 'Please provide guest names or remove empty guests.'
+        if (guests.some(g => !g.name.trim())) copy.guests = t('rsvp.validation.guestNameRequired')
         else delete copy.guests
         break
       default:
@@ -272,12 +274,12 @@ export default function RsvpForm() {
       list[existingIndex] = { ...list[existingIndex], ...entry }
       saveRsvps(list)
       setStatus('updated')
-      toast({ title: 'Response updated', description: 'Thanks! Your RSVP has been updated.', status: 'info', duration: 4000, isClosable: true })
+      toast({ title: t('rsvp.success.updatedTitle'), description: t('rsvp.success.updatedMessage'), status: 'info', duration: 4000, isClosable: true })
     } else {
       list.push(entry)
       saveRsvps(list)
       setStatus('saved')
-      toast({ title: 'Response saved', description: 'Thanks! Your RSVP has been recorded.', status: 'success', duration: 4000, isClosable: true })
+      toast({ title: t('rsvp.success.savedTitle'), description: t('rsvp.success.savedMessage'), status: 'success', duration: 4000, isClosable: true })
     }
 
     // notify admin panel (if open)
@@ -299,7 +301,7 @@ export default function RsvpForm() {
             fontWeight="500"
             mb={4}
           >
-            Kindly Respond
+            {t('rsvp.label')}
           </Text>
           <Heading 
             as="h2" 
@@ -308,14 +310,13 @@ export default function RsvpForm() {
             fontWeight="400"
             mb={4}
           >
-            RSVP
+            {t('rsvp.title')}
           </Heading>
           <Box my={6}>
             <Box as="hr" borderColor="primary.soft" w="120px" mx="auto" opacity={0.5} />
           </Box>
           <Text color="neutral.dark" fontSize="md" maxW="500px" mx="auto" lineHeight="1.8">
-            Please let us know if you'll be joining us for our wedding celebration in Burgundy. 
-            We kindly request your response by August 1, 2026.
+            {t('rsvp.description')}
           </Text>
         </Box>
 
@@ -344,46 +345,46 @@ export default function RsvpForm() {
           <input type="hidden" name="additionalNotes" />
           <Stack spacing={8}>
             <FormControl isInvalid={!!errors.firstName}>
-              <FormLabel>Your Name</FormLabel>
+              <FormLabel>{t('rsvp.form.yourName')}</FormLabel>
               <Input 
                 name="firstName" 
                 value={firstName} 
                 onChange={e => { setFirstName(e.target.value); if (errors.firstName) validateField('firstName') }} 
                 onBlur={() => validateField('firstName')} 
-                placeholder="Full name as you'd like it on the place card" 
+                placeholder={t('rsvp.form.namePlaceholder')} 
               />
               <FormErrorMessage>{errors.firstName}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.email}>
-              <FormLabel>Email Address</FormLabel>
+              <FormLabel>{t('rsvp.form.email')}</FormLabel>
               <Input 
                 name="email" 
                 type="email" 
                 value={email} 
                 onChange={e => { setEmail(e.target.value); if (errors.email) validateField('email') }} 
                 onBlur={() => validateField('email')} 
-                placeholder="your@email.com" 
+                placeholder={t('rsvp.form.emailPlaceholder')} 
               />
               <FormErrorMessage>{errors.email}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.likelihood}>
-              <FormLabel>Will You Be Joining Us?</FormLabel>
+              <FormLabel>{t('rsvp.form.willYouJoin')}</FormLabel>
               <Select 
                 name="likelihood" 
                 value={likelihood} 
                 onChange={e => { setLikelihood(e.target.value as Likelihood); validateField('likelihood') }} 
                 onBlur={() => validateField('likelihood')} 
-                placeholder="Please select"
+                placeholder={t('rsvp.form.pleaseSelect')}
               >
-                <option value="definitely">Joyfully Accept</option>
-                <option value="highly_likely">Likely to Attend</option>
-                <option value="maybe">Not Yet Certain</option>
-                <option value="no">Regretfully Decline</option>
+                <option value="definitely">{t('rsvp.form.joyfullyAccept')}</option>
+                <option value="highly_likely">{t('rsvp.form.likelyAttend')}</option>
+                <option value="maybe">{t('rsvp.form.notYetCertain')}</option>
+                <option value="no">{t('rsvp.form.regretfullyDecline')}</option>
               </Select>
               <FormHelperText fontSize="sm" color="neutral.muted">
-                If attending, please indicate which events below.
+                {t('rsvp.form.attendHint')}
               </FormHelperText>
               <FormErrorMessage>{errors.likelihood}</FormErrorMessage>
             </FormControl>
@@ -396,52 +397,52 @@ export default function RsvpForm() {
                   borderWidth="1px"
                   borderColor="primary.soft"
                 >
-                  <FormLabel mb={6}>Events You Plan to Attend</FormLabel>
+                  <FormLabel mb={6}>{t('rsvp.form.eventsTitle')}</FormLabel>
 
                   <Stack spacing={6}>
                     <FormControl>
                       <FormLabel fontSize="sm" fontWeight="400" textTransform="none" letterSpacing="normal">
-                        Welcome Dinner · Friday Evening
+                        {t('rsvp.form.welcomeDinner')}
                       </FormLabel>
                       <Select 
                         name="events.welcome" 
                         value={events.welcome} 
                         onChange={e => { setEventAnswer('welcome', e.target.value as EventAnswer); validateField('events') }} 
-                        placeholder="Please select"
+                        placeholder={t('rsvp.form.pleaseSelect')}
                       >
-                        <option value="yes">Will Attend</option>
-                        <option value="arriving_late">Arriving Late</option>
-                        <option value="no">Unable to Attend</option>
+                        <option value="yes">{t('rsvp.form.willAttend')}</option>
+                        <option value="arriving_late">{t('rsvp.form.arrivingLate')}</option>
+                        <option value="no">{t('rsvp.form.unableToAttend')}</option>
                       </Select>
                     </FormControl>
 
                     <FormControl>
                       <FormLabel fontSize="sm" fontWeight="400" textTransform="none" letterSpacing="normal">
-                        Wedding Ceremony & Reception · Saturday
+                        {t('rsvp.form.weddingDay')}
                       </FormLabel>
                       <Select 
                         name="events.ceremony" 
                         value={events.ceremony} 
                         onChange={e => { setEventAnswer('ceremony', e.target.value as EventAnswer); validateField('events') }} 
-                        placeholder="Please select"
+                        placeholder={t('rsvp.form.pleaseSelect')}
                       >
-                        <option value="yes">Will Attend</option>
-                        <option value="no">Unable to Attend</option>
+                        <option value="yes">{t('rsvp.form.willAttend')}</option>
+                        <option value="no">{t('rsvp.form.unableToAttend')}</option>
                       </Select>
                     </FormControl>
 
                     <FormControl>
                       <FormLabel fontSize="sm" fontWeight="400" textTransform="none" letterSpacing="normal">
-                        Farewell Brunch · Sunday Morning
+                        {t('rsvp.form.farewellBrunch')}
                       </FormLabel>
                       <Select 
                         name="events.brunch" 
                         value={events.brunch} 
                         onChange={e => { setEventAnswer('brunch', e.target.value as EventAnswer); validateField('events') }} 
-                        placeholder="Please select"
+                        placeholder={t('rsvp.form.pleaseSelect')}
                       >
-                        <option value="yes">Will Attend</option>
-                        <option value="no">Unable to Attend</option>
+                        <option value="yes">{t('rsvp.form.willAttend')}</option>
+                        <option value="no">{t('rsvp.form.unableToAttend')}</option>
                       </Select>
                     </FormControl>
 
@@ -452,31 +453,31 @@ export default function RsvpForm() {
             )}
 
             <FormControl>
-              <FormLabel>Accommodation</FormLabel>
-              <Select value={accommodation} onChange={e => setAccommodation(e.target.value as Accommodation)} placeholder="Please select">
-                <option value="venue">Staying at the Château</option>
-                <option value="own">Arranging Own Accommodation</option>
-                <option value="recommend">Would Like Recommendations</option>
+              <FormLabel>{t('rsvp.form.accommodation')}</FormLabel>
+              <Select value={accommodation} onChange={e => setAccommodation(e.target.value as Accommodation)} placeholder={t('rsvp.form.pleaseSelect')}>
+                <option value="venue">{t('rsvp.form.stayingChateau')}</option>
+                <option value="own">{t('rsvp.form.arrangingOwn')}</option>
+                <option value="recommend">{t('rsvp.form.wouldLikeRec')}</option>
               </Select>
             </FormControl>
 
             <FormControl>
-              <FormLabel>Travel Arrangements</FormLabel>
-              <Select value={travelPlan} onChange={e => setTravelPlan(e.target.value as TravelPlan)} placeholder="Please select">
-                <option value="rent_car">Renting a Car</option>
-                <option value="need_shuttle">Interested in Shuttle Service</option>
-                <option value="no_plan">Still Planning</option>
+              <FormLabel>{t('rsvp.form.travel')}</FormLabel>
+              <Select value={travelPlan} onChange={e => setTravelPlan(e.target.value as TravelPlan)} placeholder={t('rsvp.form.pleaseSelect')}>
+                <option value="rent_car">{t('rsvp.form.rentingCar')}</option>
+                <option value="need_shuttle">{t('rsvp.form.shuttleService')}</option>
+                <option value="no_plan">{t('rsvp.form.stillPlanning')}</option>
               </Select>
             </FormControl>
 
             <FormControl>
-              <FormLabel>Dietary Requirements</FormLabel>
-              <Input value={dietary} onChange={e => setDietary(e.target.value)} placeholder="Vegetarian, allergies, etc." />
+              <FormLabel>{t('rsvp.form.dietary')}</FormLabel>
+              <Input value={dietary} onChange={e => setDietary(e.target.value)} placeholder={t('rsvp.form.dietaryPlaceholder')} />
             </FormControl>
 
             <FormControl>
-              <FormLabel>Song Request</FormLabel>
-              <Input value={songRequest} onChange={e => setSongRequest(e.target.value)} placeholder="A song that will get you dancing" />
+              <FormLabel>{t('rsvp.form.songRequest')}</FormLabel>
+              <Input value={songRequest} onChange={e => setSongRequest(e.target.value)} placeholder={t('rsvp.form.songPlaceholder')} />
             </FormControl>
 
             <Checkbox 
@@ -484,44 +485,44 @@ export default function RsvpForm() {
               onChange={e => setFranceTips(e.target.checked)}
               colorScheme="gray"
             >
-              <Text fontSize="sm">First time in France? Send me local recommendations.</Text>
+              <Text fontSize="sm">{t('rsvp.form.franceTips')}</Text>
             </Checkbox>
 
             <Box>
-              <FormLabel>Additional Guests</FormLabel>
+              <FormLabel>{t('rsvp.form.additionalGuests')}</FormLabel>
               <Stack spacing={4}>
                 {guests.map((g, i) => (
                   <HStack key={i} spacing={4}>
                     <Input 
                       value={g.name} 
                       onChange={e => updateGuest(i, { name: e.target.value })} 
-                      placeholder={`Guest ${i + 1} name`} 
+                      placeholder={t('rsvp.form.guestName', { number: i + 1 })} 
                       flex={2}
                     />
                     <Input 
                       value={g.dietary || ''} 
                       onChange={e => updateGuest(i, { dietary: e.target.value })} 
-                      placeholder="Dietary" 
+                      placeholder={t('rsvp.form.guestDietary')} 
                       flex={1}
                     />
-                    <Button size="sm" variant="ghost" onClick={() => removeGuest(i)}>Remove</Button>
+                    <Button size="sm" variant="ghost" onClick={() => removeGuest(i)}>{t('rsvp.form.remove')}</Button>
                   </HStack>
                 ))}
 
                 <Button onClick={addGuest} variant="ghost" size="sm" alignSelf="flex-start">
-                  + Add Guest
+                  {t('rsvp.form.addGuest')}
                 </Button>
                 {errors.guests && <Text color="primary.deep" fontSize="sm">{errors.guests}</Text>}
               </Stack>
             </Box>
 
             <FormControl>
-              <FormLabel>Additional Notes</FormLabel>
+              <FormLabel>{t('rsvp.form.additionalNotes')}</FormLabel>
               <Textarea 
                 rows={3} 
                 onChange={e => setAdditionalNotes(e.target.value)} 
                 value={additionalNotes} 
-                placeholder="Anything else we should know" 
+                placeholder={t('rsvp.form.notesPlaceholder')} 
               />
             </FormControl>
 
@@ -532,17 +533,17 @@ export default function RsvpForm() {
               size="lg"
               mt={4}
             >
-              Submit Response
+              {t('rsvp.form.submit')}
             </Button>
 
             {status === 'saved' && (
               <Text textAlign="center" color="primary.deep" fontSize="sm">
-                Thank you for your response. We look forward to celebrating with you.
+                {t('rsvp.success.thankYouSaved')}
               </Text>
             )}
             {status === 'updated' && (
               <Text textAlign="center" color="primary.soft" fontSize="sm">
-                Your response has been updated. Thank you.
+                {t('rsvp.success.thankYouUpdated')}
               </Text>
             )}
           </Stack>

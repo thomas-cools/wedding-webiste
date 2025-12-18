@@ -1,0 +1,114 @@
+{
+  "header": {
+    "initials": "S & L",
+    "ourStory": "Ons Verhaal",
+    "details": "Details",
+    "rsvp": "RSVP"
+  },
+  "hero": {
+    "together": "Samen met hun families",
+    "and": "&",
+    "date": "Achttien Oktober",
+    "year": "Tweeduizend Zesentwintig",
+    "venue": "Château de Varennes · Bourgondië, Frankrijk",
+    "respond": "Gelieve te Antwoorden"
+  },
+  "story": {
+    "label": "Ons Verhaal",
+    "title": "Twee Werelden, Één Hart",
+    "paragraph1": "Van de bruisende straten van Mexico-Stad tot de geplaveide pleinen van Brussel, ons verhaal is een kaart van twee culturen die een thuis in elkaar vonden.",
+    "paragraph2": "We kozen Frankrijk als onze ontmoetingsplaats—een neutrale grond van schoonheid en wijn—om de versmelting van onze families en het begin van ons voor altijd te vieren.",
+    "quote": "Une Célébration d'Amor & Liefde"
+  },
+  "details": {
+    "label": "De Viering",
+    "title": "Trouwweekend",
+    "friday": "Vrijdag",
+    "saturday": "Zaterdag",
+    "sunday": "Zondag",
+    "welcomeDinner": "Welkomstdiner",
+    "theWedding": "Het Huwelijk",
+    "farewellBrunch": "Afscheidsbrunch",
+    "date": {
+      "friday": "17 Oktober 2026",
+      "saturday": "18 Oktober 2026",
+      "sunday": "19 Oktober 2026"
+    },
+    "time": {
+      "dinner": "Zeven uur 's avonds",
+      "ceremony": "Ceremonie om vier uur",
+      "reception": "Receptie volgt",
+      "brunch": "Elf uur 's ochtends"
+    },
+    "venueName": "Château de Varennes",
+    "venueAddress": "21320 Pouilly-en-Auxois, Bourgondië, Frankrijk"
+  },
+  "rsvp": {
+    "label": "Gelieve te Antwoorden",
+    "title": "RSVP",
+    "description": "Laat ons weten of je bij onze huwelijksviering in Bourgondië aanwezig zult zijn. We vragen vriendelijk om voor 1 augustus 2026 te antwoorden.",
+    "form": {
+      "yourName": "Je Naam",
+      "namePlaceholder": "Volledige naam zoals je die op de plaatskaart wilt",
+      "email": "E-mailadres",
+      "emailPlaceholder": "jouw@email.com",
+      "willYouJoin": "Ben je Erbij?",
+      "pleaseSelect": "Selecteer alsjeblieft",
+      "joyfullyAccept": "Ik Accepteer met Vreugde",
+      "likelyAttend": "Waarschijnlijk Aanwezig",
+      "notYetCertain": "Nog Niet Zeker",
+      "regretfullyDecline": "Helaas Niet Mogelijk",
+      "attendHint": "Als je komt, geef hieronder aan welke evenementen.",
+      "eventsTitle": "Evenementen die je Plant bij te Wonen",
+      "welcomeDinner": "Welkomstdiner · Vrijdagavond",
+      "weddingDay": "Huwelijksceremonie & Receptie · Zaterdag",
+      "farewellBrunch": "Afscheidsbrunch · Zondagochtend",
+      "willAttend": "Ik zal Aanwezig zijn",
+      "arrivingLate": "Ik Kom Later",
+      "unableToAttend": "Ik Kan Niet Aanwezig zijn",
+      "accommodation": "Accommodatie",
+      "stayingChateau": "Ik Verblijf in het Château",
+      "arrangingOwn": "Ik Regel Eigen Accommodatie",
+      "wouldLikeRec": "Ik Zou Graag Aanbevelingen Ontvangen",
+      "travel": "Reisplannen",
+      "rentingCar": "Ik Huur een Auto",
+      "shuttleService": "Geïnteresseerd in Pendeldienst",
+      "stillPlanning": "Nog aan het Plannen",
+      "dietary": "Dieetwensen",
+      "dietaryPlaceholder": "Vegetarisch, allergieën, etc.",
+      "songRequest": "Muziekverzoek",
+      "songPlaceholder": "Een liedje dat je aan het dansen krijgt",
+      "franceTips": "Eerste keer in Frankrijk? Stuur me lokale aanbevelingen.",
+      "additionalGuests": "Extra Gasten",
+      "guestName": "Naam gast {{number}}",
+      "guestDietary": "Dieet",
+      "remove": "Verwijderen",
+      "addGuest": "+ Gast Toevoegen",
+      "additionalNotes": "Extra Opmerkingen",
+      "notesPlaceholder": "Iets anders dat we moeten weten",
+      "submit": "Antwoord Verzenden"
+    },
+    "validation": {
+      "nameRequired": "Vul alsjeblieft je volledige naam in.",
+      "emailRequired": "Vul alsjeblieft een geldig e-mailadres in.",
+      "likelihoodRequired": "Geef alsjeblieft aan hoe waarschijnlijk het is dat je komt.",
+      "eventRequired": "Selecteer alsjeblieft minstens één evenement als je van plan bent te komen.",
+      "guestNameRequired": "Vul alsjeblieft de namen van de gasten in of verwijder lege entries."
+    },
+    "success": {
+      "savedTitle": "Antwoord opgeslagen",
+      "savedMessage": "Bedankt! Je RSVP is geregistreerd.",
+      "updatedTitle": "Antwoord bijgewerkt",
+      "updatedMessage": "Bedankt! Je RSVP is bijgewerkt.",
+      "thankYouSaved": "Bedankt voor je antwoord. We kijken ernaar uit om met je te vieren.",
+      "thankYouUpdated": "Je antwoord is bijgewerkt. Bedankt."
+    }
+  },
+  "footer": {
+    "date": "18 Oktober 2026",
+    "madeWith": "Gemaakt met liefde in Brussel & Mexico-Stad"
+  },
+  "language": {
+    "select": "Taal"
+  }
+}

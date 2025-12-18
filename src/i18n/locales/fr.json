@@ -1,0 +1,114 @@
+{
+  "header": {
+    "initials": "S & L",
+    "ourStory": "Notre Histoire",
+    "details": "Détails",
+    "rsvp": "RSVP"
+  },
+  "hero": {
+    "together": "Avec leurs familles",
+    "and": "&",
+    "date": "Le Dix-huit Octobre",
+    "year": "Deux Mille Vingt-Six",
+    "venue": "Château de Varennes · Bourgogne, France",
+    "respond": "Répondre S'il Vous Plaît"
+  },
+  "story": {
+    "label": "Notre Histoire",
+    "title": "Deux Mondes, Un Cœur",
+    "paragraph1": "Des rues vibrantes de Mexico aux places pavées de Bruxelles, notre histoire est une carte de deux cultures qui ont trouvé un foyer l'une dans l'autre.",
+    "paragraph2": "Nous avons choisi la France comme lieu de rassemblement—un terrain neutre de beauté et de vin—pour célébrer le mélange de nos familles et le début de notre toujours.",
+    "quote": "Une Célébration d'Amor & Liefde"
+  },
+  "details": {
+    "label": "La Célébration",
+    "title": "Week-end de Mariage",
+    "friday": "Vendredi",
+    "saturday": "Samedi",
+    "sunday": "Dimanche",
+    "welcomeDinner": "Dîner de Bienvenue",
+    "theWedding": "Le Mariage",
+    "farewellBrunch": "Brunch d'Adieu",
+    "date": {
+      "friday": "17 Octobre 2026",
+      "saturday": "18 Octobre 2026",
+      "sunday": "19 Octobre 2026"
+    },
+    "time": {
+      "dinner": "Dix-neuf heures",
+      "ceremony": "Cérémonie à seize heures",
+      "reception": "Réception à suivre",
+      "brunch": "Onze heures"
+    },
+    "venueName": "Château de Varennes",
+    "venueAddress": "21320 Pouilly-en-Auxois, Bourgogne, France"
+  },
+  "rsvp": {
+    "label": "Répondre S'il Vous Plaît",
+    "title": "RSVP",
+    "description": "Merci de nous faire savoir si vous vous joindrez à nous pour notre célébration de mariage en Bourgogne. Nous vous prions de répondre avant le 1er août 2026.",
+    "form": {
+      "yourName": "Votre Nom",
+      "namePlaceholder": "Nom complet tel que vous le souhaitez sur le marque-place",
+      "email": "Adresse Email",
+      "emailPlaceholder": "votre@email.com",
+      "willYouJoin": "Serez-vous des Nôtres?",
+      "pleaseSelect": "Veuillez sélectionner",
+      "joyfullyAccept": "J'accepte avec Joie",
+      "likelyAttend": "Je serai Probablement Présent",
+      "notYetCertain": "Pas Encore Certain",
+      "regretfullyDecline": "Je Décline à Regret",
+      "attendHint": "Si vous assistez, veuillez indiquer les événements ci-dessous.",
+      "eventsTitle": "Événements Auxquels Vous Prévoyez d'Assister",
+      "welcomeDinner": "Dîner de Bienvenue · Vendredi Soir",
+      "weddingDay": "Cérémonie et Réception · Samedi",
+      "farewellBrunch": "Brunch d'Adieu · Dimanche Matin",
+      "willAttend": "Je serai Présent",
+      "arrivingLate": "J'arriverai en Retard",
+      "unableToAttend": "Je ne pourrai pas Assister",
+      "accommodation": "Hébergement",
+      "stayingChateau": "Je loge au Château",
+      "arrangingOwn": "J'organise Mon Propre Hébergement",
+      "wouldLikeRec": "J'aimerais des Recommandations",
+      "travel": "Arrangements de Voyage",
+      "rentingCar": "Je loue une Voiture",
+      "shuttleService": "Intéressé par le Service de Navette",
+      "stillPlanning": "En Cours de Planification",
+      "dietary": "Restrictions Alimentaires",
+      "dietaryPlaceholder": "Végétarien, allergies, etc.",
+      "songRequest": "Demande de Chanson",
+      "songPlaceholder": "Une chanson qui vous fera danser",
+      "franceTips": "Première fois en France? Envoyez-moi des recommandations locales.",
+      "additionalGuests": "Invités Supplémentaires",
+      "guestName": "Nom de l'invité {{number}}",
+      "guestDietary": "Régime",
+      "remove": "Supprimer",
+      "addGuest": "+ Ajouter un Invité",
+      "additionalNotes": "Notes Supplémentaires",
+      "notesPlaceholder": "Autre chose que nous devrions savoir",
+      "submit": "Envoyer la Réponse"
+    },
+    "validation": {
+      "nameRequired": "Veuillez entrer votre nom complet.",
+      "emailRequired": "Veuillez entrer une adresse email valide.",
+      "likelihoodRequired": "Veuillez indiquer la probabilité de votre présence.",
+      "eventRequired": "Veuillez sélectionner au moins un événement si vous prévoyez d'assister.",
+      "guestNameRequired": "Veuillez fournir les noms des invités ou supprimer les entrées vides."
+    },
+    "success": {
+      "savedTitle": "Réponse enregistrée",
+      "savedMessage": "Merci! Votre RSVP a été enregistré.",
+      "updatedTitle": "Réponse mise à jour",
+      "updatedMessage": "Merci! Votre RSVP a été mis à jour.",
+      "thankYouSaved": "Merci pour votre réponse. Nous avons hâte de célébrer avec vous.",
+      "thankYouUpdated": "Votre réponse a été mise à jour. Merci."
+    }
+  },
+  "footer": {
+    "date": "18 Octobre 2026",
+    "madeWith": "Fait avec amour à Bruxelles & Mexico"
+  },
+  "language": {
+    "select": "Langue"
+  }
+}

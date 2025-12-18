@@ -30,6 +30,7 @@ jest.mock('@chakra-ui/react', () => {
   }
 })
 
+// Note: Tests use translation keys since the i18n mock returns keys as-is
 describe('RsvpForm', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -41,38 +42,38 @@ describe('RsvpForm', () => {
     it('renders the form with all required fields', () => {
       render(<RsvpForm />)
       
-      expect(screen.getByText(/kindly respond/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/your name/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/email address/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/will you be joining us/i)).toBeInTheDocument()
+      expect(screen.getByText('rsvp.label')).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.yourName')).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.email')).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.willYouJoin')).toBeInTheDocument()
     })
 
     it('renders the RSVP header section', () => {
       render(<RsvpForm />)
       
-      expect(screen.getByRole('heading', { name: /rsvp/i })).toBeInTheDocument()
-      expect(screen.getByText(/please let us know/i)).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'rsvp.title' })).toBeInTheDocument()
+      expect(screen.getByText('rsvp.description')).toBeInTheDocument()
     })
 
     it('renders optional fields', () => {
       render(<RsvpForm />)
       
-      expect(screen.getByLabelText(/accommodation/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/travel arrangements/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/dietary requirements/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/song request/i)).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.accommodation')).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.travel')).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.dietary')).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.songRequest')).toBeInTheDocument()
     })
 
     it('renders submit button', () => {
       render(<RsvpForm />)
       
-      expect(screen.getByRole('button', { name: /submit response/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'rsvp.form.submit' })).toBeInTheDocument()
     })
 
     it('renders France tips checkbox', () => {
       render(<RsvpForm />)
       
-      expect(screen.getByText(/first time in france/i)).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.franceTips')).toBeInTheDocument()
     })
   })
 
@@ -81,11 +82,11 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const submitButton = screen.getByRole('button', { name: /submit response/i })
+      const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
       
       await waitFor(() => {
-        expect(screen.getByText(/please enter your full name/i)).toBeInTheDocument()
+        expect(screen.getByText('rsvp.validation.nameRequired')).toBeInTheDocument()
       })
     })
 
@@ -93,14 +94,14 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const nameInput = screen.getByLabelText(/your name/i)
+      const nameInput = screen.getByPlaceholderText('rsvp.form.namePlaceholder')
       await user.type(nameInput, 'John Doe')
       
-      const submitButton = screen.getByRole('button', { name: /submit response/i })
+      const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
       
       await waitFor(() => {
-        expect(screen.getByText(/please enter a valid email/i)).toBeInTheDocument()
+        expect(screen.getByText('rsvp.validation.emailRequired')).toBeInTheDocument()
       })
     })
 
@@ -108,17 +109,17 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const nameInput = screen.getByLabelText(/your name/i)
+      const nameInput = screen.getByPlaceholderText('rsvp.form.namePlaceholder')
       await user.type(nameInput, 'John Doe')
       
-      const emailInput = screen.getByLabelText(/email address/i)
+      const emailInput = screen.getByPlaceholderText('rsvp.form.emailPlaceholder')
       await user.type(emailInput, 'john@example.com')
       
-      const submitButton = screen.getByRole('button', { name: /submit response/i })
+      const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
       
       await waitFor(() => {
-        expect(screen.getByText(/please indicate how likely/i)).toBeInTheDocument()
+        expect(screen.getByText('rsvp.validation.likelihoodRequired')).toBeInTheDocument()
       })
     })
 
@@ -126,12 +127,12 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const emailInput = screen.getByLabelText(/email address/i)
+      const emailInput = screen.getByPlaceholderText('rsvp.form.emailPlaceholder')
       await user.type(emailInput, 'invalid-email')
       fireEvent.blur(emailInput)
       
       await waitFor(() => {
-        expect(screen.getByText(/please enter a valid email/i)).toBeInTheDocument()
+        expect(screen.getByText('rsvp.validation.emailRequired')).toBeInTheDocument()
       })
     })
 
@@ -139,12 +140,12 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const emailInput = screen.getByLabelText(/email address/i)
+      const emailInput = screen.getByPlaceholderText('rsvp.form.emailPlaceholder')
       await user.type(emailInput, 'invalid')
       fireEvent.blur(emailInput)
       
       await waitFor(() => {
-        expect(screen.getByText(/please enter a valid email/i)).toBeInTheDocument()
+        expect(screen.getByText('rsvp.validation.emailRequired')).toBeInTheDocument()
       })
       
       await user.clear(emailInput)
@@ -152,7 +153,7 @@ describe('RsvpForm', () => {
       fireEvent.blur(emailInput)
       
       await waitFor(() => {
-        expect(screen.queryByText(/please enter a valid email/i)).not.toBeInTheDocument()
+        expect(screen.queryByText('rsvp.validation.emailRequired')).not.toBeInTheDocument()
       })
     })
   })
@@ -162,11 +163,11 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const likelihoodSelect = screen.getByLabelText(/will you be joining us/i)
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
       await user.selectOptions(likelihoodSelect, 'definitely')
       
       await waitFor(() => {
-        expect(screen.getByText(/events you plan to attend/i)).toBeInTheDocument()
+        expect(screen.getByText('rsvp.form.eventsTitle')).toBeInTheDocument()
       })
     })
 
@@ -174,11 +175,11 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const likelihoodSelect = screen.getByLabelText(/will you be joining us/i)
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
       await user.selectOptions(likelihoodSelect, 'highly_likely')
       
       await waitFor(() => {
-        expect(screen.getByText(/events you plan to attend/i)).toBeInTheDocument()
+        expect(screen.getByText('rsvp.form.eventsTitle')).toBeInTheDocument()
       })
     })
 
@@ -186,11 +187,11 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const likelihoodSelect = screen.getByLabelText(/will you be joining us/i)
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
       await user.selectOptions(likelihoodSelect, 'maybe')
       
       await waitFor(() => {
-        expect(screen.getByText(/events you plan to attend/i)).toBeInTheDocument()
+        expect(screen.getByText('rsvp.form.eventsTitle')).toBeInTheDocument()
       })
     })
 
@@ -198,11 +199,11 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const likelihoodSelect = screen.getByLabelText(/will you be joining us/i)
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
       await user.selectOptions(likelihoodSelect, 'no')
       
       await waitFor(() => {
-        expect(screen.queryByText(/events you plan to attend/i)).not.toBeInTheDocument()
+        expect(screen.queryByText('rsvp.form.eventsTitle')).not.toBeInTheDocument()
       })
     })
 
@@ -210,15 +211,15 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      await user.type(screen.getByLabelText(/your name/i), 'John Doe')
-      await user.type(screen.getByLabelText(/email address/i), 'john@example.com')
-      await user.selectOptions(screen.getByLabelText(/will you be joining us/i), 'definitely')
+      await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
+      await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'definitely')
       
-      const submitButton = screen.getByRole('button', { name: /submit response/i })
+      const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
       
       await waitFor(() => {
-        expect(screen.getByText(/please select at least one event/i)).toBeInTheDocument()
+        expect(screen.getByText('rsvp.validation.eventRequired')).toBeInTheDocument()
       })
     })
   })
@@ -228,55 +229,56 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const addGuestButton = screen.getByRole('button', { name: /add guest/i })
+      const addGuestButton = screen.getByRole('button', { name: 'rsvp.form.addGuest' })
       await user.click(addGuestButton)
       
-      expect(screen.getByPlaceholderText(/guest 1 name/i)).toBeInTheDocument()
+      expect(screen.getByPlaceholderText('rsvp.form.guestName')).toBeInTheDocument()
     })
 
     it('allows adding multiple guests', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const addGuestButton = screen.getByRole('button', { name: /add guest/i })
+      const addGuestButton = screen.getByRole('button', { name: 'rsvp.form.addGuest' })
       await user.click(addGuestButton)
       await user.click(addGuestButton)
       
-      expect(screen.getByPlaceholderText(/guest 1 name/i)).toBeInTheDocument()
-      expect(screen.getByPlaceholderText(/guest 2 name/i)).toBeInTheDocument()
+      // Both guests will have the same placeholder since i18n mock returns keys
+      const guestInputs = screen.getAllByPlaceholderText('rsvp.form.guestName')
+      expect(guestInputs.length).toBe(2)
     })
 
     it('allows removing a guest', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const addGuestButton = screen.getByRole('button', { name: /add guest/i })
+      const addGuestButton = screen.getByRole('button', { name: 'rsvp.form.addGuest' })
       await user.click(addGuestButton)
       
-      expect(screen.getByPlaceholderText(/guest 1 name/i)).toBeInTheDocument()
+      expect(screen.getByPlaceholderText('rsvp.form.guestName')).toBeInTheDocument()
       
-      const removeButton = screen.getByRole('button', { name: /remove/i })
+      const removeButton = screen.getByRole('button', { name: 'rsvp.form.remove' })
       await user.click(removeButton)
       
-      expect(screen.queryByPlaceholderText(/guest 1 name/i)).not.toBeInTheDocument()
+      expect(screen.queryByPlaceholderText('rsvp.form.guestName')).not.toBeInTheDocument()
     })
 
     it('validates guest names when guests are added', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      await user.type(screen.getByLabelText(/your name/i), 'John Doe')
-      await user.type(screen.getByLabelText(/email address/i), 'john@example.com')
-      await user.selectOptions(screen.getByLabelText(/will you be joining us/i), 'no')
+      await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
+      await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'no')
       
-      const addGuestButton = screen.getByRole('button', { name: /add guest/i })
+      const addGuestButton = screen.getByRole('button', { name: 'rsvp.form.addGuest' })
       await user.click(addGuestButton)
       
-      const submitButton = screen.getByRole('button', { name: /submit response/i })
+      const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
       
       await waitFor(() => {
-        expect(screen.getByText(/please provide guest names/i)).toBeInTheDocument()
+        expect(screen.getByText('rsvp.validation.guestNameRequired')).toBeInTheDocument()
       })
     })
   })
@@ -286,11 +288,11 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      await user.type(screen.getByLabelText(/your name/i), 'John Doe')
-      await user.type(screen.getByLabelText(/email address/i), 'john@example.com')
-      await user.selectOptions(screen.getByLabelText(/will you be joining us/i), 'no')
+      await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
+      await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'no')
       
-      const submitButton = screen.getByRole('button', { name: /submit response/i })
+      const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
       
       await waitFor(() => {
@@ -306,11 +308,11 @@ describe('RsvpForm', () => {
       const dispatchSpy = jest.spyOn(window, 'dispatchEvent')
       render(<RsvpForm />)
       
-      await user.type(screen.getByLabelText(/your name/i), 'John Doe')
-      await user.type(screen.getByLabelText(/email address/i), 'john@example.com')
-      await user.selectOptions(screen.getByLabelText(/will you be joining us/i), 'no')
+      await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
+      await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'no')
       
-      const submitButton = screen.getByRole('button', { name: /submit response/i })
+      const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
       
       await waitFor(() => {
@@ -328,7 +330,7 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const accommodationSelect = screen.getByLabelText(/accommodation/i)
+      const accommodationSelect = screen.getByRole('combobox', { name: 'rsvp.form.accommodation' })
       await user.selectOptions(accommodationSelect, 'venue')
       
       expect(accommodationSelect).toHaveValue('venue')
@@ -338,7 +340,7 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const travelSelect = screen.getByLabelText(/travel arrangements/i)
+      const travelSelect = screen.getByRole('combobox', { name: 'rsvp.form.travel' })
       await user.selectOptions(travelSelect, 'rent_car')
       
       expect(travelSelect).toHaveValue('rent_car')
@@ -348,7 +350,7 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const dietaryInput = screen.getByLabelText(/dietary requirements/i)
+      const dietaryInput = screen.getByPlaceholderText('rsvp.form.dietaryPlaceholder')
       await user.type(dietaryInput, 'Vegetarian')
       
       expect(dietaryInput).toHaveValue('Vegetarian')
@@ -358,7 +360,7 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const songInput = screen.getByLabelText(/song request/i)
+      const songInput = screen.getByPlaceholderText('rsvp.form.songPlaceholder')
       await user.type(songInput, 'Dancing Queen')
       
       expect(songInput).toHaveValue('Dancing Queen')
@@ -378,7 +380,7 @@ describe('RsvpForm', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const notesTextarea = screen.getByLabelText(/additional notes/i)
+      const notesTextarea = screen.getByPlaceholderText('rsvp.form.notesPlaceholder')
       await user.type(notesTextarea, 'Looking forward to it!')
       
       expect(notesTextarea).toHaveValue('Looking forward to it!')

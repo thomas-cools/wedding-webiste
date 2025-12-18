@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { 
   Box, 
   Text, 
@@ -13,6 +14,7 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react'
 import RsvpForm from './components/RsvpForm'
+import LanguageSwitcher from './components/LanguageSwitcher'
 
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
@@ -22,6 +24,8 @@ const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) =
 )
 
 export default function App() {
+  const { t } = useTranslation()
+  
   return (
     <Box minH="100vh" bg="neutral.light">
       {/* Minimal Elegant Header */}
@@ -46,18 +50,21 @@ export default function App() {
               letterSpacing="0.15em" 
               color="neutral.dark"
             >
-              S & L
+              {t('header.initials')}
             </Text>
-            <HStack spacing={10} display={["none", "none", "flex"]}>
-              <Button as="a" href="#story" variant="ghost" size="sm">
-                Our Story
-              </Button>
-              <Button as="a" href="#details" variant="ghost" size="sm">
-                Details
-              </Button>
-              <Button as="a" href="#rsvp" variant="ghost" size="sm">
-                RSVP
-              </Button>
+            <HStack spacing={[4, 6, 10]}>
+              <HStack spacing={10} display={["none", "none", "flex"]}>
+                <Button as="a" href="#story" variant="ghost" size="sm">
+                  {t('header.ourStory')}
+                </Button>
+                <Button as="a" href="#details" variant="ghost" size="sm">
+                  {t('header.details')}
+                </Button>
+                <Button as="a" href="#rsvp" variant="ghost" size="sm">
+                  {t('header.rsvp')}
+                </Button>
+              </HStack>
+              <LanguageSwitcher />
             </HStack>
           </Flex>
         </Container>
@@ -83,7 +90,7 @@ export default function App() {
               fontWeight="500"
               mb={8}
             >
-              Together with their families
+              {t('hero.together')}
             </Text>
             
             <Heading 
@@ -106,7 +113,7 @@ export default function App() {
               color="primary.soft"
               my={4}
             >
-              &
+              {t('hero.and')}
             </Text>
             
             <Heading 
@@ -131,7 +138,7 @@ export default function App() {
               fontWeight="500"
               mb={2}
             >
-              October Eighteenth
+              {t('hero.date')}
             </Text>
             <Text 
               fontSize="sm" 
@@ -141,7 +148,7 @@ export default function App() {
               fontWeight="500"
               mb={6}
             >
-              Two Thousand Twenty-Six
+              {t('hero.year')}
             </Text>
             <Text 
               fontSize="md" 
@@ -149,7 +156,7 @@ export default function App() {
               fontStyle="italic"
               letterSpacing="0.05em"
             >
-              Château de Varennes · Burgundy, France
+              {t('hero.venue')}
             </Text>
             
             <Button 
@@ -159,7 +166,7 @@ export default function App() {
               variant="outline"
               size="lg"
             >
-              Kindly Respond
+              {t('hero.respond')}
             </Button>
           </VStack>
         </Box>
@@ -177,7 +184,7 @@ export default function App() {
                   color="primary.soft"
                   fontWeight="500"
                 >
-                  Our Story
+                  {t('story.label')}
                 </Text>
                 <Heading 
                   as="h2" 
@@ -185,7 +192,7 @@ export default function App() {
                   fontSize={["3xl", "4xl"]} 
                   fontWeight="400"
                 >
-                  Two Worlds, One Heart
+                  {t('story.title')}
                 </Heading>
                 <ElegantDivider my={2} />
               </VStack>
@@ -208,10 +215,10 @@ export default function App() {
                 </Box>
                 <VStack flex={1} align={["center", "center", "flex-start"]} spacing={6} textAlign={["center", "center", "left"]}>
                   <Text fontSize="lg" lineHeight="1.9">
-                    From the vibrant streets of Mexico City to the cobbled squares of Brussels, our story is a map of two cultures finding a home in one another.
+                    {t('story.paragraph1')}
                   </Text>
                   <Text fontSize="lg" lineHeight="1.9">
-                    We chose France as our gathering place—a neutral ground of beauty and wine—to celebrate the blending of our families and the beginning of our forever.
+                    {t('story.paragraph2')}
                   </Text>
                   <Text 
                     fontFamily="heading" 
@@ -220,7 +227,7 @@ export default function App() {
                     color="primary.deep" 
                     mt={4}
                   >
-                    "Une Célébration d'Amor & Liefde"
+                    "{t('story.quote')}"
                   </Text>
                 </VStack>
               </Flex>
@@ -241,7 +248,7 @@ export default function App() {
                   color="primary.soft"
                   fontWeight="500"
                 >
-                  The Celebration
+                  {t('details.label')}
                 </Text>
                 <Heading 
                   as="h2" 
@@ -249,7 +256,7 @@ export default function App() {
                   fontSize={["3xl", "4xl"]} 
                   fontWeight="400"
                 >
-                  Wedding Weekend
+                  {t('details.title')}
                 </Heading>
                 <ElegantDivider my={2} />
               </VStack>
@@ -272,7 +279,7 @@ export default function App() {
                     color="primary.soft"
                     fontWeight="500"
                   >
-                    Friday
+                    {t('details.friday')}
                   </Text>
                   <Heading 
                     as="h3" 
@@ -280,11 +287,11 @@ export default function App() {
                     fontSize="xl" 
                     fontWeight="400"
                   >
-                    Welcome Dinner
+                    {t('details.welcomeDinner')}
                   </Heading>
                   <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
-                  <Text fontSize="sm" color="neutral.dark">October 17, 2026</Text>
-                  <Text fontSize="sm" color="neutral.muted">Seven o'clock in the evening</Text>
+                  <Text fontSize="sm" color="neutral.dark">{t('details.date.friday')}</Text>
+                  <Text fontSize="sm" color="neutral.muted">{t('details.time.dinner')}</Text>
                 </VStack>
 
                 {/* Saturday - Featured */}
@@ -301,7 +308,7 @@ export default function App() {
                     color="primary.soft"
                     fontWeight="500"
                   >
-                    Saturday
+                    {t('details.saturday')}
                   </Text>
                   <Heading 
                     as="h3" 
@@ -310,12 +317,12 @@ export default function App() {
                     fontWeight="400"
                     color="neutral.light"
                   >
-                    The Wedding
+                    {t('details.theWedding')}
                   </Heading>
                   <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
-                  <Text fontSize="sm" color="neutral.light">October 18, 2026</Text>
-                  <Text fontSize="sm" color="primary.soft">Ceremony at four o'clock</Text>
-                  <Text fontSize="sm" color="primary.soft">Reception to follow</Text>
+                  <Text fontSize="sm" color="neutral.light">{t('details.date.saturday')}</Text>
+                  <Text fontSize="sm" color="primary.soft">{t('details.time.ceremony')}</Text>
+                  <Text fontSize="sm" color="primary.soft">{t('details.time.reception')}</Text>
                 </VStack>
 
                 {/* Sunday */}
@@ -334,7 +341,7 @@ export default function App() {
                     color="primary.soft"
                     fontWeight="500"
                   >
-                    Sunday
+                    {t('details.sunday')}
                   </Text>
                   <Heading 
                     as="h3" 
@@ -342,21 +349,21 @@ export default function App() {
                     fontSize="xl" 
                     fontWeight="400"
                   >
-                    Farewell Brunch
+                    {t('details.farewellBrunch')}
                   </Heading>
                   <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
-                  <Text fontSize="sm" color="neutral.dark">October 19, 2026</Text>
-                  <Text fontSize="sm" color="neutral.muted">Eleven in the morning</Text>
+                  <Text fontSize="sm" color="neutral.dark">{t('details.date.sunday')}</Text>
+                  <Text fontSize="sm" color="neutral.muted">{t('details.time.brunch')}</Text>
                 </VStack>
               </SimpleGrid>
 
               {/* Venue Info */}
               <VStack spacing={2} textAlign="center" pt={8}>
                 <Text fontSize="sm" textTransform="uppercase" letterSpacing="0.2em" color="neutral.dark">
-                  Château de Varennes
+                  {t('details.venueName')}
                 </Text>
                 <Text fontSize="sm" color="neutral.muted" fontStyle="italic">
-                  21320 Pouilly-en-Auxois, Burgundy, France
+                  {t('details.venueAddress')}
                 </Text>
               </VStack>
             </VStack>
@@ -387,17 +394,17 @@ export default function App() {
               fontWeight="400" 
               letterSpacing="0.1em"
             >
-              S & L
+              {t('header.initials')}
             </Heading>
             <Text 
               fontSize="sm" 
               letterSpacing="0.15em"
               textTransform="uppercase"
             >
-              October 18, 2026
+              {t('footer.date')}
             </Text>
             <Text fontSize="xs" color="neutral.muted" mt={4}>
-              Made with love in Brussels & Mexico City
+              {t('footer.madeWith')}
             </Text>
           </VStack>
         </Container>
