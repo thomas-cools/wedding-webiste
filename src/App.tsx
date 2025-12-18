@@ -15,6 +15,8 @@ import {
 } from '@chakra-ui/react'
 import RsvpForm from './components/RsvpForm'
 import LanguageSwitcher from './components/LanguageSwitcher'
+import Hero from './components/Hero'
+import { features } from './config'
 
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
@@ -71,105 +73,8 @@ export default function App() {
       </Box>
 
       <Box as="main">
-        {/* Hero Section - Full Height, Centered, Elegant */}
-        <Box 
-          minH="100vh" 
-          display="flex" 
-          alignItems="center" 
-          justifyContent="center"
-          textAlign="center"
-          px={6}
-          pt={20}
-        >
-          <VStack spacing={0} maxW="700px">
-            <Text 
-              fontSize="xs" 
-              textTransform="uppercase" 
-              letterSpacing="0.35em" 
-              color="neutral.dark"
-              fontWeight="500"
-              mb={8}
-            >
-              {t('hero.together')}
-            </Text>
-            
-            <Heading 
-              as="h1" 
-              fontFamily="heading" 
-              fontSize={["5xl", "6xl", "7xl"]}
-              fontWeight="400"
-              color="neutral.dark"
-              lineHeight="0.9"
-              letterSpacing="-0.02em"
-            >
-              Sofia
-            </Heading>
-            
-            <Text 
-              fontFamily="heading"
-              fontSize={["2xl", "3xl"]} 
-              fontStyle="italic" 
-              fontWeight="300" 
-              color="primary.soft"
-              my={4}
-            >
-              {t('hero.and')}
-            </Text>
-            
-            <Heading 
-              as="h1" 
-              fontFamily="heading" 
-              fontSize={["5xl", "6xl", "7xl"]}
-              fontWeight="400"
-              color="neutral.dark"
-              lineHeight="0.9"
-              letterSpacing="-0.02em"
-            >
-              Lucas
-            </Heading>
-
-            <ElegantDivider mt={12} mb={10} />
-            
-            <Text 
-              fontSize="sm" 
-              textTransform="uppercase" 
-              letterSpacing="0.25em" 
-              color="neutral.dark"
-              fontWeight="500"
-              mb={2}
-            >
-              {t('hero.date')}
-            </Text>
-            <Text 
-              fontSize="sm" 
-              textTransform="uppercase" 
-              letterSpacing="0.25em" 
-              color="neutral.dark"
-              fontWeight="500"
-              mb={6}
-            >
-              {t('hero.year')}
-            </Text>
-            <Text 
-              fontSize="md" 
-              color="neutral.dark" 
-              fontStyle="italic"
-              letterSpacing="0.05em"
-            >
-              {t('hero.venue')}
-            </Text>
-            
-            <Button 
-              as="a" 
-              href="#rsvp" 
-              mt={12}
-              variant="outline"
-              size="lg"
-            >
-              {t('hero.respond')}
-            </Button>
-          </VStack>
-        </Box>
+        {/* Hero Section */}
+        <Hero />
 
         {/* Story Section */}
         <Box id="story" py={[20, 28]} bg="white">

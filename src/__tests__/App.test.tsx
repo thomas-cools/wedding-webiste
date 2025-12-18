@@ -12,9 +12,9 @@ describe('App', () => {
 
   it('renders the hero section with couple names', () => {
     render(<App />)
-    // Names are hardcoded in App.tsx, not translated
-    expect(screen.getByText('Sofia')).toBeInTheDocument()
-    expect(screen.getByText('Lucas')).toBeInTheDocument()
+    // Names now come from translation keys (hero.bride, hero.groom)
+    expect(screen.getByText('hero.bride')).toBeInTheDocument()
+    expect(screen.getByText('hero.groom')).toBeInTheDocument()
   })
 
   it('renders the wedding date', () => {
