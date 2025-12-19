@@ -319,12 +319,28 @@ export default function RsvpForm() {
       list[existingIndex] = { ...list[existingIndex], ...entry }
       saveRsvps(list)
       setStatus('updated')
-      toast({ title: t('rsvp.success.updatedTitle'), description: t('rsvp.success.updatedMessage'), status: 'info', duration: 4000, isClosable: true })
+      toast({ 
+        title: t('rsvp.success.updatedTitle'), 
+        description: t('rsvp.success.updatedMessage'), 
+        status: 'info', 
+        duration: 4000, 
+        isClosable: true,
+        variant: 'solid',
+        position: 'top',
+      })
     } else {
       list.push(entry)
       saveRsvps(list)
       setStatus('saved')
-      toast({ title: t('rsvp.success.savedTitle'), description: t('rsvp.success.savedMessage'), status: 'success', duration: 4000, isClosable: true })
+      toast({ 
+        title: t('rsvp.success.savedTitle'), 
+        description: t('rsvp.success.savedMessage'), 
+        status: 'success', 
+        duration: 4000, 
+        isClosable: true,
+        variant: 'solid',
+        position: 'top',
+      })
     }
 
     // notify admin panel (if open)

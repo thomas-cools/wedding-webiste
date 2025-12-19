@@ -150,7 +150,7 @@ const theme = extendTheme({
         field: {
           fontFamily: "'Montserrat', sans-serif",
           fontSize: 'md',
-          lineHeight: '1.5',
+          lineHeight: '1.6',
         },
       },
       variants: {
@@ -162,9 +162,10 @@ const theme = extendTheme({
             borderColor: 'primary.soft',
             borderRadius: 0,
             px: 0,
-            py: 3,
+            pt: 3,
+            pb: 4,
             h: 'auto',
-            minH: '44px',
+            minH: '48px',
             _focusVisible: { 
               borderColor: 'primary.deep', 
               boxShadow: 'none',
@@ -182,7 +183,8 @@ const theme = extendTheme({
         field: {
           fontFamily: "'Montserrat', sans-serif",
           fontSize: 'md',
-          lineHeight: '1.5',
+          lineHeight: '1.6',
+          overflow: 'visible',
         },
       },
       variants: {
@@ -194,9 +196,10 @@ const theme = extendTheme({
             borderColor: 'primary.soft',
             borderRadius: 0,
             px: 0,
-            py: 3,
+            pt: 3,
+            pb: 4,
             h: 'auto',
-            minH: '44px',
+            minH: '48px',
             _focusVisible: { 
               borderColor: 'primary.deep', 
               boxShadow: 'none',
@@ -250,6 +253,49 @@ const theme = extendTheme({
       baseStyle: {
         borderColor: 'primary.soft',
         opacity: 0.5,
+      },
+    },
+    Alert: {
+      baseStyle: {
+        container: {
+          borderRadius: 'sm',
+          fontFamily: "'Montserrat', sans-serif",
+        },
+        title: {
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 'lg',
+          fontWeight: 500,
+          letterSpacing: '0.02em',
+        },
+        description: {
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: 'sm',
+        },
+        icon: {
+          flexShrink: 0,
+        },
+      },
+      variants: {
+        subtle: {
+          container: {
+            bg: 'neutral.white',
+            border: '1px solid',
+            borderColor: 'primary.soft',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          },
+        },
+        solid: {
+          container: {
+            bg: 'neutral.white',
+            border: '1px solid',
+            borderColor: 'primary.soft',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            color: 'neutral.dark',
+          },
+          icon: {
+            color: 'primary.deep',
+          },
+        },
       },
     },
   },

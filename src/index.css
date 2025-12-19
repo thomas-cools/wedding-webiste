@@ -53,6 +53,32 @@ input, select, textarea, button {
   font-family: inherit;
 }
 
+/* Fix text clipping in select elements */
+select,
+select.chakra-select {
+  line-height: 1.6 !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 1rem !important;
+  overflow: visible !important;
+  height: auto !important;
+  min-height: 48px !important;
+}
+
+select option {
+  padding: 0.5rem;
+  line-height: 1.6;
+}
+
+/* Ensure Chakra select wrapper doesn't clip */
+.chakra-select__wrapper {
+  overflow: visible !important;
+}
+
+/* Form control wrapper fix */
+.chakra-form-control {
+  overflow: visible !important;
+}
+
 /* Smooth transitions for interactive elements */
 button, a, input, select, textarea {
   transition: all 0.2s ease;
