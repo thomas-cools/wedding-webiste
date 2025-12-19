@@ -150,6 +150,7 @@ const theme = extendTheme({
         field: {
           fontFamily: "'Montserrat', sans-serif",
           fontSize: 'md',
+          lineHeight: '1.5',
         },
       },
       variants: {
@@ -162,6 +163,8 @@ const theme = extendTheme({
             borderRadius: 0,
             px: 0,
             py: 3,
+            h: 'auto',
+            minH: '44px',
             _focusVisible: { 
               borderColor: 'primary.deep', 
               boxShadow: 'none',
@@ -179,6 +182,7 @@ const theme = extendTheme({
         field: {
           fontFamily: "'Montserrat', sans-serif",
           fontSize: 'md',
+          lineHeight: '1.5',
         },
       },
       variants: {
@@ -191,6 +195,8 @@ const theme = extendTheme({
             borderRadius: 0,
             px: 0,
             py: 3,
+            h: 'auto',
+            minH: '44px',
             _focusVisible: { 
               borderColor: 'primary.deep', 
               boxShadow: 'none',
