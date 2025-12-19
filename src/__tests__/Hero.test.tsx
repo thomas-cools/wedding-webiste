@@ -12,7 +12,7 @@ jest.mock('react-i18next', () => ({
         'hero.and': '&',
         'hero.date': 'August Twenty-Sixth',
         'hero.year': 'Two Thousand Twenty-Six',
-        'hero.venue': 'Château de Varennes · Burgundy, France',
+        'hero.venue': 'Château du Pujolet · Haute-Garonne, France',
         'hero.respond': 'Kindly Respond',
       }
       return translations[key] || key
@@ -45,7 +45,7 @@ describe('Hero Component', () => {
   it('renders the venue information', () => {
     render(<Hero />)
     
-    expect(screen.getByText('Château de Varennes · Burgundy, France')).toBeInTheDocument()
+    expect(screen.getByText('Château du Pujolet · Haute-Garonne, France')).toBeInTheDocument()
   })
 
   it('renders the "together with families" text', () => {

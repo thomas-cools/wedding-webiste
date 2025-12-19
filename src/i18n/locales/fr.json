@@ -13,7 +13,7 @@
     "and": "&",
     "date": "Le Vingt-six Août",
     "year": "Deux Mille Vingt-Six",
-    "venue": "Château de Varennes · Bourgogne, France",
+    "venue": "Château du Pujolet · Haute-Garonne, France",
     "respond": "Répondre S'il Vous Plaît"
   },
   "story": {
@@ -43,13 +43,13 @@
       "reception": "Réception à suivre",
       "brunch": "Onze heures"
     },
-    "venueName": "Château de Varennes",
-    "venueAddress": "21320 Pouilly-en-Auxois, Bourgogne, France"
+    "venueName": "Château du Pujolet",
+    "venueAddress": "962 Rte du Pujolet, 31570 Vallesvilles, France"
   },
   "rsvp": {
     "label": "Répondre S'il Vous Plaît",
     "title": "RSVP",
-    "description": "Merci de nous faire savoir si vous vous joindrez à nous pour notre célébration de mariage en Bourgogne. Nous vous prions de répondre avant le 1er juin 2026.",
+    "description": "Merci de nous faire savoir si vous vous joindrez à nous pour notre célébration de mariage en France. Nous vous prions de répondre avant le 1er juin 2026.",
     "form": {
       "yourName": "Votre Nom",
       "namePlaceholder": "Nom complet tel que vous le souhaitez sur le marque-place",
@@ -139,8 +139,8 @@
       "wedding": {
         "date": "Octobre 2026",
         "title": "Le Mariage",
-        "description": "Où nos deux familles n'en feront plus qu'une, au cœur de la Bourgogne.",
-        "location": "Château de Varennes, France"
+        "description": "Où nos deux familles n'en feront plus qu'une, au cœur de la France.",
+        "location": "Château du Pujolet, France"
       }
     }
   },

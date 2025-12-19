@@ -13,7 +13,7 @@
     "and": "&",
     "date": "August Twenty-Sixth",
     "year": "Two Thousand Twenty-Six",
-    "venue": "Château de Varennes · Burgundy, France",
+    "venue": "Château du Pujolet · Haute-Garonne, France",
     "respond": "Kindly Respond"
   },
   "story": {
@@ -43,13 +43,13 @@
       "reception": "Reception to follow",
       "brunch": "Eleven in the morning"
     },
-    "venueName": "Château de Varennes",
-    "venueAddress": "21320 Pouilly-en-Auxois, Burgundy, France"
+    "venueName": "Château du Pujolet",
+    "venueAddress": "962 Rte du Pujolet, 31570 Vallesvilles, France"
   },
   "rsvp": {
     "label": "Kindly Respond",
     "title": "RSVP",
-    "description": "Please let us know if you'll be joining us for our wedding celebration in Burgundy. We kindly request your response by June 1, 2026.",
+    "description": "Please let us know if you'll be joining us for our wedding celebration in France. We kindly request your response by June 1, 2026.",
     "form": {
       "yourName": "Your Name",
       "namePlaceholder": "Full name as you'd like it on the place card",
@@ -139,8 +139,8 @@
       "wedding": {
         "date": "October 2026",
         "title": "The Wedding",
-        "description": "Where our two families become one, in the heart of Burgundy.",
-        "location": "Château de Varennes, France"
+        "description": "Where our two families become one, in the heart of France.",
+        "location": "Château du Pujolet, France"
       }
     }
   },
