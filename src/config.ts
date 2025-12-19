@@ -4,7 +4,7 @@
  */
 export const features = {
   /** Show the photo gallery section */
-  showGallery: false,
+  showGallery: true,
   
   /** Show the timeline/love story section */
   showTimeline: false,

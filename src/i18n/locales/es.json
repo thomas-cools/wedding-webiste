@@ -167,6 +167,14 @@
     "placeholder": "Ingresa la contraseña",
     "enter": "Entrar",
     "error": "Contraseña incorrecta. Por favor intenta de nuevo.",
-    "hint": "Revisa tu invitación para la contraseña"
-  }
+    "hint": "Revisa tu invitación para la contraseña"  },
+  "gallery": {
+    "preheading": "Momentos Capturados",
+    "title": "Nuestra Galería",
+    "subtitle": "Una colección de recuerdos de nuestro camino juntos.",
+    "viewImage": "Ver imagen",
+    "close": "Cerrar galería",
+    "previous": "Imagen anterior",
+    "next": "Imagen siguiente",
+    "swipeHint": "Desliza para navegar"  }
 }

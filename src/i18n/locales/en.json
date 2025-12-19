@@ -168,5 +168,15 @@
     "enter": "Enter",
     "error": "Incorrect password. Please try again.",
     "hint": "Check your invitation for the password"
+  },
+  "gallery": {
+    "preheading": "Captured Moments",
+    "title": "Our Gallery",
+    "subtitle": "A collection of memories from our journey together.",
+    "viewImage": "View image",
+    "close": "Close gallery",
+    "previous": "Previous image",
+    "next": "Next image",
+    "swipeHint": "Swipe to navigate"
   }
 }

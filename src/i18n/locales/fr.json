@@ -168,5 +168,15 @@
     "enter": "Entrer",
     "error": "Mot de passe incorrect. Veuillez réessayer.",
     "hint": "Consultez votre invitation pour le mot de passe"
+  },
+  "gallery": {
+    "preheading": "Moments Capturés",
+    "title": "Notre Galerie",
+    "subtitle": "Une collection de souvenirs de notre parcours ensemble.",
+    "viewImage": "Voir l'image",
+    "close": "Fermer la galerie",
+    "previous": "Image précédente",
+    "next": "Image suivante",
+    "swipeHint": "Glissez pour naviguer"
   }
 }

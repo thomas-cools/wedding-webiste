@@ -27,6 +27,7 @@ import Hero from './components/Hero'
 import Timeline from './components/Timeline'
 import Countdown from './components/Countdown'
 import PasswordGate from './components/PasswordGate'
+import { PhotoGallery } from './components/PhotoGallery'
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { features } from './config'
 
@@ -224,6 +225,9 @@ export default function App() {
 
         {/* Timeline Section - Controlled by feature flag */}
         {features.showTimeline && <Timeline />}
+
+        {/* Photo Gallery Section - Controlled by feature flag */}
+        {features.showGallery && <PhotoGallery />}
 
         {/* Details Section */}
         <Box id="details" py={[20, 28]} bg="neutral.light">
