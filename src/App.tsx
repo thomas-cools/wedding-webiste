@@ -536,14 +536,24 @@ export default function App() {
                               href="https://www.airbnb.com/s/Ch%C3%A2teau-du-Pujolet--Vallesvilles--France/homes?refinement_paths%5B%5D=%2Fhomes&date_picker_type=calendar&checkin=2026-08-24&checkout=2026-08-28&adults=2&search_type=autocomplete_click&flexible_trip_lengths%5B%5D=one_week&monthly_start_date=2026-01-01&monthly_length=3&monthly_end_date=2026-04-01&price_filter_input_type=2&price_filter_num_nights=4&channel=EXPLORE&place_id=ChIJP_GaICSQrhIRMqr4tYT_Wcw&acp_id=t-g-ChIJP_GaICSQrhIRMqr4tYT_Wcw"
                               target="_blank"
                               rel="noopener noreferrer"
-                              variant="primary"
-                              size="lg"
-                              rightIcon={<ExternalLinkIcon />}
+                              bg="transparent"
+                              color="neutral.dark"
+                              border="1px solid"
+                              borderColor="primary.soft"
+                              borderRadius="full"
+                              px={8}
+                              py={5}
+                              fontSize="sm"
+                              fontWeight="500"
+                              letterSpacing="0.05em"
+                              rightIcon={<ExternalLinkIcon boxSize={3} />}
                               _hover={{
+                                bg: "neutral.dark",
+                                color: "white",
+                                borderColor: "neutral.dark",
                                 transform: "translateY(-2px)",
-                                boxShadow: "lg"
                               }}
-                              transition="all 0.2s"
+                              transition="all 0.3s ease"
                             >
                               {t('travel.searchAirbnb')}
                             </Button>
@@ -589,14 +599,24 @@ export default function App() {
                               href="https://www.booking.com/searchresults.html?ss=Vallesvilles%2C+France&checkin=2026-08-24&checkout=2026-08-28&group_adults=2&no_rooms=1"
                               target="_blank"
                               rel="noopener noreferrer"
-                              variant="primary"
-                              size="lg"
-                              rightIcon={<ExternalLinkIcon />}
+                              bg="transparent"
+                              color="neutral.dark"
+                              border="1px solid"
+                              borderColor="primary.soft"
+                              borderRadius="full"
+                              px={8}
+                              py={5}
+                              fontSize="sm"
+                              fontWeight="500"
+                              letterSpacing="0.05em"
+                              rightIcon={<ExternalLinkIcon boxSize={3} />}
                               _hover={{
+                                bg: "neutral.dark",
+                                color: "white",
+                                borderColor: "neutral.dark",
                                 transform: "translateY(-2px)",
-                                boxShadow: "lg"
                               }}
-                              transition="all 0.2s"
+                              transition="all 0.3s ease"
                             >
                               {t('travel.searchBookingButton')}
                             </Button>

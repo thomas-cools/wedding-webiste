@@ -74,7 +74,7 @@ describe('App', () => {
     expect(screen.getByText('story.paragraph1')).toBeInTheDocument()
   })
 
-  it('renders the wedding weekend event cards', () => {
+  it('renders the wedding week event cards', () => {
     render(<App />)
     expect(screen.getByText('details.welcomeDinner')).toBeInTheDocument()
     expect(screen.getByText('details.theWedding')).toBeInTheDocument()
