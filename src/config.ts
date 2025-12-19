@@ -34,9 +34,10 @@ export const weddingConfig = {
     display: 'August 26, 2026',
   },
   venue: {
-    name: 'Château de Varennes',
-    location: 'Burgundy, France',
-    address: '21320 Pouilly-en-Auxois, Burgundy, France',
+    name: 'Château du Pujolet',
+    location: 'Haute-Garonne, France',
+    address: '962 Rte du Pujolet, 31570 Vallesvilles, France',
+    website: 'https://www.chateaudupujolet.com',
   },
   rsvpDeadline: 'June 1, 2026',
   /** Contact email for wedding inquiries (also used in confirmation emails) */

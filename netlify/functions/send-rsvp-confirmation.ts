@@ -35,8 +35,8 @@ const weddingConfig = {
     display: 'August 26, 2026',
   },
   venue: {
-    name: 'Château de Varennes',
-    location: 'Burgundy, France',
+    name: 'Château du Pujolet',
+    location: 'Haute-Garonne, France',
   },
   contactEmail: 'wedding@example.com', // Update with your actual contact email
 }
