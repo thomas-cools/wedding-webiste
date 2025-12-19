@@ -10,12 +10,48 @@ import {
 import { useTranslation } from 'react-i18next'
 import { MotionBox, heroFadeIn, heroStagger } from './animations'
 
-interface HeroProps {
-  backgroundImage?: string
+/**
+ * Responsive image configuration for the hero background.
+ * Provide multiple sizes for optimal loading on different devices.
+ */
+export interface HeroImageSet {
+  /** Mobile image (750px wide, portrait) */
+  mobile?: string
+  /** Tablet image (1280px wide) */
+  tablet?: string
+  /** Desktop image (1920px wide) */
+  desktop: string
+  /** High-res desktop image (2560px wide, for retina displays) */
+  desktop2x?: string
+  /** WebP versions for better compression (optional) */
+  webp?: {
+    mobile?: string
+    tablet?: string
+    desktop?: string
+    desktop2x?: string
+  }
+  /** Alt text for accessibility */
+  alt?: string
 }
 
-export default function Hero({ backgroundImage }: HeroProps) {
+interface HeroProps {
+  /** Single background image URL (simple usage) */
+  backgroundImage?: string
+  /** Responsive image set (recommended for production) */
+  imageSet?: HeroImageSet
+  /** Overlay opacity (0-1, default: 0.3) */
+  overlayOpacity?: number
+}
+
+export default function Hero({ backgroundImage, imageSet, overlayOpacity = 0.3 }: HeroProps) {
   const { t } = useTranslation()
+  
+  // Determine if we have any background image
+  const hasBackground = Boolean(backgroundImage || imageSet)
+  
+  // For simple backgroundImage prop, use CSS background
+  // For imageSet, we'll use a proper <picture> element
+  const useImageElement = Boolean(imageSet)
 
   return (
     <Box
@@ -29,8 +65,98 @@ export default function Hero({ backgroundImage }: HeroProps) {
       overflow="hidden"
       bg="chateau.stone"
     >
-      {/* Background Image with Overlay */}
-      {backgroundImage && (
+      {/* Responsive Background Image using <picture> element */}
+      {useImageElement && imageSet && (
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          overflow="hidden"
+        >
+          <Box
+            as="picture"
+            display="block"
+            w="100%"
+            h="100%"
+          >
+            {/* WebP sources (best compression) */}
+            {imageSet.webp?.desktop2x && (
+              <source
+                media="(min-width: 1920px)"
+                srcSet={imageSet.webp.desktop2x}
+                type="image/webp"
+              />
+            )}
+            {imageSet.webp?.desktop && (
+              <source
+                media="(min-width: 1024px)"
+                srcSet={imageSet.webp.desktop}
+                type="image/webp"
+              />
+            )}
+            {imageSet.webp?.tablet && (
+              <source
+                media="(min-width: 768px)"
+                srcSet={imageSet.webp.tablet}
+                type="image/webp"
+              />
+            )}
+            {imageSet.webp?.mobile && (
+              <source
+                srcSet={imageSet.webp.mobile}
+                type="image/webp"
+              />
+            )}
+            
+            {/* JPEG/PNG fallback sources */}
+            {imageSet.desktop2x && (
+              <source
+                media="(min-width: 1920px)"
+                srcSet={imageSet.desktop2x}
+              />
+            )}
+            {imageSet.desktop && (
+              <source
+                media="(min-width: 1024px)"
+                srcSet={imageSet.desktop}
+              />
+            )}
+            {imageSet.tablet && (
+              <source
+                media="(min-width: 768px)"
+                srcSet={imageSet.tablet}
+              />
+            )}
+            
+            {/* Fallback image */}
+            <Box
+              as="img"
+              src={imageSet.mobile || imageSet.desktop}
+              alt={imageSet.alt || 'Wedding hero background'}
+              loading="eager"
+              w="100%"
+              h="100%"
+              objectFit="cover"
+              objectPosition="center"
+            />
+          </Box>
+          
+          {/* Overlay */}
+          <Box
+            position="absolute"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            bg={`rgba(0, 0, 0, ${overlayOpacity})`}
+          />
+        </Box>
+      )}
+
+      {/* Simple CSS Background Image (legacy/simple usage) */}
+      {!useImageElement && backgroundImage && (
         <Box
           position="absolute"
           top={0}
@@ -48,7 +174,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
             left: 0,
             right: 0,
             bottom: 0,
-            bg: 'rgba(0, 0, 0, 0.3)',
+            bg: `rgba(0, 0, 0, ${overlayOpacity})`,
           }}
         />
       )}
@@ -61,7 +187,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
         right={["20px", "40px"]}
         bottom={["20px", "40px"]}
         border="1px solid"
-        borderColor={backgroundImage ? "whiteAlpha.400" : "primary.soft"}
+        borderColor={hasBackground ? "whiteAlpha.400" : "primary.soft"}
         pointerEvents="none"
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -84,7 +210,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
               fontSize="sm"
               textTransform="uppercase"
               letterSpacing="0.35em"
-              color={backgroundImage ? "whiteAlpha.900" : "primary.soft"}
+              color={hasBackground ? "whiteAlpha.900" : "primary.soft"}
               fontWeight="400"
             >
               {t('hero.together')}
@@ -104,7 +230,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
                 fontFamily="heading"
                 fontSize={["5xl", "6xl", "7xl"]}
                 fontWeight="300"
-                color={backgroundImage ? "white" : "neutral.dark"}
+                color={hasBackground ? "white" : "neutral.dark"}
                 letterSpacing="0.05em"
               >
                 {t('hero.bride')}
@@ -114,7 +240,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
                 fontFamily="heading"
                 fontSize={["3xl", "4xl", "5xl"]}
                 fontWeight="300"
-                color={backgroundImage ? "whiteAlpha.800" : "primary.soft"}
+                color={hasBackground ? "whiteAlpha.800" : "primary.soft"}
                 fontStyle="italic"
               >
                 {t('hero.and')}
@@ -125,7 +251,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
                 fontFamily="heading"
                 fontSize={["5xl", "6xl", "7xl"]}
                 fontWeight="300"
-                color={backgroundImage ? "white" : "neutral.dark"}
+                color={hasBackground ? "white" : "neutral.dark"}
                 letterSpacing="0.05em"
               >
                 {t('hero.groom')}
@@ -139,7 +265,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
               as="hr"
               border="none"
               borderTop="1px solid"
-              borderColor={backgroundImage ? "whiteAlpha.500" : "primary.soft"}
+              borderColor={hasBackground ? "whiteAlpha.500" : "primary.soft"}
               width="120px"
               mx="auto"
             />
@@ -152,7 +278,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
                 fontFamily="heading"
                 fontSize={["xl", "2xl"]}
                 fontWeight="300"
-                color={backgroundImage ? "white" : "neutral.dark"}
+                color={hasBackground ? "white" : "neutral.dark"}
                 letterSpacing="0.15em"
               >
                 {t('hero.date')}
@@ -161,7 +287,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
                 fontFamily="heading"
                 fontSize={["lg", "xl"]}
                 fontWeight="300"
-                color={backgroundImage ? "whiteAlpha.900" : "neutral.muted"}
+                color={hasBackground ? "whiteAlpha.900" : "neutral.muted"}
                 letterSpacing="0.1em"
               >
                 {t('hero.year')}
@@ -175,7 +301,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
               fontSize="sm"
               textTransform="uppercase"
               letterSpacing="0.25em"
-              color={backgroundImage ? "whiteAlpha.800" : "neutral.muted"}
+              color={hasBackground ? "whiteAlpha.800" : "neutral.muted"}
               fontWeight="400"
             >
               {t('hero.venue')}
@@ -191,13 +317,13 @@ export default function Hero({ backgroundImage }: HeroProps) {
             <Button
               as="a"
               href="#rsvp"
-              variant={backgroundImage ? "outline" : "primary"}
+              variant={hasBackground ? "outline" : "primary"}
               size="lg"
               mt={8}
-              color={backgroundImage ? "white" : undefined}
-              borderColor={backgroundImage ? "white" : undefined}
+              color={hasBackground ? "white" : undefined}
+              borderColor={hasBackground ? "white" : undefined}
               _hover={{
-                bg: backgroundImage ? "whiteAlpha.200" : undefined,
+                bg: hasBackground ? "whiteAlpha.200" : undefined,
                 transform: "translateY(-2px)",
               }}
               transition="all 0.3s ease"
@@ -233,7 +359,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
             w="30px"
             h="50px"
             border="2px solid"
-            borderColor={backgroundImage ? "whiteAlpha.600" : "primary.soft"}
+            borderColor={hasBackground ? "whiteAlpha.600" : "primary.soft"}
             borderRadius="full"
             position="relative"
             mx="auto"
@@ -245,7 +371,7 @@ export default function Hero({ backgroundImage }: HeroProps) {
               transform: 'translateX(-50%)',
               w: '4px',
               h: '8px',
-              bg: backgroundImage ? "whiteAlpha.600" : "primary.soft",
+              bg: hasBackground ? "whiteAlpha.600" : "primary.soft",
               borderRadius: 'full',
             }}
           />
