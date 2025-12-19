@@ -26,6 +26,7 @@ import LanguageSwitcher from './components/LanguageSwitcher'
 import Hero from './components/Hero'
 import Timeline from './components/Timeline'
 import Countdown from './components/Countdown'
+import PasswordGate from './components/PasswordGate'
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { features } from './config'
 
@@ -39,8 +40,8 @@ const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) =
 export default function App() {
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  
-  return (
+
+  const content = (
     <Box minH="100vh" bg="neutral.light">
       {/* Minimal Elegant Header */}
       <Box 
@@ -417,4 +418,11 @@ export default function App() {
       </Box>
     </Box>
   )
+
+  // Wrap with password gate if feature is enabled
+  if (features.requirePassword) {
+    return <PasswordGate>{content}</PasswordGate>
+  }
+
+  return content
 }

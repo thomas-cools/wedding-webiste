@@ -158,5 +158,15 @@
   },
   "language": {
     "select": "Idioma"
+  },
+  "password": {
+    "label": "Celebración Privada",
+    "title": "Carolina & Thomas",
+    "description": "Por favor ingresa la contraseña de tu invitación para ver los detalles de nuestra boda.",
+    "inputLabel": "Contraseña",
+    "placeholder": "Ingresa la contraseña",
+    "enter": "Entrar",
+    "error": "Contraseña incorrecta. Por favor intenta de nuevo.",
+    "hint": "Revisa tu invitación para la contraseña"
   }
 }

@@ -158,5 +158,15 @@
   },
   "language": {
     "select": "Langue"
+  },
+  "password": {
+    "label": "Célébration Privée",
+    "title": "Carolina & Thomas",
+    "description": "Veuillez entrer le mot de passe de votre invitation pour voir les détails de notre mariage.",
+    "inputLabel": "Mot de passe",
+    "placeholder": "Entrez le mot de passe",
+    "enter": "Entrer",
+    "error": "Mot de passe incorrect. Veuillez réessayer.",
+    "hint": "Consultez votre invitation pour le mot de passe"
   }
 }

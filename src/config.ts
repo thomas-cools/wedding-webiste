@@ -13,7 +13,7 @@ export const features = {
   showCountdown: false,
   
   /** Enable password protection for the site */
-  requirePassword: false,
+  requirePassword: true,
 }
 
 /**

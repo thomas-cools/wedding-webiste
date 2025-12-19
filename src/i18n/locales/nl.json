@@ -158,5 +158,15 @@
   },
   "language": {
     "select": "Taal"
+  },
+  "password": {
+    "label": "Privé Viering",
+    "title": "Carolina & Thomas",
+    "description": "Voer het wachtwoord van uw uitnodiging in om onze trouwdetails te bekijken.",
+    "inputLabel": "Wachtwoord",
+    "placeholder": "Voer wachtwoord in",
+    "enter": "Betreden",
+    "error": "Onjuist wachtwoord. Probeer het opnieuw.",
+    "hint": "Controleer uw uitnodiging voor het wachtwoord"
   }
 }

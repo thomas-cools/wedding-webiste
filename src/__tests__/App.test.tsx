@@ -2,6 +2,33 @@ import React from 'react'
 import { render, screen } from '../test-utils'
 import App from '../App'
 
+// Mock config to disable password protection for tests
+jest.mock('../config', () => ({
+  features: {
+    showGallery: false,
+    showTimeline: false,
+    showCountdown: false,
+    requirePassword: false, // Disable password gate for tests
+  },
+  weddingConfig: {
+    couple: {
+      person1: 'Carolina',
+      person2: 'Thomas',
+      initials: 'C & T',
+    },
+    date: {
+      full: new Date('2026-08-26T16:00:00'),
+      display: 'August 26, 2026',
+    },
+    venue: {
+      name: 'Château de Varennes',
+      location: 'Burgundy, France',
+      address: '21320 Pouilly-en-Auxois, Burgundy, France',
+    },
+    rsvpDeadline: 'June 1, 2026',
+  },
+}))
+
 // Note: Tests use translation keys since the i18n mock returns keys as-is
 describe('App', () => {
   it('renders the header with couple initials', () => {

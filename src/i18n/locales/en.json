@@ -158,5 +158,15 @@
   },
   "language": {
     "select": "Language"
+  },
+  "password": {
+    "label": "Private Celebration",
+    "title": "Carolina & Thomas",
+    "description": "Please enter the password from your invitation to view our wedding details.",
+    "inputLabel": "Password",
+    "placeholder": "Enter password",
+    "enter": "Enter",
+    "error": "Incorrect password. Please try again.",
+    "hint": "Check your invitation for the password"
   }
 }
