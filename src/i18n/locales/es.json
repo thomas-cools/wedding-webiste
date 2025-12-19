@@ -185,11 +185,15 @@
     "subtitle": "La boda se llevará a cabo en el Château du Pujolet en Vallesvilles, Francia. A continuación encontrarás opciones de alojamiento cercanas.",
     "tabs": {
       "airbnb": "Alquileres Vacacionales",
+      "booking": "Booking.com",
       "hotels": "Hoteles"
     },
     "airbnbTitle": "Encuentra Alojamiento Cercano",
     "airbnbDescription": "Descubre encantadores alquileres vacacionales y alojamientos únicos cerca del lugar en Airbnb.",
     "searchAirbnb": "Buscar en Airbnb",
+    "bookingTitle": "Buscar Hoteles y Más",
+    "bookingDescription": "Encuentra hoteles, apartamentos y casas de vacaciones cerca del lugar en Booking.com.",
+    "searchBookingButton": "Buscar en Booking.com",
     "hotelsTitle": "Hoteles Cercanos",
     "hotelsDescription": "Alojamientos de hotel tradicionales en la zona, desde hoteles boutique hasta grandes cadenas.",
     "recommendedHotels": "Hoteles Recomendados",

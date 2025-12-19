@@ -186,11 +186,15 @@
     "subtitle": "Le mariage aura lieu au Château du Pujolet à Vallesvilles, France. Vous trouverez ci-dessous les options d'hébergement à proximité.",
     "tabs": {
       "airbnb": "Locations de Vacances",
+      "booking": "Booking.com",
       "hotels": "Hôtels"
     },
     "airbnbTitle": "Trouvez un Hébergement",
     "airbnbDescription": "Découvrez des locations de vacances charmantes et des hébergements uniques près du lieu sur Airbnb.",
     "searchAirbnb": "Rechercher sur Airbnb",
+    "bookingTitle": "Rechercher Hôtels et Plus",
+    "bookingDescription": "Trouvez des hôtels, appartements et maisons de vacances près du lieu sur Booking.com.",
+    "searchBookingButton": "Rechercher sur Booking.com",
     "hotelsTitle": "Hôtels à Proximité",
     "hotelsDescription": "Hébergements hôteliers traditionnels dans la région, des hôtels boutique aux grandes chaînes.",
     "recommendedHotels": "Hôtels Recommandés",

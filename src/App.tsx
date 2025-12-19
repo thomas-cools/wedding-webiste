@@ -46,6 +46,7 @@ import weddingLogo from './assets/T&C-Monogram-small.webp'
 import weddingLogo2x from './assets/T&C-Monogram-2x.webp'
 import weddingLogoFull from './assets/T&C-Monogram.webp'
 import airbnbLogo from './assets/airbnb-tile.svg'
+import bookingLogo from './assets/booking-tile.svg'
 
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
@@ -484,6 +485,14 @@ export default function App() {
                         fontSize="sm"
                         letterSpacing="0.05em"
                       >
+                        {t('travel.tabs.booking')}
+                      </Tab>
+                      <Tab 
+                        _selected={{ bg: 'neutral.dark', color: 'white' }}
+                        fontWeight="500"
+                        fontSize="sm"
+                        letterSpacing="0.05em"
+                      >
                         {t('travel.tabs.hotels')}
                       </Tab>
                     </TabList>
@@ -537,6 +546,59 @@ export default function App() {
                               transition="all 0.2s"
                             >
                               {t('travel.searchAirbnb')}
+                            </Button>
+                          </VStack>
+                        </Box>
+                      </TabPanel>
+
+                      {/* Booking.com Tab */}
+                      <TabPanel p={0}>
+                        <Box 
+                          bg="neutral.light" 
+                          borderWidth="1px" 
+                          borderColor="primary.soft"
+                          p={[8, 10]}
+                        >
+                          <VStack spacing={6} textAlign="center">
+                            {/* Booking.com Logo */}
+                            <Image
+                              src={bookingLogo}
+                              alt="Booking.com"
+                              w="48px"
+                              h="48px"
+                              borderRadius="md"
+                            />
+                            
+                            <Heading 
+                              as="h3" 
+                              fontFamily="heading" 
+                              fontSize="xl" 
+                              fontWeight="400"
+                              color="neutral.dark"
+                            >
+                              {t('travel.bookingTitle')}
+                            </Heading>
+                            
+                            <Text fontSize="sm" color="neutral.muted" maxW="450px">
+                              {t('travel.bookingDescription')}
+                            </Text>
+
+                            {/* Booking.com Search Button */}
+                            <Button
+                              as="a"
+                              href="https://www.booking.com/searchresults.html?ss=Vallesvilles%2C+France&checkin=2026-08-24&checkout=2026-08-28&group_adults=2&no_rooms=1"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              variant="primary"
+                              size="lg"
+                              rightIcon={<ExternalLinkIcon />}
+                              _hover={{
+                                transform: "translateY(-2px)",
+                                boxShadow: "lg"
+                              }}
+                              transition="all 0.2s"
+                            >
+                              {t('travel.searchBookingButton')}
                             </Button>
                           </VStack>
                         </Box>

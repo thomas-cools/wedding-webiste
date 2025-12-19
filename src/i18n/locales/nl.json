@@ -185,11 +185,15 @@
     "subtitle": "De bruiloft vindt plaats in Château du Pujolet in Vallesvilles, Frankrijk. Hieronder vindt u accommodatiemogelijkheden in de buurt.",
     "tabs": {
       "airbnb": "Vakantiewoningen",
+      "booking": "Booking.com",
       "hotels": "Hotels"
     },
     "airbnbTitle": "Vind Verblijf in de Buurt",
     "airbnbDescription": "Ontdek charmante vakantiewoningen en unieke accommodaties in de buurt van de locatie op Airbnb.",
     "searchAirbnb": "Zoeken op Airbnb",
+    "bookingTitle": "Zoek Hotels en Meer",
+    "bookingDescription": "Vind hotels, appartementen en vakantiehuizen in de buurt van de locatie op Booking.com.",
+    "searchBookingButton": "Zoeken op Booking.com",
     "hotelsTitle": "Hotels in de Buurt",
     "hotelsDescription": "Traditionele hotelaccommodaties in de omgeving, van boetiekhotels tot grotere ketens.",
     "recommendedHotels": "Aanbevolen Hotels",
