@@ -25,6 +25,7 @@ jest.mock('../config', () => ({
       location: 'Haute-Garonne, France',
       address: '962 Rte du Pujolet, 31570 Vallesvilles, France',
       website: 'https://www.chateaudupujolet.com',
+      googleMapsUrl: 'https://maps.google.com/?q=Château+du+Pujolet,+962+Rte+du+Pujolet,+31570+Vallesvilles,+France',
     },
     rsvpDeadline: 'June 1, 2026',
   },

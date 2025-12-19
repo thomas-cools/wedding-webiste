@@ -26,6 +26,7 @@ import {
   Tab,
   TabPanel,
   Badge,
+  Link,
 } from '@chakra-ui/react'
 import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import RsvpForm from './components/RsvpForm'
@@ -37,7 +38,7 @@ import PasswordGate from './components/PasswordGate'
 import { PhotoGallery } from './components/PhotoGallery'
 import LoadingScreen from './components/LoadingScreen'
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
-import { features } from './config'
+import { features, weddingConfig } from './config'
 
 // Import assets
 import heroBanner from './assets/Banner-wedding-01.jpeg'
@@ -404,9 +405,15 @@ export default function App() {
                   <Text fontSize="sm" textTransform="uppercase" letterSpacing="0.2em" color="neutral.dark">
                     {t('details.venueName')}
                   </Text>
-                  <Text fontSize="sm" color="neutral.muted" fontStyle="italic">
-                    {t('details.venueAddress')}
-                  </Text>
+                  <Link 
+                    href={weddingConfig.venue.googleMapsUrl} 
+                    isExternal
+                    _hover={{ color: 'primary.deep' }}
+                  >
+                    <Text fontSize="sm" color="neutral.muted" fontStyle="italic" _hover={{ textDecoration: 'underline' }}>
+                      {t('details.venueAddress')} ↗
+                    </Text>
+                  </Link>
                 </VStack>
               </ScrollReveal>
             </VStack>
