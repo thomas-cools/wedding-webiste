@@ -45,6 +45,7 @@ import heroBanner from './assets/Banner-wedding-01.jpeg'
 import weddingLogo from './assets/T&C-Monogram-small.webp'
 import weddingLogo2x from './assets/T&C-Monogram-2x.webp'
 import weddingLogoFull from './assets/T&C-Monogram.webp'
+import airbnbLogo from './assets/airbnb-tile.svg'
 
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
@@ -497,17 +498,14 @@ export default function App() {
                           p={[8, 10]}
                         >
                           <VStack spacing={6} textAlign="center">
-                            {/* Airbnb Logo/Icon */}
-                            <Box
-                              as="svg"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24"
+                            {/* Airbnb Logo */}
+                            <Image
+                              src={airbnbLogo}
+                              alt="Airbnb"
                               w="48px"
                               h="48px"
-                              fill="#FF5A5F"
-                            >
-                              <path d="M12.001 18.275c-.649-.8-1.156-1.6-1.499-2.274-.415-.857-.632-1.628-.632-2.356 0-1.057.415-1.728 1.056-1.928a.912.912 0 0 1 .275-.043c.414 0 .828.2 1.113.571.285-.371.7-.571 1.113-.571.1 0 .185.014.271.043.642.2 1.057.871 1.057 1.928 0 .728-.214 1.499-.628 2.356-.357.671-.857 1.471-1.5 2.271l-.314.4-.312-.397zm.57-8.686c1.114 0 2.07.714 2.485 1.728.128-.214.271-.414.428-.6.557-.67 1.342-1.085 2.185-1.085.185 0 .357.014.542.057 1.614.4 2.57 1.985 2.57 4.085 0 1.442-.443 2.928-1.285 4.442-.843 1.528-2.114 3.185-3.756 4.899l-.028.029-.029.028-1.871 1.9c-.742.757-1.713 1.128-2.713 1.128-.999 0-1.985-.385-2.713-1.128l-1.871-1.9-.057-.057c-1.642-1.714-2.914-3.371-3.756-4.899-.843-1.514-1.286-3-1.286-4.442 0-2.1.957-3.685 2.571-4.085.185-.043.357-.057.543-.057.842 0 1.628.414 2.185 1.085.157.186.3.386.428.6.414-1.014 1.371-1.728 2.485-1.728h-.057z"/>
-                            </Box>
+                              borderRadius="md"
+                            />
                             
                             <Heading 
                               as="h3" 
