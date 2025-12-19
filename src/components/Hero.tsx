@@ -8,7 +8,10 @@ import {
   Flex,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { MotionBox, heroFadeIn, heroStagger } from './animations'
+
+const MotionImg = motion.img
 
 /**
  * Responsive image configuration for the hero background.
@@ -45,6 +48,11 @@ interface HeroProps {
 
 export default function Hero({ backgroundImage, imageSet, overlayOpacity = 0.3 }: HeroProps) {
   const { t } = useTranslation()
+  
+  // Parallax scroll effect
+  const { scrollY } = useScroll()
+  const backgroundY = useTransform(scrollY, [0, 500], [0, 150])
+  const overlayOpacityAnim = useTransform(scrollY, [0, 300], [overlayOpacity, overlayOpacity + 0.3])
   
   // Determine if we have any background image
   const hasBackground = Boolean(backgroundImage || imageSet)
@@ -142,40 +150,42 @@ export default function Hero({ backgroundImage, imageSet, overlayOpacity = 0.3 }
               objectPosition="center"
             />
           </Box>
-          
-          {/* Overlay */}
-          <Box
-            position="absolute"
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
-            bg={`rgba(0, 0, 0, ${overlayOpacity})`}
-          />
         </Box>
       )}
 
-      {/* Simple CSS Background Image (legacy/simple usage) */}
+      {/* Simple CSS Background Image with Parallax */}
       {!useImageElement && backgroundImage && (
-        <Box
+        <MotionBox
+          position="absolute"
+          top={"-50px"}
+          left={0}
+          right={0}
+          bottom={"-50px"}
+          style={{ y: backgroundY }}
+        >
+          <Box
+            as="img"
+            src={backgroundImage}
+            alt="Wedding hero background"
+            w="100%"
+            h="100%"
+            objectFit="cover"
+            objectPosition="center"
+          />
+        </MotionBox>
+      )}
+      
+      {/* Animated Overlay */}
+      {hasBackground && (
+        <MotionBox
           position="absolute"
           top={0}
           left={0}
           right={0}
           bottom={0}
-          backgroundImage={`url(${backgroundImage})`}
-          backgroundSize="cover"
-          backgroundPosition="center"
-          backgroundRepeat="no-repeat"
-          _after={{
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            bg: `rgba(0, 0, 0, ${overlayOpacity})`,
-          }}
+          bg="black"
+          style={{ opacity: overlayOpacityAnim }}
+          pointerEvents="none"
         />
       )}
 

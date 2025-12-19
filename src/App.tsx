@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { 
   Box, 
@@ -28,12 +29,15 @@ import Timeline from './components/Timeline'
 import Countdown from './components/Countdown'
 import PasswordGate from './components/PasswordGate'
 import { PhotoGallery } from './components/PhotoGallery'
+import LoadingScreen from './components/LoadingScreen'
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { features } from './config'
 
 // Import assets
 import heroBanner from './assets/Banner-wedding-01.jpeg'
-import weddingLogo from './assets/T&C-Monogram.webp'
+import weddingLogo from './assets/T&C-Monogram-small.webp'
+import weddingLogo2x from './assets/T&C-Monogram-2x.webp'
+import weddingLogoFull from './assets/T&C-Monogram.webp'
 
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
@@ -45,9 +49,20 @@ const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) =
 export default function App() {
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Simulate minimum loading time for smooth animation
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 1800)
+    return () => clearTimeout(timer)
+  }, [])
 
   const content = (
-    <Box minH="100vh" bg="neutral.light">
+    <>
+      <LoadingScreen isLoading={isLoading} logo={weddingLogoFull} />
+      <Box minH="100vh" bg="neutral.light">
       {/* Minimal Elegant Header */}
       <Box 
         as="header" 
@@ -65,8 +80,9 @@ export default function App() {
           <Flex justify="space-between" align="center">
             <Image 
               src={weddingLogo} 
+              srcSet={`${weddingLogo} 1x, ${weddingLogo2x} 2x`}
               alt={t('header.initials')}
-              h={["32px", "40px"]}
+              h={["60px", "80px", "100px"]}
               w="auto"
             />
             <HStack spacing={[2, 4, 10]}>
@@ -157,7 +173,7 @@ export default function App() {
         {features.showCountdown && <Countdown />}
 
         {/* Story Section */}
-        <Box id="story" py={[20, 28]} bg="white">
+        <Box id="story" py={[20, 28]} bg="white" scrollMarginTop={["100px", "130px", "150px"]}>
           <Container maxW="container.lg">
             <VStack spacing={16}>
               {/* Section Header */}
@@ -231,7 +247,7 @@ export default function App() {
         {features.showGallery && <PhotoGallery />}
 
         {/* Details Section */}
-        <Box id="details" py={[20, 28]} bg="neutral.light">
+        <Box id="details" py={[20, 28]} bg="neutral.light" scrollMarginTop={["100px", "130px", "150px"]}>
           <Container maxW="container.lg">
             <VStack spacing={16}>
               {/* Section Header */}
@@ -379,7 +395,7 @@ export default function App() {
         </Box>
 
         {/* RSVP Section */}
-        <Box id="rsvp" py={[20, 28]} bg="white">
+        <Box id="rsvp" py={[20, 28]} bg="white" scrollMarginTop={["100px", "130px", "150px"]}>
           <Container maxW="container.lg">
             <ScrollReveal variants={scaleIn}>
               <RsvpForm />
@@ -422,6 +438,7 @@ export default function App() {
         </Container>
       </Box>
     </Box>
+    </>
   )
 
   // Wrap with password gate if feature is enabled
