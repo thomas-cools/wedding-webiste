@@ -3,6 +3,7 @@
     "initials": "C & T",
     "ourStory": "Ons Verhaal",
     "details": "Details",
+    "travel": "Verblijf",
     "rsvp": "RSVP"
   },
   "hero": {
@@ -176,5 +177,18 @@
     "close": "Sluit galerij",
     "previous": "Vorige afbeelding",
     "next": "Volgende afbeelding",
-    "swipeHint": "Veeg om te navigeren"  }
+    "swipeHint": "Veeg om te navigeren"
+  },
+  "travel": {
+    "label": "Reis en Verblijf",
+    "title": "Accommodatie",
+    "subtitle": "De bruiloft vindt plaats in Château du Pujolet in Vallesville, Frankrijk. Hieronder vindt u accommodatiemogelijkheden in de buurt.",
+    "airbnbTitle": "Vind Verblijf in de Buurt",
+    "airbnbDescription": "Ontdek charmante accommodaties in de buurt van de locatie op Airbnb.",
+    "searchAirbnb": "Zoeken op Airbnb",
+    "venueName": "Château du Pujolet",
+    "venueAddress": "Vallesville, Frankrijk",
+    "tip": "We raden aan vroeg te boeken omdat augustus hoogseizoen is in Frankrijk.",
+    "nearbyTowns": "Nabijgelegen steden met accommodatiemogelijkheden zijn onder andere Vallesville, Beaumont en omliggende dorpen."
+  }
 }

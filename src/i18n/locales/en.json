@@ -3,6 +3,7 @@
     "initials": "C & T",
     "ourStory": "Our Story",
     "details": "Details",
+    "travel": "Stay",
     "rsvp": "RSVP"
   },
   "hero": {
@@ -178,5 +179,17 @@
     "previous": "Previous image",
     "next": "Next image",
     "swipeHint": "Swipe to navigate"
+  },
+  "travel": {
+    "label": "Travel & Stay",
+    "title": "Accommodation",
+    "subtitle": "The wedding will take place at Château du Pujolet in Vallesville, France. Below you'll find nearby accommodation options.",
+    "airbnbTitle": "Find Nearby Stays",
+    "airbnbDescription": "Discover charming accommodations near the venue on Airbnb.",
+    "searchAirbnb": "Search on Airbnb",
+    "venueName": "Château du Pujolet",
+    "venueAddress": "Vallesville, France",
+    "tip": "We recommend booking early as August is peak season in France.",
+    "nearbyTowns": "Nearby towns with accommodation options include Vallesville, Beaumont, and surrounding villages."
   }
 }

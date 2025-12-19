@@ -3,6 +3,7 @@
     "initials": "C & T",
     "ourStory": "Nuestra Historia",
     "details": "Detalles",
+    "travel": "Alojamiento",
     "rsvp": "Confirmar"
   },
   "hero": {
@@ -176,5 +177,18 @@
     "close": "Cerrar galería",
     "previous": "Imagen anterior",
     "next": "Imagen siguiente",
-    "swipeHint": "Desliza para navegar"  }
+    "swipeHint": "Desliza para navegar"
+  },
+  "travel": {
+    "label": "Viaje y Alojamiento",
+    "title": "Alojamiento",
+    "subtitle": "La boda se llevará a cabo en el Château du Pujolet en Vallesville, Francia. A continuación encontrarás opciones de alojamiento cercanas.",
+    "airbnbTitle": "Encuentra Alojamiento Cercano",
+    "airbnbDescription": "Descubre alojamientos encantadores cerca del lugar en Airbnb.",
+    "searchAirbnb": "Buscar en Airbnb",
+    "venueName": "Château du Pujolet",
+    "venueAddress": "Vallesville, Francia",
+    "tip": "Recomendamos reservar con anticipación ya que agosto es temporada alta en Francia.",
+    "nearbyTowns": "Los pueblos cercanos con opciones de alojamiento incluyen Vallesville, Beaumont y los pueblos de los alrededores."
+  }
 }

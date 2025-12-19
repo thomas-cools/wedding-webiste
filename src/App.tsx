@@ -21,7 +21,7 @@ import {
   DrawerBody,
   useDisclosure,
 } from '@chakra-ui/react'
-import { HamburgerIcon } from '@chakra-ui/icons'
+import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import RsvpForm from './components/RsvpForm'
 import LanguageSwitcher from './components/LanguageSwitcher'
 import Hero from './components/Hero'
@@ -94,6 +94,9 @@ export default function App() {
                 <Button as="a" href="#details" variant="ghost" size="sm">
                   {t('header.details')}
                 </Button>
+                <Button as="a" href="#travel" variant="ghost" size="sm">
+                  {t('header.travel')}
+                </Button>
                 <Button as="a" href="#rsvp" variant="ghost" size="sm">
                   {t('header.rsvp')}
                 </Button>
@@ -139,6 +142,16 @@ export default function App() {
                 onClick={onClose}
               >
                 {t('header.details')}
+              </Button>
+              <Button 
+                as="a" 
+                href="#travel" 
+                variant="ghost" 
+                size="lg" 
+                justifyContent="flex-start"
+                onClick={onClose}
+              >
+                {t('header.travel')}
               </Button>
               <Button 
                 as="a" 
@@ -389,6 +402,137 @@ export default function App() {
                     {t('details.venueAddress')}
                   </Text>
                 </VStack>
+              </ScrollReveal>
+            </VStack>
+          </Container>
+        </Box>
+
+        {/* Travel & Accommodation Section */}
+        <Box id="travel" py={[20, 28]} bg="white" scrollMarginTop={["100px", "130px", "150px"]}>
+          <Container maxW="container.lg">
+            <VStack spacing={12}>
+              {/* Section Header */}
+              <ScrollReveal>
+                <VStack spacing={4} textAlign="center">
+                  <Text 
+                    fontSize="sm" 
+                    textTransform="uppercase" 
+                    letterSpacing="0.3em" 
+                    color="primary.soft"
+                    fontWeight="500"
+                  >
+                    {t('travel.label')}
+                  </Text>
+                  <Heading 
+                    as="h2"
+                    fontFamily="heading"
+                    fontSize={["3xl", "4xl", "5xl"]}
+                    fontWeight="400"
+                    color="neutral.dark"
+                  >
+                    {t('travel.title')}
+                  </Heading>
+                  <ElegantDivider my={2} />
+                  <Text 
+                    fontSize="md" 
+                    color="neutral.muted" 
+                    maxW="600px"
+                    lineHeight="tall"
+                  >
+                    {t('travel.subtitle')}
+                  </Text>
+                </VStack>
+              </ScrollReveal>
+
+              {/* Airbnb Search Card */}
+              <ScrollReveal>
+                <Box 
+                  bg="neutral.light" 
+                  borderWidth="1px" 
+                  borderColor="primary.soft"
+                  p={[8, 10]}
+                  maxW="700px"
+                  mx="auto"
+                >
+                  <VStack spacing={6} textAlign="center">
+                    {/* Airbnb Logo/Icon */}
+                    <Box
+                      as="svg"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      w="48px"
+                      h="48px"
+                      fill="#FF5A5F"
+                    >
+                      <path d="M12.001 18.275c-.649-.8-1.156-1.6-1.499-2.274-.415-.857-.632-1.628-.632-2.356 0-1.057.415-1.728 1.056-1.928a.912.912 0 0 1 .275-.043c.414 0 .828.2 1.113.571.285-.371.7-.571 1.113-.571.1 0 .185.014.271.043.642.2 1.057.871 1.057 1.928 0 .728-.214 1.499-.628 2.356-.357.671-.857 1.471-1.5 2.271l-.314.4-.312-.397zm.57-8.686c1.114 0 2.07.714 2.485 1.728.128-.214.271-.414.428-.6.557-.67 1.342-1.085 2.185-1.085.185 0 .357.014.542.057 1.614.4 2.57 1.985 2.57 4.085 0 1.442-.443 2.928-1.285 4.442-.843 1.528-2.114 3.185-3.756 4.899l-.028.029-.029.028-1.871 1.9c-.742.757-1.713 1.128-2.713 1.128-.999 0-1.985-.385-2.713-1.128l-1.871-1.9-.057-.057c-1.642-1.714-2.914-3.371-3.756-4.899-.843-1.514-1.286-3-1.286-4.442 0-2.1.957-3.685 2.571-4.085.185-.043.357-.057.543-.057.842 0 1.628.414 2.185 1.085.157.186.3.386.428.6.414-1.014 1.371-1.728 2.485-1.728h-.057z"/>
+                    </Box>
+                    
+                    <Heading 
+                      as="h3" 
+                      fontFamily="heading" 
+                      fontSize="xl" 
+                      fontWeight="400"
+                      color="neutral.dark"
+                    >
+                      {t('travel.airbnbTitle')}
+                    </Heading>
+                    
+                    <Text fontSize="sm" color="neutral.muted" maxW="450px">
+                      {t('travel.airbnbDescription')}
+                    </Text>
+
+                    {/* Venue Address Display */}
+                    <VStack spacing={1}>
+                      <Text fontSize="sm" fontWeight="500" color="neutral.dark">
+                        {t('travel.venueName')}
+                      </Text>
+                      <Text fontSize="sm" color="neutral.muted" fontStyle="italic">
+                        {t('travel.venueAddress')}
+                      </Text>
+                    </VStack>
+
+                    {/* Airbnb Search Button */}
+                    <Button
+                      as="a"
+                      href="https://www.airbnb.com/s/Chateau-du-Pujolet--Vallesville--France/homes?tab_id=home_tab&refinement_paths%5B%5D=%2Fhomes&query=Chateau%20du%20Pujolet%2C%20Vallesville%2C%20France&place_id=ChIJN1t_tDeuEmsRUsoyG83frY4&date_picker_type=calendar&checkin=2026-08-24&checkout=2026-08-28&adults=2&source=structured_search_input_header&search_type=autocomplete_click"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="primary"
+                      size="lg"
+                      rightIcon={<ExternalLinkIcon />}
+                      _hover={{
+                        transform: "translateY(-2px)",
+                        boxShadow: "lg"
+                      }}
+                      transition="all 0.2s"
+                    >
+                      {t('travel.searchAirbnb')}
+                    </Button>
+
+                    {/* Booking Tip */}
+                    <Text 
+                      fontSize="xs" 
+                      color="primary.soft" 
+                      fontStyle="italic"
+                      maxW="400px"
+                    >
+                      {t('travel.tip')}
+                    </Text>
+                  </VStack>
+                </Box>
+              </ScrollReveal>
+
+              {/* Additional Info */}
+              <ScrollReveal>
+                <Text 
+                  fontSize="sm" 
+                  color="neutral.muted" 
+                  textAlign="center"
+                  maxW="500px"
+                  mx="auto"
+                >
+                  {t('travel.nearbyTowns')}
+                </Text>
               </ScrollReveal>
             </VStack>
           </Container>
