@@ -31,6 +31,10 @@ import { PhotoGallery } from './components/PhotoGallery'
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { features } from './config'
 
+// Import assets
+import heroBanner from './assets/Banner-wedding-01.jpeg'
+import weddingLogo from './assets/T&C-Monogram.webp'
+
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
   <Box my={8} {...props}>
@@ -59,15 +63,12 @@ export default function App() {
       >
         <Container maxW="container.xl" px={[4, 6, 8]}>
           <Flex justify="space-between" align="center">
-            <Text 
-              fontFamily="heading" 
-              fontSize={["md", "lg"]}
-              fontWeight="400" 
-              letterSpacing="0.15em" 
-              color="neutral.dark"
-            >
-              {t('header.initials')}
-            </Text>
+            <Image 
+              src={weddingLogo} 
+              alt={t('header.initials')}
+              h={["32px", "40px"]}
+              w="auto"
+            />
             <HStack spacing={[2, 4, 10]}>
               {/* Desktop Navigation */}
               <HStack spacing={10} display={["none", "none", "flex"]}>
@@ -150,7 +151,7 @@ export default function App() {
 
       <Box as="main">
         {/* Hero Section */}
-        <Hero />
+        <Hero backgroundImage={heroBanner} overlayOpacity={0.35} />
 
         {/* Countdown Section - Controlled by feature flag */}
         {features.showCountdown && <Countdown />}
