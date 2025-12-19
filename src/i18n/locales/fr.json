@@ -183,13 +183,43 @@
   "travel": {
     "label": "Voyage et Séjour",
     "title": "Hébergement",
-    "subtitle": "Le mariage aura lieu au Château du Pujolet à Vallesville, France. Vous trouverez ci-dessous les options d'hébergement à proximité.",
+    "subtitle": "Le mariage aura lieu au Château du Pujolet à Vallesvilles, France. Vous trouverez ci-dessous les options d'hébergement à proximité.",
+    "tabs": {
+      "airbnb": "Locations de Vacances",
+      "hotels": "Hôtels"
+    },
     "airbnbTitle": "Trouvez un Hébergement",
-    "airbnbDescription": "Découvrez des hébergements charmants près du lieu sur Airbnb.",
+    "airbnbDescription": "Découvrez des locations de vacances charmantes et des hébergements uniques près du lieu sur Airbnb.",
     "searchAirbnb": "Rechercher sur Airbnb",
+    "hotelsTitle": "Hôtels à Proximité",
+    "hotelsDescription": "Hébergements hôteliers traditionnels dans la région, des hôtels boutique aux grandes chaînes.",
+    "recommendedHotels": "Hôtels Recommandés",
+    "searchMore": "Rechercher Plus d'Hôtels",
+    "searchBooking": "Rechercher sur Booking.com",
+    "searchExpedia": "Rechercher sur Expedia",
+    "hotels": [
+      {
+        "name": "Hôtel & Spa Le Pavillon",
+        "location": "Toulouse (45 min en voiture)",
+        "description": "Élégant hôtel 4 étoiles avec spa et gastronomie.",
+        "priceRange": "€€€"
+      },
+      {
+        "name": "Le Domaine des Music",
+        "location": "Montauban (30 min en voiture)",
+        "description": "Charmant hôtel de campagne dans un manoir restauré.",
+        "priceRange": "€€"
+      },
+      {
+        "name": "Hôtel & Chambre d'Hôtes de Luxe",
+        "location": "Vallesvilles (5 min en voiture)",
+        "description": "Chambre d'hôtes boutique avec service personnalisé.",
+        "priceRange": "€€"
+      }
+    ],
     "venueName": "Château du Pujolet",
-    "venueAddress": "Vallesville, France",
+    "venueAddress": "Vallesvilles, France",
     "tip": "Nous vous recommandons de réserver tôt car août est la haute saison en France.",
-    "nearbyTowns": "Les villes voisines avec des options d'hébergement comprennent Vallesville, Beaumont et les villages environnants."
+    "nearbyTowns": "Les villes voisines avec des options d'hébergement comprennent Vallesvilles, Toulouse et Montauban."
   }
 }

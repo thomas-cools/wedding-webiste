@@ -14,6 +14,9 @@ export const features = {
   
   /** Enable password protection for the site */
   requirePassword: true,
+  
+  /** Send confirmation emails to users after RSVP */
+  sendRsvpConfirmationEmail: true,
 }
 
 /**
@@ -36,4 +39,6 @@ export const weddingConfig = {
     address: '21320 Pouilly-en-Auxois, Burgundy, France',
   },
   rsvpDeadline: 'June 1, 2026',
+  /** Contact email for wedding inquiries (also used in confirmation emails) */
+  contactEmail: 'wedding@example.com',
 }

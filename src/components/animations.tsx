@@ -1,6 +1,6 @@
 import { motion, Variants, useReducedMotion } from 'framer-motion'
 import { Box, BoxProps } from '@chakra-ui/react'
-import { forwardRef, ReactNode } from 'react'
+import React, { forwardRef, ReactNode } from 'react'
 
 // Create motion-enabled Chakra components
 export const MotionBox = motion(Box)
@@ -139,8 +139,8 @@ export const ScrollReveal = forwardRef<HTMLDivElement, ScrollRevealProps>(
 
 ScrollReveal.displayName = 'ScrollReveal'
 
-// Stagger container for lists
-interface StaggerContainerProps extends BoxProps {
+// Stagger container for lists - supports polymorphic 'as' prop via BoxProps
+interface StaggerContainerProps extends Omit<BoxProps, 'children'> {
   children: ReactNode
   once?: boolean
 }
@@ -150,7 +150,7 @@ export const StaggerContainer = forwardRef<HTMLDivElement, StaggerContainerProps
     const shouldReduceMotion = useReducedMotion()
 
     if (shouldReduceMotion) {
-      return <Box ref={ref} {...props}>{children}</Box>
+      return <Box ref={ref} {...(props as BoxProps)}>{children}</Box>
     }
 
     return (
@@ -160,13 +160,13 @@ export const StaggerContainer = forwardRef<HTMLDivElement, StaggerContainerProps
         whileInView="visible"
         viewport={{ once, margin: '-50px', amount: 0.1 }}
         variants={staggerContainer}
-        {...props}
+        {...(props as BoxProps)}
       >
         {children}
       </MotionBox>
     )
   }
-)
+) as React.ForwardRefExoticComponent<StaggerContainerProps & React.RefAttributes<HTMLDivElement> & Record<string, unknown>>
 
 StaggerContainer.displayName = 'StaggerContainer'
 

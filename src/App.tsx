@@ -20,6 +20,12 @@ import {
   DrawerCloseButton,
   DrawerBody,
   useDisclosure,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Badge,
 } from '@chakra-ui/react'
 import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import RsvpForm from './components/RsvpForm'
@@ -444,95 +450,345 @@ export default function App() {
                 </VStack>
               </ScrollReveal>
 
-              {/* Airbnb Search Card */}
+              {/* Accommodation Tabs */}
               <ScrollReveal>
-                <Box 
-                  bg="neutral.light" 
-                  borderWidth="1px" 
-                  borderColor="primary.soft"
-                  p={[8, 10]}
-                  maxW="700px"
-                  mx="auto"
-                >
-                  <VStack spacing={6} textAlign="center">
-                    {/* Airbnb Logo/Icon */}
-                    <Box
-                      as="svg"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      w="48px"
-                      h="48px"
-                      fill="#FF5A5F"
+                <Box w="full" maxW="900px" mx="auto">
+                  <Tabs variant="soft-rounded" colorScheme="gray" isFitted>
+                    <TabList 
+                      bg="neutral.light" 
+                      p={2} 
+                      borderRadius="full"
+                      border="1px solid"
+                      borderColor="primary.soft"
+                      mb={8}
                     >
-                      <path d="M12.001 18.275c-.649-.8-1.156-1.6-1.499-2.274-.415-.857-.632-1.628-.632-2.356 0-1.057.415-1.728 1.056-1.928a.912.912 0 0 1 .275-.043c.414 0 .828.2 1.113.571.285-.371.7-.571 1.113-.571.1 0 .185.014.271.043.642.2 1.057.871 1.057 1.928 0 .728-.214 1.499-.628 2.356-.357.671-.857 1.471-1.5 2.271l-.314.4-.312-.397zm.57-8.686c1.114 0 2.07.714 2.485 1.728.128-.214.271-.414.428-.6.557-.67 1.342-1.085 2.185-1.085.185 0 .357.014.542.057 1.614.4 2.57 1.985 2.57 4.085 0 1.442-.443 2.928-1.285 4.442-.843 1.528-2.114 3.185-3.756 4.899l-.028.029-.029.028-1.871 1.9c-.742.757-1.713 1.128-2.713 1.128-.999 0-1.985-.385-2.713-1.128l-1.871-1.9-.057-.057c-1.642-1.714-2.914-3.371-3.756-4.899-.843-1.514-1.286-3-1.286-4.442 0-2.1.957-3.685 2.571-4.085.185-.043.357-.057.543-.057.842 0 1.628.414 2.185 1.085.157.186.3.386.428.6.414-1.014 1.371-1.728 2.485-1.728h-.057z"/>
-                    </Box>
-                    
-                    <Heading 
-                      as="h3" 
-                      fontFamily="heading" 
-                      fontSize="xl" 
-                      fontWeight="400"
-                      color="neutral.dark"
-                    >
-                      {t('travel.airbnbTitle')}
-                    </Heading>
-                    
-                    <Text fontSize="sm" color="neutral.muted" maxW="450px">
-                      {t('travel.airbnbDescription')}
-                    </Text>
+                      <Tab 
+                        _selected={{ bg: 'neutral.dark', color: 'white' }}
+                        fontWeight="500"
+                        fontSize="sm"
+                        letterSpacing="0.05em"
+                      >
+                        {t('travel.tabs.airbnb')}
+                      </Tab>
+                      <Tab 
+                        _selected={{ bg: 'neutral.dark', color: 'white' }}
+                        fontWeight="500"
+                        fontSize="sm"
+                        letterSpacing="0.05em"
+                      >
+                        {t('travel.tabs.hotels')}
+                      </Tab>
+                    </TabList>
 
-                    {/* Venue Address Display */}
-                    <VStack spacing={1}>
-                      <Text fontSize="sm" fontWeight="500" color="neutral.dark">
-                        {t('travel.venueName')}
-                      </Text>
-                      <Text fontSize="sm" color="neutral.muted" fontStyle="italic">
-                        {t('travel.venueAddress')}
-                      </Text>
-                    </VStack>
+                    <TabPanels>
+                      {/* Airbnb Tab */}
+                      <TabPanel p={0}>
+                        <Box 
+                          bg="neutral.light" 
+                          borderWidth="1px" 
+                          borderColor="primary.soft"
+                          p={[8, 10]}
+                        >
+                          <VStack spacing={6} textAlign="center">
+                            {/* Airbnb Logo/Icon */}
+                            <Box
+                              as="svg"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              w="48px"
+                              h="48px"
+                              fill="#FF5A5F"
+                            >
+                              <path d="M12.001 18.275c-.649-.8-1.156-1.6-1.499-2.274-.415-.857-.632-1.628-.632-2.356 0-1.057.415-1.728 1.056-1.928a.912.912 0 0 1 .275-.043c.414 0 .828.2 1.113.571.285-.371.7-.571 1.113-.571.1 0 .185.014.271.043.642.2 1.057.871 1.057 1.928 0 .728-.214 1.499-.628 2.356-.357.671-.857 1.471-1.5 2.271l-.314.4-.312-.397zm.57-8.686c1.114 0 2.07.714 2.485 1.728.128-.214.271-.414.428-.6.557-.67 1.342-1.085 2.185-1.085.185 0 .357.014.542.057 1.614.4 2.57 1.985 2.57 4.085 0 1.442-.443 2.928-1.285 4.442-.843 1.528-2.114 3.185-3.756 4.899l-.028.029-.029.028-1.871 1.9c-.742.757-1.713 1.128-2.713 1.128-.999 0-1.985-.385-2.713-1.128l-1.871-1.9-.057-.057c-1.642-1.714-2.914-3.371-3.756-4.899-.843-1.514-1.286-3-1.286-4.442 0-2.1.957-3.685 2.571-4.085.185-.043.357-.057.543-.057.842 0 1.628.414 2.185 1.085.157.186.3.386.428.6.414-1.014 1.371-1.728 2.485-1.728h-.057z"/>
+                            </Box>
+                            
+                            <Heading 
+                              as="h3" 
+                              fontFamily="heading" 
+                              fontSize="xl" 
+                              fontWeight="400"
+                              color="neutral.dark"
+                            >
+                              {t('travel.airbnbTitle')}
+                            </Heading>
+                            
+                            <Text fontSize="sm" color="neutral.muted" maxW="450px">
+                              {t('travel.airbnbDescription')}
+                            </Text>
 
-                    {/* Airbnb Search Button */}
-                    <Button
-                      as="a"
-                      href="https://www.airbnb.com/s/Ch%C3%A2teau-du-Pujolet--Vallesvilles--France/homes?refinement_paths%5B%5D=%2Fhomes&date_picker_type=calendar&checkin=2026-08-24&checkout=2026-08-28&adults=2&search_type=autocomplete_click&flexible_trip_lengths%5B%5D=one_week&monthly_start_date=2026-01-01&monthly_length=3&monthly_end_date=2026-04-01&price_filter_input_type=2&price_filter_num_nights=4&channel=EXPLORE&place_id=ChIJP_GaICSQrhIRMqr4tYT_Wcw&acp_id=t-g-ChIJP_GaICSQrhIRMqr4tYT_Wcw"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      variant="primary"
-                      size="lg"
-                      rightIcon={<ExternalLinkIcon />}
-                      _hover={{
-                        transform: "translateY(-2px)",
-                        boxShadow: "lg"
-                      }}
-                      transition="all 0.2s"
-                    >
-                      {t('travel.searchAirbnb')}
-                    </Button>
+                            {/* Airbnb Search Button */}
+                            <Button
+                              as="a"
+                              href="https://www.airbnb.com/s/Ch%C3%A2teau-du-Pujolet--Vallesvilles--France/homes?refinement_paths%5B%5D=%2Fhomes&date_picker_type=calendar&checkin=2026-08-24&checkout=2026-08-28&adults=2&search_type=autocomplete_click&flexible_trip_lengths%5B%5D=one_week&monthly_start_date=2026-01-01&monthly_length=3&monthly_end_date=2026-04-01&price_filter_input_type=2&price_filter_num_nights=4&channel=EXPLORE&place_id=ChIJP_GaICSQrhIRMqr4tYT_Wcw&acp_id=t-g-ChIJP_GaICSQrhIRMqr4tYT_Wcw"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              variant="primary"
+                              size="lg"
+                              rightIcon={<ExternalLinkIcon />}
+                              _hover={{
+                                transform: "translateY(-2px)",
+                                boxShadow: "lg"
+                              }}
+                              transition="all 0.2s"
+                            >
+                              {t('travel.searchAirbnb')}
+                            </Button>
+                          </VStack>
+                        </Box>
+                      </TabPanel>
 
-                    {/* Booking Tip */}
-                    <Text 
-                      fontSize="xs" 
-                      color="primary.soft" 
-                      fontStyle="italic"
-                      maxW="400px"
-                    >
-                      {t('travel.tip')}
-                    </Text>
-                  </VStack>
+                      {/* Hotels Tab */}
+                      <TabPanel p={0}>
+                        <VStack spacing={8}>
+                          {/* Hotels Introduction */}
+                          <Box 
+                            bg="neutral.light" 
+                            borderWidth="1px" 
+                            borderColor="primary.soft"
+                            p={[6, 8]}
+                            w="full"
+                            textAlign="center"
+                          >
+                            <VStack spacing={4}>
+                              {/* Hotel Icon */}
+                              <Box
+                                as="svg"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                w="48px"
+                                h="48px"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                color="neutral.dark"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+                              </Box>
+                              
+                              <Heading 
+                                as="h3" 
+                                fontFamily="heading" 
+                                fontSize="xl" 
+                                fontWeight="400"
+                                color="neutral.dark"
+                              >
+                                {t('travel.hotelsTitle')}
+                              </Heading>
+                              
+                              <Text fontSize="sm" color="neutral.muted" maxW="450px">
+                                {t('travel.hotelsDescription')}
+                              </Text>
+                            </VStack>
+                          </Box>
+
+                          {/* Recommended Hotels List */}
+                          <Box w="full">
+                            <Text 
+                              fontSize="xs" 
+                              textTransform="uppercase" 
+                              letterSpacing="0.2em" 
+                              color="primary.soft"
+                              fontWeight="500"
+                              mb={4}
+                              textAlign="center"
+                            >
+                              {t('travel.recommendedHotels')}
+                            </Text>
+                            <SimpleGrid columns={[1, 1, 3]} spacing={4}>
+                              {/* Hotel 1 */}
+                              <Box 
+                                bg="white" 
+                                borderWidth="1px" 
+                                borderColor="primary.soft"
+                                p={6}
+                              >
+                                <VStack align="start" spacing={3}>
+                                  <HStack justify="space-between" w="full">
+                                    <Heading 
+                                      as="h4" 
+                                      fontSize="md" 
+                                      fontWeight="500"
+                                      color="neutral.dark"
+                                    >
+                                      {t('travel.hotels.0.name')}
+                                    </Heading>
+                                    <Badge 
+                                      colorScheme="gray" 
+                                      variant="subtle"
+                                      fontSize="xs"
+                                    >
+                                      {t('travel.hotels.0.priceRange')}
+                                    </Badge>
+                                  </HStack>
+                                  <Text fontSize="xs" color="primary.soft" fontWeight="500">
+                                    {t('travel.hotels.0.location')}
+                                  </Text>
+                                  <Text fontSize="sm" color="neutral.muted">
+                                    {t('travel.hotels.0.description')}
+                                  </Text>
+                                </VStack>
+                              </Box>
+
+                              {/* Hotel 2 */}
+                              <Box 
+                                bg="white" 
+                                borderWidth="1px" 
+                                borderColor="primary.soft"
+                                p={6}
+                              >
+                                <VStack align="start" spacing={3}>
+                                  <HStack justify="space-between" w="full">
+                                    <Heading 
+                                      as="h4" 
+                                      fontSize="md" 
+                                      fontWeight="500"
+                                      color="neutral.dark"
+                                    >
+                                      {t('travel.hotels.1.name')}
+                                    </Heading>
+                                    <Badge 
+                                      colorScheme="gray" 
+                                      variant="subtle"
+                                      fontSize="xs"
+                                    >
+                                      {t('travel.hotels.1.priceRange')}
+                                    </Badge>
+                                  </HStack>
+                                  <Text fontSize="xs" color="primary.soft" fontWeight="500">
+                                    {t('travel.hotels.1.location')}
+                                  </Text>
+                                  <Text fontSize="sm" color="neutral.muted">
+                                    {t('travel.hotels.1.description')}
+                                  </Text>
+                                </VStack>
+                              </Box>
+
+                              {/* Hotel 3 */}
+                              <Box 
+                                bg="white" 
+                                borderWidth="1px" 
+                                borderColor="primary.soft"
+                                p={6}
+                              >
+                                <VStack align="start" spacing={3}>
+                                  <HStack justify="space-between" w="full">
+                                    <Heading 
+                                      as="h4" 
+                                      fontSize="md" 
+                                      fontWeight="500"
+                                      color="neutral.dark"
+                                    >
+                                      {t('travel.hotels.2.name')}
+                                    </Heading>
+                                    <Badge 
+                                      colorScheme="gray" 
+                                      variant="subtle"
+                                      fontSize="xs"
+                                    >
+                                      {t('travel.hotels.2.priceRange')}
+                                    </Badge>
+                                  </HStack>
+                                  <Text fontSize="xs" color="primary.soft" fontWeight="500">
+                                    {t('travel.hotels.2.location')}
+                                  </Text>
+                                  <Text fontSize="sm" color="neutral.muted">
+                                    {t('travel.hotels.2.description')}
+                                  </Text>
+                                </VStack>
+                              </Box>
+                            </SimpleGrid>
+                          </Box>
+
+                          {/* Search More Hotels */}
+                          <Box 
+                            bg="neutral.light" 
+                            borderWidth="1px" 
+                            borderColor="primary.soft"
+                            p={[6, 8]}
+                            w="full"
+                          >
+                            <VStack spacing={6}>
+                              <Text 
+                                fontSize="xs" 
+                                textTransform="uppercase" 
+                                letterSpacing="0.2em" 
+                                color="primary.soft"
+                                fontWeight="500"
+                              >
+                                {t('travel.searchMore')}
+                              </Text>
+                              
+                              <HStack spacing={4} flexWrap="wrap" justify="center">
+                                {/* Booking.com Button */}
+                                <Button
+                                  as="a"
+                                  href="https://www.booking.com/searchresults.html?ss=Vallesvilles%2C+France&checkin=2026-08-24&checkout=2026-08-28&group_adults=2&no_rooms=1"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  variant="outline"
+                                  size="md"
+                                  rightIcon={<ExternalLinkIcon />}
+                                  borderColor="neutral.dark"
+                                  color="neutral.dark"
+                                  _hover={{
+                                    bg: "neutral.dark",
+                                    color: "white",
+                                    transform: "translateY(-2px)",
+                                  }}
+                                  transition="all 0.2s"
+                                >
+                                  {t('travel.searchBooking')}
+                                </Button>
+
+                                {/* Expedia Button */}
+                                <Button
+                                  as="a"
+                                  href="https://www.expedia.com/Hotel-Search?destination=Vallesvilles%2C%20France&startDate=2026-08-24&endDate=2026-08-28&adults=2"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  variant="outline"
+                                  size="md"
+                                  rightIcon={<ExternalLinkIcon />}
+                                  borderColor="neutral.dark"
+                                  color="neutral.dark"
+                                  _hover={{
+                                    bg: "neutral.dark",
+                                    color: "white",
+                                    transform: "translateY(-2px)",
+                                  }}
+                                  transition="all 0.2s"
+                                >
+                                  {t('travel.searchExpedia')}
+                                </Button>
+                              </HStack>
+                            </VStack>
+                          </Box>
+                        </VStack>
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
                 </Box>
               </ScrollReveal>
 
-              {/* Additional Info */}
+              {/* Booking Tip & Additional Info */}
               <ScrollReveal>
-                <Text 
-                  fontSize="sm" 
-                  color="neutral.muted" 
-                  textAlign="center"
-                  maxW="500px"
-                  mx="auto"
-                >
-                  {t('travel.nearbyTowns')}
-                </Text>
+                <VStack spacing={4} textAlign="center">
+                  <Text 
+                    fontSize="sm" 
+                    color="primary.soft" 
+                    fontStyle="italic"
+                    maxW="500px"
+                  >
+                    {t('travel.tip')}
+                  </Text>
+                  <Text 
+                    fontSize="sm" 
+                    color="neutral.muted" 
+                    maxW="500px"
+                  >
+                    {t('travel.nearbyTowns')}
+                  </Text>
+                </VStack>
               </ScrollReveal>
             </VStack>
           </Container>

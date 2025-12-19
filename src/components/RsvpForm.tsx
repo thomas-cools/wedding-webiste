@@ -224,6 +224,24 @@ export default function RsvpForm() {
   }, [events, likelihood, guests])
 
 
+  // Send confirmation email via Netlify Function
+  async function sendConfirmationEmail(rsvpData: Omit<Rsvp, 'id' | 'timestamp'>) {
+    try {
+      const response = await fetch('/.netlify/functions/send-rsvp-confirmation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(rsvpData),
+      })
+      
+      if (!response.ok) {
+        console.error('Failed to send confirmation email:', await response.text())
+      }
+    } catch (error) {
+      // Silently fail - email is a nice-to-have, not critical
+      console.error('Error sending confirmation email:', error)
+    }
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const errs = validate()
@@ -279,6 +297,21 @@ export default function RsvpForm() {
       body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
     }).catch(() => {
       // Silently fail for local development - localStorage backup below
+    })
+
+    // Send confirmation email to user
+    sendConfirmationEmail({
+      firstName: entry.firstName,
+      email: entry.email,
+      likelihood: entry.likelihood,
+      events: entry.events,
+      accommodation: entry.accommodation,
+      travelPlan: entry.travelPlan,
+      guests: entry.guests,
+      dietary: entry.dietary,
+      songRequest: entry.songRequest,
+      franceTips: entry.franceTips,
+      additionalNotes: entry.additionalNotes,
     })
 
     // Also save to localStorage (backup + local dev)

@@ -182,13 +182,43 @@
   "travel": {
     "label": "Viaje y Alojamiento",
     "title": "Alojamiento",
-    "subtitle": "La boda se llevará a cabo en el Château du Pujolet en Vallesville, Francia. A continuación encontrarás opciones de alojamiento cercanas.",
+    "subtitle": "La boda se llevará a cabo en el Château du Pujolet en Vallesvilles, Francia. A continuación encontrarás opciones de alojamiento cercanas.",
+    "tabs": {
+      "airbnb": "Alquileres Vacacionales",
+      "hotels": "Hoteles"
+    },
     "airbnbTitle": "Encuentra Alojamiento Cercano",
-    "airbnbDescription": "Descubre alojamientos encantadores cerca del lugar en Airbnb.",
+    "airbnbDescription": "Descubre encantadores alquileres vacacionales y alojamientos únicos cerca del lugar en Airbnb.",
     "searchAirbnb": "Buscar en Airbnb",
+    "hotelsTitle": "Hoteles Cercanos",
+    "hotelsDescription": "Alojamientos de hotel tradicionales en la zona, desde hoteles boutique hasta grandes cadenas.",
+    "recommendedHotels": "Hoteles Recomendados",
+    "searchMore": "Buscar Más Hoteles",
+    "searchBooking": "Buscar en Booking.com",
+    "searchExpedia": "Buscar en Expedia",
+    "hotels": [
+      {
+        "name": "Hôtel & Spa Le Pavillon",
+        "location": "Toulouse (45 min en coche)",
+        "description": "Elegante hotel de 4 estrellas con spa y alta cocina.",
+        "priceRange": "€€€"
+      },
+      {
+        "name": "Le Domaine des Music",
+        "location": "Montauban (30 min en coche)",
+        "description": "Encantador hotel campestre en una casa señorial restaurada.",
+        "priceRange": "€€"
+      },
+      {
+        "name": "Hôtel & Chambre d'Hôtes de Luxe",
+        "location": "Vallesvilles (5 min en coche)",
+        "description": "Bed & breakfast boutique con servicio personalizado.",
+        "priceRange": "€€"
+      }
+    ],
     "venueName": "Château du Pujolet",
-    "venueAddress": "Vallesville, Francia",
+    "venueAddress": "Vallesvilles, Francia",
     "tip": "Recomendamos reservar con anticipación ya que agosto es temporada alta en Francia.",
-    "nearbyTowns": "Los pueblos cercanos con opciones de alojamiento incluyen Vallesville, Beaumont y los pueblos de los alrededores."
+    "nearbyTowns": "Los pueblos cercanos con opciones de alojamiento incluyen Vallesvilles, Toulouse y Montauban."
   }
 }

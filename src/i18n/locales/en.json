@@ -183,13 +183,43 @@
   "travel": {
     "label": "Travel & Stay",
     "title": "Accommodation",
-    "subtitle": "The wedding will take place at Château du Pujolet in Vallesville, France. Below you'll find nearby accommodation options.",
+    "subtitle": "The wedding will take place at Château du Pujolet in Vallesvilles, France. Below you'll find nearby accommodation options.",
+    "tabs": {
+      "airbnb": "Vacation Rentals",
+      "hotels": "Hotels"
+    },
     "airbnbTitle": "Find Nearby Stays",
-    "airbnbDescription": "Discover charming accommodations near the venue on Airbnb.",
+    "airbnbDescription": "Discover charming vacation rentals and unique accommodations near the venue on Airbnb.",
     "searchAirbnb": "Search on Airbnb",
+    "hotelsTitle": "Nearby Hotels",
+    "hotelsDescription": "Traditional hotel accommodations in the area, from boutique hotels to larger chains.",
+    "recommendedHotels": "Recommended Hotels",
+    "searchMore": "Search More Hotels",
+    "searchBooking": "Search on Booking.com",
+    "searchExpedia": "Search on Expedia",
+    "hotels": [
+      {
+        "name": "Hôtel & Spa Le Pavillon",
+        "location": "Toulouse (45 min drive)",
+        "description": "Elegant 4-star hotel with spa facilities and fine dining.",
+        "priceRange": "€€€"
+      },
+      {
+        "name": "Le Domaine des Music",
+        "location": "Montauban (30 min drive)",
+        "description": "Charming countryside hotel in a restored manor house.",
+        "priceRange": "€€"
+      },
+      {
+        "name": "Hôtel & Chambre d'Hôtes de Luxe",
+        "location": "Vallesvilles (5 min drive)",
+        "description": "Boutique bed & breakfast with personalized service.",
+        "priceRange": "€€"
+      }
+    ],
     "venueName": "Château du Pujolet",
-    "venueAddress": "Vallesville, France",
+    "venueAddress": "Vallesvilles, France",
     "tip": "We recommend booking early as August is peak season in France.",
-    "nearbyTowns": "Nearby towns with accommodation options include Vallesville, Beaumont, and surrounding villages."
+    "nearbyTowns": "Nearby towns with accommodation options include Vallesvilles, Toulouse, and Montauban."
   }
 }

@@ -182,13 +182,43 @@
   "travel": {
     "label": "Reis en Verblijf",
     "title": "Accommodatie",
-    "subtitle": "De bruiloft vindt plaats in Château du Pujolet in Vallesville, Frankrijk. Hieronder vindt u accommodatiemogelijkheden in de buurt.",
+    "subtitle": "De bruiloft vindt plaats in Château du Pujolet in Vallesvilles, Frankrijk. Hieronder vindt u accommodatiemogelijkheden in de buurt.",
+    "tabs": {
+      "airbnb": "Vakantiewoningen",
+      "hotels": "Hotels"
+    },
     "airbnbTitle": "Vind Verblijf in de Buurt",
-    "airbnbDescription": "Ontdek charmante accommodaties in de buurt van de locatie op Airbnb.",
+    "airbnbDescription": "Ontdek charmante vakantiewoningen en unieke accommodaties in de buurt van de locatie op Airbnb.",
     "searchAirbnb": "Zoeken op Airbnb",
+    "hotelsTitle": "Hotels in de Buurt",
+    "hotelsDescription": "Traditionele hotelaccommodaties in de omgeving, van boetiekhotels tot grotere ketens.",
+    "recommendedHotels": "Aanbevolen Hotels",
+    "searchMore": "Meer Hotels Zoeken",
+    "searchBooking": "Zoeken op Booking.com",
+    "searchExpedia": "Zoeken op Expedia",
+    "hotels": [
+      {
+        "name": "Hôtel & Spa Le Pavillon",
+        "location": "Toulouse (45 min rijden)",
+        "description": "Elegant 4-sterrenhotel met spa en fijne keuken.",
+        "priceRange": "€€€"
+      },
+      {
+        "name": "Le Domaine des Music",
+        "location": "Montauban (30 min rijden)",
+        "description": "Charmant plattelandshotel in een gerestaureerd landhuis.",
+        "priceRange": "€€"
+      },
+      {
+        "name": "Hôtel & Chambre d'Hôtes de Luxe",
+        "location": "Vallesvilles (5 min rijden)",
+        "description": "Boetiek bed & breakfast met persoonlijke service.",
+        "priceRange": "€€"
+      }
+    ],
     "venueName": "Château du Pujolet",
-    "venueAddress": "Vallesville, Frankrijk",
+    "venueAddress": "Vallesvilles, Frankrijk",
     "tip": "We raden aan vroeg te boeken omdat augustus hoogseizoen is in Frankrijk.",
-    "nearbyTowns": "Nabijgelegen steden met accommodatiemogelijkheden zijn onder andere Vallesville, Beaumont en omliggende dorpen."
+    "nearbyTowns": "Nabijgelegen steden met accommodatiemogelijkheden zijn onder andere Vallesvilles, Toulouse en Montauban."
   }
 }

@@ -26,8 +26,12 @@ const MotionBox = motion(Box)
 // In Vite, use VITE_SITE_PASSWORD environment variable
 const getPassword = (): string => {
   // Check for Vite environment variable (works in browser)
-  if (typeof window !== 'undefined' && (window as Record<string, unknown>).__VITE_SITE_PASSWORD__) {
-    return (window as Record<string, unknown>).__VITE_SITE_PASSWORD__ as string
+  if (typeof window !== 'undefined') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const win = window as any
+    if (win.__VITE_SITE_PASSWORD__) {
+      return win.__VITE_SITE_PASSWORD__ as string
+    }
   }
   // Default password
   return 'carolina&thomas2026'
