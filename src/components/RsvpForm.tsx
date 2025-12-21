@@ -39,13 +39,13 @@ type Rsvp = {
   id: string
   firstName: string
   email: string
+  mailingAddress?: string
   likelihood: Likelihood
   events?: Events
   accommodation?: Accommodation
   travelPlan?: TravelPlan
   guests: Guest[]
   dietary?: string
-  songRequest?: string
   franceTips?: boolean
   additionalNotes?: string
   timestamp: number
@@ -71,13 +71,13 @@ export default function RsvpForm() {
   const toast = useToast()
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
+  const [mailingAddress, setMailingAddress] = useState('')
   const [likelihood, setLikelihood] = useState<Likelihood | ''>('')
   const [events, setEvents] = useState<Events>({ welcome: '', ceremony: '', brunch: '' })
   const [accommodation, setAccommodation] = useState<Accommodation>('')
   const [travelPlan, setTravelPlan] = useState<TravelPlan>('')
   const [guests, setGuests] = useState<Guest[]>([])
   const [dietary, setDietary] = useState('')
-  const [songRequest, setSongRequest] = useState('')
   const [franceTips, setFranceTips] = useState(false)
   const [additionalNotes, setAdditionalNotes] = useState('')
   const [status, setStatus] = useState<null | 'saved' | 'updated'>(null)
@@ -104,9 +104,9 @@ export default function RsvpForm() {
       }
       setAccommodation(found.accommodation || '')
       setTravelPlan(found.travelPlan || '')
-        setGuests(found.guests)
+      setGuests(found.guests)
       setDietary(found.dietary || '')
-      setSongRequest(found.songRequest || '')
+      setMailingAddress(found.mailingAddress || '')
       setFranceTips(!!found.franceTips)
       setAdditionalNotes(found.additionalNotes || '')
     }
@@ -148,6 +148,7 @@ export default function RsvpForm() {
 
     if (!firstName.trim()) errs.firstName = t('rsvp.validation.nameRequired')
     if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) errs.email = t('rsvp.validation.emailRequired')
+    if (!mailingAddress.trim()) errs.mailingAddress = t('rsvp.validation.addressRequired')
     if (!likelihood) errs.likelihood = t('rsvp.validation.likelihoodRequired')
 
     // If the guest indicates they expect to attend (definitely/highly_likely), require at least one event selection
@@ -251,6 +252,7 @@ export default function RsvpForm() {
       let el: HTMLElement | null = null
       if (firstKey === 'firstName') el = document.querySelector('[name="firstName"]')
       else if (firstKey === 'email') el = document.querySelector('[name="email"]')
+      else if (firstKey === 'mailingAddress') el = document.querySelector('[name="mailingAddress"]')
       else if (firstKey === 'likelihood') el = document.querySelector('[name="likelihood"]')
       else if (firstKey === 'events') el = document.querySelector('[name="events.welcome"]') || document.querySelector('[name="events.ceremony"]')
       else if (firstKey === 'guests') el = document.querySelector('input[placeholder*="Guest"]') as HTMLElement | null
@@ -264,13 +266,13 @@ export default function RsvpForm() {
       id: String(Date.now()),
       firstName: firstName.trim(),
       email: email.trim(),
+      mailingAddress: mailingAddress.trim(),
       likelihood: likelihood as Likelihood,
       events: likelihood !== 'no' ? events : { welcome: '', ceremony: '', brunch: '' },
       accommodation: accommodation || undefined,
       travelPlan: travelPlan || undefined,
       guests: guests.filter(g => g.name.trim()),
       dietary: dietary.trim() || undefined,
-      songRequest: songRequest.trim() || undefined,
       franceTips: franceTips || undefined,
       additionalNotes: additionalNotes.trim() || undefined,
       timestamp: Date.now(),
@@ -281,13 +283,13 @@ export default function RsvpForm() {
     formData.append('form-name', 'rsvp')
     formData.append('firstName', entry.firstName)
     formData.append('email', entry.email)
+    formData.append('mailingAddress', entry.mailingAddress || '')
     formData.append('likelihood', entry.likelihood)
     formData.append('events', JSON.stringify(entry.events))
     formData.append('accommodation', entry.accommodation || '')
     formData.append('travelPlan', entry.travelPlan || '')
     formData.append('guests', JSON.stringify(entry.guests))
     formData.append('dietary', entry.dietary || '')
-    formData.append('songRequest', entry.songRequest || '')
     formData.append('franceTips', String(entry.franceTips || false))
     formData.append('additionalNotes', entry.additionalNotes || '')
 
@@ -303,13 +305,13 @@ export default function RsvpForm() {
     sendConfirmationEmail({
       firstName: entry.firstName,
       email: entry.email,
+      mailingAddress: entry.mailingAddress,
       likelihood: entry.likelihood,
       events: entry.events,
       accommodation: entry.accommodation,
       travelPlan: entry.travelPlan,
       guests: entry.guests,
       dietary: entry.dietary,
-      songRequest: entry.songRequest,
       franceTips: entry.franceTips,
       additionalNotes: entry.additionalNotes,
     })
@@ -401,7 +403,7 @@ export default function RsvpForm() {
           <input type="hidden" name="travelPlan" />
           <input type="hidden" name="guests" />
           <input type="hidden" name="dietary" />
-          <input type="hidden" name="songRequest" />
+          <input type="hidden" name="mailingAddress" />
           <input type="hidden" name="franceTips" />
           <input type="hidden" name="additionalNotes" />
           <Stack spacing={8}>
@@ -428,6 +430,18 @@ export default function RsvpForm() {
                 placeholder={t('rsvp.form.emailPlaceholder')} 
               />
               <FormErrorMessage>{errors.email}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.mailingAddress}>
+              <FormLabel>{t('rsvp.form.mailingAddress')}</FormLabel>
+              <Input 
+                name="mailingAddress"
+                value={mailingAddress}
+                onChange={e => { setMailingAddress(e.target.value); if (errors.mailingAddress) validateField('mailingAddress') }}
+                onBlur={() => validateField('mailingAddress')}
+                placeholder={t('rsvp.form.mailingAddressPlaceholder')}
+              />
+              <FormErrorMessage>{errors.mailingAddress}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.likelihood}>
@@ -536,10 +550,7 @@ export default function RsvpForm() {
               <Input value={dietary} onChange={e => setDietary(e.target.value)} placeholder={t('rsvp.form.dietaryPlaceholder')} />
             </FormControl>
 
-            <FormControl>
-              <FormLabel>{t('rsvp.form.songRequest')}</FormLabel>
-              <Input value={songRequest} onChange={e => setSongRequest(e.target.value)} placeholder={t('rsvp.form.songPlaceholder')} />
-            </FormControl>
+
 
             <Checkbox 
               isChecked={franceTips} 

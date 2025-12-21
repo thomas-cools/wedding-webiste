@@ -4,19 +4,25 @@
  */
 export const features = {
   /** Show the photo gallery section */
-  showGallery: true,
-  
+  showGallery: false,
+
+  /** Show the story section */
+  showStory: false,
+
   /** Show the timeline/love story section */
   showTimeline: false,
-  
+
   /** Show the countdown timer */
   showCountdown: false,
-  
+
   /** Enable password protection for the site */
   requirePassword: true,
-  
+
   /** Send confirmation emails to users after RSVP */
   sendRsvpConfirmationEmail: true,
+
+  /** Show the accommodation section */
+  showAccommodation: false,
 }
 
 /**

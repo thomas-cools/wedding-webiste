@@ -55,6 +55,8 @@
       "namePlaceholder": "Full name as you'd like it on the place card",
       "email": "Email Address",
       "emailPlaceholder": "your@email.com",
+      "mailingAddress": "Mailing Address",
+      "mailingAddressPlaceholder": "Street, City, Country, Postal Code",
       "willYouJoin": "Will You Be Joining Us?",
       "pleaseSelect": "Please select",
       "joyfullyAccept": "Joyfully Accept",
@@ -79,8 +81,6 @@
       "stillPlanning": "Still Planning",
       "dietary": "Dietary Requirements",
       "dietaryPlaceholder": "Vegetarian, allergies, etc.",
-      "songRequest": "Song Request",
-      "songPlaceholder": "A song that will get you dancing",
       "franceTips": "First time in France? Send me local recommendations.",
       "additionalGuests": "Additional Guests",
       "guestName": "Guest {{number}} name",
@@ -94,6 +94,7 @@
     "validation": {
       "nameRequired": "Please enter your full name.",
       "emailRequired": "Please enter a valid email.",
+      "addressRequired": "Please enter your mailing address.",
       "likelihoodRequired": "Please indicate how likely you are to join us.",
       "eventRequired": "Please select at least one event if you expect to join us.",
       "guestNameRequired": "Please provide guest names or remove empty guests."
