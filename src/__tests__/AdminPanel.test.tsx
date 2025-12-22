@@ -3,6 +3,11 @@ import { render, screen, fireEvent, waitFor } from '../test-utils'
 import userEvent from '@testing-library/user-event'
 import AdminPanel from '../components/AdminPanel'
 
+// JSDOM does not implement full navigation; AdminPanel's CSV export uses
+// an anchor click to trigger the download, which would otherwise emit
+// "Not implemented: navigation" console errors.
+const anchorClickSpy = jest.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
+
 // Mock localStorage
 const mockLocalStorage = {
   store: {} as Record<string, string>,
@@ -70,6 +75,10 @@ describe('AdminPanel', () => {
     mockLocalStorage.store = {}
     mockLocalStorage.getItem.mockImplementation((key: string) => mockLocalStorage.store[key] || null)
     mockConfirm.mockReturnValue(false)
+  })
+
+  afterAll(() => {
+    anchorClickSpy.mockRestore()
   })
 
   describe('Rendering', () => {
