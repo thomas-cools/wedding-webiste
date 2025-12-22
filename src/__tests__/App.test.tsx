@@ -36,34 +36,43 @@ jest.mock('../config', () => ({
 
 // Note: Tests use translation keys since the i18n mock returns keys as-is
 describe('App', () => {
-  it('renders the header with couple initials', () => {
+  const renderAppAndWaitForLazySections = async () => {
     render(<App />)
+    // App now lazy-loads some below-the-fold sections; awaiting a few known
+    // elements avoids Suspense resolution warnings.
+    await screen.findByText('story.title')
+    await screen.findByText('travel.title')
+    await screen.findByText('rsvp.form.yourName')
+  }
+
+  it('renders the header with couple initials', async () => {
+    await renderAppAndWaitForLazySections()
     // i18n mock returns keys, so we check for the translation key
     expect(screen.getAllByText('header.initials').length).toBeGreaterThan(0)
   })
 
-  it('renders the hero section with couple names', () => {
-    render(<App />)
+  it('renders the hero section with couple names', async () => {
+    await renderAppAndWaitForLazySections()
     // Names now come from translation keys (hero.bride, hero.groom)
     expect(screen.getByText('hero.bride')).toBeInTheDocument()
     expect(screen.getByText('hero.groom')).toBeInTheDocument()
   })
 
-  it('renders the wedding date', () => {
-    render(<App />)
+  it('renders the wedding date', async () => {
+    await renderAppAndWaitForLazySections()
     // Translation keys for date
     expect(screen.getByText('hero.date')).toBeInTheDocument()
     expect(screen.getByText('hero.year')).toBeInTheDocument()
   })
 
-  it('renders the venue location', () => {
-    render(<App />)
+  it('renders the venue location', async () => {
+    await renderAppAndWaitForLazySections()
     // Venue uses translation key
     expect(screen.getAllByText('hero.venue').length).toBeGreaterThan(0)
   })
 
-  it('renders navigation elements', () => {
-    render(<App />)
+  it('renders navigation elements', async () => {
+    await renderAppAndWaitForLazySections()
     // Navigation uses ghost buttons as links
     const header = document.querySelector('header')
     expect(header).toBeInTheDocument()
@@ -71,32 +80,32 @@ describe('App', () => {
     expect(header?.querySelector('a[href="#story"]') || header?.textContent?.includes('header.ourStory')).toBeTruthy()
   })
 
-  it('renders the Our Story section', () => {
-    render(<App />)
+  it('renders the Our Story section', async () => {
+    await renderAppAndWaitForLazySections()
     expect(screen.getByText('story.title')).toBeInTheDocument()
     expect(screen.getByText('story.paragraph1')).toBeInTheDocument()
   })
 
-  it('renders the wedding week event cards', () => {
-    render(<App />)
+  it('renders the wedding week event cards', async () => {
+    await renderAppAndWaitForLazySections()
     expect(screen.getByText('details.welcomeDinner')).toBeInTheDocument()
     expect(screen.getByText('details.theWedding')).toBeInTheDocument()
     expect(screen.getByText('details.farewellBrunch')).toBeInTheDocument()
   })
 
-  it('renders the RSVP section', () => {
-    render(<App />)
+  it('renders the RSVP section', async () => {
+    await renderAppAndWaitForLazySections()
     // RsvpForm is not yet translated, check for hardcoded text
     expect(screen.getByRole('heading', { name: /rsvp/i })).toBeInTheDocument()
   })
 
-  it('renders the footer', () => {
-    render(<App />)
+  it('renders the footer', async () => {
+    await renderAppAndWaitForLazySections()
     expect(screen.getByText('footer.madeWith')).toBeInTheDocument()
   })
 
-  it('renders the RSVP form within the page', () => {
-    render(<App />)
+  it('renders the RSVP form within the page', async () => {
+    await renderAppAndWaitForLazySections()
     // Check the RSVP form is rendered - now uses translation keys
     expect(screen.getByText('rsvp.form.yourName')).toBeInTheDocument()
     expect(screen.getByText('rsvp.form.email')).toBeInTheDocument()

@@ -1,12 +1,11 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Box,
   Text,
   Heading,
   Button,
-  Image,
+  Image as ChakraImage,
   Container,
   Flex,
   VStack,
@@ -29,26 +28,34 @@ import {
   Link
 } from '@chakra-ui/react';
 import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons'
-import RsvpForm from './components/RsvpForm'
 import LanguageSwitcher from './components/LanguageSwitcher'
 import Hero from './components/Hero'
-import Timeline from './components/Timeline'
-import Countdown from './components/Countdown'
 import PasswordGate from './components/PasswordGate'
-import { PhotoGallery } from './components/PhotoGallery'
-import StorySection from './components/StorySection'
 import LoadingScreen from './components/LoadingScreen'
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { features, weddingConfig } from './config'
 
 // Import assets
 import heroBanner from './assets/Banner-wedding-01.jpeg'
+import envelopeImage from './assets/Envelope.png'
 import weddingLogo from './assets/T&C-Monogram-small.webp'
 import weddingLogo2x from './assets/T&C-Monogram-2x.webp'
 import weddingLogoFull from './assets/T&C-Monogram.webp'
 import airbnbLogo from './assets/airbnb-tile.svg'
 import bookingLogo from './assets/booking-tile.svg'
-import { AccommodationSection } from './components/AccommodationSection'
+import venueImage from './assets/venue.png'
+import postcardStamp from './assets/postcard-stamp-T&C.png'
+
+const Countdown = React.lazy(() => import('./components/Countdown'))
+const StorySection = React.lazy(() => import('./components/StorySection'))
+const Timeline = React.lazy(() => import('./components/Timeline'))
+const PhotoGallery = React.lazy(() =>
+  import('./components/PhotoGallery').then((m) => ({ default: m.PhotoGallery }))
+)
+const AccommodationSection = React.lazy(() =>
+  import('./components/AccommodationSection').then((m) => ({ default: m.AccommodationSection }))
+)
+const RsvpForm = React.lazy(() => import('./components/RsvpForm'))
 
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
@@ -63,11 +70,52 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate minimum loading time for smooth animation
-    const timer = setTimeout(() => {
+    let cancelled = false
+
+    const preloadImage = (src: string) =>
+      new Promise<void>((resolve) => {
+        const img = new globalThis.Image()
+        const done = () => resolve()
+        img.onload = done
+        img.onerror = done
+        img.src = src
+
+        // Try to decode for quicker paint when possible.
+        if (typeof (img as HTMLImageElement).decode === 'function') {
+          ;(img as HTMLImageElement)
+            .decode()
+            .then(done)
+            .catch(() => {
+              /* ignore */
+            })
+        }
+      })
+
+    // Keep the loading screen only as long as needed for a smooth transition
+    // and to avoid the hero collage popping in late.
+    const minDelay = new Promise<void>((resolve) => setTimeout(resolve, 350))
+    const maxDelay = setTimeout(() => {
+      if (!cancelled) setIsLoading(false)
+    }, 1200)
+
+    // Fire-and-forget background warmup.
+    void preloadImage(heroBanner)
+
+    Promise.all([
+      minDelay,
+      preloadImage(envelopeImage),
+      preloadImage(venueImage),
+      preloadImage(postcardStamp),
+    ]).then(() => {
+      if (cancelled) return
+      clearTimeout(maxDelay)
       setIsLoading(false)
-    }, 1800)
-    return () => clearTimeout(timer)
+    })
+
+    return () => {
+      cancelled = true
+      clearTimeout(maxDelay)
+    }
   }, [])
 
   const navLinks = [
@@ -96,7 +144,7 @@ export default function App() {
       >
         <Container maxW="container.xl" px={[4, 6, 8]}>
           <Flex justify="space-between" align="center">
-            <Image 
+            <ChakraImage 
               src={weddingLogo} 
               srcSet={`${weddingLogo} 1x, ${weddingLogo2x} 2x`}
               alt={t('header.initials')}
@@ -167,21 +215,38 @@ export default function App() {
         <Hero
           backgroundImage={heroBanner}
           overlayOpacity={0.35}
+          collage={{ envelopeSrc: envelopeImage, venueSrc: venueImage, stampSrc: postcardStamp }}
           showScrollIndicator={features.showStory}
           scrollIndicatorHref="#story"
         />
 
         {/* Countdown Section - Controlled by feature flag */}
-        {features.showCountdown && <Countdown />}
+        {features.showCountdown && (
+          <Suspense fallback={null}>
+            <Countdown />
+          </Suspense>
+        )}
 
         {/* Story Section - Controlled by feature flag */}
-        {features.showStory && <StorySection />}
+        {features.showStory && (
+          <Suspense fallback={null}>
+            <StorySection />
+          </Suspense>
+        )}
 
         {/* Timeline Section - Controlled by feature flag */}
-        {features.showTimeline && <Timeline />}
+        {features.showTimeline && (
+          <Suspense fallback={null}>
+            <Timeline />
+          </Suspense>
+        )}
 
         {/* Photo Gallery Section - Controlled by feature flag */}
-        {features.showGallery && <PhotoGallery />}
+        {features.showGallery && (
+          <Suspense fallback={null}>
+            <PhotoGallery />
+          </Suspense>
+        )}
 
         {/* Details Section */}
         <Box id="details" py={[20, 28]} bg="neutral.light" scrollMarginTop={["100px", "130px", "150px"]}>
@@ -338,13 +403,17 @@ export default function App() {
         </Box>
 
         {/* Travel & Accommodation Section */}
-        <AccommodationSection enabled={features.showAccommodation} />
+        <Suspense fallback={null}>
+          <AccommodationSection enabled={features.showAccommodation} />
+        </Suspense>
 
         {/* RSVP Section */}
         <Box id="rsvp" py={[20, 28]} bg="white" scrollMarginTop={["100px", "130px", "150px"]}>
           <Container maxW="container.lg">
             <ScrollReveal variants={scaleIn}>
-              <RsvpForm />
+              <Suspense fallback={null}>
+                <RsvpForm />
+              </Suspense>
             </ScrollReveal>
           </Container>
         </Box>

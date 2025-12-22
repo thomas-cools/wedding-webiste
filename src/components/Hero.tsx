@@ -45,6 +45,13 @@ interface HeroProps {
   /** Overlay opacity (0-1, default: 0.3) */
   overlayOpacity?: number
 
+  /** Optional collage overlay to mimic the original baked-in banner layout */
+  collage?: {
+    envelopeSrc: string
+    venueSrc: string
+    stampSrc: string
+  }
+
   /** Whether to show the scroll indicator link (default: true) */
   showScrollIndicator?: boolean
   /** Where the scroll indicator should link to (default: #story) */
@@ -55,6 +62,7 @@ export default function Hero({
   backgroundImage,
   imageSet,
   overlayOpacity = 0.3,
+  collage,
   showScrollIndicator = true,
   scrollIndicatorHref = '#story',
 }: HeroProps) {
@@ -178,6 +186,8 @@ export default function Hero({
             as="img"
             src={backgroundImage}
             alt="Wedding hero background"
+            loading="eager"
+            decoding="async"
             w="100%"
             h="100%"
             objectFit="cover"
@@ -200,6 +210,79 @@ export default function Hero({
         />
       )}
 
+      {/* Collage overlays (above the dark overlay so the envelope reads clearly) */}
+      {hasBackground && collage && (
+        <Box position="absolute" inset={0} pointerEvents="none" zIndex={1}>
+          {/* Cursive headline */}
+          <Text
+            position="absolute"
+            top={['12%', '11%', '10%']}
+            left="50%"
+            transform="translateX(-50%)"
+            fontFamily="accent"
+            fontStyle="italic"
+            fontWeight="400"
+            fontSize={['46px', '64px', '78px']}
+            lineHeight="1"
+            color="whiteAlpha.900"
+            whiteSpace="nowrap"
+          >
+            {t('hero.invited')}
+          </Text>
+
+          {/* Envelope centered (the hero text sits on top of this) */}
+          <Box
+            as="img"
+            src={collage.envelopeSrc}
+            alt="Envelope"
+            loading="eager"
+            decoding="async"
+            position="absolute"
+            top="50%"
+            left="50%"
+            transform="translate(-50%, -50%)"
+            w={['300px', '460px', '600px']}
+            maxW={['92vw', '80vw', '720px']}
+            h="auto"
+            opacity={0.98}
+          />
+
+          {/* Postcard stamp (left) */}
+          <Box
+            as="img"
+            src={collage.stampSrc}
+            alt="Decorative postcard stamp"
+            loading="eager"
+            decoding="async"
+            position="absolute"
+            top={['62%', '63%', '64%']}
+            left={['6%', '10%', '16%']}
+            w={['120px', '150px', '190px']}
+            maxW={['34vw', '26vw', '220px']}
+            h="auto"
+            transform="rotate(-8deg)"
+            transformOrigin="center"
+            opacity={0.98}
+          />
+
+          {/* Venue postcard (right) */}
+          <Box
+            as="img"
+            src={collage.venueSrc}
+            alt="Venue postcard"
+            position="absolute"
+            top={['62%', '63%', '64%']}
+            right={['6%', '10%', '16%']}
+            w={['220px', '280px', '340px']}
+            maxW={['52vw', '40vw', '420px']}
+            h="auto"
+            transform="rotate(6deg)"
+            transformOrigin="center"
+            opacity={0.98}
+          />
+        </Box>
+      )}
+
       {/* Decorative Frame */}
       <MotionBox
         position="absolute"
@@ -216,7 +299,7 @@ export default function Hero({
       />
 
       {/* Content */}
-      <Container maxW="container.lg" position="relative" zIndex={1}>
+      <Container maxW="container.lg" position="relative" zIndex={2}>
         <MotionBox
           as={VStack}
           spacing={8}

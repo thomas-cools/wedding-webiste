@@ -7,6 +7,7 @@
     "rsvp": "RSVP"
   },
   "hero": {
+    "invited": "Vous êtes invité·e",
     "together": "Avec leurs familles",
     "bride": "Carolina",
     "groom": "Thomas",
