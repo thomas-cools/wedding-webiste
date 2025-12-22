@@ -8,7 +8,10 @@ jest.mock('../config', () => ({
     showGallery: false,
     showTimeline: false,
     showCountdown: false,
+    showStory: true,
+    showAccommodation: true,
     requirePassword: false, // Disable password gate for tests
+    sendRsvpConfirmationEmail: false,
   },
   weddingConfig: {
     couple: {

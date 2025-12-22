@@ -102,4 +102,10 @@ describe('Hero Component', () => {
     const scrollLink = screen.getByRole('link', { name: '' })
     expect(scrollLink).toHaveAttribute('href', '#story')
   })
+
+  it('hides scroll indicator when disabled', () => {
+    render(<Hero showScrollIndicator={false} />)
+
+    expect(screen.queryByRole('link', { name: '' })).not.toBeInTheDocument()
+  })
 })

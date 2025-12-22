@@ -70,6 +70,13 @@ export default function App() {
     return () => clearTimeout(timer)
   }, [])
 
+  const navLinks = [
+    { href: '#story', label: t('header.ourStory'), enabled: features.showStory },
+    { href: '#details', label: t('header.details'), enabled: true },
+    { href: '#travel', label: t('header.travel'), enabled: features.showAccommodation },
+    { href: '#rsvp', label: t('header.rsvp'), enabled: true },
+  ].filter((link) => link.enabled)
+
   const content = (
     <>
       <LoadingScreen isLoading={isLoading} logo={weddingLogoFull} />
@@ -99,18 +106,11 @@ export default function App() {
             <HStack spacing={[2, 4, 10]}>
               {/* Desktop Navigation */}
               <HStack spacing={10} display={["none", "none", "flex"]}>
-                <Button as="a" href="#story" variant="ghost" size="sm">
-                  {t('header.ourStory')}
-                </Button>
-                <Button as="a" href="#details" variant="ghost" size="sm">
-                  {t('header.details')}
-                </Button>
-                <Button as="a" href="#travel" variant="ghost" size="sm">
-                  {t('header.travel')}
-                </Button>
-                <Button as="a" href="#rsvp" variant="ghost" size="sm">
-                  {t('header.rsvp')}
-                </Button>
+                {navLinks.map((link) => (
+                  <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm">
+                    {link.label}
+                  </Button>
+                ))}
               </HStack>
               <LanguageSwitcher />
               {/* Mobile Hamburger Menu */}
@@ -134,46 +134,19 @@ export default function App() {
           <DrawerCloseButton />
           <DrawerBody pt={16}>
             <VStack spacing={6} align="stretch">
-              <Button 
-                as="a" 
-                href="#story" 
-                variant="ghost" 
-                size="lg" 
-                justifyContent="flex-start"
-                onClick={onClose}
-              >
-                {t('header.ourStory')}
-              </Button>
-              <Button 
-                as="a" 
-                href="#details" 
-                variant="ghost" 
-                size="lg" 
-                justifyContent="flex-start"
-                onClick={onClose}
-              >
-                {t('header.details')}
-              </Button>
-              <Button 
-                as="a" 
-                href="#travel" 
-                variant="ghost" 
-                size="lg" 
-                justifyContent="flex-start"
-                onClick={onClose}
-              >
-                {t('header.travel')}
-              </Button>
-              <Button 
-                as="a" 
-                href="#rsvp" 
-                variant="ghost" 
-                size="lg" 
-                justifyContent="flex-start"
-                onClick={onClose}
-              >
-                {t('header.rsvp')}
-              </Button>
+              {navLinks.map((link) => (
+                <Button
+                  key={link.href}
+                  as="a"
+                  href={link.href}
+                  variant="ghost"
+                  size="lg"
+                  justifyContent="flex-start"
+                  onClick={onClose}
+                >
+                  {link.label}
+                </Button>
+              ))}
               <Divider borderColor="primary.soft" />
               <Button
                 as="a"
@@ -191,7 +164,12 @@ export default function App() {
 
       <Box as="main">
         {/* Hero Section */}
-        <Hero backgroundImage={heroBanner} overlayOpacity={0.35} />
+        <Hero
+          backgroundImage={heroBanner}
+          overlayOpacity={0.35}
+          showScrollIndicator={features.showStory}
+          scrollIndicatorHref="#story"
+        />
 
         {/* Countdown Section - Controlled by feature flag */}
         {features.showCountdown && <Countdown />}

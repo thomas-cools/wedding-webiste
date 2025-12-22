@@ -44,9 +44,20 @@ interface HeroProps {
   imageSet?: HeroImageSet
   /** Overlay opacity (0-1, default: 0.3) */
   overlayOpacity?: number
+
+  /** Whether to show the scroll indicator link (default: true) */
+  showScrollIndicator?: boolean
+  /** Where the scroll indicator should link to (default: #story) */
+  scrollIndicatorHref?: string
 }
 
-export default function Hero({ backgroundImage, imageSet, overlayOpacity = 0.3 }: HeroProps) {
+export default function Hero({
+  backgroundImage,
+  imageSet,
+  overlayOpacity = 0.3,
+  showScrollIndicator = true,
+  scrollIndicatorHref = '#story',
+}: HeroProps) {
   const { t } = useTranslation()
   
   // Parallax scroll effect
@@ -345,48 +356,50 @@ export default function Hero({ backgroundImage, imageSet, overlayOpacity = 0.3 }
       </Container>
 
       {/* Scroll Indicator */}
-      <Box
-        position="absolute"
-        bottom={["40px", "60px"]}
-        left="50%"
-        transform="translateX(-50%)"
-        textAlign="center"
-      >
+      {showScrollIndicator && (
         <Box
-          as="a"
-          href="#story"
-          display="block"
-          animation="bounce 2s infinite"
-          sx={{
-            '@keyframes bounce': {
-              '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
-              '40%': { transform: 'translateY(-10px)' },
-              '60%': { transform: 'translateY(-5px)' },
-            },
-          }}
+          position="absolute"
+          bottom={["40px", "60px"]}
+          left="50%"
+          transform="translateX(-50%)"
+          textAlign="center"
         >
           <Box
-            w="30px"
-            h="50px"
-            border="2px solid"
-            borderColor={hasBackground ? "whiteAlpha.600" : "primary.soft"}
-            borderRadius="full"
-            position="relative"
-            mx="auto"
-            _before={{
-              content: '""',
-              position: 'absolute',
-              top: '8px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              w: '4px',
-              h: '8px',
-              bg: hasBackground ? "whiteAlpha.600" : "primary.soft",
-              borderRadius: 'full',
+            as="a"
+            href={scrollIndicatorHref}
+            display="block"
+            animation="bounce 2s infinite"
+            sx={{
+              '@keyframes bounce': {
+                '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
+                '40%': { transform: 'translateY(-10px)' },
+                '60%': { transform: 'translateY(-5px)' },
+              },
             }}
-          />
+          >
+            <Box
+              w="30px"
+              h="50px"
+              border="2px solid"
+              borderColor={hasBackground ? "whiteAlpha.600" : "primary.soft"}
+              borderRadius="full"
+              position="relative"
+              mx="auto"
+              _before={{
+                content: '""',
+                position: 'absolute',
+                top: '8px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                w: '4px',
+                h: '8px',
+                bg: hasBackground ? "whiteAlpha.600" : "primary.soft",
+                borderRadius: 'full',
+              }}
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   )
 }
