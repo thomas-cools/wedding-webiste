@@ -79,14 +79,17 @@
       "stillPlanning": "En Cours de Planification",
       "dietary": "Restrictions Alimentaires",
       "dietaryPlaceholder": "Végétarien, allergies, etc.",
-      "songRequest": "Demande de Chanson",
-      "songPlaceholder": "Une chanson qui vous fera danser",
       "franceTips": "Première fois en France? Envoyez-moi des recommandations locales.",
-      "additionalGuests": "Invités Supplémentaires",
-      "guestName": "Nom de l'invité {{number}}",
-      "guestDietary": "Régime",
+      "plusOneSection": "Accompagnant",
+      "hasPlusOne": "Je viens avec un accompagnant",
+      "plusOneNamePlaceholder": "Nom complet de l'accompagnant",
+      "plusOneDietaryPlaceholder": "Régime de l'accompagnant (facultatif)",
+      "childrenSection": "Enfants",
+      "hasChildren": "Je viens avec des enfants",
+      "childName": "Nom de l'enfant {{number}}",
+      "childDietaryPlaceholder": "Régime de l'enfant (facultatif)",
       "remove": "Supprimer",
-      "addGuest": "+ Ajouter un Invité",
+      "addChild": "+ Ajouter un Enfant",
       "additionalNotes": "Notes Supplémentaires",
       "notesPlaceholder": "Autre chose que nous devrions savoir",
       "submit": "Envoyer la Réponse"
@@ -94,9 +97,12 @@
     "validation": {
       "nameRequired": "Veuillez entrer votre nom complet.",
       "emailRequired": "Veuillez entrer une adresse email valide.",
+      "addressRequired": "Veuillez entrer votre adresse postale.",
       "likelihoodRequired": "Veuillez indiquer la probabilité de votre présence.",
       "eventRequired": "Veuillez sélectionner au moins un événement si vous prévoyez d'assister.",
-      "guestNameRequired": "Veuillez fournir les noms des invités ou supprimer les entrées vides."
+      "plusOneNameRequired": "Veuillez indiquer le nom de votre accompagnant ou décochez l'option accompagnant.",
+      "childrenRequired": "Veuillez ajouter au moins un enfant ou décochez l'option enfants.",
+      "childNameRequired": "Veuillez indiquer les noms des enfants ou supprimer les entrées vides."
     },
     "success": {
       "savedTitle": "Réponse enregistrée",

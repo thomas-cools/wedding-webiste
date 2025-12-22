@@ -79,14 +79,17 @@
       "stillPlanning": "Nog aan het Plannen",
       "dietary": "Dieetwensen",
       "dietaryPlaceholder": "Vegetarisch, allergieën, etc.",
-      "songRequest": "Muziekverzoek",
-      "songPlaceholder": "Een liedje dat je aan het dansen krijgt",
       "franceTips": "Eerste keer in Frankrijk? Stuur me lokale aanbevelingen.",
-      "additionalGuests": "Extra Gasten",
-      "guestName": "Naam gast {{number}}",
-      "guestDietary": "Dieet",
+      "plusOneSection": "Partner",
+      "hasPlusOne": "Ik breng een plus one mee",
+      "plusOneNamePlaceholder": "Volledige naam van je plus one",
+      "plusOneDietaryPlaceholder": "Dieet van je plus one (optioneel)",
+      "childrenSection": "Kinderen",
+      "hasChildren": "Ik breng kinderen mee",
+      "childName": "Naam kind {{number}}",
+      "childDietaryPlaceholder": "Dieet van het kind (optioneel)",
       "remove": "Verwijderen",
-      "addGuest": "+ Gast Toevoegen",
+      "addChild": "+ Kind Toevoegen",
       "additionalNotes": "Extra Opmerkingen",
       "notesPlaceholder": "Iets anders dat we moeten weten",
       "submit": "Antwoord Verzenden"
@@ -94,9 +97,12 @@
     "validation": {
       "nameRequired": "Vul alsjeblieft je volledige naam in.",
       "emailRequired": "Vul alsjeblieft een geldig e-mailadres in.",
+      "addressRequired": "Vul alsjeblieft je postadres in.",
       "likelihoodRequired": "Geef alsjeblieft aan hoe waarschijnlijk het is dat je komt.",
       "eventRequired": "Selecteer alsjeblieft minstens één evenement als je van plan bent te komen.",
-      "guestNameRequired": "Vul alsjeblieft de namen van de gasten in of verwijder lege entries."
+      "plusOneNameRequired": "Vul de naam van je plus one in of zet plus one uit.",
+      "childrenRequired": "Voeg minstens één kind toe of zet kinderen uit.",
+      "childNameRequired": "Vul de namen van de kinderen in of verwijder lege entries."
     },
     "success": {
       "savedTitle": "Antwoord opgeslagen",

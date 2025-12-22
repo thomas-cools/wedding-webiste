@@ -45,6 +45,7 @@ describe('RsvpForm', () => {
       expect(screen.getByText('rsvp.label')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.yourName')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.email')).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.mailingAddress')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.willYouJoin')).toBeInTheDocument()
     })
 
@@ -61,7 +62,9 @@ describe('RsvpForm', () => {
       expect(screen.getByText('rsvp.form.accommodation')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.travel')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.dietary')).toBeInTheDocument()
-      expect(screen.getByText('rsvp.form.songRequest')).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.plusOneSection')).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.childrenSection')).toBeInTheDocument()
+      expect(screen.getByText('rsvp.form.additionalNotes')).toBeInTheDocument()
     })
 
     it('renders submit button', () => {
@@ -114,6 +117,9 @@ describe('RsvpForm', () => {
       
       const emailInput = screen.getByPlaceholderText('rsvp.form.emailPlaceholder')
       await user.type(emailInput, 'john@example.com')
+
+      const addressInput = screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder')
+      await user.type(addressInput, '123 Main St, City')
       
       const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
@@ -213,6 +219,7 @@ describe('RsvpForm', () => {
       
       await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
       await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      await user.type(screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder'), '123 Main St, City')
       await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'definitely')
       
       const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
@@ -224,61 +231,68 @@ describe('RsvpForm', () => {
     })
   })
 
-  describe('Guest Management', () => {
-    it('allows adding a guest', async () => {
+  describe('Plus One & Children', () => {
+    it('shows plus one fields when enabled', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
-      
-      const addGuestButton = screen.getByRole('button', { name: 'rsvp.form.addGuest' })
-      await user.click(addGuestButton)
-      
-      expect(screen.getByPlaceholderText('rsvp.form.guestName')).toBeInTheDocument()
+
+      const plusOneCheckbox = screen.getByRole('checkbox', { name: 'rsvp.form.hasPlusOne' })
+      await user.click(plusOneCheckbox)
+
+      expect(screen.getByPlaceholderText('rsvp.form.plusOneNamePlaceholder')).toBeInTheDocument()
+      expect(screen.getByPlaceholderText('rsvp.form.plusOneDietaryPlaceholder')).toBeInTheDocument()
     })
 
-    it('allows adding multiple guests', async () => {
+    it('validates plus one name when enabled', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
-      
-      const addGuestButton = screen.getByRole('button', { name: 'rsvp.form.addGuest' })
-      await user.click(addGuestButton)
-      await user.click(addGuestButton)
-      
-      // Both guests will have the same placeholder since i18n mock returns keys
-      const guestInputs = screen.getAllByPlaceholderText('rsvp.form.guestName')
-      expect(guestInputs.length).toBe(2)
-    })
 
-    it('allows removing a guest', async () => {
-      const user = userEvent.setup()
-      render(<RsvpForm />)
-      
-      const addGuestButton = screen.getByRole('button', { name: 'rsvp.form.addGuest' })
-      await user.click(addGuestButton)
-      
-      expect(screen.getByPlaceholderText('rsvp.form.guestName')).toBeInTheDocument()
-      
-      const removeButton = screen.getByRole('button', { name: 'rsvp.form.remove' })
-      await user.click(removeButton)
-      
-      expect(screen.queryByPlaceholderText('rsvp.form.guestName')).not.toBeInTheDocument()
-    })
-
-    it('validates guest names when guests are added', async () => {
-      const user = userEvent.setup()
-      render(<RsvpForm />)
-      
       await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
       await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      await user.type(screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder'), '123 Main St, City')
       await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'no')
-      
-      const addGuestButton = screen.getByRole('button', { name: 'rsvp.form.addGuest' })
-      await user.click(addGuestButton)
-      
+
+      const plusOneCheckbox = screen.getByRole('checkbox', { name: 'rsvp.form.hasPlusOne' })
+      await user.click(plusOneCheckbox)
+
       const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
-      
+
       await waitFor(() => {
-        expect(screen.getByText('rsvp.validation.guestNameRequired')).toBeInTheDocument()
+        expect(screen.getByText('rsvp.validation.plusOneNameRequired')).toBeInTheDocument()
+      })
+    })
+
+    it('shows children section and allows adding a child', async () => {
+      const user = userEvent.setup()
+      render(<RsvpForm />)
+
+      const childrenCheckbox = screen.getByRole('checkbox', { name: 'rsvp.form.hasChildren' })
+      await user.click(childrenCheckbox)
+
+      const addChildButton = screen.getByRole('button', { name: 'rsvp.form.addChild' })
+      await user.click(addChildButton)
+
+      expect(screen.getByPlaceholderText('rsvp.form.childName')).toBeInTheDocument()
+    })
+
+    it('validates that at least one child is added when children is enabled', async () => {
+      const user = userEvent.setup()
+      render(<RsvpForm />)
+
+      await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
+      await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      await user.type(screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder'), '123 Main St, City')
+      await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'no')
+
+      const childrenCheckbox = screen.getByRole('checkbox', { name: 'rsvp.form.hasChildren' })
+      await user.click(childrenCheckbox)
+
+      const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
+      await user.click(submitButton)
+
+      await waitFor(() => {
+        expect(screen.getByText('rsvp.validation.childrenRequired')).toBeInTheDocument()
       })
     })
   })
@@ -290,6 +304,7 @@ describe('RsvpForm', () => {
       
       await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
       await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      await user.type(screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder'), '123 Main St, City')
       await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'no')
       
       const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
@@ -310,6 +325,7 @@ describe('RsvpForm', () => {
       
       await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
       await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      await user.type(screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder'), '123 Main St, City')
       await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'no')
       
       const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
@@ -356,21 +372,11 @@ describe('RsvpForm', () => {
       expect(dietaryInput).toHaveValue('Vegetarian')
     })
 
-    it('allows entering song request', async () => {
-      const user = userEvent.setup()
-      render(<RsvpForm />)
-      
-      const songInput = screen.getByPlaceholderText('rsvp.form.songPlaceholder')
-      await user.type(songInput, 'Dancing Queen')
-      
-      expect(songInput).toHaveValue('Dancing Queen')
-    })
-
     it('allows checking France tips checkbox', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
       
-      const checkbox = screen.getByRole('checkbox')
+      const checkbox = screen.getByRole('checkbox', { name: 'rsvp.form.franceTips' })
       await user.click(checkbox)
       
       expect(checkbox).toBeChecked()

@@ -82,11 +82,16 @@
       "dietary": "Dietary Requirements",
       "dietaryPlaceholder": "Vegetarian, allergies, etc.",
       "franceTips": "First time in France? Send me local recommendations.",
-      "additionalGuests": "Additional Guests",
-      "guestName": "Guest {{number}} name",
-      "guestDietary": "Dietary",
+      "plusOneSection": "Plus One",
+      "hasPlusOne": "I am bringing a plus one",
+      "plusOneNamePlaceholder": "Plus one full name",
+      "plusOneDietaryPlaceholder": "Plus one dietary (optional)",
+      "childrenSection": "Children",
+      "hasChildren": "I am bringing children",
+      "childName": "Child {{number}} name",
+      "childDietaryPlaceholder": "Child dietary (optional)",
       "remove": "Remove",
-      "addGuest": "+ Add Guest",
+      "addChild": "+ Add Child",
       "additionalNotes": "Additional Notes",
       "notesPlaceholder": "Anything else we should know",
       "submit": "Submit Response"
@@ -97,7 +102,9 @@
       "addressRequired": "Please enter your mailing address.",
       "likelihoodRequired": "Please indicate how likely you are to join us.",
       "eventRequired": "Please select at least one event if you expect to join us.",
-      "guestNameRequired": "Please provide guest names or remove empty guests."
+      "plusOneNameRequired": "Please provide your plus one's name or uncheck plus one.",
+      "childrenRequired": "Please add at least one child or uncheck children.",
+      "childNameRequired": "Please provide child names or remove empty entries."
     },
     "success": {
       "savedTitle": "Response saved",

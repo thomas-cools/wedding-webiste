@@ -76,7 +76,10 @@ export default function RsvpForm() {
   const [events, setEvents] = useState<Events>({ welcome: '', ceremony: '', brunch: '' })
   const [accommodation, setAccommodation] = useState<Accommodation>('')
   const [travelPlan, setTravelPlan] = useState<TravelPlan>('')
-  const [guests, setGuests] = useState<Guest[]>([])
+  const [hasPlusOne, setHasPlusOne] = useState(false)
+  const [plusOne, setPlusOne] = useState<Guest>({ name: '', dietary: '' })
+  const [hasChildren, setHasChildren] = useState(false)
+  const [children, setChildren] = useState<Guest[]>([])
   const [dietary, setDietary] = useState('')
   const [franceTips, setFranceTips] = useState(false)
   const [additionalNotes, setAdditionalNotes] = useState('')
@@ -104,7 +107,24 @@ export default function RsvpForm() {
       }
       setAccommodation(found.accommodation || '')
       setTravelPlan(found.travelPlan || '')
-      setGuests(found.guests)
+      // Backward-compatible guest prefill:
+      // - If one guest exists, treat it as the plus one
+      // - If multiple guests exist, first is plus one, remainder are children
+      const savedGuests = (found.guests || []).filter(g => g && typeof g.name === 'string')
+      if (savedGuests.length >= 1) {
+        setHasPlusOne(true)
+        setPlusOne({ name: savedGuests[0].name || '', dietary: savedGuests[0].dietary || '' })
+      } else {
+        setHasPlusOne(false)
+        setPlusOne({ name: '', dietary: '' })
+      }
+      if (savedGuests.length >= 2) {
+        setHasChildren(true)
+        setChildren(savedGuests.slice(1).map(g => ({ name: g.name || '', dietary: g.dietary || '' })))
+      } else {
+        setHasChildren(false)
+        setChildren([])
+      }
       setDietary(found.dietary || '')
       setMailingAddress(found.mailingAddress || '')
       setFranceTips(!!found.franceTips)
@@ -112,11 +132,10 @@ export default function RsvpForm() {
     }
   }, [email])
 
-  function addGuest() {
-    setGuests(prev => {
-      const next = [...prev, { name: '' }]
-      // validate guests immediately with new array
-      setTimeout(() => validateGuests(next), 0)
+  function addChild() {
+    setChildren(prev => {
+      const next = [...prev, { name: '', dietary: '' }]
+      setTimeout(() => validateChildren(next), 0)
       return next
     })
   }
@@ -127,18 +146,18 @@ export default function RsvpForm() {
     setTimeout(() => validateField('events'), 0)
   }
 
-  function updateGuest(index: number, fields: Partial<Guest>) {
-    setGuests(prev => {
-      const next = prev.map((g, i) => (i === index ? { ...g, ...fields } : g))
-      setTimeout(() => validateGuests(next), 0)
+  function updateChild(index: number, fields: Partial<Guest>) {
+    setChildren(prev => {
+      const next = prev.map((c, i) => (i === index ? { ...c, ...fields } : c))
+      setTimeout(() => validateChildren(next), 0)
       return next
     })
   }
 
-  function removeGuest(index: number) {
-    setGuests(prev => {
+  function removeChild(index: number) {
+    setChildren(prev => {
       const next = prev.filter((_, i) => i !== index)
-      setTimeout(() => validateGuests(next), 0)
+      setTimeout(() => validateChildren(next), 0)
       return next
     })
   }
@@ -157,7 +176,11 @@ export default function RsvpForm() {
       if (!anyEvent) errs.events = t('rsvp.validation.eventRequired')
     }
 
-    if (guests.some(g => !g.name.trim())) errs.guests = t('rsvp.validation.guestNameRequired')
+    if (hasPlusOne && !plusOne.name.trim()) errs.plusOne = t('rsvp.validation.plusOneNameRequired')
+    if (hasChildren) {
+      if (children.length === 0) errs.children = t('rsvp.validation.childrenRequired')
+      else if (children.some(c => !c.name.trim())) errs.children = t('rsvp.validation.childNameRequired')
+    }
 
     setErrors(errs)
     return errs
@@ -195,9 +218,20 @@ export default function RsvpForm() {
           delete copy.events
         }
         break
-      case 'guests':
-        if (guests.some(g => !g.name.trim())) copy.guests = t('rsvp.validation.guestNameRequired')
-        else delete copy.guests
+      case 'plusOne':
+        if (hasPlusOne && !plusOne.name.trim()) copy.plusOne = t('rsvp.validation.plusOneNameRequired')
+        else delete copy.plusOne
+        break
+      case 'children':
+        if (!hasChildren) {
+          delete copy.children
+        } else if (children.length === 0) {
+          copy.children = t('rsvp.validation.childrenRequired')
+        } else if (children.some(c => !c.name.trim())) {
+          copy.children = t('rsvp.validation.childNameRequired')
+        } else {
+          delete copy.children
+        }
         break
       default:
         break
@@ -206,23 +240,27 @@ export default function RsvpForm() {
     return copy
   }
 
-  // Validate guests with explicit array (to avoid stale closure)
-  function validateGuests(guestList: Guest[]) {
+  function validateChildren(childList: Guest[]) {
     const copy = { ...errors }
-    if (guestList.length > 0 && guestList.some(g => !g.name.trim())) {
-      copy.guests = t('rsvp.validation.guestNameRequired')
+    if (!hasChildren) {
+      delete copy.children
+    } else if (childList.length === 0) {
+      copy.children = t('rsvp.validation.childrenRequired')
+    } else if (childList.some(c => !c.name.trim())) {
+      copy.children = t('rsvp.validation.childNameRequired')
     } else {
-      delete copy.guests
+      delete copy.children
     }
     setErrors(copy)
   }
 
   useEffect(() => {
-    // live-validate events and guests when related fields change
+    // live-validate events, plus one, and children when related fields change
     if (errors.events) validateField('events')
-    if (errors.guests) validateField('guests')
+    if (errors.plusOne) validateField('plusOne')
+    if (errors.children) validateField('children')
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [events, likelihood, guests])
+  }, [events, likelihood, hasPlusOne, plusOne, hasChildren, children])
 
 
   // Send confirmation email via Netlify Function
@@ -255,13 +293,25 @@ export default function RsvpForm() {
       else if (firstKey === 'mailingAddress') el = document.querySelector('[name="mailingAddress"]')
       else if (firstKey === 'likelihood') el = document.querySelector('[name="likelihood"]')
       else if (firstKey === 'events') el = document.querySelector('[name="events.welcome"]') || document.querySelector('[name="events.ceremony"]')
-      else if (firstKey === 'guests') el = document.querySelector('input[placeholder*="Guest"]') as HTMLElement | null
+      else if (firstKey === 'plusOne') el = document.querySelector('[name="plusOne.name"]') as HTMLElement | null
+      else if (firstKey === 'children') el = document.querySelector('[name="children.0.name"]') as HTMLElement | null
       el?.focus()
       return
     }
 
     const list = loadRsvps()
     const existingIndex = list.findIndex(r => r.email === email)
+
+    const combinedGuests: Guest[] = []
+    if (hasPlusOne && plusOne.name.trim()) {
+      combinedGuests.push({ name: plusOne.name.trim(), dietary: (plusOne.dietary || '').trim() || undefined })
+    }
+    if (hasChildren) {
+      children
+        .filter(c => c.name.trim())
+        .forEach(c => combinedGuests.push({ name: c.name.trim(), dietary: (c.dietary || '').trim() || undefined }))
+    }
+
     const entry: Rsvp = {
       id: String(Date.now()),
       firstName: firstName.trim(),
@@ -271,7 +321,7 @@ export default function RsvpForm() {
       events: likelihood !== 'no' ? events : { welcome: '', ceremony: '', brunch: '' },
       accommodation: accommodation || undefined,
       travelPlan: travelPlan || undefined,
-      guests: guests.filter(g => g.name.trim()),
+      guests: combinedGuests,
       dietary: dietary.trim() || undefined,
       franceTips: franceTips || undefined,
       additionalNotes: additionalNotes.trim() || undefined,
@@ -561,51 +611,117 @@ export default function RsvpForm() {
             </Checkbox>
 
             <Box>
-              <FormLabel>{t('rsvp.form.additionalGuests')}</FormLabel>
+              <FormLabel>{t('rsvp.form.plusOneSection')}</FormLabel>
               <Stack spacing={4}>
-                {guests.map((g, i) => (
-                  <Box 
-                    key={i} 
-                    p={4} 
-                    bg="white" 
-                    borderWidth="1px" 
-                    borderColor="primary.soft"
-                    borderRadius="md"
-                  >
+                <Checkbox
+                  isChecked={hasPlusOne}
+                  onChange={e => {
+                    const next = e.target.checked
+                    setHasPlusOne(next)
+                    if (!next) {
+                      setPlusOne({ name: '', dietary: '' })
+                      setErrors(prev => {
+                        const copy = { ...prev }
+                        delete copy.plusOne
+                        return copy
+                      })
+                    } else {
+                      setTimeout(() => validateField('plusOne'), 0)
+                    }
+                  }}
+                  colorScheme="gray"
+                >
+                  <Text fontSize="sm">{t('rsvp.form.hasPlusOne')}</Text>
+                </Checkbox>
+
+                {hasPlusOne && (
+                  <Box p={4} bg="white" borderWidth="1px" borderColor="primary.soft" borderRadius="md">
                     <Stack spacing={3}>
-                      <Input 
-                        value={g.name} 
-                        onChange={e => updateGuest(i, { name: e.target.value })} 
-                        placeholder={t('rsvp.form.guestName', { number: i + 1 })} 
+                      <Input
+                        name="plusOne.name"
+                        value={plusOne.name}
+                        onChange={e => {
+                          setPlusOne(p => ({ ...p, name: e.target.value }))
+                          if (errors.plusOne) validateField('plusOne')
+                        }}
+                        onBlur={() => validateField('plusOne')}
+                        placeholder={t('rsvp.form.plusOneNamePlaceholder')}
                       />
-                      <Flex 
-                        direction={["column", "row"]} 
-                        gap={3}
-                      >
-                        <Input 
-                          value={g.dietary || ''} 
-                          onChange={e => updateGuest(i, { dietary: e.target.value })} 
-                          placeholder={t('rsvp.form.guestDietary')} 
-                          flex={1}
-                        />
-                        <Button 
-                          size="sm" 
-                          variant="ghost" 
-                          onClick={() => removeGuest(i)}
-                          colorScheme="red"
-                          alignSelf={["stretch", "center"]}
-                        >
-                          {t('rsvp.form.remove')}
-                        </Button>
-                      </Flex>
+                      <Input
+                        name="plusOne.dietary"
+                        value={plusOne.dietary || ''}
+                        onChange={e => setPlusOne(p => ({ ...p, dietary: e.target.value }))}
+                        placeholder={t('rsvp.form.plusOneDietaryPlaceholder')}
+                      />
+                      {errors.plusOne && <Text color="primary.deep" fontSize="sm">{errors.plusOne}</Text>}
                     </Stack>
                   </Box>
-                ))}
+                )}
+              </Stack>
+            </Box>
 
-                <Button onClick={addGuest} variant="ghost" size="sm" alignSelf="flex-start">
-                  {t('rsvp.form.addGuest')}
-                </Button>
-                {errors.guests && <Text color="primary.deep" fontSize="sm">{errors.guests}</Text>}
+            <Box>
+              <FormLabel>{t('rsvp.form.childrenSection')}</FormLabel>
+              <Stack spacing={4}>
+                <Checkbox
+                  isChecked={hasChildren}
+                  onChange={e => {
+                    const next = e.target.checked
+                    setHasChildren(next)
+                    if (!next) {
+                      setChildren([])
+                      setErrors(prev => {
+                        const copy = { ...prev }
+                        delete copy.children
+                        return copy
+                      })
+                    } else {
+                      setTimeout(() => validateField('children'), 0)
+                    }
+                  }}
+                  colorScheme="gray"
+                >
+                  <Text fontSize="sm">{t('rsvp.form.hasChildren')}</Text>
+                </Checkbox>
+
+                {hasChildren && (
+                  <>
+                    {children.map((c, i) => (
+                      <Box key={i} p={4} bg="white" borderWidth="1px" borderColor="primary.soft" borderRadius="md">
+                        <Stack spacing={3}>
+                          <Input
+                            name={`children.${i}.name`}
+                            value={c.name}
+                            onChange={e => updateChild(i, { name: e.target.value })}
+                            placeholder={t('rsvp.form.childName', { number: i + 1 })}
+                          />
+                          <Flex direction={["column", "row"]} gap={3}>
+                            <Input
+                              value={c.dietary || ''}
+                              onChange={e => updateChild(i, { dietary: e.target.value })}
+                              placeholder={t('rsvp.form.childDietaryPlaceholder')}
+                              flex={1}
+                            />
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => removeChild(i)}
+                              colorScheme="red"
+                              alignSelf={["stretch", "center"]}
+                            >
+                              {t('rsvp.form.remove')}
+                            </Button>
+                          </Flex>
+                        </Stack>
+                      </Box>
+                    ))}
+
+                    <Button onClick={addChild} variant="ghost" size="sm" alignSelf="flex-start">
+                      {t('rsvp.form.addChild')}
+                    </Button>
+                    {errors.children && <Text color="primary.deep" fontSize="sm">{errors.children}</Text>}
+                  </>
+                )}
               </Stack>
             </Box>
 

@@ -79,14 +79,17 @@
       "stillPlanning": "Aún Estoy Planeando",
       "dietary": "Restricciones Alimentarias",
       "dietaryPlaceholder": "Vegetariano, alergias, etc.",
-      "songRequest": "Solicitud de Canción",
-      "songPlaceholder": "Una canción que te haga bailar",
       "franceTips": "¿Primera vez en Francia? Envíame recomendaciones locales.",
-      "additionalGuests": "Invitados Adicionales",
-      "guestName": "Nombre del invitado {{number}}",
-      "guestDietary": "Dieta",
+      "plusOneSection": "Acompañante",
+      "hasPlusOne": "Llevaré un acompañante",
+      "plusOneNamePlaceholder": "Nombre completo del acompañante",
+      "plusOneDietaryPlaceholder": "Dieta del acompañante (opcional)",
+      "childrenSection": "Niños",
+      "hasChildren": "Llevaré niños",
+      "childName": "Nombre del niño {{number}}",
+      "childDietaryPlaceholder": "Dieta del niño (opcional)",
       "remove": "Eliminar",
-      "addGuest": "+ Agregar Invitado",
+      "addChild": "+ Agregar Niño",
       "additionalNotes": "Notas Adicionales",
       "notesPlaceholder": "Algo más que debamos saber",
       "submit": "Enviar Respuesta"
@@ -94,9 +97,12 @@
     "validation": {
       "nameRequired": "Por favor ingresa tu nombre completo.",
       "emailRequired": "Por favor ingresa un correo electrónico válido.",
+      "addressRequired": "Por favor ingresa tu dirección postal.",
       "likelihoodRequired": "Por favor indica qué tan probable es que asistas.",
       "eventRequired": "Por favor selecciona al menos un evento si planeas asistir.",
-      "guestNameRequired": "Por favor proporciona los nombres de los invitados o elimina las entradas vacías."
+      "plusOneNameRequired": "Por favor ingresa el nombre de tu acompañante o desmarca la opción de acompañante.",
+      "childrenRequired": "Por favor agrega al menos un niño o desmarca la opción de niños.",
+      "childNameRequired": "Por favor ingresa los nombres de los niños o elimina las entradas vacías."
     },
     "success": {
       "savedTitle": "Respuesta guardada",
