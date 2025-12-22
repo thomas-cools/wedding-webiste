@@ -10,6 +10,7 @@ A modern, elegant wedding website built with React, TypeScript, and Chakra UI. F
 - [Available Scripts](#available-scripts)
 - [Testing](#testing)
 - [Form Submissions](#form-submissions)
+   - [RSVP Confirmation Emails (Resend + Netlify Function)](#rsvp-confirmation-emails-resend--netlify-function)
 - [Deployment](#deployment)
   - [Netlify (Recommended)](#netlify-recommended)
   - [GitHub Codespaces](#github-codespaces)
@@ -223,6 +224,48 @@ The form includes a hidden `form-name` field and the `data-netlify="true"` attri
 
 During local development, form submissions are stored in `localStorage` for testing. The Netlify Forms integration only activates when deployed to Netlify.
 
+### RSVP Confirmation Emails (Resend + Netlify Function)
+
+When enabled, the RSVP form also triggers a Netlify Function that sends a confirmation email via **Resend**.
+
+- Function: `/.netlify/functions/send-rsvp-confirmation`
+- Source: `netlify/functions/send-rsvp-confirmation.ts`
+
+#### Localization
+
+The email subject, HTML body, and plain-text body are localized based on the `locale` sent by the client (from the website language picker).
+
+- Supported locales: `en`, `fr`, `es`, `nl`
+- Locale variants are normalized (e.g. `en-US` → `en`)
+- Unknown locales fall back to English
+
+#### Local Testing (Preview Mode)
+
+To verify the localized email output **without sending a real email**, the function supports a dev-only preview mode when running under `netlify dev`.
+
+1. Start Netlify locally:
+    ```bash
+    netlify dev
+    ```
+
+2. Call the function with `?preview=1`:
+    ```bash
+    curl -s -X POST 'http://localhost:8888/.netlify/functions/send-rsvp-confirmation?preview=1' \
+       -H 'Content-Type: application/json' \
+       --data-binary '{
+          "firstName":"Test",
+          "email":"test@example.com",
+          "likelihood":"definitely",
+          "events":{"welcome":"yes","ceremony":"yes","brunch":"yes"},
+          "guests":[],
+          "locale":"fr"
+       }' | python3 -m json.tool
+    ```
+
+The preview response includes `subject`, `html`, and `text`, plus `localeRequested` and `localeNormalized`.
+
+> Note: Preview mode is only enabled in local development (`NETLIFY_DEV=true`). In production, `?preview=1` is ignored and the function behaves normally.
+
 ### Viewing Submissions
 
 1. Log in to [Netlify](https://app.netlify.com)
@@ -398,10 +441,14 @@ For advanced configurations, you can use environment variables:
 |----------|-------------|---------|
 | `VITE_API_URL` | API endpoint (if using external backend) | `https://api.example.com` |
 | `NODE_VERSION` | Node.js version for Netlify builds | `18` |
+| `RESEND_API_KEY` | Resend API key (required to send RSVP confirmation emails) | `re_xxxxxxxx` |
+| `FROM_EMAIL` | From address shown in RSVP confirmation emails | `Wedding RSVP <onboarding@resend.dev>` |
 
 Create a `.env` file for local development:
 ```env
 VITE_API_URL=http://localhost:3000
+RESEND_API_KEY=re_xxxxxxxx
+FROM_EMAIL=Wedding RSVP <onboarding@resend.dev>
 ```
 
 Access in code:

@@ -67,7 +67,7 @@ function saveRsvps(list: Rsvp[]) {
 }
 
 export default function RsvpForm() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const toast = useToast()
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
@@ -264,7 +264,7 @@ export default function RsvpForm() {
 
 
   // Send confirmation email via Netlify Function
-  async function sendConfirmationEmail(rsvpData: Omit<Rsvp, 'id' | 'timestamp'>) {
+  async function sendConfirmationEmail(rsvpData: Omit<Rsvp, 'id' | 'timestamp'> & { locale: string }) {
     try {
       const response = await fetch('/.netlify/functions/send-rsvp-confirmation', {
         method: 'POST',
@@ -353,6 +353,7 @@ export default function RsvpForm() {
 
     // Send confirmation email to user
     sendConfirmationEmail({
+      locale: i18n.language,
       firstName: entry.firstName,
       email: entry.email,
       mailingAddress: entry.mailingAddress,

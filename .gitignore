@@ -44,3 +44,9 @@ Thumbs.db
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Local Netlify folder
+.netlify
+
+# Created by some Deno/Netlify tooling
+deno.lock
