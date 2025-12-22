@@ -27,7 +27,7 @@ jest.mock('react-i18next', () => ({
         'timeline.events.wedding.date': 'August 2026',
         'timeline.events.wedding.title': 'The Wedding',
         'timeline.events.wedding.description': 'Our big day in France.',
-        'timeline.events.wedding.location': 'Château du Pujolet, France',
+        'timeline.events.wedding.location': 'Vallesvilles, France',
       }
       return translations[key] || key
     },
@@ -83,7 +83,7 @@ describe('Timeline Component', () => {
     // Brussels appears twice (First Date and Moving In)
     expect(screen.getAllByText('Brussels, Belgium')).toHaveLength(2)
     expect(screen.getByText('Mexico City, Mexico')).toBeInTheDocument()
-    expect(screen.getByText('Château du Pujolet, France')).toBeInTheDocument()
+    expect(screen.getByText('Vallesvilles, France')).toBeInTheDocument()
   })
 
   it('has proper heading hierarchy', () => {

@@ -13,7 +13,7 @@
     "and": "&",
     "date": "Le Vingt-six Août",
     "year": "Deux Mille Vingt-Six",
-    "venue": "Château du Pujolet · Haute-Garonne, France",
+    "venue": "Vallesvilles · Haute-Garonne, France",
     "respond": "Répondre S'il Vous Plaît"
   },
   "story": {
@@ -43,8 +43,8 @@
       "reception": "Réception à suivre",
       "brunch": "Onze heures"
     },
-    "venueName": "Château du Pujolet",
-    "venueAddress": "962 Rte du Pujolet, 31570 Vallesvilles, France"
+    "venueName": "Vallesvilles",
+    "venueAddress": "Vallesvilles, France"
   },
   "rsvp": {
     "label": "Répondre S'il Vous Plaît",
@@ -70,7 +70,7 @@
       "arrivingLate": "J'arriverai en Retard",
       "unableToAttend": "Je ne pourrai pas Assister",
       "accommodation": "Hébergement",
-      "stayingChateau": "Je loge au Château",
+      "stayingChateau": "Je loge à Vallesvilles",
       "arrangingOwn": "J'organise Mon Propre Hébergement",
       "wouldLikeRec": "J'aimerais des Recommandations",
       "travel": "Arrangements de Voyage",
@@ -146,7 +146,7 @@
         "date": "Octobre 2026",
         "title": "Le Mariage",
         "description": "Où nos deux familles n'en feront plus qu'une, au cœur de la France.",
-        "location": "Château du Pujolet, France"
+        "location": "Vallesvilles, France"
       }
     }
   },
@@ -189,7 +189,7 @@
   "travel": {
     "label": "Voyage et Séjour",
     "title": "Hébergement",
-    "subtitle": "Le mariage aura lieu au Château du Pujolet à Vallesvilles, France. Vous trouverez ci-dessous les options d'hébergement à proximité.",
+    "subtitle": "Le mariage aura lieu à Vallesvilles, France. Vous trouverez ci-dessous les options d'hébergement à proximité.",
     "tabs": {
       "airbnb": "Locations de Vacances",
       "booking": "Booking.com",
@@ -227,7 +227,7 @@
         "priceRange": "€€"
       }
     ],
-    "venueName": "Château du Pujolet",
+    "venueName": "Vallesvilles",
     "venueAddress": "Vallesvilles, France",
     "tip": "Nous vous recommandons de réserver tôt car août est la haute saison en France.",
     "nearbyTowns": "Les villes voisines avec des options d'hébergement comprennent Vallesvilles, Toulouse et Montauban."

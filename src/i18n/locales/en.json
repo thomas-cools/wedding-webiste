@@ -13,7 +13,7 @@
     "and": "&",
     "date": "August Twenty-Sixth",
     "year": "Two Thousand Twenty-Six",
-    "venue": "Château du Pujolet · Haute-Garonne, France",
+    "venue": "Vallesvilles · Haute-Garonne, France",
     "respond": "Kindly Respond"
   },
   "story": {
@@ -43,8 +43,8 @@
       "reception": "Reception to follow",
       "brunch": "Eleven in the morning"
     },
-    "venueName": "Château du Pujolet",
-    "venueAddress": "962 Rte du Pujolet, 31570 Vallesvilles, France"
+    "venueName": "Vallesvilles",
+    "venueAddress": "Vallesvilles, France"
   },
   "rsvp": {
     "label": "Kindly Respond",
@@ -72,7 +72,7 @@
       "arrivingLate": "Arriving Late",
       "unableToAttend": "Unable to Attend",
       "accommodation": "Accommodation",
-      "stayingChateau": "Staying at the Château",
+      "stayingChateau": "Staying in Vallesvilles",
       "arrangingOwn": "Arranging Own Accommodation",
       "wouldLikeRec": "Would Like Recommendations",
       "travel": "Travel Arrangements",
@@ -148,7 +148,7 @@
         "date": "October 2026",
         "title": "The Wedding",
         "description": "Where our two families become one, in the heart of France.",
-        "location": "Château du Pujolet, France"
+        "location": "Vallesvilles, France"
       }
     }
   },
@@ -191,7 +191,7 @@
   "travel": {
     "label": "Travel & Stay",
     "title": "Accommodation",
-    "subtitle": "The wedding will take place at Château du Pujolet in Vallesvilles, France. Below you'll find nearby accommodation options.",
+    "subtitle": "The wedding will take place in Vallesvilles, France. Below you'll find nearby accommodation options.",
     "tabs": {
       "airbnb": "Vacation Rentals",
       "booking": "Booking.com",
@@ -229,7 +229,7 @@
         "priceRange": "€€"
       }
     ],
-    "venueName": "Château du Pujolet",
+    "venueName": "Vallesvilles",
     "venueAddress": "Vallesvilles, France",
     "tip": "We recommend booking early as August is peak season in France.",
     "nearbyTowns": "Nearby towns with accommodation options include Vallesvilles, Toulouse, and Montauban."

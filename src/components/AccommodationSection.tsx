@@ -75,7 +75,7 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
                     </Text>
                     <Button
                       as="a"
-                      href="https://www.airbnb.com/s/Ch%C3%A2teau-du-Pujolet--Vallesvilles--France/homes?refinement_paths%5B%5D=%2Fhomes&date_picker_type=calendar&checkin=2026-08-24&checkout=2026-08-28&adults=2&search_type=autocomplete_click&flexible_trip_lengths%5B%5D=one_week&monthly_start_date=2026-01-01&monthly_length=3&monthly_end_date=2026-04-01&price_filter_input_type=2&price_filter_num_nights=4&channel=EXPLORE&place_id=ChIJP_GaICSQrhIRMqr4tYT_Wcw&acp_id=t-g-ChIJP_GaICSQrhIRMqr4tYT_Wcw"
+                      href="https://www.airbnb.com/s/Vallesvilles--France/homes?refinement_paths%5B%5D=%2Fhomes&date_picker_type=calendar&checkin=2026-08-24&checkout=2026-08-28&adults=2&search_type=autocomplete_click&flexible_trip_lengths%5B%5D=one_week&monthly_start_date=2026-01-01&monthly_length=3&monthly_end_date=2026-04-01&price_filter_input_type=2&price_filter_num_nights=4&channel=EXPLORE"
                       target="_blank"
                       rel="noopener noreferrer"
                       bg="transparent"

@@ -13,7 +13,7 @@
     "and": "&",
     "date": "Veintiséis de Agosto",
     "year": "Dos Mil Veintiséis",
-    "venue": "Château du Pujolet · Haute-Garonne, Francia",
+    "venue": "Vallesvilles · Haute-Garonne, Francia",
     "respond": "Confirmar Asistencia"
   },
   "story": {
@@ -43,8 +43,8 @@
       "reception": "Recepción a continuación",
       "brunch": "Once de la mañana"
     },
-    "venueName": "Château du Pujolet",
-    "venueAddress": "962 Rte du Pujolet, 31570 Vallesvilles, Francia"
+    "venueName": "Vallesvilles",
+    "venueAddress": "Vallesvilles, Francia"
   },
   "rsvp": {
     "label": "Confirmar Asistencia",
@@ -70,7 +70,7 @@
       "arrivingLate": "Llegaré Tarde",
       "unableToAttend": "No Podré Asistir",
       "accommodation": "Alojamiento",
-      "stayingChateau": "Me Hospedaré en el Château",
+      "stayingChateau": "Me hospedaré en Vallesvilles",
       "arrangingOwn": "Organizaré Mi Propio Alojamiento",
       "wouldLikeRec": "Me Gustaría Recibir Recomendaciones",
       "travel": "Planes de Viaje",
@@ -146,7 +146,7 @@
         "date": "Octubre 2026",
         "title": "La Boda",
         "description": "Donde nuestras dos familias se convierten en una, en el corazón de Francia.",
-        "location": "Château du Pujolet, Francia"
+        "location": "Vallesvilles, Francia"
       }
     }
   },
@@ -188,7 +188,7 @@
   "travel": {
     "label": "Viaje y Alojamiento",
     "title": "Alojamiento",
-    "subtitle": "La boda se llevará a cabo en el Château du Pujolet en Vallesvilles, Francia. A continuación encontrarás opciones de alojamiento cercanas.",
+    "subtitle": "La boda se llevará a cabo en Vallesvilles, Francia. A continuación encontrarás opciones de alojamiento cercanas.",
     "tabs": {
       "airbnb": "Alquileres Vacacionales",
       "booking": "Booking.com",
@@ -226,7 +226,7 @@
         "priceRange": "€€"
       }
     ],
-    "venueName": "Château du Pujolet",
+    "venueName": "Vallesvilles",
     "venueAddress": "Vallesvilles, Francia",
     "tip": "Recomendamos reservar con anticipación ya que agosto es temporada alta en Francia.",
     "nearbyTowns": "Los pueblos cercanos con opciones de alojamiento incluyen Vallesvilles, Toulouse y Montauban."

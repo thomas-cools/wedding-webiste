@@ -40,11 +40,11 @@ export const weddingConfig = {
     display: 'August 26, 2026',
   },
   venue: {
-    name: 'Château du Pujolet',
+    name: 'Vallesvilles',
     location: 'Haute-Garonne, France',
-    address: '962 Rte du Pujolet, 31570 Vallesvilles, France',
-    website: 'https://www.chateaudupujolet.com',
-    googleMapsUrl: 'https://maps.google.com/?q=Château+du+Pujolet,+962+Rte+du+Pujolet,+31570+Vallesvilles,+France',
+    address: 'Vallesvilles, France',
+    website: 'https://maps.google.com/?q=Vallesvilles,+France',
+    googleMapsUrl: 'https://maps.google.com/?q=Vallesvilles,+France',
   },
   rsvpDeadline: 'June 1, 2026',
   /** Contact email for wedding inquiries (also used in confirmation emails) */

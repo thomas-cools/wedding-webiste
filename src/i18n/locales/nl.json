@@ -13,7 +13,7 @@
     "and": "&",
     "date": "Zesentwintig Augustus",
     "year": "Tweeduizend Zesentwintig",
-    "venue": "Château du Pujolet · Haute-Garonne, Frankrijk",
+    "venue": "Vallesvilles · Haute-Garonne, Frankrijk",
     "respond": "Gelieve te Antwoorden"
   },
   "story": {
@@ -43,8 +43,8 @@
       "reception": "Receptie volgt",
       "brunch": "Elf uur 's ochtends"
     },
-    "venueName": "Château du Pujolet",
-    "venueAddress": "962 Rte du Pujolet, 31570 Vallesvilles, Frankrijk"
+    "venueName": "Vallesvilles",
+    "venueAddress": "Vallesvilles, Frankrijk"
   },
   "rsvp": {
     "label": "Gelieve te Antwoorden",
@@ -70,7 +70,7 @@
       "arrivingLate": "Ik Kom Later",
       "unableToAttend": "Ik Kan Niet Aanwezig zijn",
       "accommodation": "Accommodatie",
-      "stayingChateau": "Ik Verblijf in het Château",
+      "stayingChateau": "Ik verblijf in Vallesvilles",
       "arrangingOwn": "Ik Regel Eigen Accommodatie",
       "wouldLikeRec": "Ik Zou Graag Aanbevelingen Ontvangen",
       "travel": "Reisplannen",
@@ -146,7 +146,7 @@
         "date": "Oktober 2026",
         "title": "Het Huwelijk",
         "description": "Waar onze twee families één worden, in het hart van Frankrijk.",
-        "location": "Château du Pujolet, Frankrijk"
+        "location": "Vallesvilles, Frankrijk"
       }
     }
   },
@@ -188,7 +188,7 @@
   "travel": {
     "label": "Reis en Verblijf",
     "title": "Accommodatie",
-    "subtitle": "De bruiloft vindt plaats in Château du Pujolet in Vallesvilles, Frankrijk. Hieronder vindt u accommodatiemogelijkheden in de buurt.",
+    "subtitle": "De bruiloft vindt plaats in Vallesvilles, Frankrijk. Hieronder vindt u accommodatiemogelijkheden in de buurt.",
     "tabs": {
       "airbnb": "Vakantiewoningen",
       "booking": "Booking.com",
@@ -226,7 +226,7 @@
         "priceRange": "€€"
       }
     ],
-    "venueName": "Château du Pujolet",
+    "venueName": "Vallesvilles",
     "venueAddress": "Vallesvilles, Frankrijk",
     "tip": "We raden aan vroeg te boeken omdat augustus hoogseizoen is in Frankrijk.",
     "nearbyTowns": "Nabijgelegen steden met accommodatiemogelijkheden zijn onder andere Vallesvilles, Toulouse en Montauban."
