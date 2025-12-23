@@ -213,23 +213,6 @@ export default function Hero({
       {/* Collage overlays (above the dark overlay so the envelope reads clearly) */}
       {hasBackground && collage && (
         <Box position="absolute" inset={0} pointerEvents="none" zIndex={1}>
-          {/* Cursive headline */}
-          <Text
-            position="absolute"
-            top={['12%', '11%', '10%']}
-            left="50%"
-            transform="translateX(-50%)"
-            fontFamily="accent"
-            fontStyle="italic"
-            fontWeight="400"
-            fontSize={['46px', '64px', '78px']}
-            lineHeight="1"
-            color="whiteAlpha.900"
-            whiteSpace="nowrap"
-          >
-            {t('hero.invited')}
-          </Text>
-
           {/* Envelope centered (the hero text sits on top of this) */}
           <Box
             as="img"
