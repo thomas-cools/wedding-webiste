@@ -67,7 +67,7 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
                 <Box bg="neutral.light" borderWidth="1px" borderColor="primary.soft" p={[8, 10]}>
                   <VStack spacing={6} textAlign="center">
                     <Image src={airbnbLogo} alt="Airbnb" w="48px" h="48px" borderRadius="md" />
-                    <Heading as="h3" fontFamily="heading" fontSize="xl" fontWeight="400" color="neutral.dark">
+                    <Heading as="h3" fontFamily="heading" fontSize="xl" fontWeight="400" color="primary.deep">
                       {t('travel.airbnbTitle')}
                     </Heading>
                     <Text fontSize="sm" color="neutral.muted" maxW="450px">
@@ -102,7 +102,7 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
                 <Box bg="neutral.light" borderWidth="1px" borderColor="primary.soft" p={[8, 10]}>
                   <VStack spacing={6} textAlign="center">
                     <Image src={bookingLogo} alt="Booking.com" w="48px" h="48px" borderRadius="md" />
-                    <Heading as="h3" fontFamily="heading" fontSize="xl" fontWeight="400" color="neutral.dark">
+                    <Heading as="h3" fontFamily="heading" fontSize="xl" fontWeight="400" color="primary.deep">
                       {t('travel.bookingTitle')}
                     </Heading>
                     <Text fontSize="sm" color="neutral.muted" maxW="450px">
@@ -141,7 +141,7 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
                       <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" w="48px" h="48px" fill="none" stroke="currentColor" strokeWidth="1.5" color="neutral.dark">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
                       </Box>
-                      <Heading as="h3" fontFamily="heading" fontSize="xl" fontWeight="400" color="neutral.dark">
+                      <Heading as="h3" fontFamily="heading" fontSize="xl" fontWeight="400" color="primary.deep">
                         {t('travel.hotelsTitle')}
                       </Heading>
                       <Text fontSize="sm" color="neutral.muted" maxW="450px">

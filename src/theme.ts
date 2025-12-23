@@ -1,55 +1,45 @@
 import { extendTheme } from '@chakra-ui/react'
 
-// Visual Identity: Old World Romance meets Modern Vibrancy
+// Visual Identity: Terracotta & Slate
 // Palette anchors:
-// - Deep terracotta + marigold (Mexican earth + sun)
-// - Slate blue + dove grey (Belgian skies + bluestone)
-// - Champagne gold (elegant binder)
-// - Cream/off-white (modern negative space)
+// - Deep terracotta: #C06C5D
+// - Slate blue: #5C6D7E
+// - Champagne gold: #D4AF37
+// - Cream (off-white): #F9F7F2
+// - Charcoal: #2C2C2C
 const theme = extendTheme({
   fonts: {
-    heading: "'Playfair Display', 'Cormorant Garamond', 'Georgia', serif",
+    heading: "'Playfair Display', 'Georgia', serif",
     body: "'Montserrat', 'Helvetica Neue', sans-serif",
-    accent: "'Cinzel', 'Playfair Display', serif",
+    accent: "'Playfair Display', 'Georgia', serif",
   },
   colors: {
     neutral: {
-      light: '#F7F1E8', // cream / off-white background
-      dark: '#22313F', // slate-charcoal text
-      muted: 'rgba(34,49,63,0.60)',
-      white: '#FFFCF7',
+      light: '#F9F7F2',
+      dark: '#2C2C2C',
+      muted: 'rgba(44,44,44,0.60)',
+      white: '#FFFFFF',
     },
     primary: {
       // Champagne gold (borders, dividers) + deep terracotta (CTAs, accents)
-      soft: '#D8B47B',
-      deep: '#8A3D2B',
-      gold: '#E1C38F',
+      soft: '#D4AF37',
+      deep: '#C06C5D',
+      gold: '#D4AF37',
     },
-    mexican: {
-      terracotta: '#8A3D2B',
-      marigold: '#E29B2D',
-      dahlia: '#B23A4C',
-      talavera: '#2E5E88',
-      pink: '#B23A4C',
-    },
-    belgian: {
-      // Dove grey + slate blue
-      lace: '#F2EEE8',
-      charcoal: '#22313F',
-      gold: '#D8B47B',
-      chocolate: '#4A3728',
+    secondary: {
+      slate: '#5C6D7E',
     },
     chateau: {
-      stone: '#D8D2C9',
-      lavender: '#7D8FA6', // slate blue
-      champagne: '#E1C38F',
-      garden: '#6B705C',
-      wine: '#6E2B2F',
+      stone: '#F9F7F2',
+      lavender: '#5C6D7E',
+      champagne: '#D4AF37',
+      garden: '#5C6D7E',
+      wine: '#C06C5D',
     },
     // Legacy aliases for backward compatibility
     accent: {
-      sage: '#6B705C',
-      gold: '#C4A77D',
+      sage: '#5C6D7E',
+      gold: '#D4AF37',
     },
   },
   styles: {
@@ -92,11 +82,11 @@ const theme = extendTheme({
       },
       variants: {
         primary: {
-          bg: 'neutral.dark',
+          bg: 'primary.deep',
           color: 'neutral.light',
           px: 10,
           py: 6,
-          _hover: { bg: 'primary.deep' },
+          _hover: { bg: 'primary.soft', color: 'neutral.dark' },
         },
         outline: {
           bg: 'transparent',
@@ -114,11 +104,11 @@ const theme = extendTheme({
           _hover: { color: 'primary.deep', bg: 'transparent' },
         },
         cultural: {
-          bg: 'mexican.marigold',
-          color: 'neutral.white',
+          bg: 'secondary.slate',
+          color: 'neutral.light',
           px: 10,
           py: 6,
-          _hover: { bg: 'mexican.terracotta' },
+          _hover: { bg: 'primary.deep' },
         },
       },
       defaultProps: {

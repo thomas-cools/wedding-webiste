@@ -721,13 +721,14 @@ export default function RsvpForm() {
             fontSize={["2xl", "3xl", "4xl"]}
             fontWeight="400"
             mb={4}
+            color="neutral.light"
           >
             {t('rsvp.title')}
           </Heading>
           <Box my={6}>
             <Box as="hr" borderColor="primary.soft" w="120px" mx="auto" opacity={0.5} />
           </Box>
-          <Text color="neutral.dark" fontSize={["sm", "md"]} maxW="500px" mx="auto" lineHeight="1.8" px={[2, 0]}>
+          <Text color="neutral.light" fontSize={["sm", "md"]} maxW="500px" mx="auto" lineHeight="1.8" px={[2, 0]} opacity={0.9}>
             {t('rsvp.description')}
           </Text>
         </Box>
@@ -740,6 +741,7 @@ export default function RsvpForm() {
           onSubmit={handleSubmit}
           bg="neutral.light"
           p={[5, 8, 12]}
+          borderRadius="md"
         >
           {/* Hidden field for Netlify Forms */}
           <input type="hidden" name="form-name" value="rsvp" />

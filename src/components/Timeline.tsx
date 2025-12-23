@@ -158,7 +158,7 @@ function TimelineItem({ event, isLeft, isFirst, isLast }: TimelineItemProps) {
           fontSize={["xl", "2xl"]}
           fontWeight="400"
           mb={3}
-          color="neutral.dark"
+          color="primary.deep"
         >
           {event.title}
         </Heading>

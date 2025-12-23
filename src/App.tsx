@@ -276,6 +276,7 @@ export default function App() {
                 </VStack>
               </ScrollReveal>
 
+                      color="primary.deep"
               {/* Event Cards - Refined Minimal Design */}
               <StaggerContainer as={SimpleGrid} columns={[1, 1, 3]} spacing={8} w="full" maxW="900px">
                 {/* Friday */}
@@ -371,6 +372,7 @@ export default function App() {
                       fontFamily="heading" 
                       fontSize="xl" 
                       fontWeight="400"
+                      color="primary.deep"
                     >
                       {t('details.farewellBrunch')}
                     </Heading>
@@ -408,7 +410,7 @@ export default function App() {
         </Suspense>
 
         {/* RSVP Section */}
-        <Box id="rsvp" py={[20, 28]} bg="white" scrollMarginTop={["100px", "130px", "150px"]}>
+        <Box id="rsvp" py={[20, 28]} bg="secondary.slate" scrollMarginTop={["100px", "130px", "150px"]}>
           <Container maxW="container.lg">
             <ScrollReveal variants={scaleIn}>
               <Suspense fallback={null}>
