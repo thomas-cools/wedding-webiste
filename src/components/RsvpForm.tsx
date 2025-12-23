@@ -435,12 +435,9 @@ export default function RsvpForm() {
       case 'likelihood':
         if (!likelihood) copy.likelihood = t('rsvp.validation.likelihoodRequired')
         else delete copy.likelihood
-        // also revalidate events when likelihood changes
-        if (likelihood === 'definitely' || likelihood === 'highly_likely') {
-          const anyEvent = Object.values(events).some(v => v === 'yes' || v === 'arriving_late')
-          if (!anyEvent) copy.events = t('rsvp.validation.eventRequired')
-          else delete copy.events
-        } else {
+        // Do NOT set an events error just because likelihood changed.
+        // Only validate events on submit, or once the user interacts with the event fields.
+        if (!(likelihood === 'definitely' || likelihood === 'highly_likely')) {
           delete copy.events
         }
         break
@@ -833,7 +830,11 @@ export default function RsvpForm() {
               <Select 
                 name="likelihood" 
                 value={likelihood} 
-                onChange={e => { setLikelihood(e.target.value as Likelihood); validateField('likelihood') }} 
+                onChange={e => {
+                  setLikelihood(e.target.value as Likelihood)
+                  // Validate after state updates to avoid transient errors.
+                  setTimeout(() => validateField('likelihood'), 0)
+                }} 
                 onBlur={() => validateField('likelihood')} 
                 placeholder={t('rsvp.form.pleaseSelect')}
               >
