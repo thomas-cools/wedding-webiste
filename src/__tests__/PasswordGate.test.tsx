@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '../test-utils'
+import { act } from '@testing-library/react'
 import PasswordGate, { AUTH_KEY } from '../components/PasswordGate'
 
 // Default password for testing
@@ -7,6 +8,14 @@ const TEST_PASSWORD = 'carolina&thomas2026'
 describe('PasswordGate', () => {
   // Create fresh mock for each test
   let mockSessionStorage: {
+    getItem: jest.Mock
+    setItem: jest.Mock
+    removeItem: jest.Mock
+    clear: jest.Mock
+    store: Record<string, string>
+  }
+
+  let mockLocalStorage: {
     getItem: jest.Mock
     setItem: jest.Mock
     removeItem: jest.Mock
@@ -31,6 +40,25 @@ describe('PasswordGate', () => {
     
     Object.defineProperty(window, 'sessionStorage', {
       value: mockSessionStorage,
+      writable: true,
+    })
+
+    mockLocalStorage = {
+      store: {},
+      getItem: jest.fn((key: string) => mockLocalStorage.store[key] || null),
+      setItem: jest.fn((key: string, value: string) => {
+        mockLocalStorage.store[key] = value
+      }),
+      removeItem: jest.fn((key: string) => {
+        delete mockLocalStorage.store[key]
+      }),
+      clear: jest.fn(() => {
+        mockLocalStorage.store = {}
+      }),
+    }
+
+    Object.defineProperty(window, 'localStorage', {
+      value: mockLocalStorage,
       writable: true,
     })
   })
@@ -207,5 +235,70 @@ describe('PasswordGate', () => {
     const hideButton = screen.getByLabelText('Hide password')
     fireEvent.click(hideButton)
     expect(input).toHaveAttribute('type', 'password')
+  })
+
+  it('locks out after exceeding 5 attempts per minute', async () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date('2025-01-01T00:00:00.000Z'))
+
+    render(
+      <PasswordGate>
+        <div>Protected Content</div>
+      </PasswordGate>
+    )
+
+    const input = screen.getByTestId('password-input')
+    const submitButton = screen.getByTestId('password-submit')
+
+    // 6 attempts in the same minute -> lockout
+    for (let i = 0; i < 6; i++) {
+      fireEvent.change(input, { target: { value: 'wrongpassword' } })
+      fireEvent.click(submitButton)
+    }
+
+    await waitFor(() => {
+      expect(screen.getByTestId('password-cooldown')).toBeInTheDocument()
+    })
+
+    expect(input).toBeDisabled()
+    expect(submitButton).toBeDisabled()
+
+    jest.useRealTimers()
+  })
+
+  it('clears lockout after 5 minutes', async () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date('2025-01-01T00:00:00.000Z'))
+
+    render(
+      <PasswordGate>
+        <div>Protected Content</div>
+      </PasswordGate>
+    )
+
+    const input = screen.getByTestId('password-input')
+    const submitButton = screen.getByTestId('password-submit')
+
+    for (let i = 0; i < 6; i++) {
+      fireEvent.change(input, { target: { value: 'wrongpassword' } })
+      fireEvent.click(submitButton)
+    }
+
+    await waitFor(() => {
+      expect(screen.getByTestId('password-cooldown')).toBeInTheDocument()
+    })
+
+    act(() => {
+      jest.advanceTimersByTime(5 * 60 * 1000 + 1000)
+    })
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('password-cooldown')).not.toBeInTheDocument()
+    })
+
+    expect(input).not.toBeDisabled()
+    expect(submitButton).not.toBeDisabled()
+
+    jest.useRealTimers()
   })
 })

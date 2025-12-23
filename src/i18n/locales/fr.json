@@ -175,6 +175,7 @@
     "placeholder": "Entrez le mot de passe",
     "enter": "Entrer",
     "error": "Mot de passe incorrect. Veuillez réessayer.",
+    "cooldown": "Trop de tentatives. Veuillez réessayer dans {{time}}.",
     "hint": "Consultez votre invitation pour le mot de passe"
   },
   "gallery": {

@@ -177,6 +177,7 @@
     "placeholder": "Enter password",
     "enter": "Enter",
     "error": "Incorrect password. Please try again.",
+    "cooldown": "Too many attempts. Please try again in {{time}}.",
     "hint": "Check your invitation for the password"
   },
   "gallery": {

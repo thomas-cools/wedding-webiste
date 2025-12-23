@@ -175,7 +175,9 @@
     "placeholder": "Ingresa la contraseña",
     "enter": "Entrar",
     "error": "Contraseña incorrecta. Por favor intenta de nuevo.",
-    "hint": "Revisa tu invitación para la contraseña"  },
+    "cooldown": "Demasiados intentos. Por favor intenta de nuevo en {{time}}.",
+    "hint": "Revisa tu invitación para la contraseña"
+  },
   "gallery": {
     "preheading": "Momentos Capturados",
     "title": "Nuestra Galería",

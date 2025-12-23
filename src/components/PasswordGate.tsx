@@ -40,6 +40,33 @@ const getPassword = (): string => {
 const SITE_PASSWORD = getPassword()
 const AUTH_KEY = 'wedding_authenticated'
 
+const ATTEMPTS_KEY = 'wedding_password_attempts'
+const LOCKOUT_UNTIL_KEY = 'wedding_password_lockout_until'
+
+const MAX_ATTEMPTS_PER_MINUTE = 5
+const ATTEMPT_WINDOW_MS = 60 * 1000
+const COOLDOWN_MS = 5 * 60 * 1000
+
+function safeParseNumberArray(raw: string | null): number[] {
+  if (!raw) return []
+  try {
+    const parsed = JSON.parse(raw) as unknown
+    if (!Array.isArray(parsed)) return []
+    return parsed
+      .map(v => (typeof v === 'number' ? v : Number.NaN))
+      .filter(n => Number.isFinite(n))
+  } catch {
+    return []
+  }
+}
+
+function formatCooldown(msRemaining: number): string {
+  const totalSeconds = Math.max(0, Math.ceil(msRemaining / 1000))
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${minutes}:${String(seconds).padStart(2, '0')}`
+}
+
 interface PasswordGateProps {
   children: React.ReactNode
 }
@@ -51,6 +78,8 @@ export default function PasswordGate({ children }: PasswordGateProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [lockoutUntil, setLockoutUntil] = useState<number | null>(null)
+  const [nowMs, setNowMs] = useState(() => Date.now())
 
   // Check if user is already authenticated on mount
   useEffect(() => {
@@ -58,15 +87,62 @@ export default function PasswordGate({ children }: PasswordGateProps) {
     if (authStatus === 'true') {
       setIsAuthenticated(true)
     }
+
+    const storedLockoutUntil = Number.parseInt(localStorage.getItem(LOCKOUT_UNTIL_KEY) || '', 10)
+    if (Number.isFinite(storedLockoutUntil) && storedLockoutUntil > Date.now()) {
+      setLockoutUntil(storedLockoutUntil)
+    } else {
+      localStorage.removeItem(LOCKOUT_UNTIL_KEY)
+    }
     setIsLoading(false)
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (!lockoutUntil) return
+
+    const tick = () => {
+      const now = Date.now()
+      setNowMs(now)
+      if (now >= lockoutUntil) {
+        setLockoutUntil(null)
+        localStorage.removeItem(LOCKOUT_UNTIL_KEY)
+        localStorage.removeItem(ATTEMPTS_KEY)
+      }
+    }
+
+    tick()
+    const id = window.setInterval(tick, 1000)
+    return () => window.clearInterval(id)
+  }, [lockoutUntil])
+
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
     setError(false)
 
+    const now = Date.now()
+    setNowMs(now)
+
+    if (lockoutUntil && now < lockoutUntil) {
+      return
+    }
+
+    const existingAttempts = safeParseNumberArray(localStorage.getItem(ATTEMPTS_KEY))
+    const recentAttempts = existingAttempts.filter(ts => now - ts < ATTEMPT_WINDOW_MS)
+    recentAttempts.push(now)
+    localStorage.setItem(ATTEMPTS_KEY, JSON.stringify(recentAttempts))
+
+    if (recentAttempts.length > MAX_ATTEMPTS_PER_MINUTE) {
+      const until = now + COOLDOWN_MS
+      localStorage.setItem(LOCKOUT_UNTIL_KEY, String(until))
+      setLockoutUntil(until)
+      setPassword('')
+      return
+    }
+
     if (password.toLowerCase() === SITE_PASSWORD.toLowerCase()) {
       sessionStorage.setItem(AUTH_KEY, 'true')
+      localStorage.removeItem(ATTEMPTS_KEY)
+      localStorage.removeItem(LOCKOUT_UNTIL_KEY)
       setIsAuthenticated(true)
     } else {
       setError(true)
@@ -79,6 +155,9 @@ export default function PasswordGate({ children }: PasswordGateProps) {
       handleSubmit(e)
     }
   }
+
+  const isLockedOut = lockoutUntil !== null && nowMs < lockoutUntil
+  const lockoutRemainingMs = isLockedOut ? lockoutUntil - nowMs : 0
 
   // Show nothing while checking auth status
   if (isLoading) {
@@ -201,6 +280,7 @@ export default function PasswordGate({ children }: PasswordGateProps) {
                         boxShadow: 'none',
                       }}
                       h="50px"
+                      isDisabled={isLockedOut}
                       data-testid="password-input"
                     />
                     <InputRightElement h="50px">
@@ -216,12 +296,25 @@ export default function PasswordGate({ children }: PasswordGateProps) {
                       />
                     </InputRightElement>
                   </InputGroup>
-                  {error && (
+                  {!isLockedOut && error && (
                     <FormErrorMessage justifyContent="center" data-testid="password-error">
                       {t('password.error')}
                     </FormErrorMessage>
                   )}
                 </FormControl>
+
+                {isLockedOut && (
+                  <Text
+                    fontFamily="body"
+                    fontSize="sm"
+                    color="neutral.dark"
+                    opacity={0.8}
+                    textAlign="center"
+                    data-testid="password-cooldown"
+                  >
+                    {t('password.cooldown', { time: formatCooldown(lockoutRemainingMs) })}
+                  </Text>
+                )}
 
                 <Button
                   type="submit"
@@ -240,6 +333,7 @@ export default function PasswordGate({ children }: PasswordGateProps) {
                     color: 'neutral.light',
                   }}
                   h="50px"
+                  isDisabled={isLockedOut}
                   data-testid="password-submit"
                 >
                   {t('password.enter')}

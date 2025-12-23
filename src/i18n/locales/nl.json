@@ -175,7 +175,9 @@
     "placeholder": "Voer wachtwoord in",
     "enter": "Betreden",
     "error": "Onjuist wachtwoord. Probeer het opnieuw.",
-    "hint": "Controleer uw uitnodiging voor het wachtwoord"  },
+    "cooldown": "Te veel pogingen. Probeer het opnieuw over {{time}}.",
+    "hint": "Controleer uw uitnodiging voor het wachtwoord"
+  },
   "gallery": {
     "preheading": "Vastgelegde Momenten",
     "title": "Onze Galerij",
