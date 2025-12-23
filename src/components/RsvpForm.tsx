@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Box,
   Stack,
@@ -40,6 +40,7 @@ type Rsvp = {
   firstName: string
   email: string
   mailingAddress?: string
+  mailingAddressPlaceId?: string
   likelihood: Likelihood
   events?: Events
   accommodation?: Accommodation
@@ -69,9 +70,11 @@ function saveRsvps(list: Rsvp[]) {
 export default function RsvpForm() {
   const { t, i18n } = useTranslation()
   const toast = useToast()
+  const mailingAddressInputRef = useRef<HTMLInputElement | null>(null)
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
   const [mailingAddress, setMailingAddress] = useState('')
+  const [mailingAddressPlaceId, setMailingAddressPlaceId] = useState('')
   const [likelihood, setLikelihood] = useState<Likelihood | ''>('')
   const [events, setEvents] = useState<Events>({ welcome: '', ceremony: '', brunch: '' })
   const [accommodation, setAccommodation] = useState<Accommodation>('')
@@ -85,6 +88,90 @@ export default function RsvpForm() {
   const [additionalNotes, setAdditionalNotes] = useState('')
   const [status, setStatus] = useState<null | 'saved' | 'updated'>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const googleMapsApiKey = useMemo(() => {
+    if (typeof window === 'undefined') return ''
+    return window.__VITE_GOOGLE_MAPS_API_KEY__ || ''
+  }, [])
+
+  // Load Google Maps JS + Places library once when an API key is present.
+  // This keeps the field fully functional without Google (manual typing fallback).
+  useEffect(() => {
+    if (!googleMapsApiKey) return
+    if (typeof window === 'undefined' || !document?.head) return
+
+    // If already present, do nothing.
+    if (window.google?.maps?.places) return
+
+    const existing = document.getElementById('google-maps-places') as HTMLScriptElement | null
+    if (existing) return
+
+    const script = document.createElement('script')
+    script.id = 'google-maps-places'
+    script.async = true
+    script.defer = true
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(googleMapsApiKey)}&libraries=places&v=weekly`
+    document.head.appendChild(script)
+  }, [googleMapsApiKey])
+
+  // Attach Places Autocomplete to the mailing address input.
+  useEffect(() => {
+    if (!googleMapsApiKey) return
+    const input = mailingAddressInputRef.current
+    if (!input) return
+
+    let cancelled = false
+    let listener: { remove: () => void } | null = null
+
+    const attach = () => {
+      if (cancelled) return
+      if (!window.google?.maps?.places?.Autocomplete) return
+
+      const autocomplete = new window.google.maps.places.Autocomplete(input, {
+        types: ['address'],
+        fields: ['formatted_address', 'place_id', 'address_components'],
+      })
+
+      listener = autocomplete.addListener('place_changed', () => {
+        if (cancelled) return
+        const place = autocomplete.getPlace?.()
+        const formatted = place?.formatted_address
+        const placeId = place?.place_id
+
+        if (typeof formatted === 'string' && formatted.trim()) {
+          setMailingAddress(formatted)
+          if (errors.mailingAddress) {
+            setTimeout(() => validateField('mailingAddress'), 0)
+          }
+        }
+        if (typeof placeId === 'string' && placeId.trim()) {
+          setMailingAddressPlaceId(placeId)
+        }
+      })
+    }
+
+    // If the script is already loaded, attach immediately.
+    if (window.google?.maps?.places) {
+      attach()
+    } else {
+      // Otherwise, wait for the script to load.
+      const script = document.getElementById('google-maps-places') as HTMLScriptElement | null
+      const onLoad = () => attach()
+      script?.addEventListener('load', onLoad)
+
+      return () => {
+        cancelled = true
+        script?.removeEventListener('load', onLoad)
+        listener?.remove()
+      }
+    }
+
+    return () => {
+      cancelled = true
+      listener?.remove()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [googleMapsApiKey])
 
   useEffect(() => {
     // If user previously saved by email, prefill
@@ -197,6 +284,10 @@ export default function RsvpForm() {
         if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) copy.email = t('rsvp.validation.emailRequired')
         else delete copy.email
         break
+      case 'mailingAddress':
+        if (!mailingAddress.trim()) copy.mailingAddress = t('rsvp.validation.addressRequired')
+        else delete copy.mailingAddress
+        break
       case 'likelihood':
         if (!likelihood) copy.likelihood = t('rsvp.validation.likelihoodRequired')
         else delete copy.likelihood
@@ -281,7 +372,36 @@ export default function RsvpForm() {
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function validateMailingAddress(address: string) {
+    try {
+      const response = await fetch('/.netlify/functions/validate-address', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          address,
+          languageCode: (i18n.language || 'en').toLowerCase(),
+        }),
+      })
+
+      const data = await response.json()
+      if (!response.ok || !data?.ok) return null
+      return data as {
+        ok: true
+        formattedAddress: string | null
+        verdict: {
+          addressComplete?: boolean
+          hasUnconfirmedComponents?: boolean
+          hasInferredComponents?: boolean
+          hasReplacedComponents?: boolean
+          missingComponentTypes?: string[]
+        } | null
+      }
+    } catch {
+      return null
+    }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const errs = validate()
     if (Object.keys(errs).length > 0) {
@@ -297,6 +417,39 @@ export default function RsvpForm() {
       else if (firstKey === 'children') el = document.querySelector('[name="children.0.name"]') as HTMLElement | null
       el?.focus()
       return
+    }
+
+    // Best-effort address validation (warn and allow submit).
+    // If validation fails or isn't configured, we silently continue.
+    const originalAddress = mailingAddress.trim()
+    let finalMailingAddress = originalAddress
+
+    const addressResult = await validateMailingAddress(originalAddress)
+    if (addressResult?.ok) {
+      const formatted = addressResult.formattedAddress
+      if (typeof formatted === 'string' && formatted.trim() && formatted.trim() !== originalAddress) {
+        finalMailingAddress = formatted.trim()
+        setMailingAddress(finalMailingAddress)
+      }
+
+      const verdict = addressResult.verdict
+      const missing = verdict?.missingComponentTypes || []
+      const shouldWarn =
+        verdict?.addressComplete === false ||
+        verdict?.hasUnconfirmedComponents === true ||
+        missing.length > 0
+
+      if (shouldWarn) {
+        toast({
+          title: 'Address may be incomplete',
+          description: 'Please double-check your mailing address (street number, unit, postal code, country). We will still accept your RSVP.',
+          status: 'warning',
+          duration: 6000,
+          isClosable: true,
+          variant: 'solid',
+          position: 'top',
+        })
+      }
     }
 
     const list = loadRsvps()
@@ -316,7 +469,8 @@ export default function RsvpForm() {
       id: String(Date.now()),
       firstName: firstName.trim(),
       email: email.trim(),
-      mailingAddress: mailingAddress.trim(),
+      mailingAddress: finalMailingAddress,
+      mailingAddressPlaceId: mailingAddressPlaceId || undefined,
       likelihood: likelihood as Likelihood,
       events: likelihood !== 'no' ? events : { welcome: '', ceremony: '', brunch: '' },
       accommodation: accommodation || undefined,
@@ -334,6 +488,7 @@ export default function RsvpForm() {
     formData.append('firstName', entry.firstName)
     formData.append('email', entry.email)
     formData.append('mailingAddress', entry.mailingAddress || '')
+    formData.append('mailingAddressPlaceId', entry.mailingAddressPlaceId || '')
     formData.append('likelihood', entry.likelihood)
     formData.append('events', JSON.stringify(entry.events))
     formData.append('accommodation', entry.accommodation || '')
@@ -455,6 +610,7 @@ export default function RsvpForm() {
           <input type="hidden" name="guests" />
           <input type="hidden" name="dietary" />
           <input type="hidden" name="mailingAddress" />
+          <input type="hidden" name="mailingAddressPlaceId" />
           <input type="hidden" name="franceTips" />
           <input type="hidden" name="additionalNotes" />
           <Stack spacing={8}>
@@ -486,9 +642,15 @@ export default function RsvpForm() {
             <FormControl isInvalid={!!errors.mailingAddress}>
               <FormLabel>{t('rsvp.form.mailingAddress')}</FormLabel>
               <Input 
+                ref={mailingAddressInputRef}
                 name="mailingAddress"
                 value={mailingAddress}
-                onChange={e => { setMailingAddress(e.target.value); if (errors.mailingAddress) validateField('mailingAddress') }}
+                onChange={e => {
+                  setMailingAddress(e.target.value)
+                  // If the user manually edits after selecting a suggestion, clear the placeId.
+                  if (mailingAddressPlaceId) setMailingAddressPlaceId('')
+                  if (errors.mailingAddress) validateField('mailingAddress')
+                }}
                 onBlur={() => validateField('mailingAddress')}
                 placeholder={t('rsvp.form.mailingAddressPlaceholder')}
               />
