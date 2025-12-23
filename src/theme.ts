@@ -1,50 +1,50 @@
 import { extendTheme } from '@chakra-ui/react'
 
-// Elegant Wedding Theme: Mexican-Belgian Heritage at a French Chateau
-// Blends warm terracotta tones with European sophistication
+// Visual Identity: Old World Romance meets Modern Vibrancy
+// Palette anchors:
+// - Deep terracotta + marigold (Mexican earth + sun)
+// - Slate blue + dove grey (Belgian skies + bluestone)
+// - Champagne gold (elegant binder)
+// - Cream/off-white (modern negative space)
 const theme = extendTheme({
   fonts: {
-    // Cormorant Garamond: French elegance, excellent for body text
-    // Montserrat: Modern, clean readability for UI elements
-    heading: "'Cormorant Garamond', 'Georgia', serif",
+    heading: "'Playfair Display', 'Cormorant Garamond', 'Georgia', serif",
     body: "'Montserrat', 'Helvetica Neue', sans-serif",
-    accent: "'Playfair Display', serif", // For special decorative text
+    accent: "'Cinzel', 'Playfair Display', serif",
   },
   colors: {
-    // Core palette: "Terracotta Elegance"
     neutral: {
-      light: '#F5F1EB',      // Warm cream - primary background
-      dark: '#2C3E50',       // Deep navy - primary text
-      muted: 'rgba(44,62,80,0.6)', // Muted text
-      white: '#FEFEFE',      // Pure white for cards
+      light: '#F7F1E8', // cream / off-white background
+      dark: '#22313F', // slate-charcoal text
+      muted: 'rgba(34,49,63,0.60)',
+      white: '#FFFCF7',
     },
     primary: {
-      soft: '#C4A77D',       // Warm gold - elegant accents, borders
-      deep: '#8B4513',       // Terracotta - rich accent, hover states
-      gold: '#D4A574',       // Burnt sienna - highlight color
+      // Champagne gold (borders, dividers) + deep terracotta (CTAs, accents)
+      soft: '#D8B47B',
+      deep: '#8A3D2B',
+      gold: '#E1C38F',
     },
-    // Mexican heritage colors (use as accents)
     mexican: {
-      marigold: '#E8963A',   // Cempasúchil orange
-      pink: '#9B2335',       // Mexican pink / magenta
-      talavera: '#1E4D8C',   // Traditional Talavera blue
-      terracotta: '#CB6843', // Clay pottery tone
-      dahlia: '#C71585',     // Dahlia flower pink
+      terracotta: '#8A3D2B',
+      marigold: '#E29B2D',
+      dahlia: '#B23A4C',
+      talavera: '#2E5E88',
+      pink: '#B23A4C',
     },
-    // Belgian heritage colors (subtle, sophisticated)
     belgian: {
-      lace: '#FAF8F5',       // Bruges lace white
-      chocolate: '#4A3728',  // Belgian chocolate brown
-      gold: '#C9A227',       // Antique gold (Art Nouveau)
-      charcoal: '#2D3436',   // Flemish painting darks
+      // Dove grey + slate blue
+      lace: '#F2EEE8',
+      charcoal: '#22313F',
+      gold: '#D8B47B',
+      chocolate: '#4A3728',
     },
-    // French chateau aesthetic
     chateau: {
-      stone: '#D4CFC4',      // Limestone walls
-      lavender: '#9B8AA4',   // Provence lavender
-      champagne: '#F7E7CE',  // Champagne toast
-      garden: '#6B705C',     // Formal garden sage
-      wine: '#722F37',       // Burgundy wine
+      stone: '#D8D2C9',
+      lavender: '#7D8FA6', // slate blue
+      champagne: '#E1C38F',
+      garden: '#6B705C',
+      wine: '#6E2B2F',
     },
     // Legacy aliases for backward compatibility
     accent: {
@@ -61,6 +61,11 @@ const theme = extendTheme({
         MozOsxFontSmoothing: 'grayscale',
         fontSize: '16px',
         lineHeight: 1.7,
+        // Subtle white-on-white "papel picado" texture (minimalist, not kitschy)
+        backgroundImage:
+          "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='120' viewBox='0 0 240 120'%3E%3Cdefs%3E%3Cpattern id='p' width='120' height='60' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 10h120' stroke='%23ffffff' stroke-opacity='0.35' stroke-width='1'/%3E%3Cpath d='M0 30h120' stroke='%23ffffff' stroke-opacity='0.20' stroke-width='1'/%3E%3Cpath d='M0 50h120' stroke='%23ffffff' stroke-opacity='0.35' stroke-width='1'/%3E%3Cpath d='M0 10l10 10 10-10 10 10 10-10 10 10 10-10 10 10 10-10 10 10 10-10 10 10 10-10 10 10 10-10' fill='none' stroke='%23ffffff' stroke-opacity='0.10' stroke-width='2'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='240' height='120' fill='url(%23p)'/%3E%3C/svg%3E\")",
+        backgroundRepeat: 'repeat',
+        backgroundSize: '240px 120px',
       },
       'a': {
         color: 'primary.deep',
@@ -122,7 +127,7 @@ const theme = extendTheme({
     },
     Heading: {
       baseStyle: {
-        fontFamily: "'Cormorant Garamond', serif",
+        fontFamily: "'Playfair Display', serif",
         color: 'neutral.dark',
         fontWeight: 400,
         letterSpacing: '0.02em',
@@ -262,7 +267,7 @@ const theme = extendTheme({
           fontFamily: "'Montserrat', sans-serif",
         },
         title: {
-          fontFamily: "'Cormorant Garamond', serif",
+          fontFamily: "'Playfair Display', serif",
           fontSize: 'lg',
           fontWeight: 500,
           letterSpacing: '0.02em',
