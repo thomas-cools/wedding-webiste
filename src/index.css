@@ -108,6 +108,9 @@ button, a, input, select, textarea {
   --mailingAddress-border-color: var(--chakra-colors-primary-soft);
   /* Force light mode regardless of OS theme (Shadow DOM component) */
   color-scheme: light;
+  font-family: var(--chakra-fonts-body);
+  font-size: var(--chakra-fontSizes-md);
+  line-height: 1.6;
 
   /* Google component library theme variables (best-effort; varies by version) */
   --gm-color-surface: transparent;

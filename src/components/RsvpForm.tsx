@@ -72,6 +72,9 @@ export default function RsvpForm() {
   const toast = useToast()
   const mailingAddressInputRef = useRef<HTMLInputElement | null>(null)
   const mailingAddressAutocompleteContainerRef = useRef<HTMLDivElement | null>(null)
+  const isApplyingMailingAddressSelectionRef = useRef(false)
+  const errorsRef = useRef<Record<string, string>>({})
+  const validateFieldRef = useRef<(field: string) => void>(() => {})
   const [googlePlacesLoaded, setGooglePlacesLoaded] = useState(false)
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
@@ -90,6 +93,10 @@ export default function RsvpForm() {
   const [additionalNotes, setAdditionalNotes] = useState('')
   const [status, setStatus] = useState<null | 'saved' | 'updated'>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    errorsRef.current = errors
+  }, [errors])
 
   const googleMapsApiKey = useMemo(() => {
     if (typeof window === 'undefined') return ''
@@ -162,28 +169,37 @@ export default function RsvpForm() {
       placeAutocompleteEl.setAttribute('aria-label', t('rsvp.form.mailingAddress'))
       // Force light mode to avoid OS dark-mode styling (the component uses Shadow DOM and
       // otherwise may render as a black input even when the app is light-themed).
-      placeAutocompleteEl.setAttribute('style', 'width: 100%; color-scheme: light;')
+      placeAutocompleteEl.setAttribute(
+        'style',
+        'width: 100%; color-scheme: light; font-family: var(--chakra-fonts-body); font-size: var(--chakra-fontSizes-md);'
+      )
       try {
         ;(placeAutocompleteEl as any).style.colorScheme = 'light'
+        ;(placeAutocompleteEl as any).style.fontFamily = 'var(--chakra-fonts-body)'
+        ;(placeAutocompleteEl as any).style.fontSize = 'var(--chakra-fontSizes-md)'
       } catch {
         // ignore
       }
       // Best-effort: some versions support a placeholder attribute.
       placeAutocompleteEl.setAttribute('placeholder', t('rsvp.form.mailingAddressPlaceholder'))
 
-      // Best-effort: seed current value.
-      try {
-        ;(placeAutocompleteEl as any).value = mailingAddress
-      } catch {
-        // ignore
-      }
-
       const syncValueFromElement = () => {
         if (cancelled || !placeAutocompleteEl) return
         const nextValue = String((placeAutocompleteEl as any).value || '')
         setMailingAddress(nextValue)
-        if (mailingAddressPlaceId) setMailingAddressPlaceId('')
-        if (errors.mailingAddress) validateField('mailingAddress')
+
+        // Clear placeId only when the user manually edits.
+        // The component may emit input/change events after selecting a suggestion;
+        // don't clear the placeId in that case.
+        if (isApplyingMailingAddressSelectionRef.current) {
+          isApplyingMailingAddressSelectionRef.current = false
+        } else {
+          setMailingAddressPlaceId(prev => (prev ? '' : prev))
+        }
+
+        if (errorsRef.current.mailingAddress) {
+          validateFieldRef.current('mailingAddress')
+        }
       }
 
       const onPlaceSelect = async (ev: Event) => {
@@ -205,10 +221,13 @@ export default function RsvpForm() {
           maybePlace.formattedAddress || maybePlace.formatted_address || maybePlace.displayName || ''
         const placeId = maybePlace.id || maybePlace.place_id || ''
 
+        // Mark that we're applying a suggestion so sync handlers don't clear placeId.
+        isApplyingMailingAddressSelectionRef.current = true
+
         if (typeof formatted === 'string' && formatted.trim()) {
           setMailingAddress(formatted)
-          if (errors.mailingAddress) {
-            setTimeout(() => validateField('mailingAddress'), 0)
+          if (errorsRef.current.mailingAddress) {
+            setTimeout(() => validateFieldRef.current('mailingAddress'), 0)
           }
         }
         if (typeof placeId === 'string' && placeId.trim()) {
@@ -221,8 +240,10 @@ export default function RsvpForm() {
       placeAutocompleteEl.addEventListener('change', syncValueFromElement)
       // Selection event for PlaceAutocompleteElement.
       placeAutocompleteEl.addEventListener('gmp-placeselect', onPlaceSelect as any)
+      // Some builds may use a prefixed event name.
+      placeAutocompleteEl.addEventListener('gmpx-placeselect', onPlaceSelect as any)
       // Validate on blur.
-      placeAutocompleteEl.addEventListener('focusout', () => validateField('mailingAddress'))
+      placeAutocompleteEl.addEventListener('focusout', () => validateFieldRef.current('mailingAddress'))
 
       container.appendChild(placeAutocompleteEl)
 
@@ -230,6 +251,7 @@ export default function RsvpForm() {
         placeAutocompleteEl?.removeEventListener('input', syncValueFromElement)
         placeAutocompleteEl?.removeEventListener('change', syncValueFromElement)
         placeAutocompleteEl?.removeEventListener('gmp-placeselect', onPlaceSelect as any)
+        placeAutocompleteEl?.removeEventListener('gmpx-placeselect', onPlaceSelect as any)
       }
     }
 
@@ -253,8 +275,8 @@ export default function RsvpForm() {
 
         if (typeof formatted === 'string' && formatted.trim()) {
           setMailingAddress(formatted)
-          if (errors.mailingAddress) {
-            setTimeout(() => validateField('mailingAddress'), 0)
+          if (errorsRef.current.mailingAddress) {
+            setTimeout(() => validateFieldRef.current('mailingAddress'), 0)
           }
         }
         if (typeof placeId === 'string' && placeId.trim()) {
@@ -293,7 +315,7 @@ export default function RsvpForm() {
       cleanup()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [googleMapsApiKey, googlePlacesLoaded, t, mailingAddress, mailingAddressPlaceId, errors.mailingAddress])
+  }, [googleMapsApiKey, googlePlacesLoaded, t])
 
   useEffect(() => {
     // If user previously saved by email, prefill
@@ -776,6 +798,9 @@ export default function RsvpForm() {
                   pt={3}
                   pb={4}
                   minH="48px"
+                  fontFamily="body"
+                  fontSize="md"
+                  lineHeight="1.6"
                   _focusWithin={{
                     borderColor: 'primary.deep',
                   }}
