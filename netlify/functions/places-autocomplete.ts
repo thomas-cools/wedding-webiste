@@ -20,6 +20,23 @@ type GooglePlacesAutocompleteResponse = {
   }>
 }
 
+function googlePlacesStatusToHttp(status: string | undefined): number {
+  switch (status) {
+    case 'OK':
+    case 'ZERO_RESULTS':
+      return 200
+    case 'INVALID_REQUEST':
+      return 400
+    case 'REQUEST_DENIED':
+      return 403
+    case 'OVER_QUERY_LIMIT':
+      return 429
+    case 'UNKNOWN_ERROR':
+    default:
+      return 502
+  }
+}
+
 function json(statusCode: number, body: unknown, extraHeaders: Record<string, string> = {}) {
   return {
     statusCode,
@@ -105,13 +122,37 @@ export const handler: Handler = async (event) => {
     const response = await fetch(url, { method: 'GET' })
     const data = (await response.json()) as GooglePlacesAutocompleteResponse
 
-    if (!response.ok || data.status === 'REQUEST_DENIED' || data.status === 'OVER_QUERY_LIMIT') {
+    if (!response.ok) {
+      console.error('places-autocomplete upstream HTTP error', {
+        upstreamStatus: response.status,
+        googleStatus: data?.status,
+        googleErrorMessage: data?.error_message,
+      })
+
       return json(
-        response.ok ? 502 : response.status,
+        response.status,
         {
           ok: false,
           error: data?.error_message || 'Places autocomplete failed',
           status: data?.status || null,
+        },
+        rateLimitHeaders(rl)
+      )
+    }
+
+    const googleStatus = data?.status
+    if (googleStatus && googleStatus !== 'OK' && googleStatus !== 'ZERO_RESULTS') {
+      console.error('places-autocomplete upstream Google status error', {
+        googleStatus,
+        googleErrorMessage: data?.error_message,
+      })
+
+      return json(
+        googlePlacesStatusToHttp(googleStatus),
+        {
+          ok: false,
+          error: data?.error_message || 'Places autocomplete failed',
+          status: googleStatus,
         },
         rateLimitHeaders(rl)
       )
