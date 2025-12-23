@@ -36,7 +36,7 @@ import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, s
 import { features, weddingConfig } from './config'
 
 // Import assets
-import heroBanner from './assets/Banner-wedding-01.jpeg'
+import heroBanner from './assets/background-banner_1.jpg'
 import envelopeImage from './assets/Envelope.png'
 import weddingLogo from './assets/T&C-Monogram-small.webp'
 import weddingLogo2x from './assets/T&C-Monogram-2x.webp'

@@ -80,6 +80,8 @@ export default function Hero({
   // For imageSet, we'll use a proper <picture> element
   const useImageElement = Boolean(imageSet)
 
+  const hasCollage = Boolean(hasBackground && collage)
+
   return (
     <Box
       as="section"
@@ -285,8 +287,12 @@ export default function Hero({
       <Container maxW="container.lg" position="relative" zIndex={2}>
         <MotionBox
           as={VStack}
-          spacing={8}
+          spacing={hasCollage ? 6 : 8}
           textAlign="center"
+          w="100%"
+          maxW={hasCollage ? ['280px', '440px', '560px'] : undefined}
+          mx={hasCollage ? 'auto' : undefined}
+          px={hasCollage ? 4 : 0}
           initial="hidden"
           animate="visible"
           variants={heroStagger}
@@ -294,11 +300,12 @@ export default function Hero({
           {/* Pre-heading */}
           <MotionBox variants={heroFadeIn}>
             <Text
-              fontSize="sm"
+              fontSize={hasCollage ? 'xs' : 'sm'}
               textTransform="uppercase"
-              letterSpacing="0.35em"
+              letterSpacing={hasCollage ? '0.2em' : '0.35em'}
               color={hasBackground ? "whiteAlpha.900" : "primary.soft"}
               fontWeight="400"
+              lineHeight="1.2"
             >
               {t('hero.together')}
             </Text>
@@ -310,25 +317,28 @@ export default function Hero({
               direction={["column", "row"]}
               align="center"
               justify="center"
-              gap={[4, 8]}
+              gap={hasCollage ? [2, 6] : [4, 8]}
+              maxW="100%"
             >
               <Heading
                 as="h1"
                 fontFamily="heading"
-                fontSize={["5xl", "6xl", "7xl"]}
+                fontSize={hasCollage ? ["3xl", "4xl", "5xl"] : ["5xl", "6xl", "7xl"]}
                 fontWeight="300"
                 color={hasBackground ? "white" : "neutral.dark"}
-                letterSpacing="0.05em"
+                letterSpacing={hasCollage ? '0.03em' : '0.05em'}
+                lineHeight="1"
               >
                 {t('hero.bride')}
               </Heading>
               
               <Text
                 fontFamily="heading"
-                fontSize={["3xl", "4xl", "5xl"]}
+                fontSize={hasCollage ? ["xl", "2xl", "3xl"] : ["3xl", "4xl", "5xl"]}
                 fontWeight="300"
                 color={hasBackground ? "whiteAlpha.800" : "primary.soft"}
                 fontStyle="italic"
+                lineHeight="1"
               >
                 {t('hero.and')}
               </Text>
@@ -336,10 +346,11 @@ export default function Hero({
               <Heading
                 as="h1"
                 fontFamily="heading"
-                fontSize={["5xl", "6xl", "7xl"]}
+                fontSize={hasCollage ? ["3xl", "4xl", "5xl"] : ["5xl", "6xl", "7xl"]}
                 fontWeight="300"
                 color={hasBackground ? "white" : "neutral.dark"}
-                letterSpacing="0.05em"
+                letterSpacing={hasCollage ? '0.03em' : '0.05em'}
+                lineHeight="1"
               >
                 {t('hero.groom')}
               </Heading>
