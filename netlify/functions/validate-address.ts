@@ -1,4 +1,5 @@
 import type { Handler } from '@netlify/functions'
+import { consumeRateLimit, getClientIp, rateLimitHeaders, rateLimitKey } from './utils/rate-limiter'
 
 type ValidateAddressRequest = {
   address: string
@@ -26,16 +27,22 @@ type GoogleAddressValidationResponse = {
   }
 }
 
-function json(statusCode: number, body: unknown) {
+function json(statusCode: number, body: unknown, extraHeaders: Record<string, string> = {}) {
   return {
     statusCode,
     headers: {
       'Content-Type': 'application/json',
       // Allow same-origin + Netlify previews to call this function
       'Access-Control-Allow-Origin': '*',
+      ...extraHeaders,
     },
     body: JSON.stringify(body),
   }
+}
+
+function numberFromEnv(value: string | undefined, fallback: number) {
+  const parsed = Number.parseInt(String(value || ''), 10)
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
 }
 
 export const handler: Handler = async (event) => {
@@ -53,6 +60,23 @@ export const handler: Handler = async (event) => {
 
   if (event.httpMethod !== 'POST') {
     return json(405, { ok: false, error: 'Method not allowed' })
+  }
+
+  // IP-based rate limiting (protects the paid Google Address Validation API).
+  // Defaults are intentionally conservative; adjust via env vars if needed.
+  const ip = getClientIp(event.headers || {})
+  const limit = numberFromEnv(process.env.RATE_LIMIT_VALIDATE_ADDRESS_MAX, 30)
+  const windowSeconds = numberFromEnv(process.env.RATE_LIMIT_VALIDATE_ADDRESS_WINDOW_SECONDS, 600)
+  const rl = consumeRateLimit(rateLimitKey('validate-address', ip), {
+    max: limit,
+    windowMs: windowSeconds * 1000,
+  })
+  if (!rl.allowed) {
+    return json(
+      429,
+      { ok: false, error: 'Rate limit exceeded. Please try again shortly.' },
+      rateLimitHeaders(rl)
+    )
   }
 
   const apiKey = process.env.GOOGLE_MAPS_API_KEY

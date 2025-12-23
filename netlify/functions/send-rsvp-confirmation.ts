@@ -1,4 +1,5 @@
 import type { Handler, HandlerEvent } from '@netlify/functions'
+import { consumeRateLimit, getClientIp, rateLimitHeaders, rateLimitKey } from './utils/rate-limiter'
 
 interface Guest {
   name: string
@@ -676,6 +677,27 @@ const handler: Handler = async (event: HandlerEvent) => {
     return {
       statusCode: 405,
       body: JSON.stringify({ error: 'Method not allowed' }),
+    }
+  }
+
+  // IP-based rate limiting (protects external Resend API usage).
+  // Defaults: 5 requests per 15 minutes per IP. Configure via env vars if needed.
+  const ip = getClientIp(event.headers || {})
+  const limit = Number.parseInt(process.env.RATE_LIMIT_RSVP_CONFIRM_MAX || '5', 10)
+  const windowSeconds = Number.parseInt(process.env.RATE_LIMIT_RSVP_CONFIRM_WINDOW_SECONDS || '900', 10)
+  const rl = consumeRateLimit(rateLimitKey('send-rsvp-confirmation', ip), {
+    max: Number.isFinite(limit) && limit > 0 ? limit : 5,
+    windowMs: (Number.isFinite(windowSeconds) && windowSeconds > 0 ? windowSeconds : 900) * 1000,
+  })
+
+  if (!rl.allowed) {
+    return {
+      statusCode: 429,
+      headers: {
+        'Content-Type': 'application/json',
+        ...rateLimitHeaders(rl),
+      },
+      body: JSON.stringify({ error: 'Rate limit exceeded. Please try again shortly.' }),
     }
   }
 
