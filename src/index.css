@@ -1,16 +1,7 @@
 /* Classic Minimalist Wedding Styles */
 
 /* Font imports */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap');
-
-/* Palette variables */
-:root {
-  --neutral-light: #E3DFCE;
-  --neutral-dark: #0B1937;
-  --neutral-muted: rgba(11,25,55,0.6);
-  --primary-soft: #94B1C8;
-  --primary-deep: #4C050C;
-}
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap');
 
 /* Base reset and setup */
 *, *::before, *::after {
@@ -28,24 +19,17 @@ html, body, #root {
 }
 
 body { 
-  font-family: 'Cormorant Garamond', Georgia, serif; 
-  background: var(--neutral-light); 
-  color: var(--neutral-dark); 
   -webkit-font-smoothing: antialiased; 
   -moz-osx-font-smoothing: grayscale;
-  font-size: 18px;
-  line-height: 1.7;
 }
 
 /* Links */
 a { 
-  color: var(--primary-deep); 
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 a:hover { 
-  color: var(--primary-soft); 
 }
 
 /* Form elements inherit font */
@@ -86,8 +70,8 @@ button, a, input, select, textarea {
 
 /* Selection styling */
 ::selection {
-  background: var(--primary-soft);
-  color: var(--neutral-dark);
+  background: var(--chakra-colors-primary-soft);
+  color: var(--chakra-colors-neutral-dark);
 }
 
 /* Scrollbar styling (webkit) */
@@ -96,16 +80,16 @@ button, a, input, select, textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--neutral-light);
+  background: var(--chakra-colors-neutral-light);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary-soft);
+  background: var(--chakra-colors-primary-soft);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--neutral-dark);
+  background: var(--chakra-colors-neutral-dark);
 }
 
 /* Google Places: PlaceAutocompleteElement theming

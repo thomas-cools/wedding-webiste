@@ -195,10 +195,10 @@ export default function PasswordGate({ children }: PasswordGateProps) {
                       fontSize="md"
                       letterSpacing="0.05em"
                       borderColor="primary.soft"
-                      _hover={{ borderColor: 'primary.main' }}
-                      _focus={{ 
-                        borderColor: 'primary.main', 
-                        boxShadow: '0 0 0 1px var(--chakra-colors-primary-main)' 
+                      _hover={{ borderColor: 'primary.deep' }}
+                      _focusVisible={{
+                        borderColor: 'primary.deep',
+                        boxShadow: 'none',
                       }}
                       h="50px"
                       data-testid="password-input"
