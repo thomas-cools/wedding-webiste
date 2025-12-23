@@ -29,8 +29,7 @@ a {
   transition: color 0.2s ease;
 }
 
-a:hover { 
-}
+
 
 /* Form elements inherit font */
 input, select, textarea, button {
@@ -96,10 +95,30 @@ button, a, input, select, textarea {
    Match Chakra's Input variant='elegant' used across the form.
    Uses Chakra CSS variables (no new hard-coded colors).
 */
+.mailingAddress-autocompleteWrapper {
+  /* Keep the suggestions dropdown from being clipped */
+  overflow: visible;
+}
+
 #mailingAddress-autocomplete {
   display: block;
   width: 100%;
   --mailingAddress-border-color: var(--chakra-colors-primary-soft);
+
+  /* Google component library theme variables (best-effort; varies by version) */
+  --gm-color-surface: transparent;
+  --gm-color-on-surface: var(--chakra-colors-neutral-dark);
+  --gm-color-outline: var(--chakra-colors-primary-soft);
+  --gm-color-primary: var(--chakra-colors-primary-deep);
+  --gm-font-family: var(--chakra-fonts-body);
+  --gm-font-size: var(--chakra-fontSizes-md);
+
+  --gmpx-color-surface: transparent;
+  --gmpx-color-on-surface: var(--chakra-colors-neutral-dark);
+  --gmpx-color-outline: var(--chakra-colors-primary-soft);
+  --gmpx-color-primary: var(--chakra-colors-primary-deep);
+  --gmpx-font-family: var(--chakra-fonts-body);
+  --gmpx-font-size: var(--chakra-fontSizes-md);
 }
 
 #mailingAddress-autocomplete:focus-within {
@@ -109,7 +128,10 @@ button, a, input, select, textarea {
 /* Input surface */
 #mailingAddress-autocomplete::part(input),
 #mailingAddress-autocomplete::part(text-input),
-#mailingAddress-autocomplete::part(search-input) {
+#mailingAddress-autocomplete::part(search-input),
+#mailingAddress-autocomplete::part(field),
+#mailingAddress-autocomplete::part(form-field),
+#mailingAddress-autocomplete::part(control) {
   width: 100% !important;
   background: transparent !important;
   color: var(--chakra-colors-neutral-dark) !important;
@@ -117,23 +139,29 @@ button, a, input, select, textarea {
   font-size: var(--chakra-fontSizes-md) !important;
   line-height: 1.6 !important;
 
+  /* Border/padding are handled by the Chakra wrapper for consistency */
   border: none !important;
-  border-bottom: 1px solid var(--mailingAddress-border-color) !important;
   border-radius: 0 !important;
 
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  padding-top: 0.75rem !important;
-  padding-bottom: 1rem !important;
-  min-height: 48px !important;
+  padding: 0 !important;
+  min-height: 0 !important;
   box-shadow: none !important;
   outline: none !important;
+}
+
+/* Make sure the host itself doesn't draw a focus ring */
+#mailingAddress-autocomplete:focus,
+#mailingAddress-autocomplete:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Placeholder */
 #mailingAddress-autocomplete::part(input)::placeholder,
 #mailingAddress-autocomplete::part(text-input)::placeholder,
-#mailingAddress-autocomplete::part(search-input)::placeholder {
+#mailingAddress-autocomplete::part(search-input)::placeholder,
+#mailingAddress-autocomplete::part(field)::placeholder,
+#mailingAddress-autocomplete::part(control)::placeholder {
   color: var(--chakra-colors-neutral-muted) !important;
 }
 

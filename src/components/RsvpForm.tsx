@@ -759,7 +759,20 @@ export default function RsvpForm() {
             <FormControl isInvalid={!!errors.mailingAddress}>
               <FormLabel>{t('rsvp.form.mailingAddress')}</FormLabel>
               {googleMapsApiKey && googlePlacesLoaded && window.google?.maps?.places?.PlaceAutocompleteElement ? (
-                <Box ref={mailingAddressAutocompleteContainerRef} />
+                <Box
+                  ref={mailingAddressAutocompleteContainerRef}
+                  className="mailingAddress-autocompleteWrapper"
+                  borderBottom="1px solid"
+                  borderColor="primary.soft"
+                  borderRadius={0}
+                  px={0}
+                  pt={3}
+                  pb={4}
+                  minH="48px"
+                  _focusWithin={{
+                    borderColor: 'primary.deep',
+                  }}
+                />
               ) : (
                 <Input 
                   ref={mailingAddressInputRef}
