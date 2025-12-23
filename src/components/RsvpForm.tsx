@@ -71,6 +71,8 @@ export default function RsvpForm() {
   const { t, i18n } = useTranslation()
   const toast = useToast()
   const mailingAddressInputRef = useRef<HTMLInputElement | null>(null)
+  const mailingAddressAutocompleteContainerRef = useRef<HTMLDivElement | null>(null)
+  const [googlePlacesLoaded, setGooglePlacesLoaded] = useState(false)
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
   const [mailingAddress, setMailingAddress] = useState('')
@@ -101,7 +103,10 @@ export default function RsvpForm() {
     if (typeof window === 'undefined' || !document?.head) return
 
     // If already present, do nothing.
-    if (window.google?.maps?.places) return
+    if (window.google?.maps?.places) {
+      setGooglePlacesLoaded(true)
+      return
+    }
 
     const existing = document.getElementById('google-maps-places') as HTMLScriptElement | null
     if (existing) return
@@ -111,20 +116,121 @@ export default function RsvpForm() {
     script.async = true
     script.defer = true
     script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(googleMapsApiKey)}&libraries=places&v=weekly`
+    script.addEventListener('load', () => setGooglePlacesLoaded(true))
+    script.addEventListener('error', () => setGooglePlacesLoaded(false))
     document.head.appendChild(script)
   }, [googleMapsApiKey])
 
-  // Attach Places Autocomplete to the mailing address input.
+  // Attach Places Autocomplete to the mailing address field.
+  // Prefer the newer PlaceAutocompleteElement when available; fallback to legacy Autocomplete.
   useEffect(() => {
     if (!googleMapsApiKey) return
-    const input = mailingAddressInputRef.current
-    if (!input) return
+    if (!googlePlacesLoaded) return
 
     let cancelled = false
-    let listener: { remove: () => void } | null = null
+    let legacyListener: { remove: () => void } | null = null
+    let placeAutocompleteEl: HTMLElement | null = null
+    let onLegacyScriptLoad: (() => void) | null = null
 
-    const attach = () => {
+    const cleanup = () => {
+      legacyListener?.remove()
+      legacyListener = null
+
+      if (placeAutocompleteEl) {
+        placeAutocompleteEl.remove()
+        placeAutocompleteEl = null
+      }
+
+      if (onLegacyScriptLoad) {
+        const script = document.getElementById('google-maps-places') as HTMLScriptElement | null
+        script?.removeEventListener('load', onLegacyScriptLoad)
+        onLegacyScriptLoad = null
+      }
+    }
+
+    const attachPlaceAutocompleteElement = () => {
       if (cancelled) return
+      const container = mailingAddressAutocompleteContainerRef.current
+      if (!container) return
+
+      const PlaceAutocompleteElement = window.google?.maps?.places?.PlaceAutocompleteElement
+      if (!PlaceAutocompleteElement) return
+
+      container.innerHTML = ''
+      placeAutocompleteEl = new PlaceAutocompleteElement() as unknown as HTMLElement
+      placeAutocompleteEl.id = 'mailingAddress-autocomplete'
+      placeAutocompleteEl.setAttribute('aria-label', t('rsvp.form.mailingAddress'))
+      placeAutocompleteEl.setAttribute('style', 'width: 100%;')
+      // Best-effort: some versions support a placeholder attribute.
+      placeAutocompleteEl.setAttribute('placeholder', t('rsvp.form.mailingAddressPlaceholder'))
+
+      // Best-effort: seed current value.
+      try {
+        ;(placeAutocompleteEl as any).value = mailingAddress
+      } catch {
+        // ignore
+      }
+
+      const syncValueFromElement = () => {
+        if (cancelled || !placeAutocompleteEl) return
+        const nextValue = String((placeAutocompleteEl as any).value || '')
+        setMailingAddress(nextValue)
+        if (mailingAddressPlaceId) setMailingAddressPlaceId('')
+        if (errors.mailingAddress) validateField('mailingAddress')
+      }
+
+      const onPlaceSelect = async (ev: Event) => {
+        if (cancelled || !placeAutocompleteEl) return
+
+        const maybePlace = (ev as any)?.place || (ev as any)?.detail?.place
+        if (!maybePlace) return
+
+        // In the new Places API, selected places can be field-lazy.
+        try {
+          if (typeof maybePlace.fetchFields === 'function') {
+            await maybePlace.fetchFields({ fields: ['formattedAddress', 'id', 'displayName'] })
+          }
+        } catch {
+          // ignore
+        }
+
+        const formatted =
+          maybePlace.formattedAddress || maybePlace.formatted_address || maybePlace.displayName || ''
+        const placeId = maybePlace.id || maybePlace.place_id || ''
+
+        if (typeof formatted === 'string' && formatted.trim()) {
+          setMailingAddress(formatted)
+          if (errors.mailingAddress) {
+            setTimeout(() => validateField('mailingAddress'), 0)
+          }
+        }
+        if (typeof placeId === 'string' && placeId.trim()) {
+          setMailingAddressPlaceId(placeId)
+        }
+      }
+
+      // Keep state updated for manual typing, not just selections.
+      placeAutocompleteEl.addEventListener('input', syncValueFromElement)
+      placeAutocompleteEl.addEventListener('change', syncValueFromElement)
+      // Selection event for PlaceAutocompleteElement.
+      placeAutocompleteEl.addEventListener('gmp-placeselect', onPlaceSelect as any)
+      // Validate on blur.
+      placeAutocompleteEl.addEventListener('focusout', () => validateField('mailingAddress'))
+
+      container.appendChild(placeAutocompleteEl)
+
+      return () => {
+        placeAutocompleteEl?.removeEventListener('input', syncValueFromElement)
+        placeAutocompleteEl?.removeEventListener('change', syncValueFromElement)
+        placeAutocompleteEl?.removeEventListener('gmp-placeselect', onPlaceSelect as any)
+      }
+    }
+
+    const attachLegacyAutocomplete = () => {
+      if (cancelled) return
+      const input = mailingAddressInputRef.current
+      if (!input) return
+
       if (!window.google?.maps?.places?.Autocomplete) return
 
       const autocomplete = new window.google.maps.places.Autocomplete(input, {
@@ -132,7 +238,7 @@ export default function RsvpForm() {
         fields: ['formatted_address', 'place_id', 'address_components'],
       })
 
-      listener = autocomplete.addListener('place_changed', () => {
+      legacyListener = autocomplete.addListener('place_changed', () => {
         if (cancelled) return
         const place = autocomplete.getPlace?.()
         const formatted = place?.formatted_address
@@ -150,28 +256,37 @@ export default function RsvpForm() {
       })
     }
 
-    // If the script is already loaded, attach immediately.
+    const attach = () => {
+      if (cancelled) return
+      const places = window.google?.maps?.places
+      if (!places) return
+
+      if (places.PlaceAutocompleteElement) {
+        const maybeCleanup = attachPlaceAutocompleteElement()
+        return maybeCleanup
+      }
+
+      // Fallback for existing customers / legacy behavior.
+      if (places.Autocomplete) {
+        attachLegacyAutocomplete()
+      }
+    }
+
+    // If the script is already loaded, attach immediately. Otherwise, wait.
     if (window.google?.maps?.places) {
       attach()
     } else {
-      // Otherwise, wait for the script to load.
       const script = document.getElementById('google-maps-places') as HTMLScriptElement | null
-      const onLoad = () => attach()
-      script?.addEventListener('load', onLoad)
-
-      return () => {
-        cancelled = true
-        script?.removeEventListener('load', onLoad)
-        listener?.remove()
-      }
+      onLegacyScriptLoad = () => attach()
+      script?.addEventListener('load', onLegacyScriptLoad)
     }
 
     return () => {
       cancelled = true
-      listener?.remove()
+      cleanup()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [googleMapsApiKey])
+  }, [googleMapsApiKey, googlePlacesLoaded, t, mailingAddress, mailingAddressPlaceId, errors.mailingAddress])
 
   useEffect(() => {
     // If user previously saved by email, prefill
@@ -379,7 +494,6 @@ export default function RsvpForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           address,
-          languageCode: (i18n.language || 'en').toLowerCase(),
         }),
       })
 
@@ -410,7 +524,10 @@ export default function RsvpForm() {
       let el: HTMLElement | null = null
       if (firstKey === 'firstName') el = document.querySelector('[name="firstName"]')
       else if (firstKey === 'email') el = document.querySelector('[name="email"]')
-      else if (firstKey === 'mailingAddress') el = document.querySelector('[name="mailingAddress"]')
+      else if (firstKey === 'mailingAddress')
+        el =
+          (document.getElementById('mailingAddress-autocomplete') as HTMLElement | null) ||
+          (document.querySelector('[name="mailingAddress"]') as HTMLElement | null)
       else if (firstKey === 'likelihood') el = document.querySelector('[name="likelihood"]')
       else if (firstKey === 'events') el = document.querySelector('[name="events.welcome"]') || document.querySelector('[name="events.ceremony"]')
       else if (firstKey === 'plusOne') el = document.querySelector('[name="plusOne.name"]') as HTMLElement | null
@@ -641,19 +758,23 @@ export default function RsvpForm() {
 
             <FormControl isInvalid={!!errors.mailingAddress}>
               <FormLabel>{t('rsvp.form.mailingAddress')}</FormLabel>
-              <Input 
-                ref={mailingAddressInputRef}
-                name="mailingAddress"
-                value={mailingAddress}
-                onChange={e => {
-                  setMailingAddress(e.target.value)
-                  // If the user manually edits after selecting a suggestion, clear the placeId.
-                  if (mailingAddressPlaceId) setMailingAddressPlaceId('')
-                  if (errors.mailingAddress) validateField('mailingAddress')
-                }}
-                onBlur={() => validateField('mailingAddress')}
-                placeholder={t('rsvp.form.mailingAddressPlaceholder')}
-              />
+              {googleMapsApiKey && googlePlacesLoaded && window.google?.maps?.places?.PlaceAutocompleteElement ? (
+                <Box ref={mailingAddressAutocompleteContainerRef} />
+              ) : (
+                <Input 
+                  ref={mailingAddressInputRef}
+                  name="mailingAddress"
+                  value={mailingAddress}
+                  onChange={e => {
+                    setMailingAddress(e.target.value)
+                    // If the user manually edits after selecting a suggestion, clear the placeId.
+                    if (mailingAddressPlaceId) setMailingAddressPlaceId('')
+                    if (errors.mailingAddress) validateField('mailingAddress')
+                  }}
+                  onBlur={() => validateField('mailingAddress')}
+                  placeholder={t('rsvp.form.mailingAddressPlaceholder')}
+                />
+              )}
               <FormErrorMessage>{errors.mailingAddress}</FormErrorMessage>
             </FormControl>
 
