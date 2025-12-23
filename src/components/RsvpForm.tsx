@@ -122,7 +122,7 @@ export default function RsvpForm() {
     script.id = 'google-maps-places'
     script.async = true
     script.defer = true
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(googleMapsApiKey)}&libraries=places&v=weekly`
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(googleMapsApiKey)}&libraries=places&v=weekly&loading=async`
     script.addEventListener('load', () => setGooglePlacesLoaded(true))
     script.addEventListener('error', () => setGooglePlacesLoaded(false))
     document.head.appendChild(script)
