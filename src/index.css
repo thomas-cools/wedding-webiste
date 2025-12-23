@@ -98,12 +98,16 @@ button, a, input, select, textarea {
 .mailingAddress-autocompleteWrapper {
   /* Keep the suggestions dropdown from being clipped */
   overflow: visible;
+  /* Force light mode for the Google web component within */
+  color-scheme: light;
 }
 
 #mailingAddress-autocomplete {
   display: block;
   width: 100%;
   --mailingAddress-border-color: var(--chakra-colors-primary-soft);
+  /* Force light mode regardless of OS theme (Shadow DOM component) */
+  color-scheme: light;
 
   /* Google component library theme variables (best-effort; varies by version) */
   --gm-color-surface: transparent;

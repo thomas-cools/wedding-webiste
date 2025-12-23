@@ -160,7 +160,14 @@ export default function RsvpForm() {
       placeAutocompleteEl = new PlaceAutocompleteElement() as unknown as HTMLElement
       placeAutocompleteEl.id = 'mailingAddress-autocomplete'
       placeAutocompleteEl.setAttribute('aria-label', t('rsvp.form.mailingAddress'))
-      placeAutocompleteEl.setAttribute('style', 'width: 100%;')
+      // Force light mode to avoid OS dark-mode styling (the component uses Shadow DOM and
+      // otherwise may render as a black input even when the app is light-themed).
+      placeAutocompleteEl.setAttribute('style', 'width: 100%; color-scheme: light;')
+      try {
+        ;(placeAutocompleteEl as any).style.colorScheme = 'light'
+      } catch {
+        // ignore
+      }
       // Best-effort: some versions support a placeholder attribute.
       placeAutocompleteEl.setAttribute('placeholder', t('rsvp.form.mailingAddressPlaceholder'))
 
@@ -771,6 +778,11 @@ export default function RsvpForm() {
                   minH="48px"
                   _focusWithin={{
                     borderColor: 'primary.deep',
+                  }}
+                  sx={{
+                    // Force light rendering for the embedded Google web component.
+                    // This prevents OS dark mode from making it a black field.
+                    colorScheme: 'light',
                   }}
                 />
               ) : (
