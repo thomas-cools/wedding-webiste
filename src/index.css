@@ -108,3 +108,73 @@ button, a, input, select, textarea {
   background: var(--neutral-dark);
 }
 
+/* Google Places: PlaceAutocompleteElement theming
+   Match Chakra's Input variant='elegant' used across the form.
+   Uses Chakra CSS variables (no new hard-coded colors).
+*/
+#mailingAddress-autocomplete {
+  display: block;
+  width: 100%;
+  --mailingAddress-border-color: var(--chakra-colors-primary-soft);
+}
+
+#mailingAddress-autocomplete:focus-within {
+  --mailingAddress-border-color: var(--chakra-colors-primary-deep);
+}
+
+/* Input surface */
+#mailingAddress-autocomplete::part(input),
+#mailingAddress-autocomplete::part(text-input),
+#mailingAddress-autocomplete::part(search-input) {
+  width: 100% !important;
+  background: transparent !important;
+  color: var(--chakra-colors-neutral-dark) !important;
+  font-family: var(--chakra-fonts-body) !important;
+  font-size: var(--chakra-fontSizes-md) !important;
+  line-height: 1.6 !important;
+
+  border: none !important;
+  border-bottom: 1px solid var(--mailingAddress-border-color) !important;
+  border-radius: 0 !important;
+
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 1rem !important;
+  min-height: 48px !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Placeholder */
+#mailingAddress-autocomplete::part(input)::placeholder,
+#mailingAddress-autocomplete::part(text-input)::placeholder,
+#mailingAddress-autocomplete::part(search-input)::placeholder {
+  color: var(--chakra-colors-neutral-muted) !important;
+}
+
+/* Suggestions popover */
+#mailingAddress-autocomplete::part(listbox),
+#mailingAddress-autocomplete::part(suggestions),
+#mailingAddress-autocomplete::part(popover) {
+  background: var(--chakra-colors-neutral-white) !important;
+  color: var(--chakra-colors-neutral-dark) !important;
+  border: 1px solid var(--chakra-colors-primary-soft) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Individual suggestions */
+#mailingAddress-autocomplete::part(option),
+#mailingAddress-autocomplete::part(suggestion) {
+  font-family: var(--chakra-fonts-body) !important;
+  color: var(--chakra-colors-neutral-dark) !important;
+}
+
+#mailingAddress-autocomplete::part(option):hover,
+#mailingAddress-autocomplete::part(suggestion):hover,
+#mailingAddress-autocomplete::part(option)[aria-selected="true"],
+#mailingAddress-autocomplete::part(suggestion)[aria-selected="true"] {
+  background: var(--chakra-colors-neutral-light) !important;
+}
+
