@@ -37,6 +37,13 @@ export interface HeroImageSet {
   alt?: string
 }
 
+/** Responsive srcSet for collage images */
+interface CollageSrcSet {
+  small?: string
+  medium?: string
+  large?: string
+}
+
 interface HeroProps {
   /** Single background image URL (simple usage) */
   backgroundImage?: string
@@ -48,8 +55,11 @@ interface HeroProps {
   /** Optional collage overlay to mimic the original baked-in banner layout */
   collage?: {
     envelopeSrc: string
+    envelopeSrcSet?: CollageSrcSet
     venueSrc: string
+    venueSrcSet?: CollageSrcSet
     stampSrc: string
+    stampSrcSet?: CollageSrcSet
   }
 
   /** Whether to show the scroll indicator link (default: true) */
@@ -217,54 +227,90 @@ export default function Hero({
         <Box position="absolute" inset={0} pointerEvents="none" zIndex={1}>
           {/* Envelope centered (the hero text sits on top of this) */}
           <Box
-            as="img"
-            src={collage.envelopeSrc}
-            alt="Envelope"
-            loading="eager"
-            decoding="async"
+            as="picture"
             position="absolute"
             top="50%"
             left="50%"
             transform="translate(-50%, -50%)"
             w={['300px', '460px', '600px']}
             maxW={['92vw', '80vw', '720px']}
-            h="auto"
-            opacity={0.98}
-          />
+          >
+            {collage.envelopeSrcSet?.large && (
+              <source media="(min-width: 1024px)" srcSet={collage.envelopeSrcSet.large} type="image/webp" />
+            )}
+            {collage.envelopeSrcSet?.medium && (
+              <source media="(min-width: 768px)" srcSet={collage.envelopeSrcSet.medium} type="image/webp" />
+            )}
+            {collage.envelopeSrcSet?.small && (
+              <source srcSet={collage.envelopeSrcSet.small} type="image/webp" />
+            )}
+            <Box
+              as="img"
+              src={collage.envelopeSrc}
+              alt="Envelope"
+              loading="eager"
+              decoding="async"
+              w="100%"
+              h="auto"
+              opacity={0.98}
+            />
+          </Box>
 
           {/* Postcard stamp (left) */}
           <Box
-            as="img"
-            src={collage.stampSrc}
-            alt="Decorative postcard stamp"
-            loading="eager"
-            decoding="async"
+            as="picture"
             position="absolute"
             top={['62%', '63%', '64%']}
             left={['6%', '10%', '16%']}
             w={['120px', '150px', '190px']}
             maxW={['34vw', '26vw', '220px']}
-            h="auto"
             transform="rotate(-8deg)"
             transformOrigin="center"
-            opacity={0.98}
-          />
+          >
+            {collage.stampSrcSet?.large && (
+              <source media="(min-width: 768px)" srcSet={collage.stampSrcSet.large} type="image/webp" />
+            )}
+            {collage.stampSrcSet?.small && (
+              <source srcSet={collage.stampSrcSet.small} type="image/webp" />
+            )}
+            <Box
+              as="img"
+              src={collage.stampSrc}
+              alt="Decorative postcard stamp"
+              loading="eager"
+              decoding="async"
+              w="100%"
+              h="auto"
+              opacity={0.98}
+            />
+          </Box>
 
           {/* Venue postcard (right) */}
           <Box
-            as="img"
-            src={collage.venueSrc}
-            alt="Venue postcard"
+            as="picture"
             position="absolute"
             top={['62%', '63%', '64%']}
             right={['6%', '10%', '16%']}
             w={['220px', '280px', '340px']}
             maxW={['52vw', '40vw', '420px']}
-            h="auto"
             transform="rotate(6deg)"
             transformOrigin="center"
-            opacity={0.98}
-          />
+          >
+            {collage.venueSrcSet?.large && (
+              <source media="(min-width: 768px)" srcSet={collage.venueSrcSet.large} type="image/webp" />
+            )}
+            {collage.venueSrcSet?.small && (
+              <source srcSet={collage.venueSrcSet.small} type="image/webp" />
+            )}
+            <Box
+              as="img"
+              src={collage.venueSrc}
+              alt="Venue postcard"
+              w="100%"
+              h="auto"
+              opacity={0.98}
+            />
+          </Box>
         </Box>
       )}
 

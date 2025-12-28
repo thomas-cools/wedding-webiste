@@ -44,16 +44,27 @@ import {
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { features, weddingConfig } from './config'
 
-// Import assets
+// Import assets - original formats for fallback
 import heroBanner from './assets/background-banner_1.jpg'
-import envelopeImage from './assets/Envelope.png'
 import weddingLogo from './assets/T&C-Monogram-small.webp'
 import weddingLogo2x from './assets/T&C-Monogram-2x.webp'
 import weddingLogoFull from './assets/T&C-Monogram.webp'
 import airbnbLogo from './assets/airbnb-tile.svg'
 import bookingLogo from './assets/booking-tile.svg'
-import venueImage from './assets/venue.png'
-import postcardStamp from './assets/postcard-stamp-T&C.png'
+
+// Optimized WebP images for hero collage
+import envelopeSmall from './assets/envelope-400.webp'
+import envelopeMedium from './assets/envelope-800.webp'
+import envelopeLarge from './assets/envelope-1200.webp'
+import venueSmall from './assets/venue-400.webp'
+import venueLarge from './assets/venue.webp'
+import stampSmall from './assets/postcard-stamp-300.webp'
+import stampLarge from './assets/postcard-stamp-600.webp'
+
+// Optimized banner WebP versions
+import bannerMobile from './assets/banner-mobile.webp'
+import bannerTablet from './assets/banner-tablet.webp'
+import bannerDesktop from './assets/banner-desktop.webp'
 
 const Countdown = React.lazy(() => import('./components/Countdown'))
 const StorySection = React.lazy(() => import('./components/StorySection'))
@@ -107,14 +118,15 @@ export default function App() {
       if (!cancelled) setIsLoading(false)
     }, 1200)
 
-    // Fire-and-forget background warmup.
-    void preloadImage(heroBanner)
+    // Fire-and-forget background warmup - use optimized WebP.
+    void preloadImage(bannerDesktop)
 
+    // Preload collage images - use appropriately sized optimized WebP
     Promise.all([
       minDelay,
-      preloadImage(envelopeImage),
-      preloadImage(venueImage),
-      preloadImage(postcardStamp),
+      preloadImage(envelopeMedium),
+      preloadImage(venueLarge),
+      preloadImage(stampLarge),
     ]).then(() => {
       if (cancelled) return
       clearTimeout(maxDelay)
@@ -220,11 +232,28 @@ export default function App() {
       </Drawer>
 
       <Box as="main">
-        {/* Hero Section */}
+        {/* Hero Section - using optimized responsive images */}
         <Hero
-          backgroundImage={heroBanner}
+          imageSet={{
+            mobile: bannerMobile,
+            tablet: bannerTablet,
+            desktop: heroBanner,
+            webp: {
+              mobile: bannerMobile,
+              tablet: bannerTablet,
+              desktop: bannerDesktop,
+            },
+            alt: 'Wedding hero background',
+          }}
           overlayOpacity={0.35}
-          collage={{ envelopeSrc: envelopeImage, venueSrc: venueImage, stampSrc: postcardStamp }}
+          collage={{
+            envelopeSrc: envelopeMedium,
+            envelopeSrcSet: { small: envelopeSmall, medium: envelopeMedium, large: envelopeLarge },
+            venueSrc: venueLarge,
+            venueSrcSet: { small: venueSmall, large: venueLarge },
+            stampSrc: stampLarge,
+            stampSrcSet: { small: stampSmall, large: stampLarge },
+          }}
           showScrollIndicator={features.showStory}
           scrollIndicatorHref="#story"
         />
