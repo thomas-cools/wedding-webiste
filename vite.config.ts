@@ -11,7 +11,8 @@ export default defineConfig(({ mode }) => {
       // Make a small set of env values available without using import.meta.env
       // (this keeps Jest + SWC happy).
       'window.__VITE_GOOGLE_MAPS_API_KEY__': JSON.stringify(env.VITE_GOOGLE_MAPS_API_KEY || ''),
-      'window.__VITE_SITE_PASSWORD__': JSON.stringify(env.VITE_SITE_PASSWORD || ''),
+      // Password hash (SHA-256) - generate with: echo -n "yourpassword" | shasum -a 256
+      'window.__VITE_SITE_PASSWORD_HASH__': JSON.stringify(env.VITE_SITE_PASSWORD_HASH || ''),
     },
     build: {
       // Increase limit slightly if needed (default is 500)

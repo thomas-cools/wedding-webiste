@@ -1,4 +1,16 @@
 import '@testing-library/jest-dom'
+import { TextEncoder, TextDecoder } from 'util'
+import { webcrypto } from 'crypto'
+
+// Polyfill TextEncoder/TextDecoder for jsdom
+global.TextEncoder = TextEncoder
+global.TextDecoder = TextDecoder as typeof global.TextDecoder
+
+// Polyfill Web Crypto API for jsdom (Node 18+)
+Object.defineProperty(global, 'crypto', {
+  value: webcrypto,
+  writable: true,
+})
 
 // Mock i18next
 jest.mock('react-i18next', () => ({

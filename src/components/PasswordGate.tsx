@@ -19,25 +19,35 @@ import {
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { motion } from 'framer-motion'
 import LanguageSwitcher from './LanguageSwitcher'
+import { verifyPassword } from '../utils/crypto'
 
 const MotionBox = motion(Box)
 
-// The password - can be configured via environment variable or defaults to this
-// In Vite, use VITE_SITE_PASSWORD environment variable
-const getPassword = (): string => {
+/**
+ * Get the expected password hash.
+ * 
+ * The password is stored as a SHA-256 hash to prevent exposure in the client bundle.
+ * To set a custom password:
+ * 1. Generate hash: echo -n "yourpassword" | shasum -a 256
+ * 2. Set VITE_SITE_PASSWORD_HASH in your environment
+ * 
+ * Default hash is for 'carolina&thomas2026'
+ */
+const getPasswordHash = (): string => {
   // Check for Vite environment variable (works in browser)
   if (typeof window !== 'undefined') {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const win = window as any
-    if (win.__VITE_SITE_PASSWORD__) {
-      return win.__VITE_SITE_PASSWORD__ as string
+    if (win.__VITE_SITE_PASSWORD_HASH__) {
+      return win.__VITE_SITE_PASSWORD_HASH__ as string
     }
   }
-  // Default password
-  return 'carolina&thomas2026'
+  // Default password hash (SHA-256 of 'carolina&thomas2026')
+  // This obscures the actual password from the client bundle
+  return '2a3938a72e797aa7e55f16da649805749b74e4670cbd802758a457502f952277'
 }
 
-const SITE_PASSWORD = getPassword()
+const SITE_PASSWORD_HASH = getPasswordHash()
 const AUTH_KEY = 'wedding_authenticated'
 
 const ATTEMPTS_KEY = 'wedding_password_attempts'
@@ -78,6 +88,7 @@ export default function PasswordGate({ children }: PasswordGateProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isVerifying, setIsVerifying] = useState(false)
   const [lockoutUntil, setLockoutUntil] = useState<number | null>(null)
   const [nowMs, setNowMs] = useState(() => Date.now())
 
@@ -115,7 +126,7 @@ export default function PasswordGate({ children }: PasswordGateProps) {
     return () => window.clearInterval(id)
   }, [lockoutUntil])
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     setError(false)
 
@@ -139,24 +150,32 @@ export default function PasswordGate({ children }: PasswordGateProps) {
       return
     }
 
-    if (password.toLowerCase() === SITE_PASSWORD.toLowerCase()) {
-      sessionStorage.setItem(AUTH_KEY, 'true')
-      localStorage.removeItem(ATTEMPTS_KEY)
-      localStorage.removeItem(LOCKOUT_UNTIL_KEY)
-      setIsAuthenticated(true)
-    } else {
-      setError(true)
-      setPassword('')
+    // Use async password verification with SHA-256 hashing
+    setIsVerifying(true)
+    try {
+      const isValid = await verifyPassword(password, SITE_PASSWORD_HASH)
+      if (isValid) {
+        sessionStorage.setItem(AUTH_KEY, 'true')
+        localStorage.removeItem(ATTEMPTS_KEY)
+        localStorage.removeItem(LOCKOUT_UNTIL_KEY)
+        setIsAuthenticated(true)
+      } else {
+        setError(true)
+        setPassword('')
+      }
+    } finally {
+      setIsVerifying(false)
     }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleSubmit(e)
+      void handleSubmit(e)
     }
   }
 
   const isLockedOut = lockoutUntil !== null && nowMs < lockoutUntil
+  const isDisabled = isLockedOut || isVerifying
   const lockoutRemainingMs = isLockedOut ? lockoutUntil - nowMs : 0
 
   // Show nothing while checking auth status
@@ -280,7 +299,7 @@ export default function PasswordGate({ children }: PasswordGateProps) {
                         boxShadow: 'none',
                       }}
                       h="50px"
-                      isDisabled={isLockedOut}
+                      isDisabled={isDisabled}
                       data-testid="password-input"
                     />
                     <InputRightElement h="50px">
@@ -333,7 +352,8 @@ export default function PasswordGate({ children }: PasswordGateProps) {
                     color: 'neutral.light',
                   }}
                   h="50px"
-                  isDisabled={isLockedOut}
+                  isDisabled={isDisabled}
+                  isLoading={isVerifying}
                   data-testid="password-submit"
                 >
                   {t('password.enter')}

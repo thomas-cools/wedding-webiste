@@ -254,6 +254,11 @@ describe('PasswordGate', () => {
     for (let i = 0; i < 6; i++) {
       fireEvent.change(input, { target: { value: 'wrongpassword' } })
       fireEvent.click(submitButton)
+      // Allow async password verification to complete
+      await act(async () => {
+        await Promise.resolve()
+        jest.advanceTimersByTime(100)
+      })
     }
 
     await waitFor(() => {
@@ -282,13 +287,18 @@ describe('PasswordGate', () => {
     for (let i = 0; i < 6; i++) {
       fireEvent.change(input, { target: { value: 'wrongpassword' } })
       fireEvent.click(submitButton)
+      // Allow async password verification to complete
+      await act(async () => {
+        await Promise.resolve()
+        jest.advanceTimersByTime(100)
+      })
     }
 
     await waitFor(() => {
       expect(screen.getByTestId('password-cooldown')).toBeInTheDocument()
     })
 
-    act(() => {
+    await act(async () => {
       jest.advanceTimersByTime(5 * 60 * 1000 + 1000)
     })
 
