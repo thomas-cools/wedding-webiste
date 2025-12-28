@@ -3,6 +3,20 @@ import { render, screen, fireEvent, waitFor } from '../test-utils'
 import userEvent from '@testing-library/user-event'
 import RsvpForm from '../components/RsvpForm'
 
+/**
+ * Integration tests for the RsvpForm component.
+ *
+ * These tests verify the full component behavior including:
+ * - UI rendering
+ * - User interactions
+ * - Form validation feedback
+ * - Submission flow
+ *
+ * For unit tests of individual pieces, see:
+ * - rsvpApi.test.ts (API functions)
+ * - useRsvpForm.test.ts (hook logic)
+ */
+
 // Mock localStorage
 const mockLocalStorage: {
   store: Record<string, string>
@@ -37,7 +51,7 @@ jest.mock('@chakra-ui/react', () => {
 })
 
 // Note: Tests use translation keys since the i18n mock returns keys as-is
-describe('RsvpForm', () => {
+describe('RsvpForm Integration Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockLocalStorage.store = {}
