@@ -12,6 +12,22 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 html, body, #root { 
   height: 100%; 
   margin: 0;
@@ -29,7 +45,39 @@ a {
   transition: color 0.2s ease;
 }
 
+/* ============================================
+   ACCESSIBILITY: Focus Styles
+   ============================================ */
 
+/* Global focus-visible styles for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--chakra-colors-primary-gold, #C9A227);
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline (we use focus-visible instead) */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Enhanced focus styles for interactive elements */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--chakra-colors-primary-gold, #C9A227);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.2);
+}
+
+/* High contrast focus for dark backgrounds */
+.dark-bg *:focus-visible,
+[data-dark-bg] *:focus-visible {
+  outline-color: #fff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+}
 
 /* Form elements inherit font */
 input, select, textarea, button {

@@ -233,5 +233,12 @@
     "venueAddress": "Vallesvilles, Francia",
     "tip": "Recomendamos reservar con anticipación ya que agosto es temporada alta en Francia.",
     "nearbyTowns": "Los pueblos cercanos con opciones de alojamiento incluyen Vallesvilles, Toulouse y Montauban."
+  },
+  "accessibility": {
+    "skipNavigation": "Saltar navegación",
+    "skipToMain": "Ir al contenido principal",
+    "skipToRsvp": "Ir al formulario de confirmación",
+    "mainNavigation": "Navegación principal",
+    "keyboardInstructions": "Use la tecla Tab para navegar por la página. Presione Enter para activar enlaces y botones."
   }
 }

@@ -33,6 +33,7 @@ import Hero from './components/Hero'
 import PasswordGate from './components/PasswordGate'
 import LoadingScreen from './components/LoadingScreen'
 import ErrorBoundary from './components/ErrorBoundary'
+import SkipToContent from './components/SkipToContent'
 import {
   CountdownSkeleton,
   StorySkeleton,
@@ -148,11 +149,20 @@ export default function App() {
 
   const content = (
     <>
+      {/* Skip to content link for keyboard users */}
+      <SkipToContent 
+        mainId="main-content"
+        additionalLinks={[
+          { id: 'rsvp', labelKey: 'accessibility.skipToRsvp' },
+        ]}
+      />
+      
       <LoadingScreen isLoading={isLoading} logo={weddingLogoFull} />
       <Box minH="100vh" bg="neutral.light">
       {/* Minimal Elegant Header */}
       <Box 
-        as="header" 
+        as="header"
+        role="banner"
         py={[4, 6]} 
         position="fixed" 
         top={0} 
@@ -174,7 +184,12 @@ export default function App() {
             />
             <HStack spacing={[2, 4, 10]}>
               {/* Desktop Navigation */}
-              <HStack spacing={10} display={["none", "none", "flex"]}>
+              <HStack 
+                as="nav" 
+                aria-label={t('accessibility.mainNavigation', 'Main navigation')}
+                spacing={10} 
+                display={["none", "none", "flex"]}
+              >
                 {navLinks.map((link) => (
                   <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm">
                     {link.label}
@@ -231,7 +246,7 @@ export default function App() {
         </DrawerContent>
       </Drawer>
 
-      <Box as="main">
+      <Box as="main" id="main-content" role="main" tabIndex={-1}>
         {/* Hero Section - using optimized responsive images */}
         <Hero
           imageSet={{

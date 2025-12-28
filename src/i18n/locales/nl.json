@@ -233,5 +233,12 @@
     "venueAddress": "Vallesvilles, Frankrijk",
     "tip": "We raden aan vroeg te boeken omdat augustus hoogseizoen is in Frankrijk.",
     "nearbyTowns": "Nabijgelegen steden met accommodatiemogelijkheden zijn onder andere Vallesvilles, Toulouse en Montauban."
+  },
+  "accessibility": {
+    "skipNavigation": "Navigatie overslaan",
+    "skipToMain": "Ga naar hoofdinhoud",
+    "skipToRsvp": "Ga naar RSVP-formulier",
+    "mainNavigation": "Hoofdnavigatie",
+    "keyboardInstructions": "Gebruik de Tab-toets om door de pagina te navigeren. Druk op Enter om links en knoppen te activeren."
   }
 }

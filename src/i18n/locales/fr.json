@@ -233,5 +233,12 @@
     "venueAddress": "Vallesvilles, France",
     "tip": "Nous vous recommandons de réserver tôt car août est la haute saison en France.",
     "nearbyTowns": "Les villes voisines avec des options d'hébergement comprennent Vallesvilles, Toulouse et Montauban."
+  },
+  "accessibility": {
+    "skipNavigation": "Passer la navigation",
+    "skipToMain": "Aller au contenu principal",
+    "skipToRsvp": "Aller au formulaire RSVP",
+    "mainNavigation": "Navigation principale",
+    "keyboardInstructions": "Utilisez la touche Tab pour naviguer sur la page. Appuyez sur Entrée pour activer les liens et les boutons."
   }
 }

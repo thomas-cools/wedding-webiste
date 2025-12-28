@@ -235,5 +235,12 @@
     "venueAddress": "Vallesvilles, France",
     "tip": "We recommend booking early as August is peak season in France.",
     "nearbyTowns": "Nearby towns with accommodation options include Vallesvilles, Toulouse, and Montauban."
+  },
+  "accessibility": {
+    "skipNavigation": "Skip navigation",
+    "skipToMain": "Skip to main content",
+    "skipToRsvp": "Skip to RSVP form",
+    "mainNavigation": "Main navigation",
+    "keyboardInstructions": "Use Tab key to navigate through the page. Press Enter to activate links and buttons."
   }
 }
