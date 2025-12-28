@@ -32,6 +32,15 @@ import LanguageSwitcher from './components/LanguageSwitcher'
 import Hero from './components/Hero'
 import PasswordGate from './components/PasswordGate'
 import LoadingScreen from './components/LoadingScreen'
+import ErrorBoundary from './components/ErrorBoundary'
+import {
+  CountdownSkeleton,
+  StorySkeleton,
+  TimelineSkeleton,
+  GallerySkeleton,
+  AccommodationSkeleton,
+  RsvpFormSkeleton,
+} from './components/SectionSkeletons'
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { features, weddingConfig } from './config'
 
@@ -222,30 +231,38 @@ export default function App() {
 
         {/* Countdown Section - Controlled by feature flag */}
         {features.showCountdown && (
-          <Suspense fallback={null}>
-            <Countdown />
-          </Suspense>
+          <ErrorBoundary sectionName="countdown" silent>
+            <Suspense fallback={<CountdownSkeleton />}>
+              <Countdown />
+            </Suspense>
+          </ErrorBoundary>
         )}
 
         {/* Story Section - Controlled by feature flag */}
         {features.showStory && (
-          <Suspense fallback={null}>
-            <StorySection />
-          </Suspense>
+          <ErrorBoundary sectionName="our story" silent>
+            <Suspense fallback={<StorySkeleton />}>
+              <StorySection />
+            </Suspense>
+          </ErrorBoundary>
         )}
 
         {/* Timeline Section - Controlled by feature flag */}
         {features.showTimeline && (
-          <Suspense fallback={null}>
-            <Timeline />
-          </Suspense>
+          <ErrorBoundary sectionName="timeline" silent>
+            <Suspense fallback={<TimelineSkeleton />}>
+              <Timeline />
+            </Suspense>
+          </ErrorBoundary>
         )}
 
         {/* Photo Gallery Section - Controlled by feature flag */}
         {features.showGallery && (
-          <Suspense fallback={null}>
-            <PhotoGallery />
-          </Suspense>
+          <ErrorBoundary sectionName="gallery" silent>
+            <Suspense fallback={<GallerySkeleton />}>
+              <PhotoGallery />
+            </Suspense>
+          </ErrorBoundary>
         )}
 
         {/* Details Section */}
@@ -405,17 +422,21 @@ export default function App() {
         </Box>
 
         {/* Travel & Accommodation Section */}
-        <Suspense fallback={null}>
-          <AccommodationSection enabled={features.showAccommodation} />
-        </Suspense>
+        <ErrorBoundary sectionName="accommodation" silent>
+          <Suspense fallback={<AccommodationSkeleton />}>
+            <AccommodationSection enabled={features.showAccommodation} />
+          </Suspense>
+        </ErrorBoundary>
 
         {/* RSVP Section */}
         <Box id="rsvp" py={[20, 28]} bg="secondary.slate" scrollMarginTop={["100px", "130px", "150px"]}>
           <Container maxW="container.lg">
             <ScrollReveal variants={scaleIn}>
-              <Suspense fallback={null}>
-                <RsvpForm />
-              </Suspense>
+              <ErrorBoundary sectionName="RSVP form">
+                <Suspense fallback={<RsvpFormSkeleton />}>
+                  <RsvpForm />
+                </Suspense>
+              </ErrorBoundary>
             </ScrollReveal>
           </Container>
         </Box>
