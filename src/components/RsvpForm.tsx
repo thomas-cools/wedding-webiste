@@ -95,6 +95,7 @@ export default function RsvpForm() {
   const [additionalNotes, setAdditionalNotes] = useState('')
   const [status, setStatus] = useState<null | 'saved' | 'updated'>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
 
   useEffect(() => {
     errorsRef.current = errors
@@ -214,8 +215,8 @@ export default function RsvpForm() {
 
   function setEventAnswer(ev: keyof Events, answer: EventAnswer) {
     setEvents(prev => ({ ...prev, [ev]: answer }))
-    // live-validate events
-    setTimeout(() => validateField('events'), 0)
+    // Only validate events after a submit attempt (so we don't show errors too early).
+    if (hasAttemptedSubmit) setTimeout(() => validateField('events'), 0)
   }
 
   function updateChild(index: number, fields: Partial<Guest>) {
@@ -329,7 +330,7 @@ export default function RsvpForm() {
 
   useEffect(() => {
     // live-validate events, plus one, and children when related fields change
-    if (errors.events) validateField('events')
+    if (hasAttemptedSubmit && errors.events) validateField('events')
     if (errors.plusOne) validateField('plusOne')
     if (errors.children) validateField('children')
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -384,6 +385,7 @@ export default function RsvpForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setHasAttemptedSubmit(true)
     const errs = validate()
     if (Object.keys(errs).length > 0) {
       // focus the first invalid field
@@ -726,7 +728,7 @@ export default function RsvpForm() {
             </FormControl>
 
             {likelihood && likelihood !== 'no' && (
-              <FormControl isInvalid={!!errors.events}>
+              <FormControl isInvalid={hasAttemptedSubmit && !!errors.events}>
                 <Box 
                   p={6} 
                   bg="white"
@@ -743,7 +745,7 @@ export default function RsvpForm() {
                       <Select 
                         name="events.welcome" 
                         value={events.welcome} 
-                        onChange={e => { setEventAnswer('welcome', e.target.value as EventAnswer); validateField('events') }} 
+                        onChange={e => setEventAnswer('welcome', e.target.value as EventAnswer)} 
                         placeholder={t('rsvp.form.pleaseSelect')}
                       >
                         <option value="yes">{t('rsvp.form.willAttend')}</option>
@@ -759,7 +761,7 @@ export default function RsvpForm() {
                       <Select 
                         name="events.ceremony" 
                         value={events.ceremony} 
-                        onChange={e => { setEventAnswer('ceremony', e.target.value as EventAnswer); validateField('events') }} 
+                        onChange={e => setEventAnswer('ceremony', e.target.value as EventAnswer)} 
                         placeholder={t('rsvp.form.pleaseSelect')}
                       >
                         <option value="yes">{t('rsvp.form.willAttend')}</option>
@@ -774,7 +776,7 @@ export default function RsvpForm() {
                       <Select 
                         name="events.brunch" 
                         value={events.brunch} 
-                        onChange={e => { setEventAnswer('brunch', e.target.value as EventAnswer); validateField('events') }} 
+                        onChange={e => setEventAnswer('brunch', e.target.value as EventAnswer)} 
                         placeholder={t('rsvp.form.pleaseSelect')}
                       >
                         <option value="yes">{t('rsvp.form.willAttend')}</option>
@@ -782,7 +784,11 @@ export default function RsvpForm() {
                       </Select>
                     </FormControl>
 
-                    {errors.events && <Text color="primary.deep" fontSize="sm">{errors.events}</Text>}
+                    {hasAttemptedSubmit && errors.events && (
+                      <Text color="primary.deep" fontSize="sm">
+                        {errors.events}
+                      </Text>
+                    )}
                   </Stack>
                 </Box>
               </FormControl>

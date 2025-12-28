@@ -213,6 +213,18 @@ describe('RsvpForm', () => {
       })
     })
 
+    it('does not show event validation error until submit', async () => {
+      const user = userEvent.setup()
+      render(<RsvpForm />)
+
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      await user.selectOptions(likelihoodSelect, 'definitely')
+
+      // Event section appears, but the error message should not.
+      expect(await screen.findByText('rsvp.form.eventsTitle')).toBeInTheDocument()
+      expect(screen.queryByText('rsvp.validation.eventRequired')).not.toBeInTheDocument()
+    })
+
     it('requires at least one event when definitely attending', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
