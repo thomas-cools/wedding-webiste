@@ -45,8 +45,7 @@ import {
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { features, weddingConfig } from './config'
 
-// Import assets - original formats for fallback
-import heroBanner from './assets/background-banner_1.jpg'
+// Import assets
 import weddingLogo from './assets/T&C-Monogram-small.webp'
 import weddingLogo2x from './assets/T&C-Monogram-2x.webp'
 import weddingLogoFull from './assets/T&C-Monogram.webp'
@@ -247,17 +246,12 @@ export default function App() {
       </Drawer>
 
       <Box as="main" id="main-content" role="main" tabIndex={-1}>
-        {/* Hero Section - using optimized responsive images */}
+        {/* Hero Section - using optimized responsive WebP images */}
         <Hero
           imageSet={{
             mobile: bannerMobile,
             tablet: bannerTablet,
-            desktop: heroBanner,
-            webp: {
-              mobile: bannerMobile,
-              tablet: bannerTablet,
-              desktop: bannerDesktop,
-            },
+            desktop: bannerDesktop,
             alt: 'Wedding hero background',
           }}
           overlayOpacity={0.35}
