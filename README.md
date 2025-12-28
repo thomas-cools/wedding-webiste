@@ -443,6 +443,8 @@ For advanced configurations, you can use environment variables:
 | `NODE_VERSION` | Node.js version for Netlify builds | `18` |
 | `RESEND_API_KEY` | Resend API key (required to send RSVP confirmation emails) | `re_xxxxxxxx` |
 | `FROM_EMAIL` | From address shown in RSVP confirmation emails | `Wedding RSVP <onboarding@resend.dev>` |
+| `GOOGLE_MAPS_API_KEY` | Google Maps Platform key used by Netlify Functions (Places Autocomplete + Address Validation) | `AIza...` |
+| `VITE_GOOGLE_MAPS_API_KEY` | Optional fallback for functions + (if ever enabled) client-side Maps JS | `AIza...` |
 
 Create a `.env` file for local development:
 ```env

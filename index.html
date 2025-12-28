@@ -14,5 +14,25 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!--
+      Netlify Forms needs a static HTML form in the deployed output to detect it.
+      The real form UI is rendered client-side by React; this hidden form enables detection.
+    -->
+    <form name="rsvp" method="POST" data-netlify="true" hidden>
+      <input type="hidden" name="form-name" value="rsvp" />
+      <input type="text" name="firstName" />
+      <input type="email" name="email" />
+      <input type="text" name="mailingAddress" />
+      <input type="text" name="mailingAddressPlaceId" />
+      <input type="text" name="likelihood" />
+      <input type="text" name="events" />
+      <input type="text" name="accommodation" />
+      <input type="text" name="travelPlan" />
+      <input type="text" name="guests" />
+      <input type="text" name="dietary" />
+      <input type="text" name="franceTips" />
+      <textarea name="additionalNotes"></textarea>
+    </form>
   </body>
 </html>

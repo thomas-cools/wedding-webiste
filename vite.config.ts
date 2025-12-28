@@ -14,28 +14,6 @@ export default defineConfig(({ mode }) => {
       'window.__VITE_SITE_PASSWORD__': JSON.stringify(env.VITE_SITE_PASSWORD || ''),
     },
     build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            // React core
-            'vendor-react': ['react', 'react-dom'],
-
-            // Chakra UI and styling
-            'vendor-chakra': [
-              '@chakra-ui/react',
-              '@chakra-ui/icons',
-              '@emotion/react',
-              '@emotion/styled',
-            ],
-
-            // Framer Motion (animations)
-            'vendor-motion': ['framer-motion'],
-
-            // i18n
-            'vendor-i18n': ['react-i18next', 'i18next'],
-          },
-        },
-      },
       // Increase limit slightly if needed (default is 500)
       chunkSizeWarningLimit: 500,
     },

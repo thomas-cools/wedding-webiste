@@ -467,25 +467,26 @@ export default function RsvpForm() {
     }
 
     // Submit to Netlify Forms (works when deployed to Netlify)
-    const formData = new FormData()
-    formData.append('form-name', 'rsvp')
-    formData.append('firstName', entry.firstName)
-    formData.append('email', entry.email)
-    formData.append('mailingAddress', entry.mailingAddress || '')
-    formData.append('mailingAddressPlaceId', entry.mailingAddressPlaceId || '')
-    formData.append('likelihood', entry.likelihood)
-    formData.append('events', JSON.stringify(entry.events))
-    formData.append('accommodation', entry.accommodation || '')
-    formData.append('travelPlan', entry.travelPlan || '')
-    formData.append('guests', JSON.stringify(entry.guests))
-    formData.append('dietary', entry.dietary || '')
-    formData.append('franceTips', String(entry.franceTips || false))
-    formData.append('additionalNotes', entry.additionalNotes || '')
+    // Use URL-encoded body so Netlify can parse it reliably.
+    const formBody = new URLSearchParams()
+    formBody.set('form-name', 'rsvp')
+    formBody.set('firstName', entry.firstName)
+    formBody.set('email', entry.email)
+    formBody.set('mailingAddress', entry.mailingAddress || '')
+    formBody.set('mailingAddressPlaceId', entry.mailingAddressPlaceId || '')
+    formBody.set('likelihood', entry.likelihood)
+    formBody.set('events', JSON.stringify(entry.events))
+    formBody.set('accommodation', entry.accommodation || '')
+    formBody.set('travelPlan', entry.travelPlan || '')
+    formBody.set('guests', JSON.stringify(entry.guests))
+    formBody.set('dietary', entry.dietary || '')
+    formBody.set('franceTips', String(entry.franceTips || false))
+    formBody.set('additionalNotes', entry.additionalNotes || '')
 
     fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
+      body: formBody.toString(),
     }).catch(() => {
       // Silently fail for local development - localStorage backup below
     })

@@ -89,9 +89,18 @@ export const handler: Handler = async (event) => {
     )
   }
 
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY || process.env.VITE_GOOGLE_MAPS_API_KEY
   if (!apiKey) {
-    return json(500, { ok: false, error: 'Missing GOOGLE_MAPS_API_KEY' }, rateLimitHeaders(rl))
+    console.error('places-autocomplete misconfigured: missing GOOGLE_MAPS_API_KEY')
+    return json(
+      500,
+      {
+        ok: false,
+        error:
+          'Server misconfigured: missing GOOGLE_MAPS_API_KEY (or VITE_GOOGLE_MAPS_API_KEY as fallback).',
+      },
+      rateLimitHeaders(rl)
+    )
   }
 
   let payload: PlacesAutocompleteRequest
@@ -174,6 +183,9 @@ export const handler: Handler = async (event) => {
       rateLimitHeaders(rl)
     )
   } catch (err) {
+    console.error('places-autocomplete unexpected error', {
+      message: err instanceof Error ? err.message : String(err),
+    })
     return json(
       500,
       { ok: false, error: err instanceof Error ? err.message : 'Unknown error' },

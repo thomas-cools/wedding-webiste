@@ -81,7 +81,15 @@ export const handler: Handler = async (event) => {
 
   const apiKey = process.env.GOOGLE_MAPS_API_KEY
   if (!apiKey) {
-    return json(500, { ok: false, error: 'Missing GOOGLE_MAPS_API_KEY' })
+    const fallback = process.env.VITE_GOOGLE_MAPS_API_KEY
+    if (!fallback) {
+      console.error('validate-address misconfigured: missing GOOGLE_MAPS_API_KEY')
+      return json(500, {
+        ok: false,
+        error:
+          'Server misconfigured: missing GOOGLE_MAPS_API_KEY (or VITE_GOOGLE_MAPS_API_KEY as fallback).',
+      })
+    }
   }
 
   let payload: ValidateAddressRequest
@@ -105,7 +113,9 @@ export const handler: Handler = async (event) => {
     },
   }
 
-  const url = `https://addressvalidation.googleapis.com/v1:validateAddress?key=${encodeURIComponent(apiKey)}`
+  const url = `https://addressvalidation.googleapis.com/v1:validateAddress?key=${encodeURIComponent(
+    apiKey || process.env.VITE_GOOGLE_MAPS_API_KEY || ''
+  )}`
 
   try {
     const response = await fetch(url, {
@@ -135,6 +145,9 @@ export const handler: Handler = async (event) => {
       verdict: verdict || null,
     })
   } catch (err) {
+    console.error('validate-address unexpected error', {
+      message: err instanceof Error ? err.message : String(err),
+    })
     return json(500, {
       ok: false,
       error: err instanceof Error ? err.message : 'Unknown error',
