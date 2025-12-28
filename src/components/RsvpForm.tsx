@@ -186,7 +186,7 @@ export default function RsvpForm() {
       const savedGuests = (found.guests || []).filter(g => g && typeof g.name === 'string')
       if (savedGuests.length >= 1) {
         setHasPlusOne(true)
-        setPlusOne({ name: savedGuests[0].name || '', dietary: savedGuests[0].dietary || '' })
+        setPlusOne({ name: savedGuests[0]!.name || '', dietary: savedGuests[0]!.dietary || '' })
       } else {
         setHasPlusOne(false)
         setPlusOne({ name: '', dietary: '' })

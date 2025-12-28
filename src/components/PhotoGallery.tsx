@@ -138,15 +138,17 @@ export function PhotoGallery({
 
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null)
-    setTouchStart(e.targetTouches[0].clientX)
+    const touch = e.targetTouches[0]
+    if (touch) setTouchStart(touch.clientX)
   }
 
   const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX)
+    const touch = e.targetTouches[0]
+    if (touch) setTouchEnd(touch.clientX)
   }
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return
+    if (touchStart === null || touchEnd === null) return
     const distance = touchStart - touchEnd
     const isLeftSwipe = distance > minSwipeDistance
     const isRightSwipe = distance < -minSwipeDistance

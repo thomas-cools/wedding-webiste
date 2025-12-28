@@ -82,7 +82,7 @@ describe('Countdown Component', () => {
     
     // Get initial seconds value
     const initialValues = screen.getAllByText(/^\d{2}$/)
-    const initialSecondsText = initialValues[initialValues.length - 1].textContent
+    const initialSecondsText = initialValues[initialValues.length - 1]?.textContent
     
     // Advance time by 1 second
     act(() => {

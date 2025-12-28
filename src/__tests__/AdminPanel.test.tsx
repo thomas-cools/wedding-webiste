@@ -9,16 +9,22 @@ import AdminPanel from '../components/AdminPanel'
 const anchorClickSpy = jest.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
 
 // Mock localStorage
-const mockLocalStorage = {
+const mockLocalStorage: {
+  store: Record<string, string>
+  getItem: jest.Mock<string | null, [string]>
+  setItem: jest.Mock<void, [string, string]>
+  removeItem: jest.Mock<void, [string]>
+  clear: jest.Mock<void, []>
+} = {
   store: {} as Record<string, string>,
-  getItem: jest.fn((key: string) => mockLocalStorage.store[key] || null),
-  setItem: jest.fn((key: string, value: string) => {
+  getItem: jest.fn((key: string): string | null => mockLocalStorage.store[key] ?? null),
+  setItem: jest.fn((key: string, value: string): void => {
     mockLocalStorage.store[key] = value
   }),
-  removeItem: jest.fn((key: string) => {
+  removeItem: jest.fn((key: string): void => {
     delete mockLocalStorage.store[key]
   }),
-  clear: jest.fn(() => {
+  clear: jest.fn((): void => {
     mockLocalStorage.store = {}
   }),
 }

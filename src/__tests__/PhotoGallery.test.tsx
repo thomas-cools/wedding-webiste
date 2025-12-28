@@ -57,7 +57,7 @@ describe('PhotoGallery Component', () => {
     
     // Find image buttons by their aria-label pattern
     const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0])
+    fireEvent.click(imageButtons[0]!)
     
     // Check that modal opens (close button appears)
     await waitFor(() => {
@@ -69,7 +69,7 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery images={mockImages} />)
     
     const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0])
+    fireEvent.click(imageButtons[0]!)
     
     await waitFor(() => {
       expect(screen.getByText('1 / 3')).toBeInTheDocument()
@@ -80,7 +80,7 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery images={mockImages} />)
     
     const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0])
+    fireEvent.click(imageButtons[0]!)
     
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /gallery\.close/i })).toBeInTheDocument()
@@ -98,7 +98,7 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery images={mockImages} />)
     
     const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0])
+    fireEvent.click(imageButtons[0]!)
     
     await waitFor(() => {
       expect(screen.getByText('1 / 3')).toBeInTheDocument()
@@ -121,7 +121,7 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery images={mockImages} />)
     
     const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0])
+    fireEvent.click(imageButtons[0]!)
     
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /gallery\.close/i })).toBeInTheDocument()
@@ -139,7 +139,7 @@ describe('PhotoGallery Component', () => {
     
     // Open on third image
     const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*Third photo/i })
-    fireEvent.click(imageButtons[0])
+    fireEvent.click(imageButtons[0]!)
     
     await waitFor(() => {
       expect(screen.getByText('3 / 3')).toBeInTheDocument()
@@ -157,7 +157,7 @@ describe('PhotoGallery Component', () => {
     
     // Open on first image
     const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0])
+    fireEvent.click(imageButtons[0]!)
     
     await waitFor(() => {
       expect(screen.getByText('1 / 3')).toBeInTheDocument()
@@ -174,7 +174,7 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery images={mockImages} />)
     
     const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.keyDown(imageButtons[0], { key: 'Enter' })
+    fireEvent.keyDown(imageButtons[0]!, { key: 'Enter' })
     
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /gallery\.close/i })).toBeInTheDocument()
@@ -185,7 +185,7 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery images={mockImages} />)
     
     const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.keyDown(imageButtons[0], { key: ' ' })
+    fireEvent.keyDown(imageButtons[0]!, { key: ' ' })
     
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /gallery\.close/i })).toBeInTheDocument()
@@ -236,7 +236,7 @@ describe('PhotoGallery Component', () => {
     
     // Open second image
     const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*Second photo/i })
-    fireEvent.click(imageButtons[0])
+    fireEvent.click(imageButtons[0]!)
     
     await waitFor(() => {
       expect(screen.getByText('2 / 3')).toBeInTheDocument()
