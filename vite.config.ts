@@ -16,6 +16,26 @@ export default defineConfig(({ mode }) => {
     build: {
       // Increase limit slightly if needed (default is 500)
       chunkSizeWarningLimit: 500,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // Split React into its own chunk (stable, rarely changes)
+            'react-vendor': ['react', 'react-dom'],
+            // Split Chakra UI and Emotion (largest dependency)
+            'chakra-vendor': [
+              '@chakra-ui/react',
+              '@chakra-ui/icons',
+              '@chakra-ui/theme-tools',
+              '@emotion/react',
+              '@emotion/styled',
+            ],
+            // Split Framer Motion (animation library)
+            'motion-vendor': ['framer-motion'],
+            // Split i18n (internationalization)
+            'i18n-vendor': ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+          },
+        },
+      },
     },
   }
 })
