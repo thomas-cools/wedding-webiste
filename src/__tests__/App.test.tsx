@@ -2,7 +2,7 @@ import React from 'react'
 import { render, screen } from '../test-utils'
 import App from '../App'
 
-// Mock config to disable password protection for tests
+// Mock config to keep weddingConfig
 jest.mock('../config', () => ({
   features: {
     showGallery: false,
@@ -10,7 +10,7 @@ jest.mock('../config', () => ({
     showCountdown: false,
     showStory: true,
     showAccommodation: true,
-    requirePassword: false, // Disable password gate for tests
+    requirePassword: false,
     sendRsvpConfirmationEmail: false,
   },
   weddingConfig: {
@@ -32,6 +32,46 @@ jest.mock('../config', () => ({
     },
     rsvpDeadline: 'June 1, 2026',
   },
+}))
+
+// Mock feature flags context to disable password protection for tests
+jest.mock('../contexts/FeatureFlagsContext', () => ({
+  FeatureFlagsProvider: ({ children }: { children: React.ReactNode }) => children,
+  useFeatureFlags: () => ({
+    features: {
+      showGallery: false,
+      showTimeline: false,
+      showCountdown: false,
+      showStory: true,
+      showAccommodation: true,
+      requirePassword: false, // Disable password gate for tests
+      sendRsvpConfirmationEmail: false,
+    },
+    isLoading: false,
+    error: null,
+    refetch: jest.fn(),
+  }),
+  useFeature: (flag: string) => {
+    const flags: Record<string, boolean> = {
+      showGallery: false,
+      showTimeline: false,
+      showCountdown: false,
+      showStory: true,
+      showAccommodation: true,
+      requirePassword: false,
+      sendRsvpConfirmationEmail: false,
+    };
+    return flags[flag] ?? false;
+  },
+  getFeatureFlags: () => ({
+    showGallery: false,
+    showTimeline: false,
+    showCountdown: false,
+    showStory: true,
+    showAccommodation: true,
+    requirePassword: false,
+    sendRsvpConfirmationEmail: false,
+  }),
 }))
 
 // Note: Tests use translation keys since the i18n mock returns keys as-is

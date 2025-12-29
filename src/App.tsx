@@ -43,7 +43,8 @@ import {
   RsvpFormSkeleton,
 } from './components/SectionSkeletons'
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
-import { features, weddingConfig } from './config'
+import { weddingConfig } from './config'
+import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsContext'
 
 // Import assets
 import weddingLogo from './assets/T&C-Monogram-small.webp'
@@ -84,10 +85,14 @@ const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) =
   </Box>
 )
 
-export default function App() {
+/**
+ * Main app content component that uses feature flags
+ */
+function AppContent() {
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLoading, setIsLoading] = useState(true)
+  const { features } = useFeatureFlags()
 
   useEffect(() => {
     let cancelled = false
@@ -523,4 +528,15 @@ export default function App() {
   }
 
   return content
+}
+
+/**
+ * Root App component with FeatureFlagsProvider
+ */
+export default function App() {
+  return (
+    <FeatureFlagsProvider>
+      <AppContent />
+    </FeatureFlagsProvider>
+  )
 }

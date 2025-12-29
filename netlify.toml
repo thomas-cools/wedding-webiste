@@ -2,11 +2,22 @@
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
+  edge_functions = "netlify/edge-functions"
 
 [functions]
   node_bundler = "esbuild"
 
-# Redirect all routes to index.html for SPA
+# Edge function for runtime config
+[[edge_functions]]
+  path = "/api/config"
+  function = "config"
+
+# Redirect all routes to index.html for SPA (except API and functions)
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

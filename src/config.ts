@@ -1,6 +1,17 @@
 /**
  * Feature flags for the wedding website.
- * Toggle sections on/off before they're ready for visitors.
+ * 
+ * @deprecated Use useFeatureFlags() hook from contexts/FeatureFlagsContext instead.
+ * These are build-time defaults. For runtime flags, set environment variables
+ * in the Netlify dashboard:
+ * 
+ * - FEATURE_SHOW_GALLERY: "true" | "false"
+ * - FEATURE_SHOW_STORY: "true" | "false"
+ * - FEATURE_SHOW_TIMELINE: "true" | "false"
+ * - FEATURE_SHOW_COUNTDOWN: "true" | "false"
+ * - FEATURE_REQUIRE_PASSWORD: "true" | "false"
+ * - FEATURE_SEND_RSVP_EMAIL: "true" | "false"
+ * - FEATURE_SHOW_ACCOMMODATION: "true" | "false"
  */
 export const features = {
   /** Show the photo gallery section */

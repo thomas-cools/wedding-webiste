@@ -87,6 +87,38 @@ Heavy components are lazy-loaded to reduce initial bundle size:
 | `places-autocomplete` | `/.netlify/functions/places-autocomplete` | Google Places autocomplete proxy |
 | `validate-address` | `/.netlify/functions/validate-address` | Google Address Validation API proxy |
 
+### Edge Functions
+
+| Function | Endpoint | Purpose |
+|----------|----------|---------|
+| `config` | `/api/config` | Runtime feature flags (no rebuild required) |
+
+### Runtime Feature Flags
+
+Feature flags can be changed at runtime without rebuilding the application. The edge function reads environment variables and returns them to the client:
+
+```
+┌─────────┐     GET /api/config     ┌──────────────────┐
+│ Browser │ ──────────────────────► │ Edge Function    │
+│  (App)  │                         │ Reads env vars   │
+└─────────┘ ◄────────────────────── │ Returns JSON     │
+              { features: {...} }   └──────────────────┘
+```
+
+**Available Feature Flags:**
+
+| Environment Variable | Default | Purpose |
+|---------------------|---------|---------|
+| `FEATURE_SHOW_GALLERY` | `false` | Show/hide photo gallery section |
+| `FEATURE_SHOW_STORY` | `false` | Show/hide couple's story section |
+| `FEATURE_SHOW_TIMELINE` | `false` | Show/hide timeline section |
+| `FEATURE_SHOW_COUNTDOWN` | `false` | Show/hide countdown timer |
+| `FEATURE_REQUIRE_PASSWORD` | `true` | Enable/disable password protection |
+| `FEATURE_SEND_RSVP_EMAIL` | `true` | Send confirmation emails after RSVP |
+| `FEATURE_SHOW_ACCOMMODATION` | `false` | Show/hide accommodation section |
+
+To change a flag, update the environment variable in the Netlify dashboard and the change takes effect immediately (cached for 60 seconds at the edge).
+
 ---
 
 ## Project Structure
@@ -652,15 +684,34 @@ node -e "const{createHmac}=require('crypto');const h=createHmac('sha256','weddin
 
 Configure these in your Netlify dashboard under **Site settings** → **Environment variables**:
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `SITE_PASSWORD_HASH` | ✅ Yes | SHA-256 hash of the site password |
-| `JWT_SECRET` | ✅ Yes | Secret key for signing JWT tokens (min 32 chars) |
-| `NODE_VERSION` | ✅ Yes | Node.js version for builds (use `18` or `20`) |
-| `RESEND_API_KEY` | Optional | Resend API key for email confirmations |
-| `FROM_EMAIL` | Optional | Sender email for RSVP confirmations |
-| `GOOGLE_MAPS_API_KEY` | Optional | Google Maps API key for address features |
-| `VITE_GOOGLE_MAPS_API_KEY` | Optional | Client-side Google Maps key (if needed) |
+#### Required Variables
+
+| Variable | Description |
+|----------|-------------|
+| `SITE_PASSWORD_HASH` | SHA-256 hash of the site password |
+| `JWT_SECRET` | Secret key for signing JWT tokens (min 32 chars) |
+| `NODE_VERSION` | Node.js version for builds (use `18` or `20`) |
+
+#### Feature Flags (Runtime - No Rebuild Needed)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `FEATURE_SHOW_GALLERY` | `false` | Show photo gallery section |
+| `FEATURE_SHOW_STORY` | `false` | Show couple's story section |
+| `FEATURE_SHOW_TIMELINE` | `false` | Show timeline section |
+| `FEATURE_SHOW_COUNTDOWN` | `false` | Show countdown timer |
+| `FEATURE_REQUIRE_PASSWORD` | `true` | Enable password protection |
+| `FEATURE_SEND_RSVP_EMAIL` | `true` | Send RSVP confirmation emails |
+| `FEATURE_SHOW_ACCOMMODATION` | `false` | Show accommodation section |
+
+#### Optional Variables
+
+| Variable | Description |
+|----------|-------------|
+| `RESEND_API_KEY` | Resend API key for email confirmations |
+| `FROM_EMAIL` | Sender email for RSVP confirmations |
+| `GOOGLE_MAPS_API_KEY` | Google Maps API key for address features |
+| `VITE_GOOGLE_MAPS_API_KEY` | Client-side Google Maps key (if needed) |
 
 ### Environment Variable Reference
 
@@ -668,6 +719,7 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 |----------|-------|-------------|
 | `SITE_PASSWORD_HASH` | Server | SHA-256 hash of site password |
 | `JWT_SECRET` | Server | Secret for signing/verifying JWT tokens |
+| `FEATURE_*` | Edge | Runtime feature flags (see above) |
 | `RESEND_API_KEY` | Server | Resend API key for sending emails |
 | `FROM_EMAIL` | Server | Email sender address |
 | `GOOGLE_MAPS_API_KEY` | Server | Google Maps API key (for serverless functions) |
