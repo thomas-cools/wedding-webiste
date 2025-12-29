@@ -35,11 +35,7 @@ declare global {
   interface Window {
     /** Injected by Vite define during dev/build */
     __VITE_GOOGLE_MAPS_API_KEY__?: string
-    /** 
-     * Injected by Vite define during dev/build (used by PasswordGate).
-     * SHA-256 hash of the site password - generate with: echo -n "yourpassword" | shasum -a 256
-     */
-    __VITE_SITE_PASSWORD_HASH__?: string
+    // Note: Password hash removed - auth is now server-side
 
     /** Google Maps JS attaches itself here */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

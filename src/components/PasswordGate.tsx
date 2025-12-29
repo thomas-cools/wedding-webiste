@@ -19,35 +19,10 @@ import {
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { motion } from 'framer-motion'
 import LanguageSwitcher from './LanguageSwitcher'
-import { verifyPassword } from '../utils/crypto'
+import { authenticate, isAuthenticated as checkAuth } from '../utils/auth'
 
 const MotionBox = motion(Box)
 
-/**
- * Get the expected password hash.
- * 
- * The password is stored as a SHA-256 hash to prevent exposure in the client bundle.
- * To set a custom password:
- * 1. Generate hash: echo -n "yourpassword" | shasum -a 256
- * 2. Set VITE_SITE_PASSWORD_HASH in your environment
- * 
- * Default hash is for 'carolina&thomas2026'
- */
-const getPasswordHash = (): string => {
-  // Check for Vite environment variable (works in browser)
-  if (typeof window !== 'undefined') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const win = window as any
-    if (win.__VITE_SITE_PASSWORD_HASH__) {
-      return win.__VITE_SITE_PASSWORD_HASH__ as string
-    }
-  }
-  // Default password hash (SHA-256 of 'carolina&thomas2026')
-  // This obscures the actual password from the client bundle
-  return '2a3938a72e797aa7e55f16da649805749b74e4670cbd802758a457502f952277'
-}
-
-const SITE_PASSWORD_HASH = getPasswordHash()
 const AUTH_KEY = 'wedding_authenticated'
 
 const ATTEMPTS_KEY = 'wedding_password_attempts'
@@ -94,8 +69,9 @@ export default function PasswordGate({ children }: PasswordGateProps) {
 
   // Check if user is already authenticated on mount
   useEffect(() => {
-    const authStatus = sessionStorage.getItem(AUTH_KEY)
-    if (authStatus === 'true') {
+    // Check both sessionStorage and auth utility
+    const authStatus = sessionStorage.getItem(AUTH_KEY) || checkAuth()
+    if (authStatus) {
       setIsAuthenticated(true)
     }
 
@@ -150,12 +126,11 @@ export default function PasswordGate({ children }: PasswordGateProps) {
       return
     }
 
-    // Use async password verification with SHA-256 hashing
+    // Use server-side authentication
     setIsVerifying(true)
     try {
-      const isValid = await verifyPassword(password, SITE_PASSWORD_HASH)
-      if (isValid) {
-        sessionStorage.setItem(AUTH_KEY, 'true')
+      const result = await authenticate(password)
+      if (result.ok) {
         localStorage.removeItem(ATTEMPTS_KEY)
         localStorage.removeItem(LOCKOUT_UNTIL_KEY)
         setIsAuthenticated(true)

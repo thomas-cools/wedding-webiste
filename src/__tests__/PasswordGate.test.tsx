@@ -5,6 +5,16 @@ import PasswordGate, { AUTH_KEY } from '../components/PasswordGate'
 // Default password for testing
 const TEST_PASSWORD = 'carolina&thomas2026'
 
+// Mock the auth module
+jest.mock('../utils/auth', () => ({
+  authenticate: jest.fn(),
+  isAuthenticated: jest.fn(() => false),
+}))
+
+import { authenticate, isAuthenticated } from '../utils/auth'
+const mockAuthenticate = authenticate as jest.MockedFunction<typeof authenticate>
+const mockIsAuthenticated = isAuthenticated as jest.MockedFunction<typeof isAuthenticated>
+
 describe('PasswordGate', () => {
   // Create fresh mock for each test
   let mockSessionStorage: {
@@ -24,6 +34,12 @@ describe('PasswordGate', () => {
   }
 
   beforeEach(() => {
+    jest.clearAllMocks()
+    
+    // Default mock: authentication fails
+    mockAuthenticate.mockResolvedValue({ ok: false, error: 'Invalid password' })
+    mockIsAuthenticated.mockReturnValue(false)
+    
     mockSessionStorage = {
       store: {},
       getItem: jest.fn((key: string) => mockSessionStorage.store[key] || null),
@@ -90,6 +106,9 @@ describe('PasswordGate', () => {
   })
 
   it('shows error message for incorrect password', async () => {
+    // Mock returns failure for wrong password
+    mockAuthenticate.mockResolvedValue({ ok: false, error: 'Invalid password' })
+    
     render(
       <PasswordGate>
         <div>Protected Content</div>
@@ -106,10 +125,14 @@ describe('PasswordGate', () => {
       expect(screen.getByTestId('password-error')).toBeInTheDocument()
     })
 
+    expect(mockAuthenticate).toHaveBeenCalledWith('wrongpassword')
     expect(screen.queryByText('Protected Content')).not.toBeInTheDocument()
   })
 
   it('grants access with correct password', async () => {
+    // Mock returns success for correct password
+    mockAuthenticate.mockResolvedValue({ ok: true, token: 'test-token', expiresIn: 86400 })
+    
     render(
       <PasswordGate>
         <div>Protected Content</div>
@@ -126,10 +149,13 @@ describe('PasswordGate', () => {
       expect(screen.getByText('Protected Content')).toBeInTheDocument()
     })
 
-    expect(mockSessionStorage.setItem).toHaveBeenCalledWith(AUTH_KEY, 'true')
+    expect(mockAuthenticate).toHaveBeenCalledWith(TEST_PASSWORD)
   })
 
   it('password comparison is case-insensitive', async () => {
+    // Server handles case-insensitivity, mock returns success
+    mockAuthenticate.mockResolvedValue({ ok: true, token: 'test-token', expiresIn: 86400 })
+    
     render(
       <PasswordGate>
         <div>Protected Content</div>
@@ -148,6 +174,8 @@ describe('PasswordGate', () => {
   })
 
   it('clears error when typing after error', async () => {
+    mockAuthenticate.mockResolvedValue({ ok: false, error: 'Invalid password' })
+    
     render(
       <PasswordGate>
         <div>Protected Content</div>
@@ -198,6 +226,8 @@ describe('PasswordGate', () => {
   })
 
   it('submits form on Enter key press', async () => {
+    mockAuthenticate.mockResolvedValue({ ok: true, token: 'test-token', expiresIn: 86400 })
+    
     render(
       <PasswordGate>
         <div>Protected Content</div>
