@@ -611,13 +611,14 @@ VITE_GOOGLE_MAPS_API_KEY=AIza...
 
 #### Generating a Password Hash
 
-```bash
-# Using Node.js
-echo -n "your-password" | openssl dgst -sha256
-# Output: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+The auth system uses HMAC-SHA256 with a salt. Generate a hash using Node.js:
 
-# Or in Node.js REPL
-node -e "console.log(require('crypto').createHash('sha256').update('your-password').digest('hex'))"
+```bash
+# Generate hash for your password
+node -e "const{createHmac}=require('crypto');const h=createHmac('sha256','wedding-site-salt');h.update('YOUR-PASSWORD');console.log(h.digest('hex'))"
+
+# Example: hash for "test" 
+# Output: bf2e447640106ffa5a533ce86996eb8a379635995902062e6020891bd3a80c09
 ```
 
 ### Production Environment Variables
