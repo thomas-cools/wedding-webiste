@@ -37,8 +37,8 @@ export default function RsvpForm() {
     },
     onAddressWarning: () => {
       toast({
-        title: 'Address may be incomplete',
-        description: 'Please double-check your mailing address (street number, unit, postal code, country). We will still accept your RSVP.',
+        title: t('rsvp.validation.addressIncompleteTitle'),
+        description: t('rsvp.validation.addressIncompleteMessage'),
         status: 'warning',
         duration: 6000,
         isClosable: true,
@@ -210,7 +210,7 @@ export default function RsvpForm() {
 
               {form.mailingAddressAutocompleteLimited && (
                 <FormHelperText fontSize="sm" color="neutral.muted">
-                  Autocomplete is temporarily unavailable. Please type your address.
+                  {t('rsvp.validation.autocompleteUnavailable')}
                 </FormHelperText>
               )}
               <FormErrorMessage>{form.errors.mailingAddress}</FormErrorMessage>

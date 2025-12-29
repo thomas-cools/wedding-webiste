@@ -105,7 +105,10 @@
       "eventRequired": "Please select at least one event if you expect to join us.",
       "plusOneNameRequired": "Please provide your plus one's name or uncheck plus one.",
       "childrenRequired": "Please add at least one child or uncheck children.",
-      "childNameRequired": "Please provide child names or remove empty entries."
+      "childNameRequired": "Please provide child names or remove empty entries.",
+      "addressIncompleteTitle": "Address may be incomplete",
+      "addressIncompleteMessage": "Please double-check your mailing address (street number, unit, postal code, country). We will still accept your RSVP.",
+      "autocompleteUnavailable": "Autocomplete is temporarily unavailable. Please type your address."
     },
     "success": {
       "savedTitle": "Response saved",

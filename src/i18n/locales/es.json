@@ -56,6 +56,8 @@
       "namePlaceholder": "Nombre completo como te gustaría en la tarjeta de mesa",
       "email": "Correo Electrónico",
       "emailPlaceholder": "tu@email.com",
+      "mailingAddress": "Dirección Postal",
+      "mailingAddressPlaceholder": "Calle, Ciudad, País, Código Postal",
       "willYouJoin": "¿Nos Acompañarás?",
       "pleaseSelect": "Por favor selecciona",
       "joyfullyAccept": "Acepto con Alegría",
@@ -103,7 +105,10 @@
       "eventRequired": "Por favor selecciona al menos un evento si planeas asistir.",
       "plusOneNameRequired": "Por favor ingresa el nombre de tu acompañante o desmarca la opción de acompañante.",
       "childrenRequired": "Por favor agrega al menos un niño o desmarca la opción de niños.",
-      "childNameRequired": "Por favor ingresa los nombres de los niños o elimina las entradas vacías."
+      "childNameRequired": "Por favor ingresa los nombres de los niños o elimina las entradas vacías.",
+      "addressIncompleteTitle": "La dirección puede estar incompleta",
+      "addressIncompleteMessage": "Por favor verifica tu dirección postal (número, departamento, código postal, país). Aún aceptaremos tu confirmación.",
+      "autocompleteUnavailable": "El autocompletado no está disponible temporalmente. Por favor escribe tu dirección."
     },
     "success": {
       "savedTitle": "Respuesta guardada",

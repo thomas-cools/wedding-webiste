@@ -56,6 +56,8 @@
       "namePlaceholder": "Nom complet tel que vous le souhaitez sur le marque-place",
       "email": "Adresse Email",
       "emailPlaceholder": "votre@email.com",
+      "mailingAddress": "Adresse Postale",
+      "mailingAddressPlaceholder": "Rue, Ville, Pays, Code Postal",
       "willYouJoin": "Serez-vous des Nôtres?",
       "pleaseSelect": "Veuillez sélectionner",
       "joyfullyAccept": "J'accepte avec Joie",
@@ -103,7 +105,10 @@
       "eventRequired": "Veuillez sélectionner au moins un événement si vous prévoyez d'assister.",
       "plusOneNameRequired": "Veuillez indiquer le nom de votre accompagnant ou décochez l'option accompagnant.",
       "childrenRequired": "Veuillez ajouter au moins un enfant ou décochez l'option enfants.",
-      "childNameRequired": "Veuillez indiquer les noms des enfants ou supprimer les entrées vides."
+      "childNameRequired": "Veuillez indiquer les noms des enfants ou supprimer les entrées vides.",
+      "addressIncompleteTitle": "L'adresse est peut-être incomplète",
+      "addressIncompleteMessage": "Veuillez vérifier votre adresse postale (numéro de rue, appartement, code postal, pays). Nous accepterons quand même votre réponse.",
+      "autocompleteUnavailable": "L'autocomplétion est temporairement indisponible. Veuillez saisir votre adresse."
     },
     "success": {
       "savedTitle": "Réponse enregistrée",
