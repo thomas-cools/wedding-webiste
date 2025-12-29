@@ -1,21 +1,40 @@
 # Wedding Website
 
-A modern, elegant wedding website built with React, TypeScript, and Chakra UI. Features an RSVP form with Netlify Forms integration for serverless form submissions.
+A modern, elegant wedding website built with React, TypeScript, and Chakra UI. Features server-side password protection, RSVP form with Netlify Forms integration, and optimized performance with code splitting.
 
 ## Table of Contents
 
+- [Features](#features)
 - [Technology Stack](#technology-stack)
+- [Architecture](#architecture)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
 - [Available Scripts](#available-scripts)
 - [Testing](#testing)
+- [Security](#security)
+  - [Password Protection](#password-protection)
+  - [Server-Side Authentication](#server-side-authentication)
 - [Form Submissions](#form-submissions)
-   - [RSVP Confirmation Emails (Resend + Netlify Function)](#rsvp-confirmation-emails-resend--netlify-function)
+  - [RSVP Confirmation Emails (Resend + Netlify Function)](#rsvp-confirmation-emails-resend--netlify-function)
+- [Performance Optimizations](#performance-optimizations)
 - [Deployment](#deployment)
   - [Netlify (Recommended)](#netlify-recommended)
   - [GitHub Codespaces](#github-codespaces)
   - [Other Hosting Options](#other-hosting-options)
 - [Environment Variables](#environment-variables)
+
+---
+
+## Features
+
+- 🔐 **Server-side password protection** with JWT authentication
+- 📝 **RSVP form** with Netlify Forms + email confirmations via Resend
+- 🌍 **Multi-language support** (English, French, Spanish, Dutch)
+- 📱 **Fully responsive** design with mobile-first approach
+- ⚡ **Optimized performance** with lazy loading and bundle splitting
+- ♿ **Accessible** components following WCAG guidelines
+- 🎨 **Elegant animations** powered by Framer Motion
+- 🧪 **Comprehensive testing** (391 unit tests + E2E tests)
 
 ---
 
@@ -33,6 +52,40 @@ A modern, elegant wedding website built with React, TypeScript, and Chakra UI. F
 | **[React Testing Library](https://testing-library.com/react)** | Component Testing | Tests components as users interact with them |
 | **[Playwright](https://playwright.dev/)** | E2E Testing | Cross-browser, responsive viewport testing |
 | **[Netlify Forms](https://www.netlify.com/products/forms/)** | Form Backend | Zero-config serverless form handling |
+| **[Netlify Functions](https://www.netlify.com/products/functions/)** | Serverless Backend | Authentication, email sending, address validation |
+
+---
+
+## Architecture
+
+### Bundle Splitting
+
+The application uses Rollup's manual chunks for optimal loading:
+
+| Chunk | Contents | Purpose |
+|-------|----------|---------|
+| `react-vendor` | React, React DOM | Core framework (cached long-term) |
+| `chakra-vendor` | Chakra UI, Emotion | UI components |
+| `motion-vendor` | Framer Motion | Animations |
+| `i18n-vendor` | i18next, react-i18next | Internationalization |
+
+### Lazy-Loaded Components
+
+Heavy components are lazy-loaded to reduce initial bundle size:
+
+- `PhotoGallery` - Image gallery with lightbox
+- `Timeline` - Story/timeline section
+- `StorySection` - Couple's story
+- `AccommodationSection` - Venue/hotel info
+
+### Serverless Functions
+
+| Function | Endpoint | Purpose |
+|----------|----------|---------|
+| `auth` | `/.netlify/functions/auth` | Password validation, JWT token issuance |
+| `send-rsvp-confirmation` | `/.netlify/functions/send-rsvp-confirmation` | Email confirmations via Resend |
+| `places-autocomplete` | `/.netlify/functions/places-autocomplete` | Google Places autocomplete proxy |
+| `validate-address` | `/.netlify/functions/validate-address` | Google Address Validation API proxy |
 
 ---
 
@@ -42,25 +95,48 @@ A modern, elegant wedding website built with React, TypeScript, and Chakra UI. F
 wedding-website/
 ├── index.html              # Entry HTML (Vite entry point)
 ├── package.json            # Dependencies and scripts
-├── tsconfig.json           # TypeScript configuration
-├── jest.config.js          # Jest test configuration
-├── vite.config.ts          # Vite build configuration (if present)
-├── public/                 # Static assets (copied as-is to build)
+├── tsconfig.json           # TypeScript configuration (strict mode)
+├── jest.config.cjs         # Jest test configuration
+├── vite.config.ts          # Vite build configuration with bundle splitting
+├── playwright.config.ts    # Playwright E2E test configuration
+├── netlify.toml            # Netlify deployment configuration
+├── netlify/
+│   └── functions/          # Serverless functions
+│       ├── auth.ts         # Password authentication + JWT
+│       ├── send-rsvp-confirmation.ts  # Email sending via Resend
+│       ├── places-autocomplete.ts     # Google Places API proxy
+│       ├── validate-address.ts        # Address validation proxy
+│       ├── utils/
+│       │   ├── jwt.ts      # JWT creation/verification utilities
+│       │   └── rate-limiter.ts  # Rate limiting for functions
+│       └── __tests__/      # Serverless function tests
 └── src/
     ├── main.tsx            # React entry point
-    ├── App.tsx             # Root component
+    ├── App.tsx             # Root component with lazy loading
+    ├── config.ts           # Feature flags and wedding configuration
     ├── index.css           # Global styles
     ├── theme.ts            # Chakra UI theme customization
     ├── setupTests.ts       # Jest setup
-    ├── test-utils.tsx      # Testing utilities
-    ├── assets/             # Images and static assets (bundled by Vite)
+    ├── test-utils.tsx      # Testing utilities with Chakra context
+    ├── assets/             # Images and static assets
+    ├── utils/
+    │   ├── auth.ts         # Client-side auth utilities
+    │   └── crypto.ts       # Password hashing utilities
     ├── components/
-    │   ├── RsvpForm.tsx    # RSVP form with Netlify Forms integration
-    │   └── AdminPanel.tsx  # Admin view for RSVP submissions
-    └── __tests__/          # Test files
-        ├── App.test.tsx
-        ├── RsvpForm.test.tsx
-        └── AdminPanel.test.tsx
+    │   ├── PasswordGate.tsx    # Server-side password protection
+    │   ├── RsvpForm.tsx        # RSVP form with validation
+    │   ├── Hero.tsx            # Hero section with optimized background
+    │   ├── PhotoGallery.tsx    # Lazy-loaded image gallery
+    │   ├── Timeline.tsx        # Lazy-loaded timeline
+    │   ├── Countdown.tsx       # Wedding countdown timer
+    │   ├── LanguageSwitcher.tsx # i18n language selector
+    │   ├── LoadingScreen.tsx   # Skeleton loading states
+    │   ├── animations.tsx      # Reusable Framer Motion components
+    │   └── ...                 # Other UI components
+    ├── i18n/
+    │   ├── index.ts        # i18next configuration
+    │   └── locales/        # Translation files (en, fr, es, nl)
+    └── __tests__/          # Unit/component tests
 ```
 
 ---
@@ -198,6 +274,46 @@ The custom `test-utils.tsx` wrapper provides Chakra UI context automatically.
 
 ---
 
+## Security
+
+### Password Protection
+
+The site is protected by a shared password that guests must enter to access content. The authentication system is designed with security best practices:
+
+- **No credentials in client bundle** - Password hash is never shipped to the browser in production
+- **Server-side validation** - Passwords are validated by a Netlify Function
+- **JWT tokens** - Successful authentication returns a signed JWT token (24-hour expiry)
+- **HttpOnly cookies** - Tokens are stored in secure, HttpOnly cookies (prevents XSS attacks)
+- **Rate limiting** - 10 authentication attempts per 10 minutes per IP
+- **Timing-safe comparison** - Prevents timing attacks on password verification
+
+### Server-Side Authentication
+
+The authentication flow:
+
+```
+┌─────────┐     POST /auth      ┌─────────────────┐
+│ Browser │ ──────────────────► │ Netlify Function│
+│         │   { password }      │   (auth.ts)     │
+└─────────┘                     └────────┬────────┘
+     ▲                                   │
+     │    { ok: true, token }            │ Verify password
+     │    Set-Cookie: auth_token         │ against hash
+     │    (HttpOnly, Secure)             │
+     └───────────────────────────────────┘
+```
+
+#### Local Development
+
+In development mode (`npm run dev`), the auth system uses a local fallback that doesn't require the serverless function. This allows testing without running `netlify dev`.
+
+To test with the actual serverless function:
+```bash
+netlify dev
+```
+
+---
+
 ## Form Submissions
 
 ### Netlify Forms Integration
@@ -264,7 +380,18 @@ To verify the localized email output **without sending a real email**, the funct
 
 The preview response includes `subject`, `html`, and `text`, plus `localeRequested` and `localeNormalized`.
 
-> Note: Preview mode is only enabled in local development (`NETLIFY_DEV=true`). In production, `?preview=1` is ignored and the function behaves normally.
+> **Note**: Preview mode is only enabled in local development (`NETLIFY_DEV=true`). In production, `?preview=1` is ignored and the function behaves normally.
+
+### Rate Limiting
+
+All Netlify Functions include rate limiting to prevent abuse:
+
+| Function | Limit | Window |
+|----------|-------|--------|
+| `auth` | 10 requests | 10 minutes |
+| `send-rsvp-confirmation` | 5 requests | 1 minute |
+| `places-autocomplete` | 100 requests | 1 minute |
+| `validate-address` | 50 requests | 1 minute |
 
 ### Viewing Submissions
 
@@ -433,30 +560,92 @@ Or connect via [vercel.com](https://vercel.com) GitHub integration.
 
 ---
 
+## Performance Optimizations
+
+The site includes several performance optimizations:
+
+### Bundle Splitting
+- Vendor chunks are separated for better caching
+- Heavy components (PhotoGallery, Timeline) are lazy-loaded
+- Total initial JS reduced from ~630KB to ~95KB
+
+### Image Optimization
+- Hero background uses CSS `image-set()` for responsive images
+- WebP format with JPEG fallback for older browsers
+- Lazy loading for below-the-fold images
+- Blur-up placeholder technique for gallery images
+
+### Loading States
+- Skeleton loaders during component loading
+- Error boundaries with graceful fallbacks
+- Suspense boundaries around lazy components
+
+### Accessibility
+- WCAG 2.1 AA compliant
+- Keyboard navigation support
+- Screen reader friendly
+- Focus management for modals and forms
+- Reduced motion support
+
+---
+
 ## Environment Variables
 
-For advanced configurations, you can use environment variables:
+### Local Development
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `VITE_API_URL` | API endpoint (if using external backend) | `https://api.example.com` |
-| `NODE_VERSION` | Node.js version for Netlify builds | `18` |
-| `RESEND_API_KEY` | Resend API key (required to send RSVP confirmation emails) | `re_xxxxxxxx` |
-| `FROM_EMAIL` | From address shown in RSVP confirmation emails | `Wedding RSVP <onboarding@resend.dev>` |
-| `GOOGLE_MAPS_API_KEY` | Google Maps Platform key used by Netlify Functions (Places Autocomplete + Address Validation) | `AIza...` |
-| `VITE_GOOGLE_MAPS_API_KEY` | Optional fallback for functions + (if ever enabled) client-side Maps JS | `AIza...` |
+Create a `.env.local` file in the project root:
 
-Create a `.env` file for local development:
 ```env
-VITE_API_URL=http://localhost:3000
+# Authentication (required for password protection)
+SITE_PASSWORD_HASH=<sha256-hash-of-your-password>
+JWT_SECRET=<random-string-at-least-32-characters>
+
+# Email confirmations (optional)
 RESEND_API_KEY=re_xxxxxxxx
-FROM_EMAIL=Wedding RSVP <onboarding@resend.dev>
+FROM_EMAIL=Wedding RSVP <noreply@yourdomain.com>
+
+# Google Maps (optional, for address autocomplete)
+GOOGLE_MAPS_API_KEY=AIza...
+VITE_GOOGLE_MAPS_API_KEY=AIza...
 ```
 
-Access in code:
-```ts
-const apiUrl = import.meta.env.VITE_API_URL
+#### Generating a Password Hash
+
+```bash
+# Using Node.js
+echo -n "your-password" | openssl dgst -sha256
+# Output: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+
+# Or in Node.js REPL
+node -e "console.log(require('crypto').createHash('sha256').update('your-password').digest('hex'))"
 ```
+
+### Production Environment Variables
+
+Configure these in your Netlify dashboard under **Site settings** → **Environment variables**:
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `SITE_PASSWORD_HASH` | ✅ Yes | SHA-256 hash of the site password |
+| `JWT_SECRET` | ✅ Yes | Secret key for signing JWT tokens (min 32 chars) |
+| `NODE_VERSION` | ✅ Yes | Node.js version for builds (use `18` or `20`) |
+| `RESEND_API_KEY` | Optional | Resend API key for email confirmations |
+| `FROM_EMAIL` | Optional | Sender email for RSVP confirmations |
+| `GOOGLE_MAPS_API_KEY` | Optional | Google Maps API key for address features |
+| `VITE_GOOGLE_MAPS_API_KEY` | Optional | Client-side Google Maps key (if needed) |
+
+### Environment Variable Reference
+
+| Variable | Scope | Description |
+|----------|-------|-------------|
+| `SITE_PASSWORD_HASH` | Server | SHA-256 hash of site password |
+| `JWT_SECRET` | Server | Secret for signing/verifying JWT tokens |
+| `RESEND_API_KEY` | Server | Resend API key for sending emails |
+| `FROM_EMAIL` | Server | Email sender address |
+| `GOOGLE_MAPS_API_KEY` | Server | Google Maps API key (for serverless functions) |
+| `VITE_GOOGLE_MAPS_API_KEY` | Client | Google Maps API key (exposed to browser) |
+| `VITE_API_URL` | Client | Optional API endpoint override |
+| `NODE_VERSION` | Build | Node.js version for Netlify builds |
 
 ---
 
