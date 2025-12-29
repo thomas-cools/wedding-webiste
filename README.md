@@ -230,14 +230,41 @@ npm run test:e2e:report
 
 E2E test files are located in `tests/` and follow the naming convention `*.spec.ts`.
 
-#### Configured Viewports
+#### Browser Coverage
 
-| Project | Device | Viewport |
+Tests run on all major browsers to ensure cross-browser compatibility:
+
+| Browser | Engine | Projects |
 |---------|--------|----------|
-| Desktop Chrome | Desktop | 1280×720 |
-| Mobile Chrome | Pixel 5 | 393×851 |
-| Mobile Safari | iPhone 12 | 390×844 |
-| Tablet | iPad (gen 7) | 810×1080 |
+| **Chrome** | Chromium | Desktop Chrome, Mobile Chrome (Android) |
+| **Safari** | WebKit | Desktop Safari, Mobile Safari (iPhone), iPad variants |
+| **Firefox** | Gecko | Desktop Firefox |
+| **Edge** | Chromium | Desktop Edge |
+
+#### Device Coverage
+
+| Category | Devices | Viewport Examples |
+|----------|---------|-------------------|
+| **Desktop** | Chrome, Firefox, Safari, Edge | 1280×720 |
+| **Mobile** | Pixel 5, iPhone 12, iPhone SE | 393×851, 390×844, 375×667 |
+| **Tablet** | iPad, iPad Pro 11, iPad Mini | 810×1080, 834×1194, 768×1024 |
+| **Landscape** | iPad Landscape | 1080×810 |
+
+#### Running Specific Browsers
+
+```bash
+# Run tests only on Safari (desktop + mobile + iPad)
+npm run test:e2e -- --project="Desktop Safari" --project="Mobile Safari*" --project="iPad*"
+
+# Run tests only on Chrome
+npm run test:e2e -- --project="*Chrome*"
+
+# Run tests only on mobile devices
+npm run test:e2e -- --project="Mobile*"
+
+# Run tests only on iPad/tablets
+npm run test:e2e -- --project="iPad*"
+```
 
 #### Test Coverage
 
