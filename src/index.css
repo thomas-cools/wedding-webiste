@@ -121,6 +121,14 @@ button, a, input, select, textarea {
   color: var(--chakra-colors-neutral-dark);
 }
 
+/* Language switcher - remove hover highlighting */
+.chakra-menu__menuitem[data-focus],
+.chakra-menu__menuitem:hover,
+.chakra-menu__menuitem:focus {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
 /* Scrollbar styling (webkit) */
 ::-webkit-scrollbar {
   width: 8px;

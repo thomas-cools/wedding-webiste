@@ -27,31 +27,38 @@ export default function LanguageSwitcher() {
         as={Button}
         variant="ghost"
         size="sm"
-        rightIcon={<ChevronDownIcon />}
+        rightIcon={<ChevronDownIcon color="white" />}
         fontWeight="400"
-        _hover={{ color: 'primary.deep' }}
+        color="white"
+        _hover={{ color: 'white', bg: 'whiteAlpha.200' }}
+        _active={{ bg: 'whiteAlpha.300' }}
       >
         <HStack spacing={2}>
           <Text fontSize="lg">{currentLanguage.flag}</Text>
-          <Text display={['none', 'inline']}>{currentLanguage.code.toUpperCase()}</Text>
+          <Text display={['none', 'inline']} color="white">{currentLanguage.code.toUpperCase()}</Text>
         </HStack>
       </MenuButton>
       <MenuList 
-        bg="neutral.light" 
-        borderColor="primary.soft"
-        minW="auto"
+        bg="rgba(39, 11, 12, 0.95)"
+        borderColor="whiteAlpha.200"
+        borderWidth="1px"
+        boxShadow="lg"
+        minW="160px"
+        py={2}
       >
         {languages.map((lang) => (
           <MenuItem
             key={lang.code}
             onClick={() => handleLanguageChange(lang.code)}
-            bg={lang.code === i18n.language ? 'primary.soft' : 'transparent'}
-            color={lang.code === i18n.language ? 'neutral.dark' : 'neutral.dark'}
-            _hover={{ bg: 'chateau.champagne' }}
+            bg="transparent"
+            color="white"
+            fontWeight={lang.code === i18n.language ? '500' : '400'}
+            _hover={{ bg: 'transparent', color: 'white' }}
+            _focus={{ bg: 'transparent', color: 'white' }}
           >
             <HStack spacing={3}>
               <Text fontSize="lg">{lang.flag}</Text>
-              <Text>{lang.name}</Text>
+              <Text color="white">{lang.name}</Text>
             </HStack>
           </MenuItem>
         ))}
