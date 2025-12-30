@@ -30,7 +30,7 @@ jest.mock('../config', () => ({
       website: 'https://maps.google.com/?q=Vallesvilles,+France',
       googleMapsUrl: 'https://maps.google.com/?q=Vallesvilles,+France',
     },
-    rsvpDeadline: 'June 1, 2026',
+    rsvpDeadline: 'February 1, 2026',
   },
 }))
 
