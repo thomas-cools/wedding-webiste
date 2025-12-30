@@ -127,16 +127,16 @@ button, a, input, select, textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--chakra-colors-neutral-light);
+  background: #f5f5f5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--chakra-colors-primary-soft);
+  background: #888;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--chakra-colors-neutral-dark);
+  background: #555;
 }
 
 /* Google Places: PlaceAutocompleteElement theming

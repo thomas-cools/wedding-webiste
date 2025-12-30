@@ -47,8 +47,9 @@ import { weddingConfig } from './config'
 import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsContext'
 
 // Import assets
-import weddingLogo from './assets/T&C-Monogram-small.webp'
-import weddingLogo2x from './assets/T&C-Monogram-2x.webp'
+import weddingLogoSmall from './assets/monogram_websiteT&C-small.webp'
+import weddingLogoMedium from './assets/monogram_websiteT&C-medium.webp'
+import weddingLogo2x from './assets/monogram_websiteT&C-2x.webp'
 import weddingLogoFull from './assets/T&C-Monogram.webp'
 import airbnbLogo from './assets/airbnb-tile.svg'
 import bookingLogo from './assets/booking-tile.svg'
@@ -173,42 +174,68 @@ function AppContent() {
         left={0} 
         right={0} 
         zIndex={100}
-        bg="neutral.light"
-        borderBottom="1px solid"
-        borderColor="primary.soft"
+        bg="rgba(39, 11, 12, 0.9)"
       >
         <Container maxW="container.xl" px={[4, 6, 8]}>
-          <Flex justify="space-between" align="center">
+          <Flex justify="center" align="center" position="relative">
+            {/* Left Navigation - Desktop */}
+            <HStack 
+              as="nav" 
+              aria-label={t('accessibility.mainNavigation', 'Main navigation')}
+              spacing={10} 
+              display={["none", "none", "flex"]}
+              position="absolute"
+              left={0}
+            >
+              {navLinks.slice(0, Math.ceil(navLinks.length / 2)).map((link) => (
+                <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="white" _hover={{ bg: 'whiteAlpha.200' }}>
+                  {link.label}
+                </Button>
+              ))}
+            </HStack>
+            
+            {/* Centered Logo */}
             <ChakraImage 
-              src={weddingLogo} 
-              srcSet={`${weddingLogo} 1x, ${weddingLogo2x} 2x`}
+              src={weddingLogoSmall} 
+              srcSet={`${weddingLogoSmall} 60w, ${weddingLogoMedium} 100w, ${weddingLogo2x} 200w`}
+              sizes="(max-width: 480px) 40px, (max-width: 768px) 45px, 50px"
               alt={t('header.initials')}
-              h={["60px", "80px", "100px"]}
+              h={["40px", "45px", "50px"]}
               w="auto"
             />
-            <HStack spacing={[2, 4, 10]}>
-              {/* Desktop Navigation */}
-              <HStack 
-                as="nav" 
-                aria-label={t('accessibility.mainNavigation', 'Main navigation')}
-                spacing={10} 
-                display={["none", "none", "flex"]}
-              >
-                {navLinks.map((link) => (
-                  <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm">
-                    {link.label}
-                  </Button>
-                ))}
-              </HStack>
+            
+            {/* Right Navigation - Desktop */}
+            <HStack 
+              spacing={10} 
+              display={["none", "none", "flex"]}
+              position="absolute"
+              right={0}
+              align="center"
+            >
+              {navLinks.slice(Math.ceil(navLinks.length / 2)).map((link) => (
+                <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="white" _hover={{ bg: 'whiteAlpha.200' }}>
+                  {link.label}
+                </Button>
+              ))}
               <LanguageSwitcher />
-              {/* Mobile Hamburger Menu */}
+            </HStack>
+            
+            {/* Mobile Controls */}
+            <HStack 
+              spacing={2} 
+              display={["flex", "flex", "none"]}
+              position="absolute"
+              right={0}
+            >
+              <LanguageSwitcher />
               <IconButton
                 aria-label="Open menu"
                 icon={<HamburgerIcon />}
                 variant="ghost"
-                display={["flex", "flex", "none"]}
                 onClick={onOpen}
                 size="sm"
+                color="white"
+                _hover={{ bg: 'whiteAlpha.200' }}
               />
             </HStack>
           </Flex>

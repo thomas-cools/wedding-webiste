@@ -487,7 +487,7 @@ Netlify is the recommended hosting platform—it's free, fast, and includes form
    |---------|-------|
    | Build command | `npm run build` |
    | Publish directory | `dist` |
-   | Node version | `18` (set in Environment Variables as `NODE_VERSION=18`) |
+   | Node version | `20` (set in Environment Variables as `NODE_VERSION=20`) |
 
 4. **Deploy**
    - Click **"Deploy site"**
@@ -690,7 +690,7 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 |----------|-------------|
 | `SITE_PASSWORD_HASH` | SHA-256 hash of the site password |
 | `JWT_SECRET` | Secret key for signing JWT tokens (min 32 chars) |
-| `NODE_VERSION` | Node.js version for builds (use `18` or `20`) |
+| `NODE_VERSION` | Node.js version for builds (use `20`) |
 
 #### Feature Flags (Runtime - No Rebuild Needed)
 
