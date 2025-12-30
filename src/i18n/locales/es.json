@@ -15,7 +15,7 @@
     "date": "Veintiséis de Agosto",
     "year": "Dos Mil Veintiséis",
     "venue": "Vallesvilles · Haute-Garonne, Francia",
-    "respond": "Confirmar Asistencia"
+    "respond": "RSVP"
   },
   "story": {
     "label": "Nuestra Historia",
@@ -48,7 +48,7 @@
     "venueAddress": "Vallesvilles, Francia"
   },
   "rsvp": {
-    "label": "Confirmar Asistencia",
+    "label": "RSVP",
     "title": "RSVP",
     "description": "Por favor, háznos saber si nos acompañarás en nuestra celebración de boda en Francia. Te pedimos confirmar antes del 1 de febrero de 2026. Las invitaciones formales seguirán.",
     "form": {

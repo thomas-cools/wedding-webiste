@@ -467,7 +467,9 @@ export default function Hero({
               color={hasBackground ? "white" : undefined}
               borderColor={hasBackground ? "white" : undefined}
               _hover={{
-                bg: hasBackground ? "whiteAlpha.200" : undefined,
+                bg: hasBackground ? "transparent" : "primary.deep",
+                color: hasBackground ? "white" : "neutral.light",
+                borderColor: hasBackground ? "white" : undefined,
                 transform: "translateY(-2px)",
               }}
               transition="all 0.3s ease"

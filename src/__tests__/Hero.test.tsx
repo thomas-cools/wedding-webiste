@@ -13,7 +13,7 @@ jest.mock('react-i18next', () => ({
         'hero.date': 'August Twenty-Sixth',
         'hero.year': 'Two Thousand Twenty-Six',
         'hero.venue': 'Vallesvilles · Haute-Garonne, France',
-        'hero.respond': 'Kindly Respond',
+        'hero.respond': 'RSVP',
       }
       return translations[key] || key
     },
@@ -58,13 +58,13 @@ describe('Hero Component', () => {
     render(<Hero />)
     
     // It's a link styled as a button, not a button element
-    expect(screen.getByRole('link', { name: /kindly respond/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /rsvp/i })).toBeInTheDocument()
   })
 
   it('respond link points to RSVP section', () => {
     render(<Hero />)
     
-    const link = screen.getByRole('link', { name: /kindly respond/i })
+    const link = screen.getByRole('link', { name: /rsvp/i })
     expect(link).toHaveAttribute('href', '#rsvp')
   })
 

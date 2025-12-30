@@ -60,7 +60,7 @@ const theme = extendTheme({
       'a': {
         color: 'primary.deep',
         textDecoration: 'none',
-        _hover: { color: 'primary.soft' },
+        _hover: { color: 'primary.deep' },
       },
     },
   },
@@ -86,7 +86,8 @@ const theme = extendTheme({
           color: 'neutral.light',
           px: 10,
           py: 6,
-          _hover: { bg: 'primary.soft', color: 'neutral.dark' },
+          _hover: { bg: 'primary.deep', color: 'neutral.light', opacity: 1, filter: 'none' },
+          _active: { bg: 'primary.deep', color: 'neutral.light', opacity: 1 },
         },
         outline: {
           bg: 'transparent',
@@ -95,7 +96,8 @@ const theme = extendTheme({
           borderColor: 'neutral.dark',
           px: 10,
           py: 6,
-          _hover: { bg: 'neutral.dark', color: 'neutral.light' },
+          _hover: { bg: 'transparent', color: 'neutral.dark', borderColor: 'neutral.dark', opacity: 1, filter: 'none' },
+          _active: { bg: 'transparent', color: 'neutral.dark', opacity: 1 },
         },
         ghost: {
           bg: 'transparent',

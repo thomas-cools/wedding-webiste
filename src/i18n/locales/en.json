@@ -15,7 +15,7 @@
     "date": "August Twenty-Sixth",
     "year": "Two Thousand Twenty-Six",
     "venue": "Vallesvilles · Haute-Garonne, France",
-    "respond": "Kindly Respond"
+    "respond": "RSVP"
   },
   "story": {
     "label": "Our Story",
@@ -48,7 +48,7 @@
     "venueAddress": "Vallesvilles, France"
   },
   "rsvp": {
-    "label": "Kindly Respond",
+    "label": "RSVP",
     "title": "RSVP",
     "description": "Please let us know if you'll be joining us for our wedding celebration in France. We kindly request your response by February 1, 2026. Formal invitations will follow.",
     "form": {

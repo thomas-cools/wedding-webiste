@@ -15,7 +15,7 @@
     "date": "Le Vingt-six Août",
     "year": "Deux Mille Vingt-Six",
     "venue": "Vallesvilles · Haute-Garonne, France",
-    "respond": "Répondre S'il Vous Plaît"
+    "respond": "RSVP"
   },
   "story": {
     "label": "Notre Histoire",
@@ -48,7 +48,7 @@
     "venueAddress": "Vallesvilles, France"
   },
   "rsvp": {
-    "label": "Répondre S'il Vous Plaît",
+    "label": "RSVP",
     "title": "RSVP",
     "description": "Merci de nous faire savoir si vous vous joindrez à nous pour notre célébration de mariage en France. Nous vous prions de répondre avant le 1er février 2026. Les invitations officielles suivront.",
     "form": {

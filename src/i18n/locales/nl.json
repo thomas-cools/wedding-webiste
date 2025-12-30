@@ -15,7 +15,7 @@
     "date": "Zesentwintig Augustus",
     "year": "Tweeduizend Zesentwintig",
     "venue": "Vallesvilles · Haute-Garonne, Frankrijk",
-    "respond": "Gelieve te Antwoorden"
+    "respond": "RSVP"
   },
   "story": {
     "label": "Ons Verhaal",
@@ -48,7 +48,7 @@
     "venueAddress": "Vallesvilles, Frankrijk"
   },
   "rsvp": {
-    "label": "Gelieve te Antwoorden",
+    "label": "RSVP",
     "title": "RSVP",
     "description": "Laat ons weten of je bij onze huwelijksviering in Frankrijk aanwezig zult zijn. We vragen vriendelijk om voor 1 februari 2026 te antwoorden. Formele uitnodigingen volgen.",
     "form": {
