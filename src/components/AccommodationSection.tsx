@@ -1,11 +1,13 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { 
-  Box, VStack, Tabs, TabList, TabPanels, Tab, TabPanel, Heading, Text, Image, Button, Badge, SimpleGrid, HStack
+  Box, VStack, Tabs, TabList, TabPanels, Tab, TabPanel, Heading, Text, Image, Button, Badge, SimpleGrid, Flex,
+  Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton, useDisclosure, Link
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import airbnbLogo from '../assets/airbnb-tile.svg';
 import bookingLogo from '../assets/booking-tile.svg';
+import venueRoomsImg from '../assets/venue_rooms.webp';
 
 interface AccommodationSectionProps {
   enabled: boolean;
@@ -13,6 +15,7 @@ interface AccommodationSectionProps {
 
 export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enabled }) => {
   const { t } = useTranslation();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   if (!enabled) return null;
   return (
     <Box id="travel" py={[20, 28]} bg="white" scrollMarginTop={["100px", "130px", "150px"]}>
@@ -40,10 +43,20 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
           <Text 
             fontSize="md" 
             color="neutral.muted" 
-            maxW="600px"
+            maxW="700px"
             lineHeight="tall"
           >
             {t('travel.subtitle')}
+          </Text>
+          <Text 
+            fontSize="sm" 
+            color="primary.deep" 
+            maxW="650px"
+            lineHeight="tall"
+            fontWeight="500"
+            fontStyle="italic"
+          >
+            {t('travel.transportNote')}
           </Text>
         </VStack>
         {/* Accommodation Tabs */}
@@ -57,11 +70,60 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
               borderColor="primary.soft"
               mb={8}
             >
+              <Tab _selected={{ bg: 'neutral.dark', color: 'white' }}>{t('travel.tabs.onsite')}</Tab>
               <Tab _selected={{ bg: 'neutral.dark', color: 'white' }}>{t('travel.tabs.airbnb')}</Tab>
               <Tab _selected={{ bg: 'neutral.dark', color: 'white' }}>{t('travel.tabs.booking')}</Tab>
               <Tab _selected={{ bg: 'neutral.dark', color: 'white' }}>{t('travel.tabs.hotels')}</Tab>
             </TabList>
             <TabPanels>
+              {/* On-Site Accommodation Tab */}
+              <TabPanel p={0}>
+                <Box bg="neutral.light" borderWidth="1px" borderColor="primary.soft" p={[8, 10]}>
+                  <VStack spacing={6} textAlign="center">
+                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" w="48px" h="48px" fill="none" stroke="currentColor" strokeWidth="1.5" color="neutral.dark">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />
+                    </Box>
+                    <Heading as="h3" fontFamily="heading" fontSize="xl" fontWeight="400" color="primary.deep">
+                      {t('travel.onsiteTitle')}
+                    </Heading>
+                    <Text fontSize="sm" color="neutral.muted" maxW="550px">
+                      {t('travel.onsiteDescription')}
+                    </Text>
+                    <Text fontSize="sm" color="neutral.muted" maxW="550px">
+                      <Trans 
+                        i18nKey="travel.onsiteDetails"
+                        components={{
+                          emailLink: <Link href="mailto:rsvp@carolinaandthomas.com" color="primary.deep" fontWeight="500" _hover={{ textDecoration: 'underline' }} />
+                        }}
+                      />
+                    </Text>
+                    {/* Room Plan Image */}
+                    <Box 
+                      w="full" 
+                      maxW="700px" 
+                      cursor="pointer" 
+                      onClick={onOpen}
+                      borderRadius="md"
+                      overflow="hidden"
+                      border="1px solid"
+                      borderColor="primary.soft"
+                      transition="all 0.3s ease"
+                      _hover={{ transform: "scale(1.02)", boxShadow: "lg" }}
+                    >
+                      <Image 
+                        src={venueRoomsImg} 
+                        alt={t('travel.viewFloorplan')}
+                        w="full"
+                        h="auto"
+                        objectFit="contain"
+                      />
+                    </Box>
+                    <Text fontSize="xs" color="neutral.muted" fontStyle="italic">
+                      {t('travel.clickToEnlarge')}
+                    </Text>
+                  </VStack>
+                </Box>
+              </TabPanel>
               {/* Airbnb Tab */}
               <TabPanel p={0}>
                 <Box bg="neutral.light" borderWidth="1px" borderColor="primary.soft" p={[8, 10]}>
@@ -158,14 +220,14 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
                       {/* Hotel 1 */}
                       <Box bg="white" borderWidth="1px" borderColor="primary.soft" p={6}>
                         <VStack align="start" spacing={3}>
-                          <HStack justify="space-between" w="full">
+                          <Flex justify="space-between" align="flex-start" w="full" gap={2} minH="50px">
                             <Heading as="h4" fontSize="md" fontWeight="500" color="neutral.dark">
                               {t('travel.hotels.0.name')}
                             </Heading>
-                            <Badge colorScheme="gray" variant="subtle" fontSize="xs">
+                            <Badge colorScheme="gray" variant="subtle" fontSize="xs" flexShrink={0}>
                               {t('travel.hotels.0.priceRange')}
                             </Badge>
-                          </HStack>
+                          </Flex>
                           <Text fontSize="xs" color="primary.soft" fontWeight="500">
                             {t('travel.hotels.0.location')}
                           </Text>
@@ -177,14 +239,14 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
                       {/* Hotel 2 */}
                       <Box bg="white" borderWidth="1px" borderColor="primary.soft" p={6}>
                         <VStack align="start" spacing={3}>
-                          <HStack justify="space-between" w="full">
+                          <Flex justify="space-between" align="flex-start" w="full" gap={2} minH="50px">
                             <Heading as="h4" fontSize="md" fontWeight="500" color="neutral.dark">
                               {t('travel.hotels.1.name')}
                             </Heading>
-                            <Badge colorScheme="gray" variant="subtle" fontSize="xs">
+                            <Badge colorScheme="gray" variant="subtle" fontSize="xs" flexShrink={0}>
                               {t('travel.hotels.1.priceRange')}
                             </Badge>
-                          </HStack>
+                          </Flex>
                           <Text fontSize="xs" color="primary.soft" fontWeight="500">
                             {t('travel.hotels.1.location')}
                           </Text>
@@ -196,14 +258,14 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
                       {/* Hotel 3 */}
                       <Box bg="white" borderWidth="1px" borderColor="primary.soft" p={6}>
                         <VStack align="start" spacing={3}>
-                          <HStack justify="space-between" w="full">
+                          <Flex justify="space-between" align="flex-start" w="full" gap={2} minH="50px">
                             <Heading as="h4" fontSize="md" fontWeight="500" color="neutral.dark">
                               {t('travel.hotels.2.name')}
                             </Heading>
-                            <Badge colorScheme="gray" variant="subtle" fontSize="xs">
+                            <Badge colorScheme="gray" variant="subtle" fontSize="xs" flexShrink={0}>
                               {t('travel.hotels.2.priceRange')}
                             </Badge>
-                          </HStack>
+                          </Flex>
                           <Text fontSize="xs" color="primary.soft" fontWeight="500">
                             {t('travel.hotels.2.location')}
                           </Text>
@@ -220,6 +282,44 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
           </Tabs>
         </Box>
       </VStack>
+
+      {/* Fullscreen Room Plan Modal */}
+      <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered>
+        <ModalOverlay bg="blackAlpha.800" />
+        <ModalContent 
+          bg="transparent" 
+          boxShadow="none" 
+          maxW="95vw" 
+          maxH="95vh"
+          m={4}
+        >
+          <ModalCloseButton 
+            color="white" 
+            size="lg" 
+            top={4} 
+            right={4}
+            bg="blackAlpha.600"
+            borderRadius="full"
+            _hover={{ bg: "blackAlpha.800" }}
+          />
+          <ModalBody 
+            display="flex" 
+            alignItems="center" 
+            justifyContent="center" 
+            p={0}
+            onClick={onClose}
+          >
+            <Image 
+              src={venueRoomsImg} 
+              alt={t('travel.viewFloorplan')}
+              maxW="100%"
+              maxH="90vh"
+              objectFit="contain"
+              borderRadius="md"
+            />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };

@@ -33,7 +33,7 @@ export const features = {
   sendRsvpConfirmationEmail: true,
 
   /** Show the accommodation section */
-  showAccommodation: false,
+  showAccommodation: true,
 }
 
 /**

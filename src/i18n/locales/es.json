@@ -197,12 +197,19 @@
   "travel": {
     "label": "Viaje y Alojamiento",
     "title": "Alojamiento",
-    "subtitle": "La boda se llevará a cabo en Vallesvilles, Francia. A continuación encontrarás opciones de alojamiento cercanas.",
+    "subtitle": "Vallesvilles es un pueblo rural en la campiña de Toulouse con aproximadamente 500 habitantes. Este encantador pueblo ofrece un entorno tranquilo y auténtico, típico de la región de Lauragais, con sus colinas, campos abiertos y bonitas casas de ladrillo. El ambiente es suave y acogedor, ideal para celebrar una boda rodeada de naturaleza, lejos del bullicio, pero fácilmente accesible desde Toulouse.",
+    "transportNote": "Si no vas a proporcionar tu propio transporte hacia y desde el lugar, te recomendamos encarecidamente alojarte en Toulouse, a solo 35 minutos en coche, para que podamos ayudarte a organizar el transporte.",
     "tabs": {
-      "airbnb": "Alquileres Vacacionales",
+      "onsite": "En el Lugar",
+      "airbnb": "Airbnb",
       "booking": "Booking.com",
       "hotels": "Hoteles"
     },
+    "onsiteTitle": "Alójate en el Lugar",
+    "onsiteDescription": "Nos complace ofrecer alojamiento limitado en el château para nuestros invitados. Se dará prioridad a los familiares cercanos.",
+    "onsiteDetails": "Si estás interesado en alojarte en el lugar, indícalo en tu RSVP o envía un email a <emailLink>rsvp@carolinaandthomas.com</emailLink>. Te contactaremos con la disponibilidad y los detalles.",
+    "viewFloorplan": "Plano de Habitaciones",
+    "clickToEnlarge": "Haz clic en la imagen para ampliar",
     "airbnbTitle": "Encuentra Alojamiento Cercano",
     "airbnbDescription": "Descubre encantadores alquileres vacacionales y alojamientos únicos cerca del lugar en Airbnb.",
     "searchAirbnb": "Buscar en Airbnb",

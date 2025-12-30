@@ -315,6 +315,11 @@ export default function RsvpForm() {
                 <option value="own">{t('rsvp.form.arrangingOwn')}</option>
                 <option value="recommend">{t('rsvp.form.wouldLikeRec')}</option>
               </Select>
+              {form.accommodation === 'venue' && (
+                <Text fontSize="xs" color="primary.soft" mt={2} fontStyle="italic">
+                  {t('rsvp.form.onsiteInterestHint')}
+                </Text>
+              )}
             </FormControl>
 
             {/* Travel Plan */}

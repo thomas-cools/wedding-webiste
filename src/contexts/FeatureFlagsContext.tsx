@@ -32,7 +32,7 @@ const defaultFeatures: FeatureFlags = {
   showCountdown: false,
   requirePassword: true,
   sendRsvpConfirmationEmail: true,
-  showAccommodation: false,
+  showAccommodation: true,
 };
 
 const FeatureFlagsContext = createContext<FeatureFlagsContextType>({

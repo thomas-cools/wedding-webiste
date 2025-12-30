@@ -242,17 +242,6 @@ export default function PasswordGate({ children }: PasswordGateProps) {
             <Box as="form" onSubmit={handleSubmit} w="100%" maxW="320px">
               <VStack spacing={4}>
                 <FormControl isInvalid={error}>
-                  <FormLabel
-                    fontFamily="body"
-                    fontSize="xs"
-                    fontWeight="500"
-                    letterSpacing="0.15em"
-                    textTransform="uppercase"
-                    color="neutral.dark"
-                    textAlign="center"
-                  >
-                    {t('password.inputLabel')}
-                  </FormLabel>
                   <InputGroup>
                     <Input
                       type={showPassword ? 'text' : 'password'}

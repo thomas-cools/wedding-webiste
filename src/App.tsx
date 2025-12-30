@@ -174,7 +174,7 @@ function AppContent() {
         left={0} 
         right={0} 
         zIndex={100}
-        bg="rgba(39, 11, 12, 0.9)"
+        bg="#270B0C"
       >
         <Container maxW="container.xl" px={[4, 6, 8]}>
           <Flex justify="center" align="center" position="relative">
