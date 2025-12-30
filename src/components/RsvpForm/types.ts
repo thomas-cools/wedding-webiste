@@ -1,4 +1,4 @@
-export type Guest = { name: string; dietary?: string }
+export type Guest = { name: string; age?: string; dietary?: string }
 
 export type Likelihood = 'definitely' | 'highly_likely' | 'maybe' | 'no'
 

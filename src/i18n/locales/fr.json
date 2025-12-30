@@ -90,7 +90,8 @@
       "childrenSection": "Enfants",
       "hasChildren": "Je viens avec des enfants",
       "childName": "Nom de l'enfant {{number}}",
-      "childDietaryPlaceholder": "Régime de l'enfant (facultatif)",
+      "childAgePlaceholder": "Âge",
+      "childDietaryPlaceholder": "Restrictions alimentaires (facultatif)",
       "remove": "Supprimer",
       "addChild": "+ Ajouter un Enfant",
       "additionalNotes": "Notes Supplémentaires",
@@ -158,7 +159,7 @@
   },
   "footer": {
     "date": "26 Août 2026",
-    "madeWith": "Fait avec amour à Bruxelles & Mexico"
+    "madeWith": "Fait avec amour à Amsterdam"
   },
   "countdown": {
     "label": "À Noter",

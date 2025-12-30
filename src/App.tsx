@@ -369,7 +369,6 @@ function AppContent() {
                     </Heading>
                     <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
                     <Text fontSize="sm" color="neutral.dark">{t('details.date.friday')}</Text>
-                    <Text fontSize="sm" color="neutral.muted">{t('details.time.dinner')}</Text>
                   </VStack>
                 </StaggerItem>
 
@@ -402,8 +401,6 @@ function AppContent() {
                     </Heading>
                     <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
                     <Text fontSize="sm" color="neutral.light">{t('details.date.saturday')}</Text>
-                    <Text fontSize="sm" color="primary.soft">{t('details.time.ceremony')}</Text>
-                    <Text fontSize="sm" color="primary.soft">{t('details.time.reception')}</Text>
                   </VStack>
                 </StaggerItem>
 
@@ -438,7 +435,6 @@ function AppContent() {
                     </Heading>
                     <Divider borderColor="primary.soft" w="40px" opacity={0.5} />
                     <Text fontSize="sm" color="neutral.dark">{t('details.date.sunday')}</Text>
-                    <Text fontSize="sm" color="neutral.muted">{t('details.time.brunch')}</Text>
                   </VStack>
                 </StaggerItem>
               </StaggerContainer>

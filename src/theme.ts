@@ -161,9 +161,15 @@ const theme = extendTheme({
             pb: 4,
             h: 'auto',
             minH: '48px',
+            _focus: {
+              borderColor: 'primary.deep',
+              boxShadow: 'none',
+              outline: 'none',
+            },
             _focusVisible: { 
               borderColor: 'primary.deep', 
               boxShadow: 'none',
+              outline: 'none',
             },
             _placeholder: { color: 'neutral.muted' },
           },
@@ -195,9 +201,15 @@ const theme = extendTheme({
             pb: 4,
             h: 'auto',
             minH: '48px',
+            _focus: {
+              borderColor: 'primary.deep',
+              boxShadow: 'none',
+              outline: 'none',
+            },
             _focusVisible: { 
               borderColor: 'primary.deep', 
               boxShadow: 'none',
+              outline: 'none',
             },
           },
         },
@@ -219,9 +231,15 @@ const theme = extendTheme({
           borderRadius: 'sm',
           px: 4,
           py: 3,
+          _focus: {
+            borderColor: 'primary.deep',
+            boxShadow: 'none',
+            outline: 'none',
+          },
           _focusVisible: { 
             borderColor: 'primary.deep', 
             boxShadow: 'none',
+            outline: 'none',
           },
           _placeholder: { color: 'neutral.muted' },
         },

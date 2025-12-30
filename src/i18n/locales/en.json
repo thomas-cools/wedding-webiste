@@ -90,7 +90,8 @@
       "childrenSection": "Children",
       "hasChildren": "I am bringing children",
       "childName": "Child {{number}} name",
-      "childDietaryPlaceholder": "Child dietary (optional)",
+      "childAgePlaceholder": "Age",
+      "childDietaryPlaceholder": "Dietary restrictions (optional)",
       "remove": "Remove",
       "addChild": "+ Add Child",
       "additionalNotes": "Additional Notes",
@@ -158,7 +159,7 @@
   },
   "footer": {
     "date": "August 26, 2026",
-    "madeWith": "Made with love in Brussels & Mexico City"
+    "madeWith": "Made with love in Amsterdam"
   },
   "countdown": {
     "label": "Save the Date",

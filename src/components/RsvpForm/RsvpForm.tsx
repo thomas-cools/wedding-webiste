@@ -425,12 +425,24 @@ export default function RsvpForm() {
                     {form.children.map((c, i) => (
                       <Box key={i} p={4} bg="white" borderWidth="1px" borderColor="primary.soft" borderRadius="md">
                         <Stack spacing={3}>
-                          <Input
-                            name={`children.${i}.name`}
-                            value={c.name}
-                            onChange={e => form.updateChild(i, { name: e.target.value })}
-                            placeholder={t('rsvp.form.childName', { number: i + 1 })}
-                          />
+                          <Flex direction={['column', 'row']} gap={3}>
+                            <Input
+                              name={`children.${i}.name`}
+                              value={c.name}
+                              onChange={e => form.updateChild(i, { name: e.target.value })}
+                              placeholder={t('rsvp.form.childName', { number: i + 1 })}
+                              flex={2}
+                            />
+                            <Input
+                              value={c.age || ''}
+                              onChange={e => form.updateChild(i, { age: e.target.value })}
+                              placeholder={t('rsvp.form.childAgePlaceholder')}
+                              maxW={['100%', '80px']}
+                              type="number"
+                              min="0"
+                              max="17"
+                            />
+                          </Flex>
                           <Flex direction={['column', 'row']} gap={3}>
                             <Input
                               value={c.dietary || ''}

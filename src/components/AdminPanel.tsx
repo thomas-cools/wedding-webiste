@@ -18,7 +18,7 @@ import {
 
 const STORAGE_KEY = 'rsvps'
 
-type Guest = { name: string; dietary?: string }
+type Guest = { name: string; age?: string; dietary?: string }
 
 type Likelihood = 'definitely' | 'highly_likely' | 'maybe' | 'no'
 

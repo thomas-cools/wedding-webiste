@@ -90,7 +90,8 @@
       "childrenSection": "Niños",
       "hasChildren": "Llevaré niños",
       "childName": "Nombre del niño {{number}}",
-      "childDietaryPlaceholder": "Dieta del niño (opcional)",
+      "childAgePlaceholder": "Edad",
+      "childDietaryPlaceholder": "Restricciones alimentarias (opcional)",
       "remove": "Eliminar",
       "addChild": "+ Agregar Niño",
       "additionalNotes": "Notas Adicionales",
@@ -158,7 +159,7 @@
   },
   "footer": {
     "date": "26 de Agosto, 2026",
-    "madeWith": "Hecho con amor en Bruselas y Ciudad de México"
+    "madeWith": "Hecho con amor en Ámsterdam"
   },
   "countdown": {
     "label": "Reserva la Fecha",

@@ -90,7 +90,8 @@
       "childrenSection": "Kinderen",
       "hasChildren": "Ik breng kinderen mee",
       "childName": "Naam kind {{number}}",
-      "childDietaryPlaceholder": "Dieet van het kind (optioneel)",
+      "childAgePlaceholder": "Leeftijd",
+      "childDietaryPlaceholder": "Dieetwensen (optioneel)",
       "remove": "Verwijderen",
       "addChild": "+ Kind Toevoegen",
       "additionalNotes": "Extra Opmerkingen",
@@ -158,7 +159,7 @@
   },
   "footer": {
     "date": "26 Augustus 2026",
-    "madeWith": "Gemaakt met liefde in Brussel & Mexico-Stad"
+    "madeWith": "Gemaakt met liefde in Amsterdam"
   },
   "countdown": {
     "label": "Noteer de Datum",
