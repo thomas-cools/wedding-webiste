@@ -53,16 +53,6 @@ export default function RsvpForm() {
       <Box as="section" py={4} maxW="container.sm" mx="auto" px={[4, 0]}>
         {/* Section Header */}
         <Box textAlign="center" mb={[8, 12]}>
-          <Text
-            fontSize="xs"
-            textTransform="uppercase"
-            letterSpacing="0.35em"
-            color="primary.light"
-            fontWeight="500"
-            mb={4}
-          >
-            {t('rsvp.label')}
-          </Text>
           <Heading
             as="h2"
             fontFamily="heading"
