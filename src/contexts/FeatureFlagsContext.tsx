@@ -28,7 +28,7 @@ interface FeatureFlagsContextType {
 const defaultFeatures: FeatureFlags = {
   showGallery: false,
   showStory: false,
-  showTimeline: false,
+  showTimeline: true,
   showCountdown: true,
   requirePassword: true,
   sendRsvpConfirmationEmail: true,

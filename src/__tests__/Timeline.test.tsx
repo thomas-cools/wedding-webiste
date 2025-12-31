@@ -6,28 +6,16 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
-        'timeline.label': 'Our Journey',
-        'timeline.title': 'How We Met',
-        'timeline.events.met.date': 'Summer 2019',
-        'timeline.events.met.title': 'First Meeting',
-        'timeline.events.met.description': 'We met at a conference in Paris.',
-        'timeline.events.met.location': 'Paris, France',
-        'timeline.events.firstDate.date': 'Fall 2019',
-        'timeline.events.firstDate.title': 'First Date',
-        'timeline.events.firstDate.description': 'Our first real date in Brussels.',
-        'timeline.events.firstDate.location': 'Brussels, Belgium',
-        'timeline.events.moved.date': 'Spring 2021',
-        'timeline.events.moved.title': 'Moving In',
-        'timeline.events.moved.description': 'We moved in together.',
-        'timeline.events.moved.location': 'Brussels, Belgium',
-        'timeline.events.engaged.date': 'Winter 2024',
-        'timeline.events.engaged.title': 'The Proposal',
-        'timeline.events.engaged.description': 'Thomas proposed in Mexico City.',
-        'timeline.events.engaged.location': 'Mexico City, Mexico',
-        'timeline.events.wedding.date': 'August 2026',
+        'timeline.title': 'Wedding Timeline',
+        'timeline.events.welcome.date': 'August 25th, 2026',
+        'timeline.events.welcome.title': 'Welcome Dinner',
+        'timeline.events.welcome.dressCode': 'Dress Code | Cocktail Attire',
+        'timeline.events.wedding.date': 'August 26th, 2026',
         'timeline.events.wedding.title': 'The Wedding',
-        'timeline.events.wedding.description': 'Our big day in France.',
-        'timeline.events.wedding.location': 'Vallesvilles, France',
+        'timeline.events.wedding.dressCode': 'Dress Code | Formal',
+        'timeline.events.brunch.date': 'August 27th, 2026',
+        'timeline.events.brunch.title': 'Pool Brunch',
+        'timeline.events.brunch.dressCode': 'Dress Code | Casual',
       }
       return translations[key] || key
     },
@@ -35,55 +23,40 @@ jest.mock('react-i18next', () => ({
   }),
 }))
 
-describe('Timeline Component', () => {
-  it('renders the section label', () => {
-    render(<Timeline />)
-    
-    expect(screen.getByText('Our Journey')).toBeInTheDocument()
-  })
+// Mock the SVG imports
+jest.mock('../assets/Cheers_icon.svg', () => 'cheers-icon.svg')
+jest.mock('../assets/WedCake_icon.svg', () => 'wedcake-icon.svg')
+jest.mock('../assets/Poolday_icon.svg', () => 'poolday-icon.svg')
 
+describe('Timeline Component', () => {
   it('renders the section title', () => {
     render(<Timeline />)
     
-    expect(screen.getByText('How We Met')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Wedding Timeline' })).toBeInTheDocument()
   })
 
-  it('renders all timeline events', () => {
+  it('renders all three wedding weekend events', () => {
     render(<Timeline />)
     
-    expect(screen.getByText('First Meeting')).toBeInTheDocument()
-    expect(screen.getByText('First Date')).toBeInTheDocument()
-    expect(screen.getByText('Moving In')).toBeInTheDocument()
-    expect(screen.getByText('The Proposal')).toBeInTheDocument()
+    expect(screen.getByText('Welcome Dinner')).toBeInTheDocument()
     expect(screen.getByText('The Wedding')).toBeInTheDocument()
+    expect(screen.getByText('Pool Brunch')).toBeInTheDocument()
   })
 
   it('renders event dates', () => {
     render(<Timeline />)
     
-    expect(screen.getByText('Summer 2019')).toBeInTheDocument()
-    expect(screen.getByText('Fall 2019')).toBeInTheDocument()
-    expect(screen.getByText('Spring 2021')).toBeInTheDocument()
-    expect(screen.getByText('Winter 2024')).toBeInTheDocument()
-    expect(screen.getByText('August 2026')).toBeInTheDocument()
+    expect(screen.getByText('August 25th, 2026')).toBeInTheDocument()
+    expect(screen.getByText('August 26th, 2026')).toBeInTheDocument()
+    expect(screen.getByText('August 27th, 2026')).toBeInTheDocument()
   })
 
-  it('renders event descriptions', () => {
+  it('renders dress codes for each event', () => {
     render(<Timeline />)
     
-    expect(screen.getByText('We met at a conference in Paris.')).toBeInTheDocument()
-    expect(screen.getByText('Our first real date in Brussels.')).toBeInTheDocument()
-    expect(screen.getByText('Thomas proposed in Mexico City.')).toBeInTheDocument()
-  })
-
-  it('renders event locations', () => {
-    render(<Timeline />)
-    
-    expect(screen.getByText('Paris, France')).toBeInTheDocument()
-    // Brussels appears twice (First Date and Moving In)
-    expect(screen.getAllByText('Brussels, Belgium')).toHaveLength(2)
-    expect(screen.getByText('Mexico City, Mexico')).toBeInTheDocument()
-    expect(screen.getByText('Vallesvilles, France')).toBeInTheDocument()
+    expect(screen.getByText('Dress Code | Cocktail Attire')).toBeInTheDocument()
+    expect(screen.getByText('Dress Code | Formal')).toBeInTheDocument()
+    expect(screen.getByText('Dress Code | Casual')).toBeInTheDocument()
   })
 
   it('has proper heading hierarchy', () => {
@@ -91,11 +64,7 @@ describe('Timeline Component', () => {
     
     // Main section title should be h2
     const mainHeading = screen.getByRole('heading', { level: 2 })
-    expect(mainHeading).toHaveTextContent('How We Met')
-    
-    // Event titles should be h3
-    const eventHeadings = screen.getAllByRole('heading', { level: 3 })
-    expect(eventHeadings.length).toBe(5)
+    expect(mainHeading).toHaveTextContent('Wedding Timeline')
   })
 
   it('renders the timeline section with correct id', () => {
@@ -105,20 +74,20 @@ describe('Timeline Component', () => {
     expect(section).toBeInTheDocument()
   })
 
-  it('renders timeline connector elements', () => {
+  it('renders event icons', () => {
     const { container } = render(<Timeline />)
     
-    // Each event has connecting lines/elements
-    // Check that the timeline section contains multiple event items
-    const eventHeadings = screen.getAllByRole('heading', { level: 3 })
-    expect(eventHeadings.length).toBe(5)
+    // Check that images are rendered (the icons) - they have empty alt for decorative purposes
+    const images = container.querySelectorAll('img')
+    expect(images).toHaveLength(3)
   })
 
-  it('renders 5 timeline events', () => {
+  it('renders 3 timeline events', () => {
     render(<Timeline />)
     
-    // Count event titles (h3 headings)
-    const eventHeadings = screen.getAllByRole('heading', { level: 3 })
-    expect(eventHeadings).toHaveLength(5)
+    // Count by checking for dates (unique per event)
+    expect(screen.getByText('August 25th, 2026')).toBeInTheDocument()
+    expect(screen.getByText('August 26th, 2026')).toBeInTheDocument()
+    expect(screen.getByText('August 27th, 2026')).toBeInTheDocument()
   })
 })

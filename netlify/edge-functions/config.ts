@@ -30,7 +30,7 @@ export interface FeatureFlags {
 const defaults: FeatureFlags = {
   showGallery: false,
   showStory: false,
-  showTimeline: false,
+  showTimeline: true,
   showCountdown: true,
   requirePassword: true,
   sendRsvpConfirmationEmail: true,

@@ -21,7 +21,7 @@ export const features = {
   showStory: false,
 
   /** Show the timeline/love story section */
-  showTimeline: false,
+  showTimeline: true,
 
   /** Show the countdown timer */
   showCountdown: true,
