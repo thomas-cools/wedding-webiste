@@ -40,7 +40,6 @@ import {
   StorySkeleton,
   TimelineSkeleton,
   GallerySkeleton,
-  AccommodationSkeleton,
 } from './components/SectionSkeletons'
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { weddingConfig } from './config'
@@ -51,8 +50,6 @@ import weddingLogoSmall from './assets/monogram_websiteT&C-small.webp'
 import weddingLogoMedium from './assets/monogram_websiteT&C-medium.webp'
 import weddingLogo2x from './assets/monogram_websiteT&C-2x.webp'
 import weddingLogoFull from './assets/T&C-Monogram.webp'
-import airbnbLogo from './assets/airbnb-tile.svg'
-import bookingLogo from './assets/booking-tile.svg'
 import Footer from './components/Footer'
 
 // Optimized WebP images for hero collage
@@ -74,9 +71,6 @@ const StorySection = React.lazy(() => import('./components/StorySection'))
 const Timeline = React.lazy(() => import('./components/Timeline'))
 const PhotoGallery = React.lazy(() =>
   import('./components/PhotoGallery').then((m) => ({ default: m.PhotoGallery }))
-)
-const AccommodationSection = React.lazy(() =>
-  import('./components/AccommodationSection').then((m) => ({ default: m.AccommodationSection }))
 )
 
 // Elegant thin decorative divider - classic minimalist style
@@ -148,7 +142,7 @@ function AppContent() {
   const navLinks = [
     { href: '#story', label: t('header.ourStory'), enabled: features.showStory, isExternal: false },
     { href: '#details', label: t('header.details'), enabled: true, isExternal: false },
-    { href: '#travel', label: t('header.travel'), enabled: features.showAccommodation, isExternal: false },
+    { href: '/accommodations', label: t('header.travel'), enabled: features.showAccommodation, isExternal: true },
     { href: '/rsvp', label: t('header.rsvp'), enabled: true, isExternal: true },
   ].filter((link) => link.enabled)
 
@@ -510,12 +504,6 @@ function AppContent() {
           </Container>
         </Box>
 
-        {/* Travel & Accommodation Section */}
-        <ErrorBoundary sectionName="accommodation" silent>
-          <Suspense fallback={<AccommodationSkeleton />}>
-            <AccommodationSection enabled={features.showAccommodation} />
-          </Suspense>
-        </ErrorBoundary>
       </Box>
 
       <Footer />

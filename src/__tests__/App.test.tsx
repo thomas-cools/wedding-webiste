@@ -80,9 +80,8 @@ describe('App', () => {
     render(<App />)
     // App now lazy-loads some below-the-fold sections; awaiting a few known
     // elements avoids Suspense resolution warnings.
-    // RSVP form is now on a separate page, so we don't wait for it here
+    // RSVP form and Accommodation section are now on separate pages, so we don't wait for them here
     await screen.findByText('story.title')
-    await screen.findByText('travel.title')
   }
 
   it('renders the header with couple initials', async () => {

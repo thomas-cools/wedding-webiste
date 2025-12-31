@@ -4,6 +4,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from './App'
 import RsvpPage from './pages/RsvpPage'
+import AccommodationsPage from './pages/AccommodationsPage'
 import theme from './theme'
 import { FeatureFlagsProvider } from './contexts/FeatureFlagsContext'
 import './index.css'
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/rsvp" element={<RsvpPage />} />
+            <Route path="/accommodations" element={<AccommodationsPage />} />
           </Routes>
         </BrowserRouter>
       </FeatureFlagsProvider>

@@ -200,6 +200,7 @@
   "travel": {
     "label": "Voyage et Séjour",
     "title": "Hébergement",
+    "backToHome": "Retour",
     "subtitle": "Vallesvilles est un village rural dans la campagne toulousaine d'environ 500 habitants. Ce charmant village offre un cadre paisible et authentique, typique de la région du Lauragais, avec ses coteaux, ses champs ouverts et ses jolies maisons en briques. L'atmosphère y est douce et accueillante, idéale pour célébrer un mariage entouré de nature, loin de l'agitation, tout en restant facilement accessible depuis Toulouse.",
     "transportNote": "Si vous ne prévoyez pas votre propre transport vers et depuis le lieu, nous vous recommandons vivement de séjourner à Toulouse, à seulement 35 minutes en voiture, afin que nous puissions vous aider à organiser le transport.",
     "tabs": {
