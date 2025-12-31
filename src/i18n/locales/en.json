@@ -160,7 +160,8 @@
   },
   "footer": {
     "date": "August 26, 2026",
-    "madeWith": "Made with love in Amsterdam"
+    "madeWith": "Made with love in Amsterdam",
+    "contactUs": "For any questions, please contact us at:"
   },
   "countdown": {
     "label": "Save the Date",

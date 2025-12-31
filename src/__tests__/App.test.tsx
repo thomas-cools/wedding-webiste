@@ -87,8 +87,8 @@ describe('App', () => {
 
   it('renders the header with couple initials', async () => {
     await renderAppAndWaitForLazySections()
-    // i18n mock returns keys, so we check for the translation key
-    expect(screen.getAllByText('header.initials').length).toBeGreaterThan(0)
+    // i18n mock returns keys, so we check for the translation key in alt attribute
+    expect(screen.getByAltText('header.initials')).toBeInTheDocument()
   })
 
   it('renders the hero section with couple names', async () => {
@@ -141,7 +141,7 @@ describe('App', () => {
 
   it('renders the footer', async () => {
     await renderAppAndWaitForLazySections()
-    expect(screen.getByText('footer.madeWith')).toBeInTheDocument()
+    expect(screen.getByText('footer.contactUs')).toBeInTheDocument()
   })
 
   it('renders the RSVP form within the page', async () => {

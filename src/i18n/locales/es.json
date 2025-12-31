@@ -159,7 +159,8 @@
   },
   "footer": {
     "date": "26 de Agosto, 2026",
-    "madeWith": "Hecho con amor en Ámsterdam"
+    "madeWith": "Hecho con amor en Ámsterdam",
+    "contactUs": "Para cualquier pregunta, contáctanos en:"
   },
   "countdown": {
     "label": "Reserva la Fecha",
