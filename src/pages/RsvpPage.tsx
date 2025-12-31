@@ -116,7 +116,7 @@ export default function RsvpPage() {
 
   // Wrap with password gate if feature is enabled
   if (features.requirePassword) {
-    return <PasswordGate><RsvpPageContent /></PasswordGate>
+    return <PasswordGate bg="#300F0C"><RsvpPageContent /></PasswordGate>
   }
 
   return <RsvpPageContent />

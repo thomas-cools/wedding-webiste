@@ -174,7 +174,7 @@ export function AccommodationSkeleton() {
  */
 export function RsvpFormSkeleton() {
   return (
-    <Box py={[12, 16]} bg="secondary.slate">
+    <Box py={[12, 16]} bg="#300F0C">
       <Container maxW="container.lg">
         <VStack spacing={8} align="center">
           {/* Section header */}
@@ -185,9 +185,9 @@ export function RsvpFormSkeleton() {
           </VStack>
           {/* Form skeleton */}
           <Box
-            bg="neutral.light"
+            bg="neutral.cream"
             p={[5, 8, 12]}
-            borderRadius="md"
+            borderRadius="lg"
             w="full"
             maxW="600px"
           >
@@ -196,11 +196,11 @@ export function RsvpFormSkeleton() {
               {[1, 2, 3, 4].map((i) => (
                 <Box key={i}>
                   <Skeleton height="14px" width="100px" mb={2} />
-                  <Skeleton height="40px" width="full" />
+                  <Skeleton height="40px" width="full" borderRadius="full" />
                 </Box>
               ))}
               {/* Submit button */}
-              <Skeleton height="48px" width="full" mt={4} />
+              <Skeleton height="48px" width="full" mt={4} borderRadius="full" />
             </VStack>
           </Box>
         </VStack>

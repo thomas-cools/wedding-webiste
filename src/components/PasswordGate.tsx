@@ -54,9 +54,11 @@ function formatCooldown(msRemaining: number): string {
 
 interface PasswordGateProps {
   children: React.ReactNode
+  /** Custom background color for loading and gate screens */
+  bg?: string
 }
 
-export default function PasswordGate({ children }: PasswordGateProps) {
+export default function PasswordGate({ children, bg = 'neutral.light' }: PasswordGateProps) {
   const { t } = useTranslation()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
@@ -156,7 +158,7 @@ export default function PasswordGate({ children }: PasswordGateProps) {
   // Show nothing while checking auth status
   if (isLoading) {
     return (
-      <Box minH="100vh" bg="neutral.light" />
+      <Box minH="100vh" bg={bg} />
     )
   }
 
@@ -169,7 +171,7 @@ export default function PasswordGate({ children }: PasswordGateProps) {
   return (
     <Box 
       minH="100vh" 
-      bg="neutral.light"
+      bg={bg}
       display="flex"
       alignItems="center"
       justifyContent="center"
