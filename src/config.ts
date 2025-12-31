@@ -24,7 +24,7 @@ export const features = {
   showTimeline: false,
 
   /** Show the countdown timer */
-  showCountdown: false,
+  showCountdown: true,
 
   /** Enable password protection for the site */
   requirePassword: true,

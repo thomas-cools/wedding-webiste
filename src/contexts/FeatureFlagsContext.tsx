@@ -29,7 +29,7 @@ const defaultFeatures: FeatureFlags = {
   showGallery: false,
   showStory: false,
   showTimeline: false,
-  showCountdown: false,
+  showCountdown: true,
   requirePassword: true,
   sendRsvpConfirmationEmail: true,
   showAccommodation: true,
