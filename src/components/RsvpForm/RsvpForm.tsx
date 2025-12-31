@@ -17,14 +17,18 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useRsvpForm } from './useRsvpForm'
-import type { Likelihood, EventAnswer, Accommodation, TravelPlan } from './types'
+import type { Likelihood, EventAnswer, Accommodation, TravelPlan, Rsvp } from './types'
 
-export default function RsvpForm() {
+export interface RsvpFormProps {
+  onSuccess?: (entry: Rsvp, isUpdate: boolean) => void
+}
+
+export default function RsvpForm({ onSuccess }: RsvpFormProps) {
   const { t } = useTranslation()
   const toast = useToast()
 
   const form = useRsvpForm({
-    onSuccess: (_entry, isUpdate) => {
+    onSuccess: (entry, isUpdate) => {
       toast({
         title: isUpdate ? t('rsvp.success.updatedTitle') : t('rsvp.success.savedTitle'),
         description: isUpdate ? t('rsvp.success.updatedMessage') : t('rsvp.success.savedMessage'),
@@ -34,6 +38,8 @@ export default function RsvpForm() {
         variant: 'solid',
         position: 'top',
       })
+      // Call the parent's onSuccess callback if provided
+      onSuccess?.(entry, isUpdate)
     },
     onAddressWarning: () => {
       toast({

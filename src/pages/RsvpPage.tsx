@@ -8,7 +8,7 @@ import {
   Flex,
   Image as ChakraImage,
 } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ErrorBoundary from '../components/ErrorBoundary'
@@ -26,6 +26,14 @@ const RsvpForm = React.lazy(() => import('../components/RsvpForm'))
 
 function RsvpPageContent() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
+  const handleRsvpSuccess = () => {
+    // Small delay to allow toast to be shown before navigating
+    setTimeout(() => {
+      navigate('/')
+    }, 1500)
+  }
 
   return (
     <Box minH="100vh" bg="#300F0C" display="flex" flexDirection="column">
@@ -100,7 +108,7 @@ function RsvpPageContent() {
         <Container maxW="container.lg">
           <ErrorBoundary sectionName="RSVP form">
             <Suspense fallback={<RsvpFormSkeleton />}>
-              <RsvpForm />
+              <RsvpForm onSuccess={handleRsvpSuccess} />
             </Suspense>
           </ErrorBoundary>
         </Container>
