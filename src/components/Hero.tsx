@@ -226,47 +226,154 @@ export default function Hero({
       {/* Collage overlays (above the dark overlay so the envelope reads clearly) */}
       {hasBackground && collage && (
         <Box position="absolute" inset={0} pointerEvents="none" zIndex={1}>
-          {/* Envelope centered (the hero text sits on top of this) */}
+          {/* Envelope centered with text content */}
           <Box
-            as="picture"
             position="absolute"
-            top="50%"
+            top={['38%', '45%', '50%']}
             left="50%"
             transform="translate(-50%, -50%)"
             w={['300px', '460px', '600px']}
             maxW={['92vw', '80vw', '720px']}
           >
-            {collage.envelopeSrcSet?.large && (
-              <source media="(min-width: 1024px)" srcSet={collage.envelopeSrcSet.large} type="image/webp" />
-            )}
-            {collage.envelopeSrcSet?.medium && (
-              <source media="(min-width: 768px)" srcSet={collage.envelopeSrcSet.medium} type="image/webp" />
-            )}
-            {collage.envelopeSrcSet?.small && (
-              <source srcSet={collage.envelopeSrcSet.small} type="image/webp" />
-            )}
+            {/* Envelope image */}
+            <Box as="picture" display="block" w="100%">
+              {collage.envelopeSrcSet?.large && (
+                <source media="(min-width: 1024px)" srcSet={collage.envelopeSrcSet.large} type="image/webp" />
+              )}
+              {collage.envelopeSrcSet?.medium && (
+                <source media="(min-width: 768px)" srcSet={collage.envelopeSrcSet.medium} type="image/webp" />
+              )}
+              {collage.envelopeSrcSet?.small && (
+                <source srcSet={collage.envelopeSrcSet.small} type="image/webp" />
+              )}
+              <Box
+                as="img"
+                src={collage.envelopeSrc}
+                alt="Envelope"
+                loading="eager"
+                decoding="async"
+                w="100%"
+                h="auto"
+                opacity={0.98}
+              />
+            </Box>
+
+            {/* Date/Venue text - positioned on envelope */}
             <Box
-              as="img"
-              src={collage.envelopeSrc}
-              alt="Envelope"
-              loading="eager"
-              decoding="async"
-              w="100%"
-              h="auto"
-              opacity={0.98}
+              position="absolute"
+              top="18%"
+              left="50%"
+              transform="translateX(-50%)"
+              textAlign="center"
+              pointerEvents="auto"
+            >
+              <VStack spacing={1}>
+                <Text
+                  fontFamily="heading"
+                  fontSize={["md", "xl", "2xl"]}
+                  fontWeight="300"
+                  color="white"
+                  letterSpacing="0.15em"
+                >
+                  {t('hero.date')}
+                </Text>
+                <Text
+                  fontFamily="heading"
+                  fontSize={["xs", "md", "lg"]}
+                  fontWeight="300"
+                  color="whiteAlpha.900"
+                  letterSpacing="0.1em"
+                >
+                  {t('hero.venue')}
+                </Text>
+              </VStack>
+            </Box>
+          </Box>
+
+          {/* Scroll indicator chevron - between envelope and RSVP */}
+          <Box
+            position="absolute"
+            bottom={['18%', '20%', '22%']}
+            left="50%"
+            transform="translateX(-50%)"
+            pointerEvents="none"
+            animation="bounce 2s infinite"
+            sx={{
+              '@keyframes bounce': {
+                '0%, 20%, 50%, 80%, 100%': { transform: 'translateX(-50%) translateY(0)' },
+                '40%': { transform: 'translateX(-50%) translateY(-8px)' },
+                '60%': { transform: 'translateX(-50%) translateY(-4px)' },
+              },
+            }}
+          >
+            <Box
+              w="24px"
+              h="40px"
+              border="2px solid"
+              borderColor="whiteAlpha.500"
+              borderRadius="full"
+              position="relative"
+              _before={{
+                content: '""',
+                position: 'absolute',
+                top: '6px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                w: '3px',
+                h: '6px',
+                bg: 'whiteAlpha.500',
+                borderRadius: 'full',
+              }}
             />
           </Box>
 
-          {/* Postcard stamp (left) */}
+          {/* RSVP Button - positioned below envelope */}
           <Box
+            position="absolute"
+            bottom={['8%', '10%', '12%']}
+            left="50%"
+            transform="translateX(-50%)"
+            pointerEvents="auto"
+            zIndex={2}
+          >
+            <Button
+              as={Link}
+              to="/rsvp"
+              variant="ghost"
+              size={["md", "lg", "lg"]}
+              color="whiteAlpha.800"
+              borderWidth="1px"
+              borderColor="whiteAlpha.400"
+              borderRadius="sm"
+              bg="transparent"
+              px={[8, 10, 12]}
+              py={[5, 6, 6]}
+              fontSize={["sm", "md", "md"]}
+              fontWeight="400"
+              letterSpacing="0.15em"
+              _hover={{
+                bg: "whiteAlpha.100",
+                color: "white",
+                borderColor: "whiteAlpha.600",
+              }}
+              transition="all 0.3s ease"
+            >
+              {t('hero.respond')}
+            </Button>
+          </Box>
+
+          {/* Postcard stamp (left) */}
+          <MotionBox
             as="picture"
             position="absolute"
-            top={['62%', '63%', '64%']}
-            left={['6%', '10%', '16%']}
-            w={['120px', '150px', '190px']}
-            maxW={['34vw', '26vw', '220px']}
-            transform="rotate(-8deg)"
+            top={['55%', '50%', '45%']}
+            left={['8%', '18%', '22%']}
+            w={['160px', '200px', '240px']}
+            maxW={['42vw', '30vw', '280px']}
             transformOrigin="center"
+            initial={{ opacity: 0, x: -100, rotate: -20 }}
+            animate={{ opacity: 1, x: 0, rotate: -8 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
           >
             {collage.stampSrcSet?.large && (
               <source media="(min-width: 768px)" srcSet={collage.stampSrcSet.large} type="image/webp" />
@@ -284,18 +391,20 @@ export default function Hero({
               h="auto"
               opacity={0.98}
             />
-          </Box>
+          </MotionBox>
 
           {/* Venue postcard (right) */}
-          <Box
+          <MotionBox
             as="picture"
             position="absolute"
-            top={['62%', '63%', '64%']}
-            right={['6%', '10%', '16%']}
-            w={['220px', '280px', '340px']}
-            maxW={['52vw', '40vw', '420px']}
-            transform="rotate(6deg)"
+            top={['55%', '50%', '45%']}
+            right={['8%', '18%', '22%']}
+            w={['160px', '200px', '240px']}
+            maxW={['42vw', '30vw', '280px']}
             transformOrigin="center"
+            initial={{ opacity: 0, x: 100, rotate: 20 }}
+            animate={{ opacity: 1, x: 0, rotate: 6 }}
+            transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
           >
             {collage.venueSrcSet?.large && (
               <source media="(min-width: 768px)" srcSet={collage.venueSrcSet.large} type="image/webp" />
@@ -311,7 +420,69 @@ export default function Hero({
               h="auto"
               opacity={0.98}
             />
-          </Box>
+          </MotionBox>
+        </Box>
+      )}
+
+      {/* Couple Names - positioned above envelope */}
+      {hasCollage && (
+        <Box
+          position="absolute"
+          top={['12%', '12%', '12%']}
+          left="50%"
+          transform="translateX(-50%)"
+          zIndex={3}
+          textAlign="center"
+        >
+          <MotionBox
+            initial="hidden"
+            animate="visible"
+            variants={heroStagger}
+          >
+            <MotionBox variants={heroFadeIn}>
+              <Flex
+                direction="row"
+                align="center"
+                justify="center"
+                gap={[2, 4]}
+              >
+                <Heading
+                  as="h1"
+                  fontFamily="heading"
+                  fontSize={["3xl", "5xl", "6xl"]}
+                  fontWeight="300"
+                  color="white"
+                  letterSpacing="0.03em"
+                  lineHeight="1"
+                >
+                  {t('hero.bride')}
+                </Heading>
+                
+                <Text
+                  fontFamily="heading"
+                  fontSize={["xl", "3xl", "4xl"]}
+                  fontWeight="300"
+                  color="whiteAlpha.800"
+                  fontStyle="italic"
+                  lineHeight="1"
+                >
+                  {t('hero.and')}
+                </Text>
+                
+                <Heading
+                  as="h1"
+                  fontFamily="heading"
+                  fontSize={["3xl", "5xl", "6xl"]}
+                  fontWeight="300"
+                  color="white"
+                  letterSpacing="0.03em"
+                  lineHeight="1"
+                >
+                  {t('hero.groom')}
+                </Heading>
+              </Flex>
+            </MotionBox>
+          </MotionBox>
         </Box>
       )}
 
@@ -329,140 +500,121 @@ export default function Hero({
           animate="visible"
           variants={heroStagger}
         >
-          {/* Pre-heading */}
-          <MotionBox variants={heroFadeIn}>
-            <Text
-              fontSize={hasCollage ? 'xs' : 'sm'}
-              textTransform="uppercase"
-              letterSpacing={hasCollage ? '0.2em' : '0.35em'}
-              color={hasBackground ? "whiteAlpha.900" : "primary.soft"}
-              fontWeight="400"
-              lineHeight="1.2"
+          {/* Couple Names - only show here when no collage */}
+          {!hasCollage && (
+            <MotionBox variants={heroFadeIn}>
+              <Flex
+                direction={["column", "row"]}
+                align="center"
+                justify="center"
+                gap={[4, 8]}
+                maxW="100%"
+              >
+                <Heading
+                  as="h1"
+                  fontFamily="heading"
+                  fontSize={["5xl", "6xl", "7xl"]}
+                  fontWeight="300"
+                  color={hasBackground ? "white" : "neutral.dark"}
+                  letterSpacing="0.05em"
+                  lineHeight="1"
+                >
+                  {t('hero.bride')}
+                </Heading>
+                
+                <Text
+                  fontFamily="heading"
+                  fontSize={["3xl", "4xl", "5xl"]}
+                  fontWeight="300"
+                  color={hasBackground ? "whiteAlpha.800" : "primary.soft"}
+                  fontStyle="italic"
+                  lineHeight="1"
+                >
+                  {t('hero.and')}
+                </Text>
+                
+                <Heading
+                  as="h1"
+                  fontFamily="heading"
+                  fontSize={["5xl", "6xl", "7xl"]}
+                  fontWeight="300"
+                  color={hasBackground ? "white" : "neutral.dark"}
+                  letterSpacing="0.05em"
+                  lineHeight="1"
+                >
+                  {t('hero.groom')}
+                </Heading>
+              </Flex>
+            </MotionBox>
+          )}
+
+          {/* Decorative Divider - only show when no collage */}
+          {!hasCollage && (
+            <MotionBox variants={heroFadeIn}>
+              <Box
+                as="hr"
+                border="none"
+                borderTop="1px solid"
+                borderColor={hasBackground ? "whiteAlpha.500" : "primary.soft"}
+                width="120px"
+                mx="auto"
+              />
+            </MotionBox>
+          )}
+
+          {/* Date - only show here when no collage */}
+          {!hasCollage && (
+            <MotionBox variants={heroFadeIn}>
+              <VStack spacing={1}>
+                <Text
+                  fontFamily="heading"
+                  fontSize={["xl", "2xl"]}
+                  fontWeight="300"
+                  color={hasBackground ? "white" : "neutral.dark"}
+                  letterSpacing="0.15em"
+                >
+                  {t('hero.date')}
+                </Text>
+                <Text
+                  fontFamily="heading"
+                  fontSize={["md", "lg"]}
+                  fontWeight="300"
+                  color={hasBackground ? "whiteAlpha.900" : "neutral.muted"}
+                  letterSpacing="0.1em"
+                >
+                  {t('hero.venue')}
+                </Text>
+              </VStack>
+            </MotionBox>
+          )}
+
+          {/* CTA Button - only show here when no collage */}
+          {!hasCollage && (
+            <MotionBox
+              variants={heroFadeIn}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              {t('hero.together')}
-            </Text>
-          </MotionBox>
-
-          {/* Couple Names */}
-          <MotionBox variants={heroFadeIn}>
-            <Flex
-              direction={["column", "row"]}
-              align="center"
-              justify="center"
-              gap={hasCollage ? [2, 6] : [4, 8]}
-              maxW="100%"
-            >
-              <Heading
-                as="h1"
-                fontFamily="heading"
-                fontSize={hasCollage ? ["3xl", "4xl", "5xl"] : ["5xl", "6xl", "7xl"]}
-                fontWeight="300"
-                color={hasBackground ? "white" : "neutral.dark"}
-                letterSpacing={hasCollage ? '0.03em' : '0.05em'}
-                lineHeight="1"
+              <Button
+                as={Link}
+                to="/rsvp"
+                variant={hasBackground ? "outline" : "primary"}
+                size="lg"
+                mt={8}
+                color={hasBackground ? "white" : undefined}
+                borderColor={hasBackground ? "white" : undefined}
+                _hover={{
+                  bg: hasBackground ? "transparent" : "primary.deep",
+                  color: hasBackground ? "white" : "neutral.light",
+                  borderColor: hasBackground ? "white" : undefined,
+                  transform: "translateY(-2px)",
+                }}
+                transition="all 0.3s ease"
               >
-                {t('hero.bride')}
-              </Heading>
-              
-              <Text
-                fontFamily="heading"
-                fontSize={hasCollage ? ["xl", "2xl", "3xl"] : ["3xl", "4xl", "5xl"]}
-                fontWeight="300"
-                color={hasBackground ? "whiteAlpha.800" : "primary.soft"}
-                fontStyle="italic"
-                lineHeight="1"
-              >
-                {t('hero.and')}
-              </Text>
-              
-              <Heading
-                as="h1"
-                fontFamily="heading"
-                fontSize={hasCollage ? ["3xl", "4xl", "5xl"] : ["5xl", "6xl", "7xl"]}
-                fontWeight="300"
-                color={hasBackground ? "white" : "neutral.dark"}
-                letterSpacing={hasCollage ? '0.03em' : '0.05em'}
-                lineHeight="1"
-              >
-                {t('hero.groom')}
-              </Heading>
-            </Flex>
-          </MotionBox>
-
-          {/* Decorative Divider */}
-          <MotionBox variants={heroFadeIn}>
-            <Box
-              as="hr"
-              border="none"
-              borderTop="1px solid"
-              borderColor={hasBackground ? "whiteAlpha.500" : "primary.soft"}
-              width="120px"
-              mx="auto"
-            />
-          </MotionBox>
-
-          {/* Date */}
-          <MotionBox variants={heroFadeIn}>
-            <VStack spacing={2}>
-              <Text
-                fontFamily="heading"
-                fontSize={["xl", "2xl"]}
-                fontWeight="300"
-                color={hasBackground ? "white" : "neutral.dark"}
-                letterSpacing="0.15em"
-              >
-                {t('hero.date')}
-              </Text>
-              <Text
-                fontFamily="heading"
-                fontSize={["lg", "xl"]}
-                fontWeight="300"
-                color={hasBackground ? "whiteAlpha.900" : "neutral.muted"}
-                letterSpacing="0.1em"
-              >
-                {t('hero.year')}
-              </Text>
-            </VStack>
-          </MotionBox>
-
-          {/* Venue */}
-          <MotionBox variants={heroFadeIn}>
-            <Text
-              fontSize="sm"
-              textTransform="uppercase"
-              letterSpacing="0.25em"
-              color={hasBackground ? "whiteAlpha.800" : "neutral.muted"}
-              fontWeight="400"
-            >
-              {t('hero.venue')}
-            </Text>
-          </MotionBox>
-
-          {/* CTA Button */}
-          <MotionBox
-            variants={heroFadeIn}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Button
-              as={Link}
-              to="/rsvp"
-              variant={hasBackground ? "outline" : "primary"}
-              size="lg"
-              mt={8}
-              color={hasBackground ? "white" : undefined}
-              borderColor={hasBackground ? "white" : undefined}
-              _hover={{
-                bg: hasBackground ? "transparent" : "primary.deep",
-                color: hasBackground ? "white" : "neutral.light",
-                borderColor: hasBackground ? "white" : undefined,
-                transform: "translateY(-2px)",
-              }}
-              transition="all 0.3s ease"
-            >
-              {t('hero.respond')}
-            </Button>
-          </MotionBox>
+                {t('hero.respond')}
+              </Button>
+            </MotionBox>
+          )}
         </MotionBox>
       </Container>
 
