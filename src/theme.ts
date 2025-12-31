@@ -172,6 +172,7 @@ const theme = extendTheme({
             pb: 4,
             h: 'auto',
             minH: '48px',
+            color: 'neutral.dark',
             _focus: {
               borderColor: 'primary.deep',
               boxShadow: 'none',
@@ -242,6 +243,7 @@ const theme = extendTheme({
           borderRadius: 'sm',
           px: 4,
           py: 3,
+          color: 'neutral.dark',
           _focus: {
             borderColor: 'primary.deep',
             boxShadow: 'none',
