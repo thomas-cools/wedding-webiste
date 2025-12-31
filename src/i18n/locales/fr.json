@@ -124,39 +124,22 @@
     }
   },
   "timeline": {
-    "label": "Notre Parcours",
-    "title": "Comment Nous en Sommes Arrivés Là",
-    "subtitle": "D'une rencontre fortuite à l'éternité, voici les moments qui nous ont réunis.",
+    "title": "Programme du Mariage",
     "events": {
-      "met": {
-        "date": "Été 2019",
-        "title": "Le Premier Bonjour",
-        "description": "Une rencontre fortuite qui allait tout changer. Ce qui a commencé comme une simple présentation est devenu le début de notre histoire.",
-        "location": "Bruxelles, Belgique"
-      },
-      "firstDate": {
-        "date": "Automne 2019",
-        "title": "Le Premier Rendez-vous",
-        "description": "Le café s'est transformé en dîner, le dîner en promenade dans la ville, et nous savions que c'était quelque chose de spécial.",
-        "location": "Bruxelles, Belgique"
-      },
-      "moved": {
-        "date": "Printemps 2021",
-        "title": "Construire Notre Foyer",
-        "description": "Nous avons franchi le pas et emménagé ensemble, mélangeant nos vies, nos cultures et nos collections de livres.",
-        "location": "Bruxelles, Belgique"
-      },
-      "engaged": {
-        "date": "Hiver 2024",
-        "title": "La Demande",
-        "description": "Sous un ciel étoilé, avec des mains tremblantes et un cœur plein, la question a été posée et répondue avec joie.",
-        "location": "Mexico, Mexique"
+      "welcome": {
+        "date": "25 Août 2026",
+        "title": "Dîner de Bienvenue",
+        "dressCode": "Tenue | Cocktail"
       },
       "wedding": {
-        "date": "Octobre 2026",
+        "date": "26 Août 2026",
         "title": "Le Mariage",
-        "description": "Où nos deux familles n'en feront plus qu'une, au cœur de la France.",
-        "location": "Vallesvilles, France"
+        "dressCode": "Tenue | Formelle"
+      },
+      "brunch": {
+        "date": "27 Août 2026",
+        "title": "Brunch à la Piscine",
+        "dressCode": "Tenue | Décontractée"
       }
     }
   },

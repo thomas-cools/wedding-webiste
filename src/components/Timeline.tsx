@@ -7,111 +7,121 @@ import {
   HStack,
   Flex,
   Circle,
-  Divider,
+  Image,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-interface TimelineEvent {
+// Import icons
+import CheersIcon from '../assets/Cheers_icon.svg'
+import WedCakeIcon from '../assets/WedCake_icon.svg'
+import PooldayIcon from '../assets/Poolday_icon.svg'
+
+interface WeddingEvent {
   date: string
   title: string
-  description: string
-  location?: string
+  dressCode: string
+  icon: string
 }
 
 export default function Timeline() {
   const { t } = useTranslation()
 
-  // Get timeline events from translations
-  const events: TimelineEvent[] = [
+  // Wedding weekend events
+  const weddingEvents: WeddingEvent[] = [
     {
-      date: t('timeline.events.met.date'),
-      title: t('timeline.events.met.title'),
-      description: t('timeline.events.met.description'),
-      location: t('timeline.events.met.location'),
-    },
-    {
-      date: t('timeline.events.firstDate.date'),
-      title: t('timeline.events.firstDate.title'),
-      description: t('timeline.events.firstDate.description'),
-      location: t('timeline.events.firstDate.location'),
-    },
-    {
-      date: t('timeline.events.moved.date'),
-      title: t('timeline.events.moved.title'),
-      description: t('timeline.events.moved.description'),
-      location: t('timeline.events.moved.location'),
-    },
-    {
-      date: t('timeline.events.engaged.date'),
-      title: t('timeline.events.engaged.title'),
-      description: t('timeline.events.engaged.description'),
-      location: t('timeline.events.engaged.location'),
+      date: t('timeline.events.welcome.date'),
+      title: t('timeline.events.welcome.title'),
+      dressCode: t('timeline.events.welcome.dressCode'),
+      icon: CheersIcon,
     },
     {
       date: t('timeline.events.wedding.date'),
       title: t('timeline.events.wedding.title'),
-      description: t('timeline.events.wedding.description'),
-      location: t('timeline.events.wedding.location'),
+      dressCode: t('timeline.events.wedding.dressCode'),
+      icon: WedCakeIcon,
+    },
+    {
+      date: t('timeline.events.brunch.date'),
+      title: t('timeline.events.brunch.title'),
+      dressCode: t('timeline.events.brunch.dressCode'),
+      icon: PooldayIcon,
     },
   ]
 
   return (
-    <Box as="section" id="timeline" py={[20, 28]} bg="white">
-      <Container maxW="container.lg">
-        <VStack spacing={16}>
+    <Box as="section" id="timeline" py={[16, 20, 28]} bg="white">
+      <Container maxW="container.xl" px={[4, 6, 8]}>
+        <VStack spacing={[12, 16, 20]}>
           {/* Section Header */}
-          <VStack spacing={4} textAlign="center" maxW="600px">
-            <Text
-              fontSize="xs"
-              textTransform="uppercase"
-              letterSpacing="0.35em"
-              color="primary.soft"
-              fontWeight="500"
-            >
-              {t('timeline.label')}
-            </Text>
+          <VStack spacing={4} textAlign="center">
             <Heading
               as="h2"
               fontFamily="heading"
-              fontSize={["3xl", "4xl"]}
+              fontSize={["2xl", "3xl", "4xl"]}
               fontWeight="400"
+              textTransform="uppercase"
+              letterSpacing="0.15em"
+              color="primary.deep"
             >
               {t('timeline.title')}
             </Heading>
-            <Box my={2}>
-              <Divider borderColor="primary.soft" w="120px" mx="auto" />
-            </Box>
-            <Text color="neutral.muted" fontSize="md" maxW="500px" lineHeight="1.8">
-              {t('timeline.subtitle')}
-            </Text>
           </VStack>
 
-          {/* Timeline */}
-          <Box position="relative" w="full" maxW="800px">
-            {/* Vertical Line - Hidden on mobile */}
+          {/* Wedding Events - Horizontal Layout */}
+          <Box w="full" position="relative">
+            {/* Events Grid */}
+            <Flex
+              direction={["column", "column", "row"]}
+              justify="center"
+              align={["center", "center", "flex-start"]}
+              gap={[10, 12, 0]}
+              position="relative"
+              maxW="1000px"
+              mx="auto"
+            >
+              {weddingEvents.map((event, index) => (
+                <EventCard key={index} event={event} />
+              ))}
+            </Flex>
+
+            {/* Horizontal Timeline Line - Desktop only */}
             <Box
               display={["none", "none", "block"]}
               position="absolute"
+              bottom="0"
               left="50%"
-              top={0}
-              bottom={0}
-              w="1px"
-              bg="primary.soft"
               transform="translateX(-50%)"
-            />
-
-            {/* Timeline Events */}
-            <VStack spacing={[8, 12, 0]} align="stretch">
-              {events.map((event, index) => (
-                <TimelineItem
-                  key={index}
-                  event={event}
-                  isLeft={index % 2 === 0}
-                  isFirst={index === 0}
-                  isLast={index === events.length - 1}
+              w="70%"
+              maxW="700px"
+            >
+              <Box position="relative" w="full">
+                {/* Main line */}
+                <Box
+                  h="2px"
+                  bg="primary.soft"
+                  opacity={0.6}
+                  w="full"
                 />
-              ))}
-            </VStack>
+                {/* Dots */}
+                <Flex
+                  position="absolute"
+                  top="50%"
+                  left={0}
+                  right={0}
+                  transform="translateY(-50%)"
+                  justify="space-between"
+                >
+                  {[0, 1, 2].map((i) => (
+                    <Circle
+                      key={i}
+                      size="12px"
+                      bg="primary.soft"
+                      opacity={0.8}
+                    />
+                  ))}
+                </Flex>
+              </Box>
+            </Box>
           </Box>
         </VStack>
       </Container>
@@ -119,99 +129,72 @@ export default function Timeline() {
   )
 }
 
-interface TimelineItemProps {
-  event: TimelineEvent
-  isLeft: boolean
-  isFirst: boolean
-  isLast: boolean
+interface EventCardProps {
+  event: WeddingEvent
 }
 
-function TimelineItem({ event, isLeft, isFirst, isLast }: TimelineItemProps) {
+function EventCard({ event }: EventCardProps) {
   return (
-    <Flex
-      direction={["column", "column", isLeft ? "row" : "row-reverse"]}
-      align={["flex-start", "flex-start", "center"]}
-      position="relative"
-      pb={[0, 0, 12]}
+    <VStack
+      flex={1}
+      spacing={4}
+      textAlign="center"
+      px={[4, 6, 8]}
+      pb={[0, 0, 10]}
+      maxW={["280px", "300px", "320px"]}
     >
-      {/* Content */}
+      {/* Icon */}
       <Box
-        flex={1}
-        textAlign={["left", "left", isLeft ? "right" : "left"]}
-        pr={[0, 0, isLeft ? 12 : 0]}
-        pl={[0, 0, isLeft ? 0 : 12]}
-        pb={[4, 4, 0]}
+        w={["100px", "120px", "140px"]}
+        h={["100px", "120px", "140px"]}
+        mb={2}
       >
-        <Text
-          fontSize="sm"
-          textTransform="uppercase"
-          letterSpacing="0.2em"
-          color="primary.soft"
-          fontWeight="500"
-          mb={2}
-        >
-          {event.date}
-        </Text>
-        <Heading
-          as="h3"
-          fontFamily="heading"
-          fontSize={["xl", "2xl"]}
-          fontWeight="400"
-          mb={3}
-          color="primary.deep"
-        >
-          {event.title}
-        </Heading>
-        <Text fontSize="md" color="neutral.muted" lineHeight="1.8" mb={2}>
-          {event.description}
-        </Text>
-        {event.location && (
-          <Text fontSize="sm" fontStyle="italic" color="primary.soft">
-            {event.location}
-          </Text>
-        )}
+        <Image
+          src={event.icon}
+          alt=""
+          w="full"
+          h="full"
+          objectFit="contain"
+        />
       </Box>
 
-      {/* Center Dot - Only visible on desktop */}
-      <Circle
-        display={["none", "none", "flex"]}
-        size="16px"
-        bg="white"
-        border="2px solid"
-        borderColor="primary.soft"
-        position="absolute"
-        left="50%"
-        top="8px"
-        transform="translateX(-50%)"
-        zIndex={1}
-        _before={isLast ? {
-          content: '""',
-          position: 'absolute',
-          w: '24px',
-          h: '24px',
-          borderRadius: 'full',
-          border: '1px solid',
-          borderColor: 'primary.soft',
-          opacity: 0.5,
-        } : undefined}
-      />
-
-      {/* Mobile Timeline Dot */}
-      <HStack
-        display={["flex", "flex", "none"]}
-        spacing={3}
-        mb={4}
-        position="relative"
+      {/* Date */}
+      <Text
+        fontSize={["sm", "md"]}
+        textTransform="uppercase"
+        letterSpacing="0.2em"
+        fontWeight="500"
+        color="primary.deep"
       >
-        <Circle
-          size="12px"
-          bg="primary.soft"
-        />
-        <Box flex={1} h="1px" bg="primary.soft" opacity={0.3} />
-      </HStack>
+        {event.date}
+      </Text>
 
-      {/* Empty space for the other side */}
-      <Box flex={1} display={["none", "none", "block"]} />
-    </Flex>
+      {/* Title */}
+      <Text
+        fontSize={["md", "lg"]}
+        color="neutral.muted"
+        fontWeight="400"
+      >
+        {event.title}
+      </Text>
+
+      {/* Dress Code */}
+      <Text
+        fontSize={["sm", "md"]}
+        color="neutral.muted"
+        fontStyle="italic"
+      >
+        {event.dressCode}
+      </Text>
+
+      {/* Mobile dot */}
+      <Circle
+        display={["block", "block", "none"]}
+        size="10px"
+        bg="primary.soft"
+        opacity={0.8}
+        mt={2}
+      />
+    </VStack>
   )
 }

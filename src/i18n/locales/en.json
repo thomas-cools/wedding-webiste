@@ -124,39 +124,22 @@
     }
   },
   "timeline": {
-    "label": "Our Journey",
-    "title": "How We Got Here",
-    "subtitle": "From chance encounter to forever, these are the moments that brought us together.",
+    "title": "Wedding Timeline",
     "events": {
-      "met": {
-        "date": "Summer 2019",
-        "title": "The First Hello",
-        "description": "A chance meeting that would change everything. What started as a casual introduction became the beginning of our story.",
-        "location": "Brussels, Belgium"
-      },
-      "firstDate": {
-        "date": "Autumn 2019",
-        "title": "The First Date",
-        "description": "Coffee turned into dinner, dinner turned into a walk through the city, and we knew this was something special.",
-        "location": "Brussels, Belgium"
-      },
-      "moved": {
-        "date": "Spring 2021",
-        "title": "Building Our Home",
-        "description": "We took the leap and moved in together, blending our lives, cultures, and collections of books.",
-        "location": "Brussels, Belgium"
-      },
-      "engaged": {
-        "date": "Winter 2024",
-        "title": "The Proposal",
-        "description": "Under a sky full of stars, with trembling hands and a full heart, the question was asked and answered with joy.",
-        "location": "Mexico City, Mexico"
+      "welcome": {
+        "date": "August 25th, 2026",
+        "title": "Welcome Dinner",
+        "dressCode": "Dress Code | Cocktail Attire"
       },
       "wedding": {
-        "date": "October 2026",
+        "date": "August 26th, 2026",
         "title": "The Wedding",
-        "description": "Where our two families become one, in the heart of France.",
-        "location": "Vallesvilles, France"
+        "dressCode": "Dress Code | Formal"
+      },
+      "brunch": {
+        "date": "August 27th, 2026",
+        "title": "Pool Brunch",
+        "dressCode": "Dress Code | Casual"
       }
     }
   },
