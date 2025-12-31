@@ -50,6 +50,7 @@
   "rsvp": {
     "label": "RSVP",
     "title": "RSVP",
+    "backToHome": "Retour",
     "description": "Merci de nous faire savoir si vous vous joindrez à nous pour notre célébration de mariage en France. Nous vous prions de répondre avant le 1er février 2026. Les invitations officielles suivront.",
     "form": {
       "yourName": "Votre Nom",

@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { MotionBox, heroFadeIn, heroStagger } from './animations'
 
 const MotionImg = motion.img
@@ -459,8 +460,8 @@ export default function Hero({
             whileTap={{ scale: 0.98 }}
           >
             <Button
-              as="a"
-              href="#rsvp"
+              as={Link}
+              to="/rsvp"
               variant={hasBackground ? "outline" : "primary"}
               size="lg"
               mt={8}

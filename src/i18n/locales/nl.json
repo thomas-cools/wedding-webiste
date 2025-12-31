@@ -50,6 +50,7 @@
   "rsvp": {
     "label": "RSVP",
     "title": "RSVP",
+    "backToHome": "Terug",
     "description": "Laat ons weten of je bij onze huwelijksviering in Frankrijk aanwezig zult zijn. We vragen vriendelijk om voor 1 februari 2026 te antwoorden. Formele uitnodigingen volgen.",
     "form": {
       "yourName": "Je Naam",

@@ -50,6 +50,7 @@
   "rsvp": {
     "label": "RSVP",
     "title": "RSVP",
+    "backToHome": "Back",
     "description": "Please let us know if you'll be joining us for our wedding celebration in France. We kindly request your response by February 1, 2026. Formal invitations will follow.",
     "form": {
       "yourName": "Your Name",

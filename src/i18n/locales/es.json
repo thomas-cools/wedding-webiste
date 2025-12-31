@@ -50,6 +50,7 @@
   "rsvp": {
     "label": "RSVP",
     "title": "RSVP",
+    "backToHome": "Volver",
     "description": "Por favor, háznos saber si nos acompañarás en nuestra celebración de boda en Francia. Te pedimos confirmar antes del 1 de febrero de 2026. Las invitaciones formales seguirán.",
     "form": {
       "yourName": "Tu Nombre",

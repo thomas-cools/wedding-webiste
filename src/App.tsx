@@ -25,8 +25,9 @@ import {
   Tab,
   TabPanel,
   Badge,
-  Link
+  Link as ChakraLink
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom'
 import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import LanguageSwitcher from './components/LanguageSwitcher'
 import Hero from './components/Hero'
@@ -40,11 +41,10 @@ import {
   TimelineSkeleton,
   GallerySkeleton,
   AccommodationSkeleton,
-  RsvpFormSkeleton,
 } from './components/SectionSkeletons'
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { weddingConfig } from './config'
-import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsContext'
+import { useFeatureFlags } from './contexts/FeatureFlagsContext'
 
 // Import assets
 import weddingLogoSmall from './assets/monogram_websiteT&C-small.webp'
@@ -78,7 +78,6 @@ const PhotoGallery = React.lazy(() =>
 const AccommodationSection = React.lazy(() =>
   import('./components/AccommodationSection').then((m) => ({ default: m.AccommodationSection }))
 )
-const RsvpForm = React.lazy(() => import('./components/RsvpForm'))
 
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
@@ -147,10 +146,10 @@ function AppContent() {
   }, [])
 
   const navLinks = [
-    { href: '#story', label: t('header.ourStory'), enabled: features.showStory },
-    { href: '#details', label: t('header.details'), enabled: true },
-    { href: '#travel', label: t('header.travel'), enabled: features.showAccommodation },
-    { href: '#rsvp', label: t('header.rsvp'), enabled: true },
+    { href: '#story', label: t('header.ourStory'), enabled: features.showStory, isExternal: false },
+    { href: '#details', label: t('header.details'), enabled: true, isExternal: false },
+    { href: '#travel', label: t('header.travel'), enabled: features.showAccommodation, isExternal: false },
+    { href: '/rsvp', label: t('header.rsvp'), enabled: true, isExternal: true },
   ].filter((link) => link.enabled)
 
   const content = (
@@ -158,9 +157,6 @@ function AppContent() {
       {/* Skip to content link for keyboard users */}
       <SkipToContent 
         mainId="main-content"
-        additionalLinks={[
-          { id: 'rsvp', labelKey: 'accessibility.skipToRsvp' },
-        ]}
       />
       
       <LoadingScreen isLoading={isLoading} logo={weddingLogoFull} />
@@ -188,11 +184,17 @@ function AppContent() {
               position="absolute"
               left={0}
             >
-              {navLinks.slice(0, Math.ceil(navLinks.length / 2)).map((link) => (
-                <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                  {link.label}
-                </Button>
-              ))}
+              {navLinks.slice(0, Math.ceil(navLinks.length / 2)).map((link) => 
+                link.isExternal ? (
+                  <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                    {link.label}
+                  </Button>
+                ) : (
+                  <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                    {link.label}
+                  </Button>
+                )
+              )}
             </HStack>
             
             {/* Centered Logo */}
@@ -213,11 +215,17 @@ function AppContent() {
               right={0}
               align="center"
             >
-              {navLinks.slice(Math.ceil(navLinks.length / 2)).map((link) => (
-                <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                  {link.label}
-                </Button>
-              ))}
+              {navLinks.slice(Math.ceil(navLinks.length / 2)).map((link) => 
+                link.isExternal ? (
+                  <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                    {link.label}
+                  </Button>
+                ) : (
+                  <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                    {link.label}
+                  </Button>
+                )
+              )}
               <LanguageSwitcher />
             </HStack>
             
@@ -250,23 +258,37 @@ function AppContent() {
           <DrawerCloseButton />
           <DrawerBody pt={16}>
             <VStack spacing={6} align="stretch">
-              {navLinks.map((link) => (
-                <Button
-                  key={link.href}
-                  as="a"
-                  href={link.href}
-                  variant="ghost"
-                  size="lg"
-                  justifyContent="flex-start"
-                  onClick={onClose}
-                >
-                  {link.label}
-                </Button>
-              ))}
+              {navLinks.map((link) => 
+                link.isExternal ? (
+                  <Button
+                    key={link.href}
+                    as={Link}
+                    to={link.href}
+                    variant="ghost"
+                    size="lg"
+                    justifyContent="flex-start"
+                    onClick={onClose}
+                  >
+                    {link.label}
+                  </Button>
+                ) : (
+                  <Button
+                    key={link.href}
+                    as="a"
+                    href={link.href}
+                    variant="ghost"
+                    size="lg"
+                    justifyContent="flex-start"
+                    onClick={onClose}
+                  >
+                    {link.label}
+                  </Button>
+                )
+              )}
               <Divider borderColor="primary.soft" />
               <Button
-                as="a"
-                href="#rsvp"
+                as={Link}
+                to="/rsvp"
                 variant="primary"
                 size="lg"
                 onClick={onClose}
@@ -473,7 +495,7 @@ function AppContent() {
                   <Text fontSize="sm" textTransform="uppercase" letterSpacing="0.2em" color="neutral.dark">
                     {t('details.venueName')}
                   </Text>
-                  <Link 
+                  <ChakraLink 
                     href={weddingConfig.venue.googleMapsUrl} 
                     isExternal
                     _hover={{ color: 'primary.deep' }}
@@ -481,7 +503,7 @@ function AppContent() {
                     <Text fontSize="sm" color="neutral.muted" fontStyle="italic" _hover={{ textDecoration: 'underline' }}>
                       {t('details.venueAddress')} ↗
                     </Text>
-                  </Link>
+                  </ChakraLink>
                 </VStack>
               </ScrollReveal>
             </VStack>
@@ -494,19 +516,6 @@ function AppContent() {
             <AccommodationSection enabled={features.showAccommodation} />
           </Suspense>
         </ErrorBoundary>
-
-        {/* RSVP Section */}
-        <Box id="rsvp" py={[20, 28]} bg="neutral.light" scrollMarginTop={["100px", "130px", "150px"]}>
-          <Container maxW="container.lg">
-            <ScrollReveal variants={scaleIn}>
-              <ErrorBoundary sectionName="RSVP form">
-                <Suspense fallback={<RsvpFormSkeleton />}>
-                  <RsvpForm />
-                </Suspense>
-              </ErrorBoundary>
-            </ScrollReveal>
-          </Container>
-        </Box>
       </Box>
 
       <Footer />
@@ -523,12 +532,8 @@ function AppContent() {
 }
 
 /**
- * Root App component with FeatureFlagsProvider
+ * Root App component
  */
 export default function App() {
-  return (
-    <FeatureFlagsProvider>
-      <AppContent />
-    </FeatureFlagsProvider>
-  )
+  return <AppContent />
 }
