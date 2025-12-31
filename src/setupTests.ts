@@ -21,6 +21,7 @@ jest.mock('react-i18next', () => ({
       changeLanguage: jest.fn(),
     },
   }),
+  Trans: ({ i18nKey, children }: { i18nKey: string; children?: React.ReactNode }) => i18nKey || children,
   initReactI18next: {
     type: '3rdParty',
     init: jest.fn(),
