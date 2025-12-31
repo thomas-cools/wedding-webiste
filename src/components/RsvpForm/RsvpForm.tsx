@@ -382,62 +382,59 @@ export default function RsvpForm() {
               <Text fontSize="sm" color="#300F0C">{t('rsvp.form.franceTips')}</Text>
             </Checkbox>
 
-            {/* Plus One & Children Section */}
-            <Box p={6} bg="rgba(176,210,236,0.1)" borderWidth="2px" borderColor="#B0D2EC" borderRadius="lg">
-              <Stack spacing={6}>
-                {/* Plus One */}
-                <Box>
-                  <FormLabel>{t('rsvp.form.plusOneSection')}</FormLabel>
-                  <Stack spacing={4}>
-                    <Checkbox
-                      isChecked={form.hasPlusOne}
-                      onChange={e => {
-                        const next = e.target.checked
-                        form.setHasPlusOne(next)
-                        if (!next) {
-                          form.setPlusOne({ name: '', dietary: '' })
-                        } else {
-                          setTimeout(() => form.validateField('plusOne'), 0)
-                        }
-                      }}
-                      colorScheme="blue"
-                    >
-                      <Text fontSize="sm" color="#300F0C">{t('rsvp.form.hasPlusOne')}</Text>
-                    </Checkbox>
+            {/* Plus One Section */}
+            <Box>
+              <FormLabel>{t('rsvp.form.plusOneSection')}</FormLabel>
+              <Stack spacing={4}>
+                <Checkbox
+                  isChecked={form.hasPlusOne}
+                  onChange={e => {
+                    const next = e.target.checked
+                    form.setHasPlusOne(next)
+                    if (!next) {
+                      form.setPlusOne({ name: '', dietary: '' })
+                    } else {
+                      setTimeout(() => form.validateField('plusOne'), 0)
+                    }
+                  }}
+                  colorScheme="blue"
+                >
+                  <Text fontSize="sm" color="#300F0C">{t('rsvp.form.hasPlusOne')}</Text>
+                </Checkbox>
 
-                    {form.hasPlusOne && (
-                      <Box p={4} bg="rgba(255,255,255,0.5)" borderWidth="1px" borderColor="rgba(48,15,12,0.15)" borderRadius="md">
-                        <Stack spacing={3}>
-                          <Input
-                            name="plusOne.name"
-                            value={form.plusOne.name}
-                            onChange={e => {
-                              form.setPlusOne(p => ({ ...p, name: e.target.value }))
-                              if (form.errors.plusOne) form.validateField('plusOne')
-                            }}
-                            onBlur={() => form.validateField('plusOne')}
-                            placeholder={t('rsvp.form.plusOneNamePlaceholder')}
-                          />
-                          <Input
-                            name="plusOne.dietary"
-                            value={form.plusOne.dietary || ''}
-                            onChange={e => form.setPlusOne(p => ({ ...p, dietary: e.target.value }))}
-                            placeholder={t('rsvp.form.plusOneDietaryPlaceholder')}
-                          />
-                          {form.errors.plusOne && (
-                            <Text color="#4C050C" fontSize="sm">
-                              {form.errors.plusOne}
-                            </Text>
-                          )}
-                        </Stack>
-                      </Box>
-                    )}
-                  </Stack>
-                </Box>
+                {form.hasPlusOne && (
+                  <Box p={5} bg="rgba(176,210,236,0.1)" borderWidth="2px" borderColor="#B0D2EC" borderRadius="xl">
+                    <Stack spacing={3}>
+                      <Input
+                        name="plusOne.name"
+                        value={form.plusOne.name}
+                        onChange={e => {
+                          form.setPlusOne(p => ({ ...p, name: e.target.value }))
+                          if (form.errors.plusOne) form.validateField('plusOne')
+                        }}
+                        onBlur={() => form.validateField('plusOne')}
+                        placeholder={t('rsvp.form.plusOneNamePlaceholder')}
+                      />
+                      <Input
+                        name="plusOne.dietary"
+                        value={form.plusOne.dietary || ''}
+                        onChange={e => form.setPlusOne(p => ({ ...p, dietary: e.target.value }))}
+                        placeholder={t('rsvp.form.plusOneDietaryPlaceholder')}
+                      />
+                      {form.errors.plusOne && (
+                        <Text color="#4C050C" fontSize="sm">
+                          {form.errors.plusOne}
+                        </Text>
+                      )}
+                    </Stack>
+                  </Box>
+                )}
+              </Stack>
+            </Box>
 
-                {/* Children */}
-                <Box>
-                  <FormLabel>{t('rsvp.form.childrenSection')}</FormLabel>
+            {/* Children Section */}
+            <Box>
+              <FormLabel>{t('rsvp.form.childrenSection')}</FormLabel>
               <Stack spacing={4}>
                 <Checkbox
                   isChecked={form.hasChildren}
@@ -456,9 +453,10 @@ export default function RsvpForm() {
                 </Checkbox>
 
                 {form.hasChildren && (
-                  <>
+                  <Box p={5} bg="rgba(176,210,236,0.1)" borderWidth="2px" borderColor="#B0D2EC" borderRadius="xl">
+                    <Stack spacing={4}>
                     {form.children.map((c, i) => (
-                      <Box key={i} p={4} bg="rgba(255,255,255,0.5)" borderWidth="1px" borderColor="rgba(48,15,12,0.15)" borderRadius="md">
+                      <Box key={i} p={4} bg="rgba(255,255,255,0.5)" borderWidth="1px" borderColor="rgba(48,15,12,0.15)" borderRadius="lg">
                         <Stack spacing={3}>
                           <Flex direction={['column', 'row']} gap={3}>
                             <Input
@@ -514,10 +512,9 @@ export default function RsvpForm() {
                         {form.errors.children}
                       </Text>
                     )}
-                  </>
+                    </Stack>
+                  </Box>
                 )}
-              </Stack>
-                </Box>
               </Stack>
             </Box>
 
