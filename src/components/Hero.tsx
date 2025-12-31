@@ -315,21 +315,6 @@ export default function Hero({
         </Box>
       )}
 
-      {/* Decorative Frame */}
-      <MotionBox
-        position="absolute"
-        top={["20px", "40px"]}
-        left={["20px", "40px"]}
-        right={["20px", "40px"]}
-        bottom={["20px", "40px"]}
-        border="1px solid"
-        borderColor={hasBackground ? "whiteAlpha.400" : "primary.soft"}
-        pointerEvents="none"
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
-      />
-
       {/* Content */}
       <Container maxW="container.lg" position="relative" zIndex={2}>
         <MotionBox
