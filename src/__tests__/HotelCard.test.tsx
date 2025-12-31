@@ -1,5 +1,5 @@
 import { render, screen } from '../test-utils'
-import { HotelCard, Hotel } from '../components/AccommodationSection'
+import { HotelCard, Hotel } from '../components/AccommodationSection/HotelCard'
 
 describe('HotelCard', () => {
   const mockHotel: Hotel = {

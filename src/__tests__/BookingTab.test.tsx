@@ -1,5 +1,11 @@
+import React from 'react'
 import { render, screen } from '../test-utils'
-import { BookingTab } from '../components/AccommodationSection'
+import { BookingTab } from '../components/AccommodationSection/BookingTab'
+
+// Mock @chakra-ui/icons
+jest.mock('@chakra-ui/icons', () => ({
+  ExternalLinkIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'external-link-icon', ...props }),
+}))
 
 // Mock react-i18next
 jest.mock('react-i18next', () => ({

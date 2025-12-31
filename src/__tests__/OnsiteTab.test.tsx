@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '../test-utils'
-import { OnsiteTab } from '../components/AccommodationSection'
+import { OnsiteTab } from '../components/AccommodationSection/OnsiteTab'
 
 // Mock react-i18next
 jest.mock('react-i18next', () => ({

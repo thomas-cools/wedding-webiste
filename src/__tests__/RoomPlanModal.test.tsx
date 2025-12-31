@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '../test-utils'
-import { RoomPlanModal } from '../components/AccommodationSection'
+import { RoomPlanModal } from '../components/AccommodationSection/RoomPlanModal'
 
 // Mock react-i18next
 jest.mock('react-i18next', () => ({

@@ -28,6 +28,22 @@ jest.mock('react-i18next', () => ({
   },
 }))
 
+// Mock @chakra-ui/icons
+jest.mock('@chakra-ui/icons', () => {
+  const React = require('react')
+  return {
+    ExternalLinkIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'external-link-icon', ...props }),
+    ChevronDownIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'chevron-down-icon', ...props }),
+    CloseIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'close-icon', ...props }),
+    HamburgerIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'hamburger-icon', ...props }),
+    CheckIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'check-icon', ...props }),
+    WarningIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'warning-icon', ...props }),
+    InfoIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'info-icon', ...props }),
+    ViewIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'view-icon', ...props }),
+    ViewOffIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'view-off-icon', ...props }),
+  }
+})
+
 // Mock window.matchMedia for Chakra UI
 if (typeof window !== 'undefined') {
   Object.defineProperty(window, 'matchMedia', {

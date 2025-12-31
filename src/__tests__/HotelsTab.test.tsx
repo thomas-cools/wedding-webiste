@@ -1,5 +1,5 @@
 import { render, screen } from '../test-utils'
-import { HotelsTab } from '../components/AccommodationSection'
+import { HotelsTab } from '../components/AccommodationSection/HotelsTab'
 
 // Mock react-i18next
 jest.mock('react-i18next', () => ({

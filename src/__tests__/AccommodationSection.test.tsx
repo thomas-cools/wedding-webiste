@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '../test-utils'
-import { AccommodationSection } from '../components/AccommodationSection'
+import { AccommodationSection } from '../components/AccommodationSection/AccommodationSection'
 
 // Mock react-i18next
 jest.mock('react-i18next', () => ({
