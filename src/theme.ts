@@ -1,12 +1,16 @@
 import { extendTheme } from '@chakra-ui/react'
 
-// Visual Identity: Terracotta & Slate
+// Visual Identity: Elegant Neutrals & Blues
 // Palette anchors:
-// - Deep terracotta: #C06C5D
-// - Slate blue: #5C6D7E
-// - Champagne gold: #D4AF37
-// - Cream (off-white): #F9F7F2
-// - Charcoal: #2C2C2C
+// - Cream beige: #E3DFCE (primary neutral, backgrounds)
+// - Light cream: #F6F1EB (secondary neutral, backgrounds)
+// - Muted blue: #94B1C8 (accents)
+// - Light blue: #B0D2EC (highlights)
+// - Medium blue: #648EC0 (accents, CTAs)
+// - Dark navy: #0B1937 (headings, contrast text)
+// - Dark maroon: #4C050C (accents)
+// - Dark brown: #321709 (deep accents)
+// - Olive green: #BCCA25 (accent)
 const theme = extendTheme({
   fonts: {
     heading: "'Playfair Display', 'Georgia', serif",
@@ -15,31 +19,36 @@ const theme = extendTheme({
   },
   colors: {
     neutral: {
-      light: '#F9F7F2',
-      dark: '#2C2C2C',
-      muted: 'rgba(44,44,44,0.60)',
+      light: '#F6F1EB',
+      cream: '#E3DFCE',
+      dark: '#0B1937',
+      muted: 'rgba(11,25,55,0.75)',
       white: '#FFFFFF',
     },
     primary: {
-      // Champagne gold (borders, dividers) + deep terracotta (CTAs, accents)
-      soft: '#D4AF37',
-      deep: '#C06C5D',
-      gold: '#D4AF37',
+      // Blues for CTAs and accents
+      soft: '#94B1C8',
+      deep: '#648EC0',
+      light: '#B0D2EC',
     },
     secondary: {
-      slate: '#5C6D7E',
+      navy: '#0B1937',
+      maroon: '#4C050C',
+      brown: '#321709',
+      slate: '#0B1937',
     },
     chateau: {
-      stone: '#F9F7F2',
-      lavender: '#5C6D7E',
-      champagne: '#D4AF37',
-      garden: '#5C6D7E',
-      wine: '#C06C5D',
+      stone: '#E3DFCE',
+      blue: '#94B1C8',
+      lightBlue: '#B0D2EC',
+      navy: '#0B1937',
+      wine: '#4C050C',
     },
     // Legacy aliases for backward compatibility
     accent: {
-      sage: '#5C6D7E',
-      gold: '#D4AF37',
+      sage: '#94B1C8',
+      gold: '#BCCA25',
+      olive: '#BCCA25',
     },
   },
   styles: {
@@ -51,7 +60,7 @@ const theme = extendTheme({
         MozOsxFontSmoothing: 'grayscale',
         fontSize: '16px',
         lineHeight: 1.7,
-        // Subtle white-on-white "papel picado" texture (minimalist, not kitschy)
+        // Subtle white-on-white texture (minimalist)
         backgroundImage:
           "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='120' viewBox='0 0 240 120'%3E%3Cdefs%3E%3Cpattern id='p' width='120' height='60' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 10h120' stroke='%23ffffff' stroke-opacity='0.35' stroke-width='1'/%3E%3Cpath d='M0 30h120' stroke='%23ffffff' stroke-opacity='0.20' stroke-width='1'/%3E%3Cpath d='M0 50h120' stroke='%23ffffff' stroke-opacity='0.35' stroke-width='1'/%3E%3Cpath d='M0 10l10 10 10-10 10 10 10-10 10 10 10-10 10 10 10-10 10 10 10-10 10 10 10-10 10 10 10-10' fill='none' stroke='%23ffffff' stroke-opacity='0.10' stroke-width='2'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='240' height='120' fill='url(%23p)'/%3E%3C/svg%3E\")",
         backgroundRepeat: 'repeat',

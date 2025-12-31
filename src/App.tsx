@@ -189,7 +189,7 @@ function AppContent() {
               left={0}
             >
               {navLinks.slice(0, Math.ceil(navLinks.length / 2)).map((link) => (
-                <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="white" _hover={{ bg: 'whiteAlpha.200' }}>
+                <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
                   {link.label}
                 </Button>
               ))}
@@ -214,7 +214,7 @@ function AppContent() {
               align="center"
             >
               {navLinks.slice(Math.ceil(navLinks.length / 2)).map((link) => (
-                <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="white" _hover={{ bg: 'whiteAlpha.200' }}>
+                <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
                   {link.label}
                 </Button>
               ))}
@@ -235,7 +235,7 @@ function AppContent() {
                 variant="ghost"
                 onClick={onOpen}
                 size="sm"
-                color="white"
+                color="#E3DFCE"
                 _hover={{ bg: 'whiteAlpha.200' }}
               />
             </HStack>
@@ -496,7 +496,7 @@ function AppContent() {
         </ErrorBoundary>
 
         {/* RSVP Section */}
-        <Box id="rsvp" py={[20, 28]} bg="secondary.slate" scrollMarginTop={["100px", "130px", "150px"]}>
+        <Box id="rsvp" py={[20, 28]} bg="neutral.light" scrollMarginTop={["100px", "130px", "150px"]}>
           <Container maxW="container.lg">
             <ScrollReveal variants={scaleIn}>
               <ErrorBoundary sectionName="RSVP form">

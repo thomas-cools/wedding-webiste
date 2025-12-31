@@ -57,7 +57,7 @@ export default function RsvpForm() {
             fontSize="xs"
             textTransform="uppercase"
             letterSpacing="0.35em"
-            color="primary.soft"
+            color="primary.deep"
             fontWeight="500"
             mb={4}
           >
@@ -69,7 +69,7 @@ export default function RsvpForm() {
             fontSize={['2xl', '3xl', '4xl']}
             fontWeight="400"
             mb={4}
-            color="neutral.light"
+            color="neutral.dark"
           >
             {t('rsvp.title')}
           </Heading>
@@ -77,28 +77,54 @@ export default function RsvpForm() {
             <Box as="hr" borderColor="primary.soft" w="120px" mx="auto" opacity={0.5} />
           </Box>
           <Text
-            color="neutral.light"
+            color="neutral.muted"
             fontSize={['sm', 'md']}
             maxW="500px"
             mx="auto"
             lineHeight="1.8"
             px={[2, 0]}
-            opacity={0.9}
           >
             {t('rsvp.description')}
           </Text>
         </Box>
 
+        {/* Form */}
         <Box
           as="form"
           name="rsvp"
           method="POST"
           data-netlify="true"
           onSubmit={form.handleSubmit}
-          bg="neutral.light"
-          p={[5, 8, 12]}
-          borderRadius="md"
-        >
+          bg="secondary.navy"
+          p={[6, 10, 14]}
+          borderRadius="lg"
+          boxShadow="xl"
+          sx={{
+              '& label': { color: '#E3DFCE' },
+              '& input, & select': { 
+                bg: 'rgba(255,255,255,0.1)',
+                color: '#F6F1EB',
+                borderColor: 'rgba(255,255,255,0.3)',
+                borderRadius: 'full',
+                px: 6,
+                _placeholder: { color: 'rgba(246,241,235,0.5)' },
+                _focus: { borderColor: '#94B1C8', boxShadow: 'none' },
+              },
+              '& textarea': { 
+                bg: 'rgba(255,255,255,0.1)',
+                color: '#F6F1EB',
+                borderColor: 'rgba(255,255,255,0.3)',
+                borderRadius: 'xl',
+                px: 6,
+                py: 4,
+                _placeholder: { color: 'rgba(246,241,235,0.5)' },
+                _focus: { borderColor: '#94B1C8', boxShadow: 'none' },
+              },
+              '& .chakra-checkbox__label': { color: '#E3DFCE' },
+              '& .chakra-form__helper-text': { color: 'rgba(246,241,235,0.7)' },
+              '& .chakra-form__error-message': { color: '#BCCA25' },
+            }}
+          >
           {/* Hidden fields for Netlify Forms */}
           <input type="hidden" name="form-name" value="rsvp" />
           <input type="hidden" name="firstName" />
@@ -243,7 +269,7 @@ export default function RsvpForm() {
             {/* Event Selection */}
             {form.likelihood && form.likelihood !== 'no' && (
               <FormControl isInvalid={form.hasAttemptedSubmit && !!form.errors.events}>
-                <Box p={6} bg="white" borderWidth="1px" borderColor="primary.soft">
+                <Box p={6} bg="rgba(255,255,255,0.05)" borderWidth="1px" borderColor="rgba(255,255,255,0.2)" borderRadius="md">
                   <FormLabel mb={6}>{t('rsvp.form.eventsTitle')}</FormLabel>
 
                   <Stack spacing={6}>
@@ -294,7 +320,7 @@ export default function RsvpForm() {
                     </FormControl>
 
                     {form.hasAttemptedSubmit && form.errors.events && (
-                      <Text color="primary.deep" fontSize="sm">
+                      <Text color="#BCCA25" fontSize="sm">
                         {form.errors.events}
                       </Text>
                     )}
@@ -316,7 +342,7 @@ export default function RsvpForm() {
                 <option value="recommend">{t('rsvp.form.wouldLikeRec')}</option>
               </Select>
               {form.accommodation === 'venue' && (
-                <Text fontSize="xs" color="primary.soft" mt={2} fontStyle="italic">
+                <Text fontSize="xs" color="rgba(246,241,235,0.7)" mt={2} fontStyle="italic">
                   {t('rsvp.form.onsiteInterestHint')}
                 </Text>
               )}
@@ -352,7 +378,7 @@ export default function RsvpForm() {
               onChange={e => form.setFranceTips(e.target.checked)}
               colorScheme="gray"
             >
-              <Text fontSize="sm">{t('rsvp.form.franceTips')}</Text>
+              <Text fontSize="sm" color="#E3DFCE">{t('rsvp.form.franceTips')}</Text>
             </Checkbox>
 
             {/* Plus One Section */}
@@ -372,11 +398,11 @@ export default function RsvpForm() {
                   }}
                   colorScheme="gray"
                 >
-                  <Text fontSize="sm">{t('rsvp.form.hasPlusOne')}</Text>
+                  <Text fontSize="sm" color="#E3DFCE">{t('rsvp.form.hasPlusOne')}</Text>
                 </Checkbox>
 
                 {form.hasPlusOne && (
-                  <Box p={4} bg="white" borderWidth="1px" borderColor="primary.soft" borderRadius="md">
+                  <Box p={4} bg="rgba(255,255,255,0.05)" borderWidth="1px" borderColor="rgba(255,255,255,0.2)" borderRadius="md">
                     <Stack spacing={3}>
                       <Input
                         name="plusOne.name"
@@ -395,7 +421,7 @@ export default function RsvpForm() {
                         placeholder={t('rsvp.form.plusOneDietaryPlaceholder')}
                       />
                       {form.errors.plusOne && (
-                        <Text color="primary.deep" fontSize="sm">
+                        <Text color="#BCCA25" fontSize="sm">
                           {form.errors.plusOne}
                         </Text>
                       )}
@@ -422,13 +448,13 @@ export default function RsvpForm() {
                   }}
                   colorScheme="gray"
                 >
-                  <Text fontSize="sm">{t('rsvp.form.hasChildren')}</Text>
+                  <Text fontSize="sm" color="#E3DFCE">{t('rsvp.form.hasChildren')}</Text>
                 </Checkbox>
 
                 {form.hasChildren && (
                   <>
                     {form.children.map((c, i) => (
-                      <Box key={i} p={4} bg="white" borderWidth="1px" borderColor="primary.soft" borderRadius="md">
+                      <Box key={i} p={4} bg="rgba(255,255,255,0.05)" borderWidth="1px" borderColor="rgba(255,255,255,0.2)" borderRadius="md">
                         <Stack spacing={3}>
                           <Flex direction={['column', 'row']} gap={3}>
                             <Input
@@ -469,11 +495,18 @@ export default function RsvpForm() {
                       </Box>
                     ))}
 
-                    <Button onClick={form.addChild} variant="ghost" size="sm" alignSelf="flex-start">
+                    <Button 
+                      onClick={form.addChild} 
+                      variant="ghost" 
+                      size="sm" 
+                      alignSelf="flex-start"
+                      color="#94B1C8"
+                      _hover={{ bg: 'rgba(255,255,255,0.1)' }}
+                    >
                       {t('rsvp.form.addChild')}
                     </Button>
                     {form.errors.children && (
-                      <Text color="primary.deep" fontSize="sm">
+                      <Text color="#BCCA25" fontSize="sm">
                         {form.errors.children}
                       </Text>
                     )}
@@ -500,12 +533,12 @@ export default function RsvpForm() {
 
             {/* Status Messages */}
             {form.status === 'saved' && (
-              <Text textAlign="center" color="primary.deep" fontSize="sm">
+              <Text textAlign="center" color="#BCCA25" fontSize="sm">
                 {t('rsvp.success.thankYouSaved')}
               </Text>
             )}
             {form.status === 'updated' && (
-              <Text textAlign="center" color="primary.soft" fontSize="sm">
+              <Text textAlign="center" color="#94B1C8" fontSize="sm">
                 {t('rsvp.success.thankYouUpdated')}
               </Text>
             )}

@@ -45,7 +45,7 @@ export default function Footer() {
           <ScrollReveal>
             <VStack spacing={6}>
               <Text 
-                color="white" 
+                color="#E3DFCE" 
                 fontSize="md" 
                 fontFamily="body"
                 letterSpacing="0.05em"
@@ -54,7 +54,7 @@ export default function Footer() {
               </Text>
               <Link
                 href="mailto:carolinaandthomaswedding@gmail.com"
-                color="white"
+                color="#E3DFCE"
                 fontSize="md"
                 fontFamily="body"
                 letterSpacing="0.02em"
