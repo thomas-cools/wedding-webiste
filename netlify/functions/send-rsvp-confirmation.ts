@@ -391,24 +391,24 @@ function generateEmailHtml(data: RsvpData): string {
     .groomWave { transform-origin: 88% 58%; animation: wave 2.4s ease-in-out infinite; }
   </style>
 </head>
-<body style="margin: 0; padding: 0; font-family: Georgia, 'Times New Roman', serif; background-color: #F5F1EB; color: #2C3E50;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #F5F1EB; padding: 40px 20px;">
+<body style="margin: 0; padding: 0; font-family: Georgia, 'Times New Roman', serif; background-color: #F6F1EB; color: #0B1937;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #F6F1EB; padding: 40px 20px;">
     <tr>
       <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF; border: 1px solid #C4A77D; max-width: 100%;">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF; border: 1px solid #94B1C8; max-width: 100%;">
           <!-- Header -->
           <tr>
-            <td style="padding: 40px 40px 20px; text-align: center; border-bottom: 1px solid #C4A77D;">
-              <h1 style="margin: 0; font-size: 28px; font-weight: normal; color: #2C3E50; font-family: Georgia, serif;">
+            <td style="padding: 40px 40px 20px; text-align: center; border-bottom: 1px solid #94B1C8;">
+              <h1 style="margin: 0; font-size: 28px; font-weight: normal; color: #0B1937; font-family: Georgia, serif;">
                 ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}
               </h1>
-              <p style="margin: 10px 0 0; font-size: 14px; color: #8B4513; letter-spacing: 2px; text-transform: uppercase;">
+              <p style="margin: 10px 0 0; font-size: 14px; color: #648EC0; letter-spacing: 2px; text-transform: uppercase;">
                 ${weddingConfig.date.display}
               </p>
               <div class="coupleWrap coupleFloat" aria-hidden="true">
                 <svg width="120" height="48" viewBox="0 0 120 48" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg">
                   <!-- bride (left) -->
-                  <g transform="translate(12,4)" fill="none" stroke="#8B4513" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <g transform="translate(12,4)" fill="none" stroke="#648EC0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="14" cy="12" r="6"/>
                     <path d="M7 12 C10 5, 18 5, 21 12" opacity="0.5"/>
                     <path d="M14 18 L14 30"/>
@@ -417,7 +417,7 @@ function generateEmailHtml(data: RsvpData): string {
                     <path d="M8 22 L20 22"/>
                   </g>
                   <!-- groom (right) -->
-                  <g transform="translate(66,4)" fill="none" stroke="#8B4513" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <g transform="translate(66,4)" fill="none" stroke="#648EC0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="14" cy="12" r="6"/>
                     <path d="M10 9 L18 9" opacity="0.6"/>
                     <path d="M14 18 L14 30"/>
@@ -427,7 +427,7 @@ function generateEmailHtml(data: RsvpData): string {
                     <path d="M14 30 L20 40"/>
                   </g>
                   <!-- little heart -->
-                  <path d="M58 18 C58 14, 62 14, 62 18 C62 22, 58 24, 60 26 C62 24, 66 22, 66 18 C66 14, 62 14, 62 18" fill="#C4A77D" stroke="none" opacity="0.85"/>
+                  <path d="M58 18 C58 14, 62 14, 62 18 C62 22, 58 24, 60 26 C62 24, 66 22, 66 18 C66 14, 62 14, 62 18" fill="#94B1C8" stroke="none" opacity="0.85"/>
                 </svg>
               </div>
             </td>
@@ -436,29 +436,29 @@ function generateEmailHtml(data: RsvpData): string {
           <!-- Main Content -->
           <tr>
             <td style="padding: 40px;">
-              <h2 style="margin: 0 0 20px; font-size: 22px; font-weight: normal; color: #2C3E50;">
+              <h2 style="margin: 0 0 20px; font-size: 22px; font-weight: normal; color: #0B1937;">
                 ${s.thanks(safeFirstName)}
               </h2>
               
-              <p style="margin: 0 0 30px; font-size: 16px; line-height: 1.6; color: #2C3E50;">
+              <p style="margin: 0 0 30px; font-size: 16px; line-height: 1.6; color: #0B1937;">
                 ${s.intro}
               </p>
               
               <!-- Response Summary -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #FAF8F5; border: 1px solid #E8E4DC; margin-bottom: 30px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #F6F1EB; border: 1px solid #E3DFCE; margin-bottom: 30px;">
                 <tr>
                   <td style="padding: 25px;">
-                    <h3 style="margin: 0 0 15px; font-size: 16px; color: #8B4513; text-transform: uppercase; letter-spacing: 1px;">
+                    <h3 style="margin: 0 0 15px; font-size: 16px; color: #648EC0; text-transform: uppercase; letter-spacing: 1px;">
                       ${s.yourResponse}
                     </h3>
                     
-                    <p style="margin: 0 0 15px; font-size: 18px; color: #2C3E50;">
+                    <p style="margin: 0 0 15px; font-size: 18px; color: #0B1937;">
                       <strong>${escapeHtml(getLikelihoodText(likelihood, s))}</strong>
                     </p>
 
-                    <hr style="border: none; border-top: 1px solid #E8E4DC; margin: 20px 0;">
+                    <hr style="border: none; border-top: 1px solid #E3DFCE; margin: 20px 0;">
 
-                    <h4 style="margin: 0 0 10px; font-size: 14px; color: #8B4513; text-transform: uppercase; letter-spacing: 1px;">
+                    <h4 style="margin: 0 0 10px; font-size: 14px; color: #648EC0; text-transform: uppercase; letter-spacing: 1px;">
                       ${s.contactDetails}
                     </h4>
                     <table width="100%" cellpadding="8" cellspacing="0" style="font-size: 14px;">
@@ -472,9 +472,9 @@ function generateEmailHtml(data: RsvpData): string {
                       </tr>
                     </table>
 
-                    <hr style="border: none; border-top: 1px solid #E8E4DC; margin: 20px 0;">
+                    <hr style="border: none; border-top: 1px solid #E3DFCE; margin: 20px 0;">
 
-                    <h4 style="margin: 0 0 10px; font-size: 14px; color: #8B4513; text-transform: uppercase; letter-spacing: 1px;">
+                    <h4 style="margin: 0 0 10px; font-size: 14px; color: #648EC0; text-transform: uppercase; letter-spacing: 1px;">
                       ${s.events}
                     </h4>
                     <table width="100%" cellpadding="8" cellspacing="0" style="font-size: 14px;">
@@ -492,17 +492,17 @@ function generateEmailHtml(data: RsvpData): string {
                       </tr>
                     </table>
 
-                    <hr style="border: none; border-top: 1px solid #E8E4DC; margin: 20px 0;">
+                    <hr style="border: none; border-top: 1px solid #E3DFCE; margin: 20px 0;">
                     <p style="margin: 0; font-size: 14px;">
-                      <strong style="color: #8B4513;">${s.accommodation}:</strong> ${escapeHtml(getAccommodationText(accommodation || '', s))}
+                      <strong style="color: #648EC0;">${s.accommodation}:</strong> ${escapeHtml(getAccommodationText(accommodation || '', s))}
                     </p>
                     <p style="margin: 10px 0 0; font-size: 14px;">
-                      <strong style="color: #8B4513;">${s.travel}:</strong> ${escapeHtml(getTravelText(travelPlan || '', s))}
+                      <strong style="color: #648EC0;">${s.travel}:</strong> ${escapeHtml(getTravelText(travelPlan || '', s))}
                     </p>
                     
-                    <hr style="border: none; border-top: 1px solid #E8E4DC; margin: 20px 0;">
+                    <hr style="border: none; border-top: 1px solid #E3DFCE; margin: 20px 0;">
                     
-                    <h4 style="margin: 0 0 10px; font-size: 14px; color: #8B4513; text-transform: uppercase; letter-spacing: 1px;">
+                    <h4 style="margin: 0 0 10px; font-size: 14px; color: #648EC0; text-transform: uppercase; letter-spacing: 1px;">
                       ${s.yourParty}
                     </h4>
                     <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.8;">
@@ -510,26 +510,26 @@ function generateEmailHtml(data: RsvpData): string {
                     </ul>
                     
                     ${safeDietary ? `
-                    <hr style="border: none; border-top: 1px solid #E8E4DC; margin: 20px 0;">
+                    <hr style="border: none; border-top: 1px solid #E3DFCE; margin: 20px 0;">
                     <p style="margin: 0; font-size: 14px;">
-                      <strong style="color: #8B4513;">${s.dietaryRequirements}:</strong> ${safeDietary}
+                      <strong style="color: #648EC0;">${s.dietaryRequirements}:</strong> ${safeDietary}
                     </p>
                     ` : ''}
                     
                     ${safeSongRequest ? `
                     <p style="margin: 10px 0 0; font-size: 14px;">
-                      <strong style="color: #8B4513;">${s.songRequest}:</strong> ${safeSongRequest}
+                      <strong style="color: #648EC0;">${s.songRequest}:</strong> ${safeSongRequest}
                     </p>
                     ` : ''}
 
                     <p style="margin: 10px 0 0; font-size: 14px;">
-                      <strong style="color: #8B4513;">${s.franceTips}:</strong> ${getFranceTipsText(franceTips, s)}
+                      <strong style="color: #648EC0;">${s.franceTips}:</strong> ${getFranceTipsText(franceTips, s)}
                     </p>
                     
                     ${safeAdditionalNotes ? `
-                    <hr style="border: none; border-top: 1px solid #E8E4DC; margin: 20px 0;">
+                    <hr style="border: none; border-top: 1px solid #E3DFCE; margin: 20px 0;">
                     <p style="margin: 0; font-size: 14px;">
-                      <strong style="color: #8B4513;">${s.additionalNotes}:</strong><br>
+                      <strong style="color: #648EC0;">${s.additionalNotes}:</strong><br>
                       ${safeAdditionalNotes}
                     </p>
                     ` : ''}
@@ -541,7 +541,7 @@ function generateEmailHtml(data: RsvpData): string {
               <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
                 <tr>
                   <td style="padding: 20px;">
-                    <p style="margin: 0 0 5px; font-size: 16px; color: #2C3E50;">
+                    <p style="margin: 0 0 5px; font-size: 16px; color: #0B1937;">
                       <strong>${weddingConfig.venue.name}</strong>
                     </p>
                     <p style="margin: 0; font-size: 14px; color: #666;">
@@ -559,12 +559,12 @@ function generateEmailHtml(data: RsvpData): string {
           
           <!-- Footer -->
           <tr>
-            <td style="padding: 30px 40px; background-color: #FAF8F5; border-top: 1px solid #C4A77D; text-align: center;">
-              <p style="margin: 0 0 10px; font-size: 14px; color: #666;">
+            <td style="padding: 30px 40px; background-color: #300F0C; border-top: 1px solid #94B1C8; text-align: center;">
+              <p style="margin: 0 0 10px; font-size: 14px; color: #E3DFCE;">
                 ${s.questions}<br>
-                <a href="mailto:${weddingConfig.contactEmail}" style="color: #8B4513;">${weddingConfig.contactEmail}</a>
+                <a href="mailto:${weddingConfig.contactEmail}" style="color: #94B1C8;">${weddingConfig.contactEmail}</a>
               </p>
-              <p style="margin: 0; font-size: 12px; color: #999;">
+              <p style="margin: 0; font-size: 12px; color: #E3DFCE; opacity: 0.8;">
                 ${s.withLove}, ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2} 💕
               </p>
             </td>
