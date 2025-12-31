@@ -61,11 +61,11 @@ describe('Hero Component', () => {
     expect(screen.getByRole('link', { name: /rsvp/i })).toBeInTheDocument()
   })
 
-  it('respond link points to RSVP section', () => {
+  it('respond link points to RSVP page', () => {
     render(<Hero />)
     
     const link = screen.getByRole('link', { name: /rsvp/i })
-    expect(link).toHaveAttribute('href', '#rsvp')
+    expect(link).toHaveAttribute('href', '/rsvp')
   })
 
   it('renders with default styling when no background image', () => {

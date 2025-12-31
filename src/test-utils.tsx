@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 import { ChakraProvider } from '@chakra-ui/react'
+import { MemoryRouter } from 'react-router-dom'
 import theme from './theme'
 
 interface WrapperProps {
@@ -10,7 +11,9 @@ interface WrapperProps {
 const AllTheProviders = ({ children }: WrapperProps) => {
   return (
     <ChakraProvider theme={theme}>
-      {children}
+      <MemoryRouter>
+        {children}
+      </MemoryRouter>
     </ChakraProvider>
   )
 }

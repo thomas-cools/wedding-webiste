@@ -80,9 +80,9 @@ describe('App', () => {
     render(<App />)
     // App now lazy-loads some below-the-fold sections; awaiting a few known
     // elements avoids Suspense resolution warnings.
+    // RSVP form is now on a separate page, so we don't wait for it here
     await screen.findByText('story.title')
     await screen.findByText('travel.title')
-    await screen.findByText('rsvp.form.yourName')
   }
 
   it('renders the header with couple initials', async () => {
@@ -133,21 +133,19 @@ describe('App', () => {
     expect(screen.getByText('details.farewellBrunch')).toBeInTheDocument()
   })
 
-  it('renders the RSVP section', async () => {
-    await renderAppAndWaitForLazySections()
-    // RsvpForm is not yet translated, check for hardcoded text
-    expect(screen.getByRole('heading', { name: /rsvp/i })).toBeInTheDocument()
-  })
-
   it('renders the footer', async () => {
     await renderAppAndWaitForLazySections()
     expect(screen.getByText('footer.contactUs')).toBeInTheDocument()
   })
 
-  it('renders the RSVP form within the page', async () => {
+  it('renders RSVP navigation link pointing to /rsvp page', async () => {
     await renderAppAndWaitForLazySections()
-    // Check the RSVP form is rendered - now uses translation keys
-    expect(screen.getByText('rsvp.form.yourName')).toBeInTheDocument()
-    expect(screen.getByText('rsvp.form.email')).toBeInTheDocument()
+    // RSVP form is now on a separate page, check for the navigation link
+    // The nav links use i18n keys, so check for links with 'header.rsvp' text
+    const rsvpLinks = screen.getAllByText('header.rsvp')
+    expect(rsvpLinks.length).toBeGreaterThan(0)
+    // Also check the Hero respond button which links to /rsvp
+    const heroRsvpLink = screen.getByRole('link', { name: 'hero.respond' })
+    expect(heroRsvpLink).toHaveAttribute('href', '/rsvp')
   })
 })

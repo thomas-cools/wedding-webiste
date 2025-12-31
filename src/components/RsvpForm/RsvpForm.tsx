@@ -57,7 +57,7 @@ export default function RsvpForm() {
             fontSize="xs"
             textTransform="uppercase"
             letterSpacing="0.35em"
-            color="primary.deep"
+            color="neutral.cream"
             fontWeight="500"
             mb={4}
           >
@@ -69,15 +69,15 @@ export default function RsvpForm() {
             fontSize={['2xl', '3xl', '4xl']}
             fontWeight="400"
             mb={4}
-            color="neutral.dark"
+            color="neutral.light"
           >
             {t('rsvp.title')}
           </Heading>
           <Box my={6}>
-            <Box as="hr" borderColor="primary.soft" w="120px" mx="auto" opacity={0.5} />
+            <Box as="hr" borderColor="neutral.cream" w="120px" mx="auto" opacity={0.5} />
           </Box>
           <Text
-            color="neutral.muted"
+            color="rgba(246,241,235,0.75)"
             fontSize={['sm', 'md']}
             maxW="500px"
             mx="auto"
@@ -95,7 +95,7 @@ export default function RsvpForm() {
           method="POST"
           data-netlify="true"
           onSubmit={form.handleSubmit}
-          bg="secondary.navy"
+          bg="rgba(0,0,0,0.3)"
           p={[6, 10, 14]}
           borderRadius="lg"
           boxShadow="xl"
@@ -108,7 +108,7 @@ export default function RsvpForm() {
                 borderRadius: 'full',
                 px: 6,
                 _placeholder: { color: 'rgba(246,241,235,0.5)' },
-                _focus: { borderColor: '#94B1C8', boxShadow: 'none' },
+                _focus: { borderColor: '#E3DFCE', boxShadow: 'none' },
               },
               '& textarea': { 
                 bg: 'rgba(255,255,255,0.1)',
@@ -118,11 +118,11 @@ export default function RsvpForm() {
                 px: 6,
                 py: 4,
                 _placeholder: { color: 'rgba(246,241,235,0.5)' },
-                _focus: { borderColor: '#94B1C8', boxShadow: 'none' },
+                _focus: { borderColor: '#E3DFCE', boxShadow: 'none' },
               },
               '& .chakra-checkbox__label': { color: '#E3DFCE' },
               '& .chakra-form__helper-text': { color: 'rgba(246,241,235,0.7)' },
-              '& .chakra-form__error-message': { color: '#BCCA25' },
+              '& .chakra-form__error-message': { color: '#E3DFCE' },
             }}
           >
           {/* Hidden fields for Netlify Forms */}
@@ -207,7 +207,7 @@ export default function RsvpForm() {
                     mt={2}
                     bg="white"
                     borderWidth="1px"
-                    borderColor="primary.soft"
+                    borderColor="neutral.cream"
                     borderRadius="md"
                     overflow="hidden"
                     zIndex={10}
@@ -320,7 +320,7 @@ export default function RsvpForm() {
                     </FormControl>
 
                     {form.hasAttemptedSubmit && form.errors.events && (
-                      <Text color="#BCCA25" fontSize="sm">
+                      <Text color="#E3DFCE" fontSize="sm">
                         {form.errors.events}
                       </Text>
                     )}
@@ -421,7 +421,7 @@ export default function RsvpForm() {
                         placeholder={t('rsvp.form.plusOneDietaryPlaceholder')}
                       />
                       {form.errors.plusOne && (
-                        <Text color="#BCCA25" fontSize="sm">
+                        <Text color="#E3DFCE" fontSize="sm">
                           {form.errors.plusOne}
                         </Text>
                       )}
@@ -496,17 +496,17 @@ export default function RsvpForm() {
                     ))}
 
                     <Button 
-                      onClick={form.addChild} 
+                      onClick={form.addChild}
                       variant="ghost" 
                       size="sm" 
                       alignSelf="flex-start"
-                      color="#94B1C8"
+                      color="#E3DFCE"
                       _hover={{ bg: 'rgba(255,255,255,0.1)' }}
                     >
                       {t('rsvp.form.addChild')}
                     </Button>
                     {form.errors.children && (
-                      <Text color="#BCCA25" fontSize="sm">
+                      <Text color="#E3DFCE" fontSize="sm">
                         {form.errors.children}
                       </Text>
                     )}
@@ -527,18 +527,27 @@ export default function RsvpForm() {
             </FormControl>
 
             {/* Submit Button */}
-            <Button type="submit" variant="primary" width="full" size="lg" mt={4}>
+            <Button 
+              type="submit" 
+              width="full" 
+              size="lg" 
+              mt={4}
+              bg="#E3DFCE"
+              color="#300F0C"
+              _hover={{ bg: '#F6F1EB', color: '#300F0C' }}
+              _active={{ bg: '#E3DFCE', color: '#300F0C' }}
+            >
               {t('rsvp.form.submit')}
             </Button>
 
             {/* Status Messages */}
             {form.status === 'saved' && (
-              <Text textAlign="center" color="#BCCA25" fontSize="sm">
+              <Text textAlign="center" color="#E3DFCE" fontSize="sm">
                 {t('rsvp.success.thankYouSaved')}
               </Text>
             )}
             {form.status === 'updated' && (
-              <Text textAlign="center" color="#94B1C8" fontSize="sm">
+              <Text textAlign="center" color="#E3DFCE" fontSize="sm">
                 {t('rsvp.success.thankYouUpdated')}
               </Text>
             )}

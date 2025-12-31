@@ -45,14 +45,14 @@ describe('SkipToContent', () => {
       render(
         <SkipToContent
           additionalLinks={[
-            { id: 'rsvp', labelKey: 'accessibility.skipToRsvp' },
+            { id: 'details', labelKey: 'accessibility.skipToDetails' },
           ]}
         />
       )
 
-      const rsvpLink = screen.getByRole('link', { name: 'accessibility.skipToRsvp' })
-      expect(rsvpLink).toBeInTheDocument()
-      expect(rsvpLink).toHaveAttribute('href', '#rsvp')
+      const detailsLink = screen.getByRole('link', { name: 'accessibility.skipToDetails' })
+      expect(detailsLink).toBeInTheDocument()
+      expect(detailsLink).toHaveAttribute('href', '#details')
     })
 
     it('wraps links in a nav element with aria-label', () => {

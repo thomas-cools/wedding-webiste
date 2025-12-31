@@ -28,7 +28,7 @@ function RsvpPageContent() {
   const { t } = useTranslation()
 
   return (
-    <Box minH="100vh" bg="neutral.light" display="flex" flexDirection="column">
+    <Box minH="100vh" bg="#300F0C" display="flex" flexDirection="column">
       {/* Minimal Header */}
       <Box 
         as="header"
