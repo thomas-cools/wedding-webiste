@@ -10,7 +10,7 @@ import bgDesktop from '../assets/simple_smooth_background-desktop.webp';
 // Import story section assets
 import couplePhoto from '../assets/C&T-2025.webp';
 import tcLogo from '../assets/tc_logo.svg';
-import belgiumFlower from '../assets/Belgium_flower-blue.svg';
+import belgiumFlower from '../assets/Belgium_flower.svg';
 
 export default function StorySection() {
   const { t } = useTranslation();
@@ -53,14 +53,17 @@ export default function StorySection() {
       {/* Belgium flower decoration - large subtle background element on right */}
       <Box
         position="absolute"
-        top="50%"
-        right={["-100px", "-80px", "-60px"]}
-        transform="translateY(-50%)"
+        top={["-50px", "-80px", "-100px"]}
+        right={["-80px", "-60px", "-40px"]}
         w={["300px", "400px", "500px"]}
         h={["300px", "400px", "500px"]}
         zIndex={0}
         pointerEvents="none"
-        opacity={0.4}
+        opacity={0.3}
+        sx={{
+          maskImage: 'linear-gradient(to bottom, transparent 0%, transparent 15%, black 40%, black 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, transparent 15%, black 40%, black 100%)',
+        }}
       >
         <Image
           src={belgiumFlower}
