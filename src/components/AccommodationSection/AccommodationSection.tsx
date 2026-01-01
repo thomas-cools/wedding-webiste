@@ -9,14 +9,12 @@ import {
   Tab, 
   TabPanel, 
   Heading, 
-  Text,
-  useDisclosure
+  Text
 } from '@chakra-ui/react';
 import { OnsiteTab } from './OnsiteTab';
 import { AirbnbTab } from './AirbnbTab';
 import { BookingTab } from './BookingTab';
 import { HotelsTab } from './HotelsTab';
-import { RoomPlanModal } from './RoomPlanModal';
 
 interface AccommodationSectionProps {
   enabled: boolean;
@@ -24,7 +22,6 @@ interface AccommodationSectionProps {
 
 export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enabled }) => {
   const { t } = useTranslation();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (!enabled) return null;
 
@@ -97,7 +94,7 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
             </TabList>
             <TabPanels>
               <TabPanel p={0}>
-                <OnsiteTab onOpenModal={onOpen} />
+                <OnsiteTab />
               </TabPanel>
               <TabPanel p={0}>
                 <AirbnbTab />
@@ -112,9 +109,6 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
           </Tabs>
         </Box>
       </VStack>
-
-      {/* Fullscreen Room Plan Modal */}
-      <RoomPlanModal isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 };

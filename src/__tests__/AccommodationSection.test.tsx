@@ -17,8 +17,6 @@ jest.mock('react-i18next', () => ({
         'travel.onsiteTitle': 'Stay at the Venue',
         'travel.onsiteDescription': 'We offer limited on-site accommodation...',
         'travel.onsiteDetails': 'Priority will be given to immediate family. Email <emailLink>rsvp@carolinaandthomas.com</emailLink>.',
-        'travel.viewFloorplan': 'Room Plan',
-        'travel.clickToEnlarge': 'Click image to enlarge',
         'travel.airbnbTitle': 'Find Nearby Stays',
         'travel.airbnbDescription': 'Discover charming vacation rentals...',
         'travel.searchAirbnb': 'Search on Airbnb',
@@ -60,7 +58,6 @@ jest.mock('react-i18next', () => ({
 }))
 
 // Mock image imports
-jest.mock('../assets/venue_rooms.webp', () => 'venue_rooms.webp')
 jest.mock('../assets/airbnb-tile.svg', () => 'airbnb-tile.svg')
 jest.mock('../assets/booking-tile.svg', () => 'booking-tile.svg')
 
