@@ -28,10 +28,9 @@ const ICON_FILTER = 'brightness(0) saturate(100%) invert(12%) sepia(24%) saturat
 
 function QuickLinkCard({ to, icon, label, alt }: QuickLinkItem) {
   return (
-    <StaggerItem>
+    <StaggerItem flex={1}>
       <Link to={to} style={{ textDecoration: 'none' }}>
         <VStack
-          flex={1}
           spacing={4}
           textAlign="center"
           px={[4, 6, 8]}
@@ -40,6 +39,7 @@ function QuickLinkCard({ to, icon, label, alt }: QuickLinkItem) {
           transition="all 0.3s ease"
           _hover={{ transform: 'translateY(-4px)' }}
           maxW={['280px', '300px', '320px']}
+          mx="auto"
         >
           <Box
             w={['100px', '120px', '140px']}
