@@ -11,8 +11,8 @@ import bgDesktop from '../assets/simple_smooth_background-desktop.webp';
 import usImageMain from '../assets/us-image-main.svg';
 import belgiumFlower from '../assets/Belgium_flower-red.svg';
 
-// CSS filter to change the flower to gray (sketch-like appearance)
-const FLOWER_COLOR_FILTER = 'grayscale(100%) brightness(70%) opacity(0.35)';
+// CSS filter to change the red flower to muted blue (#94B1C8 palette color)
+const FLOWER_COLOR_FILTER = 'sepia(100%) saturate(300%) brightness(70%) hue-rotate(180deg) opacity(0.4)';
 
 export default function StorySection() {
   const { t } = useTranslation();
