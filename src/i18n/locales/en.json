@@ -4,6 +4,7 @@
     "ourStory": "Our Story",
     "details": "Details",
     "travel": "Accommodations",
+    "faq": "FAQ",
     "rsvp": "RSVP"
   },
   "hero": {
@@ -241,5 +242,75 @@
     "skipToRsvp": "Skip to RSVP form",
     "mainNavigation": "Main navigation",
     "keyboardInstructions": "Use Tab key to navigate through the page. Press Enter to activate links and buttons."
+  },
+  "faq": {
+    "label": "Questions & Answers",
+    "title": "Frequently Asked Questions",
+    "description": "Everything you need to know about our wedding celebration in France.",
+    "backToHome": "Back",
+    "contactNote": "Still have questions? Feel free to reach out to us directly—we're happy to help!",
+    "dressCode": {
+      "welcomeDinner": {
+        "title": "Welcome Dinner",
+        "day": "Tuesday Evening",
+        "code": "Cocktail Attire",
+        "description": "Think elegant but not overly formal. For women, a cocktail dress, jumpsuit, or dressy separates work beautifully. For men, a suit or blazer paired with dress pants. Feel free to add a pop of color!"
+      },
+      "wedding": {
+        "title": "The Wedding",
+        "day": "Wednesday",
+        "code": "Formal Attire",
+        "description": "This is our most elegant celebration. For women, floor-length gowns, formal midi dresses, or elegant cocktail dresses are perfect. For men, a dark suit or tuxedo. Think black-tie optional."
+      },
+      "brunch": {
+        "title": "Farewell Brunch",
+        "day": "Thursday Morning",
+        "code": "Smart Casual",
+        "description": "Relaxed but polished. Sundresses, linen separates, chinos with a nice shirt, or a casual blazer all work well. Comfortable and chic!"
+      },
+      "shoeTip": "The ceremony and reception will be outdoors on grass and gravel paths, so we recommend comfortable shoes—block heels or wedges are great alternatives to stilettos."
+    },
+    "items": [
+      {
+        "question": "When and where is the wedding?",
+        "answer": "Our wedding will take place on August 26, 2026 at Vallesvilles, France. The ceremony will begin mid-afternoon, with a specific time to follow in your invitation."
+      },
+      {
+        "question": "What is the dress code?",
+        "answer": ""
+      },
+      {
+        "question": "Can I bring a plus one?",
+        "answer": "Yes, you are welcome to bring a plus one! Please indicate their name on your RSVP form. If you're unsure whether your invitation includes a plus one, please reach out to us."
+      },
+      {
+        "question": "Are children welcome?",
+        "answer": "Yes, children are welcome at our celebration! Please indicate any children attending on your RSVP form so we can make appropriate arrangements."
+      },
+      {
+        "question": "What are the transportation options?",
+        "answer": "The nearest major airport is Toulouse-Blagnac (TLS), approximately 45 minutes from the venue. We recommend renting a car or arranging a taxi. We will provide more detailed transportation information closer to the date."
+      },
+      {
+        "question": "Will there be vegetarian or special dietary options?",
+        "answer": "Yes! Please indicate any dietary requirements on your RSVP form, and we'll ensure there are delicious options for you."
+      },
+      {
+        "question": "What time should I arrive?",
+        "answer": "We recommend arriving 15-30 minutes before each event begins to find your seat and settle in."
+      },
+      {
+        "question": "Can I take photos during the ceremony?",
+        "answer": "We kindly ask for an unplugged ceremony—please keep phones and cameras away during the ceremony so you can be fully present. Our photographer will capture all the special moments!"
+      },
+      {
+        "question": "Is there parking at the venue?",
+        "answer": "Yes, there is free parking available at the venue. Parking attendants will guide you upon arrival."
+      },
+      {
+        "question": "When do I need to RSVP by?",
+        "answer": "Please respond by February 1, 2026 so we can finalize arrangements with our vendors."
+      }
+    ]
   }
 }

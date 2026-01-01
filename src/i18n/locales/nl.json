@@ -4,6 +4,7 @@
     "ourStory": "Ons Verhaal",
     "details": "Details",
     "travel": "Accommodatie",
+    "faq": "FAQ",
     "rsvp": "RSVP"
   },
   "hero": {
@@ -241,5 +242,75 @@
     "skipToRsvp": "Ga naar RSVP-formulier",
     "mainNavigation": "Hoofdnavigatie",
     "keyboardInstructions": "Gebruik de Tab-toets om door de pagina te navigeren. Druk op Enter om links en knoppen te activeren."
+  },
+  "faq": {
+    "label": "Vragen & Antwoorden",
+    "title": "Veelgestelde Vragen",
+    "description": "Alles wat je moet weten over onze huwelijksviering in Frankrijk.",
+    "backToHome": "Terug",
+    "contactNote": "Heb je nog vragen? Neem gerust rechtstreeks contact met ons op—we helpen je graag!",
+    "dressCode": {
+      "welcomeDinner": {
+        "title": "Welkomstdiner",
+        "day": "Dinsdagavond",
+        "code": "Cocktailkleding",
+        "description": "Elegant maar niet overdreven formeel. Voor vrouwen werkt een cocktailjurk, jumpsuit of chique ensemble prachtig. Voor mannen een pak of blazer met nette broek. Voel je vrij om een vleugje kleur toe te voegen!"
+      },
+      "wedding": {
+        "title": "De Bruiloft",
+        "day": "Woensdag",
+        "code": "Formele Kleding",
+        "description": "Dit is onze meest elegante viering. Voor vrouwen zijn lange jurken, formele midi-jurken of elegante cocktailjurken perfect. Voor mannen een donker pak of smoking. Denk aan optioneel black-tie."
+      },
+      "brunch": {
+        "title": "Afscheidsbrunch",
+        "day": "Donderdagochtend",
+        "code": "Smart Casual",
+        "description": "Ontspannen maar verzorgd. Zomerjurken, linnen ensembles, chino's met een mooi overhemd of een casual blazer werken allemaal goed. Comfortabel en chic!"
+      },
+      "shoeTip": "De ceremonie en receptie zijn buiten op gras en grindpaden, dus we raden comfortabele schoenen aan—blokhakken of sleehakken zijn geweldige alternatieven voor naaldhakken."
+    },
+    "items": [
+      {
+        "question": "Wanneer en waar is de bruiloft?",
+        "answer": "Onze bruiloft vindt plaats op 26 augustus 2026 in Vallesvilles, Frankrijk. De ceremonie begint in de middag, met een specifieke tijd die later in je uitnodiging wordt vermeld."
+      },
+      {
+        "question": "Wat is de dresscode?",
+        "answer": ""
+      },
+      {
+        "question": "Mag ik iemand meenemen?",
+        "answer": "Ja, je bent welkom om iemand mee te nemen! Vermeld hun naam op je RSVP-formulier. Als je niet zeker weet of je uitnodiging een plus-één bevat, neem dan contact met ons op."
+      },
+      {
+        "question": "Zijn kinderen welkom?",
+        "answer": "Ja, kinderen zijn welkom bij onze viering! Vermeld eventuele kinderen die meekomen op je RSVP-formulier zodat we de juiste voorzieningen kunnen treffen."
+      },
+      {
+        "question": "Wat zijn de vervoersopties?",
+        "answer": "De dichtstbijzijnde grote luchthaven is Toulouse-Blagnac (TLS), ongeveer 45 minuten van de locatie. We raden aan een auto te huren of een taxi te regelen. We zullen meer gedetailleerde vervoersinformatie verstrekken dichter bij de datum."
+      },
+      {
+        "question": "Zijn er vegetarische of speciale dieetopties?",
+        "answer": "Ja! Geef eventuele dieetwensen aan op je RSVP-formulier, en we zorgen ervoor dat er heerlijke opties voor je zijn."
+      },
+      {
+        "question": "Hoe laat moet ik aankomen?",
+        "answer": "We raden aan 15-30 minuten voor aanvang van elk evenement te arriveren om je plaats te vinden en te settelen."
+      },
+      {
+        "question": "Mag ik foto's maken tijdens de ceremonie?",
+        "answer": "We vragen vriendelijk om een ceremonie zonder apparaten—houd telefoons en camera's alstublieft weg tijdens de ceremonie zodat je volledig aanwezig kunt zijn. Onze fotograaf legt alle speciale momenten vast!"
+      },
+      {
+        "question": "Is er parkeerruimte bij de locatie?",
+        "answer": "Ja, er is gratis parkeren beschikbaar bij de locatie. Parkeerbegeleiders wijzen je de weg bij aankomst."
+      },
+      {
+        "question": "Wanneer moet ik uiterlijk bevestigen?",
+        "answer": "Reageer alstublieft vóór 1 februari 2026 zodat we de afspraken met onze leveranciers kunnen afronden."
+      }
+    ]
   }
 }

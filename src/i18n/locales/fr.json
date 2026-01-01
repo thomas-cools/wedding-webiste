@@ -4,6 +4,7 @@
     "ourStory": "Notre Histoire",
     "details": "Détails",
     "travel": "Hébergement",
+    "faq": "FAQ",
     "rsvp": "RSVP"
   },
   "hero": {
@@ -241,5 +242,75 @@
     "skipToRsvp": "Aller au formulaire RSVP",
     "mainNavigation": "Navigation principale",
     "keyboardInstructions": "Utilisez la touche Tab pour naviguer sur la page. Appuyez sur Entrée pour activer les liens et les boutons."
+  },
+  "faq": {
+    "label": "Questions & Réponses",
+    "title": "Questions Fréquentes",
+    "description": "Tout ce que vous devez savoir sur notre célébration de mariage en France.",
+    "backToHome": "Retour",
+    "contactNote": "Vous avez encore des questions ? N'hésitez pas à nous contacter directement—nous serons ravis de vous aider !",
+    "dressCode": {
+      "welcomeDinner": {
+        "title": "Dîner de Bienvenue",
+        "day": "Mardi Soir",
+        "code": "Tenue de Cocktail",
+        "description": "Élégante mais pas trop formelle. Pour les femmes, une robe de cocktail, une combinaison ou des ensembles chics conviennent parfaitement. Pour les hommes, un costume ou un blazer avec un pantalon habillé. N'hésitez pas à ajouter une touche de couleur !"
+      },
+      "wedding": {
+        "title": "Le Mariage",
+        "day": "Mercredi",
+        "code": "Tenue Formelle",
+        "description": "C'est notre célébration la plus élégante. Pour les femmes, des robes longues, des robes midi formelles ou des robes de cocktail élégantes sont parfaites. Pour les hommes, un costume sombre ou un smoking. Pensez cravate noire optionnelle."
+      },
+      "brunch": {
+        "title": "Brunch d'Adieu",
+        "day": "Jeudi Matin",
+        "code": "Chic Décontracté",
+        "description": "Détendu mais soigné. Robes d'été, ensembles en lin, chinos avec une belle chemise ou un blazer décontracté conviennent bien. Confortable et chic !"
+      },
+      "shoeTip": "La cérémonie et la réception auront lieu en plein air sur herbe et chemins de gravier, nous recommandons donc des chaussures confortables—les talons bloc ou les compensées sont d'excellentes alternatives aux talons aiguilles."
+    },
+    "items": [
+      {
+        "question": "Quand et où a lieu le mariage ?",
+        "answer": "Notre mariage aura lieu le 26 août 2026 à Vallesvilles, France. La cérémonie commencera en milieu d'après-midi, l'heure exacte sera précisée dans votre invitation."
+      },
+      {
+        "question": "Quel est le code vestimentaire ?",
+        "answer": ""
+      },
+      {
+        "question": "Puis-je amener un accompagnant ?",
+        "answer": "Oui, vous êtes bienvenu·e d'amener un accompagnant ! Veuillez indiquer son nom sur votre formulaire RSVP. Si vous n'êtes pas sûr·e que votre invitation inclut un accompagnant, n'hésitez pas à nous contacter."
+      },
+      {
+        "question": "Les enfants sont-ils les bienvenus ?",
+        "answer": "Oui, les enfants sont les bienvenus à notre célébration ! Veuillez indiquer les enfants présents sur votre formulaire RSVP afin que nous puissions faire les arrangements appropriés."
+      },
+      {
+        "question": "Quelles sont les options de transport ?",
+        "answer": "L'aéroport principal le plus proche est Toulouse-Blagnac (TLS), à environ 45 minutes du lieu. Nous recommandons de louer une voiture ou d'organiser un taxi. Nous fournirons des informations de transport plus détaillées à l'approche de la date."
+      },
+      {
+        "question": "Y aura-t-il des options végétariennes ou pour régimes spéciaux ?",
+        "answer": "Oui ! Veuillez indiquer toute exigence alimentaire sur votre formulaire RSVP, et nous nous assurerons qu'il y aura de délicieuses options pour vous."
+      },
+      {
+        "question": "À quelle heure dois-je arriver ?",
+        "answer": "Nous recommandons d'arriver 15 à 30 minutes avant le début de chaque événement pour trouver votre place et vous installer."
+      },
+      {
+        "question": "Puis-je prendre des photos pendant la cérémonie ?",
+        "answer": "Nous vous demandons gentiment une cérémonie sans appareils—veuillez garder vos téléphones et appareils photo rangés pendant la cérémonie afin d'être pleinement présent. Notre photographe capturera tous les moments spéciaux !"
+      },
+      {
+        "question": "Y a-t-il un parking sur place ?",
+        "answer": "Oui, un parking gratuit est disponible sur place. Des agents de stationnement vous guideront à votre arrivée."
+      },
+      {
+        "question": "Quelle est la date limite pour confirmer ma présence ?",
+        "answer": "Veuillez répondre avant le 1er février 2026 afin que nous puissions finaliser les arrangements avec nos prestataires."
+      }
+    ]
   }
 }

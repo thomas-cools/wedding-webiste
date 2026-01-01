@@ -143,6 +143,7 @@ function AppContent() {
     { href: '#story', label: t('header.ourStory'), enabled: features.showStory, isExternal: false },
     { href: '#details', label: t('header.details'), enabled: true, isExternal: false },
     { href: '/accommodations', label: t('header.travel'), enabled: features.showAccommodation, isExternal: true },
+    { href: '/faq', label: t('header.faq'), enabled: true, isExternal: true },
     { href: '/rsvp', label: t('header.rsvp'), enabled: true, isExternal: true },
   ].filter((link) => link.enabled)
 

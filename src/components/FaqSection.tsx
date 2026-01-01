@@ -1,0 +1,283 @@
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import {
+  Box,
+  Container,
+  VStack,
+  HStack,
+  Text,
+  Heading,
+  Divider,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  SimpleGrid,
+  Icon,
+} from '@chakra-ui/react'
+import { ScrollReveal, StaggerContainer, StaggerItem } from './animations'
+
+interface FaqItem {
+  question: string
+  answer: string
+}
+
+interface DressCodeEvent {
+  title: string
+  day: string
+  code: string
+  description: string
+}
+
+// Custom component for rendering dress code with elegant styling
+function DressCodeAnswer() {
+  const { t } = useTranslation()
+  
+  const events: DressCodeEvent[] = [
+    {
+      title: t('faq.dressCode.welcomeDinner.title', 'Welcome Dinner'),
+      day: t('faq.dressCode.welcomeDinner.day', 'Tuesday Evening'),
+      code: t('faq.dressCode.welcomeDinner.code', 'Cocktail Attire'),
+      description: t('faq.dressCode.welcomeDinner.description', 'Think elegant but not overly formal. For women, a cocktail dress, jumpsuit, or dressy separates work beautifully. For men, a suit or blazer paired with dress pants. Feel free to add a pop of color!'),
+    },
+    {
+      title: t('faq.dressCode.wedding.title', 'The Wedding'),
+      day: t('faq.dressCode.wedding.day', 'Wednesday'),
+      code: t('faq.dressCode.wedding.code', 'Formal Attire'),
+      description: t('faq.dressCode.wedding.description', 'This is our most elegant celebration. For women, floor-length gowns, formal midi dresses, or elegant cocktail dresses are perfect. For men, a dark suit or tuxedo. Think black-tie optional.'),
+    },
+    {
+      title: t('faq.dressCode.brunch.title', 'Farewell Brunch'),
+      day: t('faq.dressCode.brunch.day', 'Thursday Morning'),
+      code: t('faq.dressCode.brunch.code', 'Smart Casual'),
+      description: t('faq.dressCode.brunch.description', 'Relaxed but polished. Sundresses, linen separates, chinos with a nice shirt, or a casual blazer all work well. Comfortable and chic!'),
+    },
+  ]
+
+  const shoeTip = t('faq.dressCode.shoeTip', 'The ceremony and reception will be outdoors on grass and gravel paths, so we recommend comfortable shoes—block heels or wedges are great alternatives to stilettos.')
+
+  return (
+    <VStack spacing={6} align="stretch">
+      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+        {events.map((event, index) => (
+          <Box
+            key={index}
+            bg="neutral.light"
+            borderRadius="lg"
+            p={5}
+            position="relative"
+            borderTop="3px solid"
+            borderColor="primary.soft"
+          >
+            <VStack align="start" spacing={3}>
+              <Box>
+                <Text
+                  fontFamily="elegant"
+                  fontSize="xl"
+                  fontWeight="600"
+                  color="secondary.navy"
+                  lineHeight="1.3"
+                  letterSpacing="0.01em"
+                >
+                  {event.title}
+                </Text>
+                <Text
+                  fontFamily="elegant"
+                  fontSize="sm"
+                  color="primary.soft"
+                  textTransform="uppercase"
+                  letterSpacing="0.15em"
+                  fontWeight="500"
+                >
+                  {event.day}
+                </Text>
+              </Box>
+              <Box
+                bg="secondary.navy"
+                color="white"
+                px={4}
+                py={1.5}
+                borderRadius="full"
+                fontFamily="elegant"
+                fontSize="sm"
+                fontWeight="500"
+                letterSpacing="0.05em"
+              >
+                {event.code}
+              </Box>
+              <Text
+                fontFamily="elegant"
+                fontSize="md"
+                color="neutral.muted"
+                lineHeight="1.8"
+              >
+                {event.description}
+              </Text>
+            </VStack>
+          </Box>
+        ))}
+      </SimpleGrid>
+      
+      {/* Shoe tip */}
+      <HStack
+        spacing={3}
+        p={4}
+        bg="chateau.stone"
+        borderRadius="lg"
+        align="start"
+      >
+        <Text fontSize="lg">👠</Text>
+        <Text
+          fontFamily="elegant"
+          fontSize="md"
+          color="neutral.dark"
+          fontStyle="italic"
+          lineHeight="1.7"
+        >
+          {shoeTip}
+        </Text>
+      </HStack>
+    </VStack>
+  )
+}
+
+// Check if this is the dress code question
+function isDressCodeQuestion(question: string): boolean {
+  const dressCodeKeywords = ['dress code', 'dresscode', 'código de vestimenta', 'code vestimentaire', 'dresscode', 'kleding']
+  return dressCodeKeywords.some(keyword => 
+    question.toLowerCase().includes(keyword.toLowerCase())
+  )
+}
+
+export function FaqSection() {
+  const { t } = useTranslation()
+
+  // Get FAQ items from translations
+  const faqItems: FaqItem[] = t('faq.items', { returnObjects: true }) as FaqItem[]
+
+  return (
+    <Box py={[16, 20, 24]} bg="neutral.light">
+      <Container maxW="container.md">
+        <VStack spacing={12}>
+          {/* Section Header */}
+          <ScrollReveal>
+            <VStack spacing={4} textAlign="center">
+              <Text
+                fontFamily="elegant"
+                fontSize="sm"
+                textTransform="uppercase"
+                letterSpacing="0.35em"
+                color="primary.soft"
+                fontWeight="500"
+              >
+                {t('faq.label')}
+              </Text>
+              <Heading
+                as="h1"
+                fontFamily="elegant"
+                fontSize={['3xl', '4xl', '5xl']}
+                fontWeight="400"
+                color="secondary.navy"
+                letterSpacing="0.02em"
+              >
+                {t('faq.title')}
+              </Heading>
+              <Divider borderColor="primary.soft" w="120px" mx="auto" my={2} />
+              <Text
+                fontFamily="elegant"
+                fontSize={['md', 'lg']}
+                color="neutral.dark"
+                maxW="500px"
+                lineHeight="1.9"
+                fontStyle="italic"
+              >
+                {t('faq.description')}
+              </Text>
+            </VStack>
+          </ScrollReveal>
+
+          {/* FAQ Accordion */}
+          <StaggerContainer>
+            <Accordion allowMultiple width="100%">
+              {Array.isArray(faqItems) && faqItems.map((item, index) => (
+                <StaggerItem key={index}>
+                  <AccordionItem
+                    border="none"
+                    mb={4}
+                    bg="white"
+                    borderRadius="lg"
+                    boxShadow="sm"
+                    overflow="hidden"
+                  >
+                    <AccordionButton
+                      py={5}
+                      px={6}
+                      _hover={{ bg: 'gray.50' }}
+                      _expanded={{ bg: 'primary.soft', color: 'white' }}
+                    >
+                      <Box
+                        flex="1"
+                        textAlign="left"
+                        fontFamily="elegant"
+                        fontSize={['lg', 'xl']}
+                        fontWeight="500"
+                        letterSpacing="0.01em"
+                      >
+                        {item.question}
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                    <AccordionPanel
+                      py={5}
+                      px={6}
+                      fontFamily="elegant"
+                      fontSize={['md', 'lg']}
+                      color="neutral.dark"
+                      lineHeight="1.9"
+                    >
+                      {isDressCodeQuestion(item.question) ? (
+                        <DressCodeAnswer />
+                      ) : (
+                        <Text 
+                          whiteSpace="pre-line" 
+                          fontFamily="elegant"
+                          lineHeight="1.9"
+                        >
+                          {item.answer}
+                        </Text>
+                      )}
+                    </AccordionPanel>
+                  </AccordionItem>
+                </StaggerItem>
+              ))}
+            </Accordion>
+          </StaggerContainer>
+
+          {/* Contact Note */}
+          <ScrollReveal>
+            <Box
+              textAlign="center"
+              p={6}
+              bg="white"
+              borderRadius="lg"
+              boxShadow="sm"
+            >
+              <Text
+                fontFamily="elegant"
+                fontSize={['md', 'lg']}
+                color="neutral.dark"
+                fontStyle="italic"
+                lineHeight="1.8"
+              >
+                {t('faq.contactNote')}
+              </Text>
+            </Box>
+          </ScrollReveal>
+        </VStack>
+      </Container>
+    </Box>
+  )
+}
+
+export default FaqSection

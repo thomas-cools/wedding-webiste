@@ -16,6 +16,7 @@ const theme = extendTheme({
     heading: "'Playfair Display', 'Georgia', serif",
     body: "'Montserrat', 'Helvetica Neue', sans-serif",
     accent: "'Playfair Display', 'Georgia', serif",
+    elegant: "'Cormorant Garamond', 'Georgia', serif",
   },
   colors: {
     neutral: {

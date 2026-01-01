@@ -4,6 +4,7 @@
     "ourStory": "Nuestra Historia",
     "details": "Detalles",
     "travel": "Alojamiento",
+    "faq": "Preguntas",
     "rsvp": "Confirmar"
   },
   "hero": {
@@ -240,5 +241,75 @@
     "skipToRsvp": "Ir al formulario de confirmación",
     "mainNavigation": "Navegación principal",
     "keyboardInstructions": "Use la tecla Tab para navegar por la página. Presione Enter para activar enlaces y botones."
+  },
+  "faq": {
+    "label": "Preguntas y Respuestas",
+    "title": "Preguntas Frecuentes",
+    "description": "Todo lo que necesitas saber sobre nuestra celebración de boda en Francia.",
+    "backToHome": "Volver",
+    "contactNote": "¿Aún tienes preguntas? No dudes en contactarnos directamente—¡estaremos encantados de ayudarte!",
+    "dressCode": {
+      "welcomeDinner": {
+        "title": "Cena de Bienvenida",
+        "day": "Martes por la Noche",
+        "code": "Vestimenta de Cóctel",
+        "description": "Elegante pero no demasiado formal. Para mujeres, un vestido de cóctel, mono o conjuntos elegantes funcionan muy bien. Para hombres, traje o blazer con pantalón de vestir. ¡Siéntete libre de añadir un toque de color!"
+      },
+      "wedding": {
+        "title": "La Boda",
+        "day": "Miércoles",
+        "code": "Vestimenta Formal",
+        "description": "Esta es nuestra celebración más elegante. Para mujeres, vestidos largos, vestidos midi formales o vestidos de cóctel elegantes son perfectos. Para hombres, traje oscuro o esmoquin. Piensa en etiqueta opcional."
+      },
+      "brunch": {
+        "title": "Brunch de Despedida",
+        "day": "Jueves por la Mañana",
+        "code": "Casual Elegante",
+        "description": "Relajado pero pulido. Vestidos de verano, conjuntos de lino, pantalones chinos con una camisa bonita o un blazer casual funcionan bien. ¡Cómodo y chic!"
+      },
+      "shoeTip": "La ceremonia y recepción serán al aire libre sobre césped y caminos de grava, así que recomendamos zapatos cómodos—tacones anchos o cuñas son excelentes alternativas a los tacones de aguja."
+    },
+    "items": [
+      {
+        "question": "¿Cuándo y dónde es la boda?",
+        "answer": "Nuestra boda tendrá lugar el 26 de agosto de 2026 en Vallesvilles, Francia. La ceremonia comenzará a media tarde, con la hora específica indicada en tu invitación."
+      },
+      {
+        "question": "¿Cuál es el código de vestimenta?",
+        "answer": ""
+      },
+      {
+        "question": "¿Puedo llevar acompañante?",
+        "answer": "¡Sí, eres bienvenido/a a traer un acompañante! Por favor indica su nombre en el formulario de confirmación. Si no estás seguro/a si tu invitación incluye acompañante, por favor contáctanos."
+      },
+      {
+        "question": "¿Los niños son bienvenidos?",
+        "answer": "¡Sí, los niños son bienvenidos en nuestra celebración! Por favor indica cualquier niño que asistirá en tu formulario de confirmación para que podamos hacer los arreglos apropiados."
+      },
+      {
+        "question": "¿Cuáles son las opciones de transporte?",
+        "answer": "El aeropuerto principal más cercano es Toulouse-Blagnac (TLS), aproximadamente a 45 minutos del lugar. Recomendamos alquilar un auto o coordinar un taxi. Proporcionaremos información de transporte más detallada cerca de la fecha."
+      },
+      {
+        "question": "¿Habrá opciones vegetarianas o para dietas especiales?",
+        "answer": "¡Sí! Por favor indica cualquier requerimiento dietético en tu formulario de confirmación, y nos aseguraremos de que haya opciones deliciosas para ti."
+      },
+      {
+        "question": "¿A qué hora debo llegar?",
+        "answer": "Recomendamos llegar 15-30 minutos antes de que comience cada evento para encontrar tu asiento y acomodarte."
+      },
+      {
+        "question": "¿Puedo tomar fotos durante la ceremonia?",
+        "answer": "Solicitamos amablemente una ceremonia sin dispositivos—por favor mantén teléfonos y cámaras guardados durante la ceremonia para que puedas estar completamente presente. ¡Nuestro fotógrafo capturará todos los momentos especiales!"
+      },
+      {
+        "question": "¿Hay estacionamiento en el lugar?",
+        "answer": "Sí, hay estacionamiento gratuito disponible en el lugar. Los asistentes de estacionamiento te guiarán a tu llegada."
+      },
+      {
+        "question": "¿Para cuándo necesito confirmar mi asistencia?",
+        "answer": "Por favor responde antes del 1 de febrero de 2026 para que podamos finalizar los arreglos con nuestros proveedores."
+      }
+    ]
   }
 }
