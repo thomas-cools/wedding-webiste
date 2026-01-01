@@ -35,6 +35,7 @@ function QuickLinkCard({ to, icon, label, alt }: QuickLinkItem) {
           spacing={4}
           textAlign="center"
           px={[4, 6, 8]}
+          pb={[0, 0, 10]}
           cursor="pointer"
           transition="all 0.3s ease"
           _hover={{ transform: 'translateY(-4px)' }}
@@ -95,31 +96,22 @@ export function QuickLinks() {
   ]
 
   return (
-    <Box as="section" id="quick-links" py={[16, 20, 24]} bg="neutral.light">
+    <Box as="section" id="quick-links" py={[16, 20, 28]} bg="white">
       <Container maxW="container.xl" px={[4, 6, 8]}>
         <VStack spacing={[12, 16, 20]}>
           {/* Section Header */}
           <ScrollReveal>
-            <VStack spacing={3} textAlign="center">
-              <Text
-                fontFamily="elegant"
-                fontSize="sm"
-                textTransform="uppercase"
-                letterSpacing="0.35em"
-                color="primary.soft"
-                fontWeight="500"
-              >
-                {t('story.label')}
-              </Text>
+            <VStack spacing={4} textAlign="center">
               <Heading
                 as="h2"
-                fontFamily="elegant"
+                fontFamily="heading"
                 fontSize={['2xl', '3xl', '4xl']}
                 fontWeight="400"
-                color="secondary.navy"
-                letterSpacing="0.02em"
+                textTransform="uppercase"
+                letterSpacing="0.15em"
+                color="primary.deep"
               >
-                {t('story.title')}
+                {t('quickLinks.title', 'Links')}
               </Heading>
             </VStack>
           </ScrollReveal>

@@ -6,8 +6,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string, fallback?: string) => {
       const translations: Record<string, string> = {
-        'story.label': 'Our Story',
-        'story.title': 'Two Worlds, One Heart',
+        'quickLinks.title': 'Links',
         'header.rsvp': 'RSVP',
         'header.faq': 'FAQ',
         'quickLinks.stay': 'STAY',
@@ -24,16 +23,10 @@ jest.mock('../assets/Luchador_icon.svg', () => 'luchador-icon.svg')
 jest.mock('../assets/rest_icon.svg', () => 'rest-icon.svg')
 
 describe('QuickLinks Component', () => {
-  it('renders the section header with label', () => {
-    render(<QuickLinks />)
-    
-    expect(screen.getByText('Our Story')).toBeInTheDocument()
-  })
-
   it('renders the section title', () => {
     render(<QuickLinks />)
     
-    expect(screen.getByRole('heading', { name: 'Two Worlds, One Heart' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Links' })).toBeInTheDocument()
   })
 
   it('renders all three quick link labels', () => {
@@ -73,7 +66,7 @@ describe('QuickLinks Component', () => {
     
     // Main section title should be h2
     const mainHeading = screen.getByRole('heading', { level: 2 })
-    expect(mainHeading).toHaveTextContent('Two Worlds, One Heart')
+    expect(mainHeading).toHaveTextContent('Links')
   })
 
   it('renders the section with correct id', () => {
