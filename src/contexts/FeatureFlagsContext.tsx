@@ -27,7 +27,7 @@ interface FeatureFlagsContextType {
 // Build-time defaults (used as fallback)
 const defaultFeatures: FeatureFlags = {
   showGallery: false,
-  showStory: false,
+  showStory: true,
   showTimeline: true,
   showCountdown: true,
   requirePassword: true,
