@@ -11,8 +11,8 @@ import bgDesktop from '../assets/simple_smooth_background-desktop.webp';
 import usImageMain from '../assets/us-image-main.svg';
 import belgiumFlower from '../assets/Belgium_flower-red.svg';
 
-// CSS filter to change the flower color to brownish/terracotta to match the design
-const FLOWER_COLOR_FILTER = 'sepia(60%) saturate(200%) hue-rotate(-10deg) brightness(85%)';
+// CSS filter to change the flower color to light beige/cream (subtle watermark effect)
+const FLOWER_COLOR_FILTER = 'sepia(20%) saturate(30%) brightness(110%) opacity(0.4)';
 
 export default function StorySection() {
   const { t } = useTranslation();
@@ -52,6 +52,27 @@ export default function StorySection() {
         />
       </Box>
 
+      {/* Belgium flower decoration - large subtle background element on right */}
+      <Box
+        position="absolute"
+        top="50%"
+        right={["-100px", "-80px", "-60px"]}
+        transform="translateY(-50%)"
+        w={["300px", "400px", "500px"]}
+        h={["300px", "400px", "500px"]}
+        zIndex={0}
+        pointerEvents="none"
+      >
+        <Image
+          src={belgiumFlower}
+          alt=""
+          w="100%"
+          h="100%"
+          objectFit="contain"
+          filter={FLOWER_COLOR_FILTER}
+        />
+      </Box>
+
       <Container maxW="container.lg" position="relative" zIndex={1}>
         <VStack spacing={12}>
           {/* Section Header */}
@@ -86,41 +107,16 @@ export default function StorySection() {
             maxW="900px"
             position="relative"
           >
-            {/* Left side - Decorative flower and circular photo */}
+            {/* Left side - Circular photo with decorative frame */}
             <ScrollReveal variants={fadeInLeft}>
               <Box position="relative" w={["200px", "220px", "240px"]} mx={["auto", "auto", 0]}>
-                {/* Belgium flower decoration */}
-                <Box
-                  position="absolute"
-                  top={["-20px", "-25px", "-30px"]}
-                  left={["-30px", "-40px", "-50px"]}
-                  w={["80px", "100px", "120px"]}
-                  h={["80px", "100px", "120px"]}
-                  zIndex={0}
-                >
-                  <Image
-                    src={belgiumFlower}
-                    alt=""
-                    w="100%"
-                    h="100%"
-                    objectFit="contain"
-                    filter={FLOWER_COLOR_FILTER}
-                    transform="rotate(-15deg)"
-                  />
-                </Box>
-
                 {/* Circular couple photo with decorative frame */}
-                <Box
-                  position="relative"
-                  zIndex={1}
-                >
-                  <Image
-                    src={usImageMain}
-                    alt={t('story.coupleAlt', 'Carolina and Thomas')}
-                    w="100%"
-                    h="auto"
-                  />
-                </Box>
+                <Image
+                  src={usImageMain}
+                  alt={t('story.coupleAlt', 'Carolina and Thomas')}
+                  w="100%"
+                  h="auto"
+                />
               </Box>
             </ScrollReveal>
 
