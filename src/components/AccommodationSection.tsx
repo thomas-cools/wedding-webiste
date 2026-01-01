@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { 
-  Box, VStack, Tabs, TabList, TabPanels, Tab, TabPanel, Heading, Text, Image, Button, Badge, SimpleGrid, Flex,
-  Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton, useDisclosure, Link
+  Box, VStack, Tabs, TabList, TabPanels, Tab, TabPanel, Heading, Text, Image, Button, Badge, SimpleGrid, Flex, Link
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import airbnbLogo from '../assets/airbnb-tile.svg';
 import bookingLogo from '../assets/booking-tile.svg';
-import venueRoomsImg from '../assets/venue_rooms.webp';
 
 interface AccommodationSectionProps {
   enabled: boolean;
@@ -15,7 +13,6 @@ interface AccommodationSectionProps {
 
 export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enabled }) => {
   const { t } = useTranslation();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   if (!enabled) return null;
   return (
     <Box id="travel" py={[12, 16, 28]} px={[4, 6, 8]} bg="white" scrollMarginTop={["100px", "130px", "150px"]}>
@@ -136,30 +133,6 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
                           emailLink: <Link href="mailto:rsvp@carolinaandthomas.com" color="primary.deep" fontWeight="500" _hover={{ textDecoration: 'underline' }} />
                         }}
                       />
-                    </Text>
-                    {/* Room Plan Image */}
-                    <Box 
-                      w="full" 
-                      maxW="700px" 
-                      cursor="pointer" 
-                      onClick={onOpen}
-                      borderRadius="md"
-                      overflow="hidden"
-                      border="1px solid"
-                      borderColor="primary.soft"
-                      transition="all 0.3s ease"
-                      _hover={{ transform: "scale(1.02)", boxShadow: "lg" }}
-                    >
-                      <Image 
-                        src={venueRoomsImg} 
-                        alt={t('travel.viewFloorplan')}
-                        w="full"
-                        h="auto"
-                        objectFit="contain"
-                      />
-                    </Box>
-                    <Text fontSize="xs" color="neutral.muted" fontStyle="italic">
-                      {t('travel.clickToEnlarge')}
                     </Text>
                   </VStack>
                 </Box>
@@ -322,44 +295,6 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
           </Tabs>
         </Box>
       </VStack>
-
-      {/* Fullscreen Room Plan Modal */}
-      <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered>
-        <ModalOverlay bg="blackAlpha.800" />
-        <ModalContent 
-          bg="transparent" 
-          boxShadow="none" 
-          maxW="95vw" 
-          maxH="95vh"
-          m={4}
-        >
-          <ModalCloseButton 
-            color="white" 
-            size="lg" 
-            top={4} 
-            right={4}
-            bg="blackAlpha.600"
-            borderRadius="full"
-            _hover={{ bg: "blackAlpha.800" }}
-          />
-          <ModalBody 
-            display="flex" 
-            alignItems="center" 
-            justifyContent="center" 
-            p={0}
-            onClick={onClose}
-          >
-            <Image 
-              src={venueRoomsImg} 
-              alt={t('travel.viewFloorplan')}
-              maxW="100%"
-              maxH="90vh"
-              objectFit="contain"
-              borderRadius="md"
-            />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
     </Box>
   );
 };
