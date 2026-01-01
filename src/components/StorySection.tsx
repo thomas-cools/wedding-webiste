@@ -117,8 +117,6 @@ export default function StorySection() {
                   borderRadius="lg"
                   overflow="hidden"
                   boxShadow="lg"
-                  border="4px solid"
-                  borderColor="whiteAlpha.800"
                 >
                   <Image
                     src={couplePhoto}
@@ -131,10 +129,10 @@ export default function StorySection() {
                 {/* TC Monogram logo overlay */}
                 <Box
                   position="absolute"
-                  top="-15px"
-                  right="-15px"
-                  w={["50px", "60px", "70px"]}
-                  h={["50px", "60px", "70px"]}
+                  top="-25px"
+                  right="-25px"
+                  w={["70px", "85px", "100px"]}
+                  h={["70px", "85px", "100px"]}
                   zIndex={2}
                 >
                   <Image
