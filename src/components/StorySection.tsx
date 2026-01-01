@@ -129,10 +129,10 @@ export default function StorySection() {
                 {/* TC Monogram logo overlay */}
                 <Box
                   position="absolute"
-                  top={["-45px", "-55px", "-65px"]}
-                  right="-10px"
-                  w={["70px", "85px", "100px"]}
-                  h={["70px", "85px", "100px"]}
+                  top={["-70px", "-85px", "-100px"]}
+                  right="-15px"
+                  w={["105px", "128px", "150px"]}
+                  h={["105px", "128px", "150px"]}
                   zIndex={2}
                 >
                   <Image
