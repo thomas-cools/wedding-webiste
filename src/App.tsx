@@ -314,15 +314,15 @@ function AppContent() {
             stampSrc: stampLarge,
             stampSrcSet: { small: stampSmall, large: stampLarge },
           }}
-          showScrollIndicator={features.showStory}
-          scrollIndicatorHref="#story"
+          showScrollIndicator={features.showTimeline}
+          scrollIndicatorHref="#timeline"
         />
 
-        {/* Countdown Section - Controlled by feature flag */}
-        {features.showCountdown && (
-          <ErrorBoundary sectionName="countdown" silent>
-            <Suspense fallback={<CountdownSkeleton />}>
-              <Countdown />
+        {/* Timeline Section - Controlled by feature flag */}
+        {features.showTimeline && (
+          <ErrorBoundary sectionName="timeline" silent>
+            <Suspense fallback={<TimelineSkeleton />}>
+              <Timeline />
             </Suspense>
           </ErrorBoundary>
         )}
@@ -336,11 +336,11 @@ function AppContent() {
           </ErrorBoundary>
         )}
 
-        {/* Timeline Section - Controlled by feature flag */}
-        {features.showTimeline && (
-          <ErrorBoundary sectionName="timeline" silent>
-            <Suspense fallback={<TimelineSkeleton />}>
-              <Timeline />
+        {/* Countdown Section - Controlled by feature flag */}
+        {features.showCountdown && (
+          <ErrorBoundary sectionName="countdown" silent>
+            <Suspense fallback={<CountdownSkeleton />}>
+              <Countdown />
             </Suspense>
           </ErrorBoundary>
         )}
