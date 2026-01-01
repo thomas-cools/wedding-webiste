@@ -8,7 +8,8 @@ import bgTablet from '../assets/simple_smooth_background-tablet.webp';
 import bgDesktop from '../assets/simple_smooth_background-desktop.webp';
 
 // Import story section assets
-import usImageMain from '../assets/us-image-main.svg';
+import couplePhoto from '../assets/C&T-2025.webp';
+import tcLogo from '../assets/tc_logo.svg';
 import belgiumFlower from '../assets/Belgium_flower-red.svg';
 
 // CSS filter to change the red flower to muted blue (#94B1C8 palette color)
@@ -107,16 +108,51 @@ export default function StorySection() {
             maxW="900px"
             position="relative"
           >
-            {/* Left side - Circular photo with decorative frame */}
+            {/* Left side - Circular photo with monogram overlay */}
             <ScrollReveal variants={fadeInLeft}>
-              <Box position="relative" w={["200px", "220px", "240px"]} mx={["auto", "auto", 0]}>
-                {/* Circular couple photo with decorative frame */}
-                <Image
-                  src={usImageMain}
-                  alt={t('story.coupleAlt', 'Carolina and Thomas')}
+              <Box position="relative" w={["180px", "200px", "220px"]} mx={["auto", "auto", 0]}>
+                {/* Circular couple photo */}
+                <Box
+                  position="relative"
                   w="100%"
-                  h="auto"
-                />
+                  paddingBottom="100%"
+                  borderRadius="full"
+                  overflow="hidden"
+                  boxShadow="lg"
+                  border="4px solid"
+                  borderColor="whiteAlpha.800"
+                >
+                  <Image
+                    src={couplePhoto}
+                    alt={t('story.coupleAlt', 'Carolina and Thomas')}
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="100%"
+                    h="100%"
+                    objectFit="cover"
+                    objectPosition="center top"
+                  />
+                </Box>
+                {/* TC Monogram logo overlay */}
+                <Box
+                  position="absolute"
+                  top="-10px"
+                  left="50%"
+                  transform="translateX(-50%)"
+                  w={["60px", "70px", "80px"]}
+                  h={["60px", "70px", "80px"]}
+                  zIndex={2}
+                >
+                  <Image
+                    src={tcLogo}
+                    alt=""
+                    w="100%"
+                    h="100%"
+                    objectFit="contain"
+                    filter="opacity(0.7)"
+                  />
+                </Box>
               </Box>
             </ScrollReveal>
 
