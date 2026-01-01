@@ -1,12 +1,18 @@
 import { Box, Container, VStack, Text, Heading, Flex, Image } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { ScrollReveal, fadeInLeft, fadeInRight } from './animations';
-import { Divider } from '@chakra-ui/react';
 
 // Import responsive background images
 import bgMobile from '../assets/simple_smooth_background-mobile.webp';
 import bgTablet from '../assets/simple_smooth_background-tablet.webp';
 import bgDesktop from '../assets/simple_smooth_background-desktop.webp';
+
+// Import story section assets
+import usImageMain from '../assets/us-image-main.svg';
+import belgiumFlower from '../assets/Belgium_flower-red.svg';
+
+// CSS filter to change the flower color to brownish/terracotta to match the design
+const FLOWER_COLOR_FILTER = 'sepia(60%) saturate(200%) hue-rotate(-10deg) brightness(85%)';
 
 export default function StorySection() {
   const { t } = useTranslation();
@@ -47,7 +53,7 @@ export default function StorySection() {
       </Box>
 
       <Container maxW="container.lg" position="relative" zIndex={1}>
-        <VStack spacing={16}>
+        <VStack spacing={12}>
           {/* Section Header */}
           <ScrollReveal>
             <VStack spacing={4} textAlign="center" maxW="600px">
@@ -69,47 +75,63 @@ export default function StorySection() {
               >
                 {t('story.title')}
               </Heading>
-              <Divider borderColor="primary.soft" w="120px" mx="auto" my={2} />
             </VStack>
           </ScrollReveal>
-          {/* Story Content - Elegant Layout */}
+
+          {/* Story Content - Image + Text Layout */}
           <Flex 
             direction={["column", "column", "row"]} 
-            gap={[10, 10, 16]} 
-            align="center"
-            maxW="1000px"
+            gap={[8, 10, 12]} 
+            align="flex-start"
+            maxW="900px"
+            position="relative"
           >
-            <ScrollReveal variants={fadeInLeft} flex={1} maxW={["100%", "100%", "450px"]}>
-              <Box
-                borderRadius="lg"
-                overflow="hidden"
-                boxShadow="xl"
-              >
-                <Image 
-                  src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop" 
-                  alt="Sofia and Lucas" 
-                  w="100%"
-                  h={["300px", "400px", "500px"]}
-                  objectFit="cover"
-                />
+            {/* Left side - Decorative flower and circular photo */}
+            <ScrollReveal variants={fadeInLeft}>
+              <Box position="relative" w={["200px", "220px", "240px"]} mx={["auto", "auto", 0]}>
+                {/* Belgium flower decoration */}
+                <Box
+                  position="absolute"
+                  top={["-20px", "-25px", "-30px"]}
+                  left={["-30px", "-40px", "-50px"]}
+                  w={["80px", "100px", "120px"]}
+                  h={["80px", "100px", "120px"]}
+                  zIndex={0}
+                >
+                  <Image
+                    src={belgiumFlower}
+                    alt=""
+                    w="100%"
+                    h="100%"
+                    objectFit="contain"
+                    filter={FLOWER_COLOR_FILTER}
+                    transform="rotate(-15deg)"
+                  />
+                </Box>
+
+                {/* Circular couple photo with decorative frame */}
+                <Box
+                  position="relative"
+                  zIndex={1}
+                >
+                  <Image
+                    src={usImageMain}
+                    alt={t('story.coupleAlt', 'Carolina and Thomas')}
+                    w="100%"
+                    h="auto"
+                  />
+                </Box>
               </Box>
             </ScrollReveal>
+
+            {/* Right side - Text content */}
             <ScrollReveal variants={fadeInRight} flex={1}>
-              <VStack align={["center", "center", "flex-start"]} spacing={6} textAlign={["center", "center", "left"]}>
-                <Text fontSize="lg" lineHeight="1.9" color="neutral.dark">
+              <VStack align={["center", "center", "flex-start"]} spacing={5} textAlign={["center", "center", "left"]}>
+                <Text fontSize={["md", "lg"]} lineHeight="1.9" color="neutral.dark">
                   {t('story.paragraph1')}
                 </Text>
-                <Text fontSize="lg" lineHeight="1.9" color="neutral.dark">
+                <Text fontSize={["md", "lg"]} lineHeight="1.9" color="neutral.dark">
                   {t('story.paragraph2')}
-                </Text>
-                <Text 
-                  fontFamily="heading" 
-                  fontStyle="italic" 
-                  fontSize="xl"
-                  color="primary.deep" 
-                  mt={4}
-                >
-                  "{t('story.quote')}"
                 </Text>
               </VStack>
             </ScrollReveal>
