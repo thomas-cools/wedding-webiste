@@ -618,8 +618,8 @@ export default function Hero({
         </MotionBox>
       </Container>
 
-      {/* Scroll Indicator */}
-      {showScrollIndicator && (
+      {/* Scroll Indicator - only show when no collage (collage has its own indicator) */}
+      {showScrollIndicator && !hasCollage && (
         <Box
           position="absolute"
           bottom={["40px", "60px"]}
