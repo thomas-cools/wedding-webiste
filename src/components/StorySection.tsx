@@ -108,15 +108,13 @@ export default function StorySection() {
             maxW="900px"
             position="relative"
           >
-            {/* Left side - Circular photo with monogram overlay */}
+            {/* Left side - Rectangular photo with monogram overlay */}
             <ScrollReveal variants={fadeInLeft}>
-              <Box position="relative" w={["180px", "200px", "220px"]} mx={["auto", "auto", 0]}>
-                {/* Circular couple photo */}
+              <Box position="relative" w={["160px", "180px", "200px"]} mx={["auto", "auto", 0]}>
+                {/* Rectangular couple photo with rounded corners */}
                 <Box
                   position="relative"
-                  w="100%"
-                  paddingBottom="100%"
-                  borderRadius="full"
+                  borderRadius="lg"
                   overflow="hidden"
                   boxShadow="lg"
                   border="4px solid"
@@ -125,23 +123,18 @@ export default function StorySection() {
                   <Image
                     src={couplePhoto}
                     alt={t('story.coupleAlt', 'Carolina and Thomas')}
-                    position="absolute"
-                    top="0"
-                    left="0"
                     w="100%"
-                    h="100%"
-                    objectFit="cover"
-                    objectPosition="center top"
+                    h="auto"
+                    display="block"
                   />
                 </Box>
                 {/* TC Monogram logo overlay */}
                 <Box
                   position="absolute"
-                  top="-10px"
-                  left="50%"
-                  transform="translateX(-50%)"
-                  w={["60px", "70px", "80px"]}
-                  h={["60px", "70px", "80px"]}
+                  top="-15px"
+                  left="-15px"
+                  w={["50px", "60px", "70px"]}
+                  h={["50px", "60px", "70px"]}
                   zIndex={2}
                 >
                   <Image
