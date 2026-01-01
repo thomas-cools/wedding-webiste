@@ -132,7 +132,7 @@ export default function StorySection() {
                 <Box
                   position="absolute"
                   top="-15px"
-                  left="-15px"
+                  right="-15px"
                   w={["50px", "60px", "70px"]}
                   h={["50px", "60px", "70px"]}
                   zIndex={2}
