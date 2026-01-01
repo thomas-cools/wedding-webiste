@@ -62,7 +62,7 @@ describe('RsvpForm Integration Tests', () => {
     it('renders the form with all required fields', () => {
       render(<RsvpForm />)
       
-      expect(screen.getByText('rsvp.label')).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'rsvp.title' })).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.yourName')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.email')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.mailingAddress')).toBeInTheDocument()

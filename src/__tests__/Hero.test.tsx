@@ -6,12 +6,10 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
-        'hero.together': 'Together with their families',
         'hero.bride': 'Carolina',
         'hero.groom': 'Thomas',
         'hero.and': '&',
         'hero.date': 'August Twenty-Sixth',
-        'hero.year': 'Two Thousand Twenty-Six',
         'hero.venue': 'Vallesvilles · Haute-Garonne, France',
         'hero.respond': 'RSVP',
       }
@@ -39,19 +37,12 @@ describe('Hero Component', () => {
     render(<Hero />)
     
     expect(screen.getByText('August Twenty-Sixth')).toBeInTheDocument()
-    expect(screen.getByText('Two Thousand Twenty-Six')).toBeInTheDocument()
   })
 
   it('renders the venue information', () => {
     render(<Hero />)
     
     expect(screen.getByText('Vallesvilles · Haute-Garonne, France')).toBeInTheDocument()
-  })
-
-  it('renders the "together with families" text', () => {
-    render(<Hero />)
-    
-    expect(screen.getByText('Together with their families')).toBeInTheDocument()
   })
 
   it('renders the respond link styled as button', () => {

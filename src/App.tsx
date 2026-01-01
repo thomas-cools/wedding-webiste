@@ -69,6 +69,7 @@ import bannerDesktop from './assets/banner-desktop.webp'
 const Countdown = React.lazy(() => import('./components/Countdown'))
 const StorySection = React.lazy(() => import('./components/StorySection'))
 const Timeline = React.lazy(() => import('./components/Timeline'))
+const QuickLinks = React.lazy(() => import('./components/QuickLinks'))
 const PhotoGallery = React.lazy(() =>
   import('./components/PhotoGallery').then((m) => ({ default: m.PhotoGallery }))
 )
@@ -377,6 +378,11 @@ function AppContent() {
             </VStack>
           </Container>
         </Box>
+
+        {/* Quick Links Section */}
+        <Suspense fallback={null}>
+          <QuickLinks />
+        </Suspense>
 
       </Box>
 
