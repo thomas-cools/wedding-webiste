@@ -3,6 +3,7 @@
     "initials": "C & T",
     "ourStory": "Ons Verhaal",
     "details": "Details",
+    "gallery": "Galerij",
     "travel": "Accommodatie",
     "faq": "FAQ",
     "rsvp": "RSVP"
@@ -176,6 +177,7 @@
     "preheading": "Vastgelegde Momenten",
     "title": "Onze Galerij",
     "subtitle": "Een collectie herinneringen van onze reis samen.",
+    "backToHome": "Terug",
     "viewImage": "Bekijk afbeelding",
     "close": "Sluit galerij",
     "previous": "Vorige afbeelding",

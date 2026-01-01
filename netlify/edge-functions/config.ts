@@ -28,7 +28,7 @@ export interface FeatureFlags {
 
 // Default values (used when env vars are not set)
 const defaults: FeatureFlags = {
-  showGallery: false,
+  showGallery: true,
   showStory: true,
   showTimeline: true,
   showCountdown: true,

@@ -3,6 +3,7 @@
     "initials": "C & T",
     "ourStory": "Notre Histoire",
     "details": "Détails",
+    "gallery": "Galerie",
     "travel": "Hébergement",
     "faq": "FAQ",
     "rsvp": "RSVP"
@@ -176,6 +177,7 @@
     "preheading": "Moments Capturés",
     "title": "Notre Galerie",
     "subtitle": "Une collection de souvenirs de notre parcours ensemble.",
+    "backToHome": "Retour",
     "viewImage": "Voir l'image",
     "close": "Fermer la galerie",
     "previous": "Image précédente",

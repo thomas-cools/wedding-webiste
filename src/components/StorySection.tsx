@@ -10,10 +10,7 @@ import bgDesktop from '../assets/simple_smooth_background-desktop.webp';
 // Import story section assets
 import couplePhoto from '../assets/C&T-2025.webp';
 import tcLogo from '../assets/tc_logo.svg';
-import belgiumFlower from '../assets/Belgium_flower-red.svg';
-
-// CSS filter to change the red flower to muted blue (#94B1C8 palette color)
-const FLOWER_COLOR_FILTER = 'sepia(100%) saturate(300%) brightness(70%) hue-rotate(180deg) opacity(0.4)';
+import belgiumFlower from '../assets/Belgium_flower-blue.svg';
 
 export default function StorySection() {
   const { t } = useTranslation();
@@ -63,6 +60,7 @@ export default function StorySection() {
         h={["300px", "400px", "500px"]}
         zIndex={0}
         pointerEvents="none"
+        opacity={0.4}
       >
         <Image
           src={belgiumFlower}
@@ -70,7 +68,6 @@ export default function StorySection() {
           w="100%"
           h="100%"
           objectFit="contain"
-          filter={FLOWER_COLOR_FILTER}
         />
       </Box>
 

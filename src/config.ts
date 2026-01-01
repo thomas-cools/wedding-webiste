@@ -15,10 +15,10 @@
  */
 export const features = {
   /** Show the photo gallery section */
-  showGallery: false,
+  showGallery: true,
 
   /** Show the story section */
-  showStory: false,
+  showStory: true,
 
   /** Show the timeline/love story section */
   showTimeline: true,

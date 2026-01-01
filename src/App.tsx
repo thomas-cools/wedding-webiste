@@ -39,7 +39,6 @@ import {
   CountdownSkeleton,
   StorySkeleton,
   TimelineSkeleton,
-  GallerySkeleton,
 } from './components/SectionSkeletons'
 import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
 import { weddingConfig } from './config'
@@ -70,9 +69,6 @@ const Countdown = React.lazy(() => import('./components/Countdown'))
 const StorySection = React.lazy(() => import('./components/StorySection'))
 const Timeline = React.lazy(() => import('./components/Timeline'))
 const QuickLinks = React.lazy(() => import('./components/QuickLinks'))
-const PhotoGallery = React.lazy(() =>
-  import('./components/PhotoGallery').then((m) => ({ default: m.PhotoGallery }))
-)
 
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
@@ -143,6 +139,7 @@ function AppContent() {
   const navLinks = [
     { href: '#story', label: t('header.ourStory'), enabled: features.showStory, isExternal: false },
     { href: '#details', label: t('header.details'), enabled: true, isExternal: false },
+    { href: '/gallery', label: t('header.gallery'), enabled: features.showGallery, isExternal: true },
     { href: '/accommodations', label: t('header.travel'), enabled: features.showAccommodation, isExternal: true },
     { href: '/faq', label: t('header.faq'), enabled: true, isExternal: true },
     { href: '/rsvp', label: t('header.rsvp'), enabled: true, isExternal: true },
@@ -341,15 +338,6 @@ function AppContent() {
           <ErrorBoundary sectionName="countdown" silent>
             <Suspense fallback={<CountdownSkeleton />}>
               <Countdown />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-
-        {/* Photo Gallery Section - Controlled by feature flag */}
-        {features.showGallery && (
-          <ErrorBoundary sectionName="gallery" silent>
-            <Suspense fallback={<GallerySkeleton />}>
-              <PhotoGallery />
             </Suspense>
           </ErrorBoundary>
         )}
