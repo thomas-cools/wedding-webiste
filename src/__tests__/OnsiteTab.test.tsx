@@ -49,4 +49,32 @@ describe('OnsiteTab', () => {
     const svg = document.querySelector('svg[aria-hidden="true"]')
     expect(svg).toBeInTheDocument()
   })
+
+  it('renders Main building section with room details', () => {
+    render(<OnsiteTab />)
+    
+    expect(screen.getByText('Main building')).toBeInTheDocument()
+    expect(screen.getByText(/1 kitchen, 6 bedrooms, 6 bathrooms \(20 persons\)/)).toBeInTheDocument()
+    // Main building accordion is open by default
+    expect(screen.getByText(/Bedroom India/)).toBeInTheDocument()
+    expect(screen.getByText(/Pyrenees' Bedroom/)).toBeInTheDocument()
+    expect(screen.getByText(/Bedroom Provence/)).toBeInTheDocument()
+    expect(screen.getByText(/Bedroom Occitanie/)).toBeInTheDocument()
+    expect(screen.getByText(/Lauragais' Dormitory/)).toBeInTheDocument()
+  })
+
+  it('renders Annex section header', () => {
+    render(<OnsiteTab />)
+    
+    expect(screen.getByText('Annex')).toBeInTheDocument()
+    expect(screen.getByText(/1 kitchen, 4 bedrooms, 4 bathrooms \(14 persons\)/)).toBeInTheDocument()
+  })
+
+  it('displays room prices', () => {
+    render(<OnsiteTab />)
+    
+    expect(screen.getByText('€90 / night')).toBeInTheDocument()
+    expect(screen.getAllByText('€70 / night').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('€TBD / night').length).toBe(4)
+  })
 })
