@@ -343,7 +343,7 @@ export const OnsiteTab: React.FC = () => {
 
         {/* Room Details */}
         <Box w="100%" maxW="600px" mt={4}>
-          <Accordion allowMultiple defaultIndex={[0]}>
+          <Accordion allowMultiple defaultIndex={[]}>
             <BuildingAccordion section={mainBuilding} />
             <BuildingAccordion section={annex} />
           </Accordion>
