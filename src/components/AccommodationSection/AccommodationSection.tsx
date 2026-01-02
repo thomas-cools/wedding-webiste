@@ -26,7 +26,7 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
   if (!enabled) return null;
 
   return (
-    <Box id="travel" py={[20, 28]} bg="white" scrollMarginTop={["100px", "130px", "150px"]}>
+    <Box id="travel" py={[20, 28]} scrollMarginTop={["100px", "130px", "150px"]}>
       <VStack spacing={12}>
         {/* Section Header */}
         <VStack spacing={4} textAlign="center">
