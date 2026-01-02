@@ -35,7 +35,7 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery />)
     
     // Find and click the first timeline photo
-    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]!!
     fireEvent.click(firstPhoto)
     
     // Check that modal opens (close button appears)
@@ -47,7 +47,7 @@ describe('PhotoGallery Component', () => {
   it('shows image counter in lightbox', async () => {
     render(<PhotoGallery />)
     
-    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]!!
     fireEvent.click(firstPhoto)
     
     await waitFor(() => {
@@ -58,7 +58,7 @@ describe('PhotoGallery Component', () => {
   it('closes lightbox with close button', async () => {
     render(<PhotoGallery />)
     
-    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]!!
     fireEvent.click(firstPhoto)
     
     await waitFor(() => {
@@ -76,7 +76,7 @@ describe('PhotoGallery Component', () => {
   it('handles keyboard navigation with arrow keys', async () => {
     render(<PhotoGallery />)
     
-    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]!!
     fireEvent.click(firstPhoto)
     
     await waitFor(() => {
@@ -99,7 +99,7 @@ describe('PhotoGallery Component', () => {
   it('closes lightbox with Escape key', async () => {
     render(<PhotoGallery />)
     
-    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]!!
     fireEvent.click(firstPhoto)
     
     await waitFor(() => {
@@ -117,7 +117,7 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery />)
     
     // Open on last image (2025)
-    const lastPhoto = screen.getAllByAltText('Carolina and Thomas 2025')[0]
+    const lastPhoto = screen.getAllByAltText('Carolina and Thomas 2025')[0]!!
     fireEvent.click(lastPhoto)
     
     await waitFor(() => {
@@ -135,7 +135,7 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery />)
     
     // Open on first image
-    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]!!
     fireEvent.click(firstPhoto)
     
     await waitFor(() => {
@@ -175,7 +175,7 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery />)
     
     // Open second image (2018)
-    const secondPhoto = screen.getAllByAltText('Carolina and Thomas 2018')[0]
+    const secondPhoto = screen.getAllByAltText('Carolina and Thomas 2018')[0]!!
     fireEvent.click(secondPhoto)
     
     await waitFor(() => {
