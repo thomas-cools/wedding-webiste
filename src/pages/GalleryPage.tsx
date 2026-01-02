@@ -104,7 +104,7 @@ function GalleryPageContent() {
         </ErrorBoundary>
       </Box>
 
-      <Footer />
+      <Footer sectionAboveBg="#E3DFCE" />
     </Box>
   )
 }
