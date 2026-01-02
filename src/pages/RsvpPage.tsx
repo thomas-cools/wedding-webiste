@@ -106,7 +106,7 @@ function RsvpPageContent() {
         </Container>
       </Box>
 
-      <Footer />
+      <Footer variant="light" />
     </Box>
   )
 }
