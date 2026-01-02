@@ -23,9 +23,48 @@
   "story": {
     "label": "Our Story",
     "title": "Two Worlds, One Heart",
+    "intro": "From the vibrant streets of Mexico City to the cobbled squares of Brussels, our story is a map of two cultures finding a home in one another.",
     "paragraph1": "From the vibrant streets of Mexico City to the cobbled squares of Brussels, our story is a map of two cultures finding a home in one another.",
     "paragraph2": "We chose France as our gathering place—a neutral ground of beauty and wine—to celebrate the blending of our families and the beginning of our forever.",
-    "quote": "Une Célébration d'Amor & Liefde"
+    "quote": "Une Célébration d'Amor & Liefde",
+    "timeline": {
+      "2017": {
+        "caption": "Where it all began",
+        "text": "A chance encounter in Brussels brought two worlds together. Neither of us knew that this moment would change everything."
+      },
+      "2018": {
+        "caption": "First adventures together",
+        "text": "Our first year was filled with discovery—learning each other's languages, cultures, and the little things that make us who we are."
+      },
+      "2019": {
+        "caption": "Growing closer",
+        "text": "Trips between continents, late-night calls, and the realization that distance only made our hearts grow fonder."
+      },
+      "2020": {
+        "caption": "Weathering the storm",
+        "text": "A year that tested everyone. We found strength in each other, proving that our love could weather any storm."
+      },
+      "2021": {
+        "caption": "Building our home",
+        "text": "We started building a life together, blending Belgian waffles with Mexican spice in our little corner of the world."
+      },
+      "2022": {
+        "caption": "New horizons",
+        "text": "Adventures took us to new places, creating memories and dreaming about our future together."
+      },
+      "2023": {
+        "caption": "The question",
+        "text": "A magical moment when one knee touched the ground and a question changed our lives forever. She said yes!"
+      },
+      "2024": {
+        "caption": "Planning our forever",
+        "text": "A year of excitement, planning, and anticipation as we prepared to celebrate our love with family and friends."
+      },
+      "2025": {
+        "caption": "Ready for forever",
+        "text": "As we look toward our wedding day, we're grateful for every step of this journey that brought us here."
+      }
+    }
   },
   "details": {
     "label": "The Celebration",
@@ -174,9 +213,49 @@
     "hint": "Check your invitation for the password"
   },
   "gallery": {
-    "preheading": "Captured Moments",
-    "title": "Our Gallery",
+    "preheading": "Our Story",
+    "title": "Two Worlds, One Heart",
     "subtitle": "A collection of memories from our journey together.",
+    "intro": "From a chance meeting in 2017 to saying 'yes' in 2024, our journey has been filled with adventure, laughter, and endless love. Here's our story, year by year.",
+    "quote": "And now, we can't wait to begin the next chapter with you by our side.",
+    "timeline": {
+      "2017": {
+        "caption": "Where it all began",
+        "text": "We met for the first time and something just clicked. Little did we know this was the start of something beautiful."
+      },
+      "2018": {
+        "caption": "Building our foundation",
+        "text": "A year of getting to know each other, sharing dreams, and realizing we wanted the same things in life."
+      },
+      "2019": {
+        "caption": "Adventures together",
+        "text": "We started exploring the world together, creating memories that would last a lifetime."
+      },
+      "2020": {
+        "caption": "Growing closer",
+        "text": "A challenging year that brought us even closer together, proving that our love could weather any storm."
+      },
+      "2021": {
+        "caption": "New beginnings",
+        "text": "We took big steps forward, building our life together and making plans for the future."
+      },
+      "2022": {
+        "caption": "Creating memories",
+        "text": "Another year of adventures, laughter, and falling more in love with each other every day."
+      },
+      "2023": {
+        "caption": "The perfect moment",
+        "text": "We knew we had found our forever person. The question was just a matter of time."
+      },
+      "2024": {
+        "caption": "She said yes!",
+        "text": "The most magical moment of our journey so far – we're engaged and couldn't be happier!"
+      },
+      "2025": {
+        "caption": "Forever begins",
+        "text": "This is the year we say 'I do' and begin our greatest adventure yet – married life!"
+      }
+    },
     "backToHome": "Back",
     "viewImage": "View image",
     "close": "Close gallery",

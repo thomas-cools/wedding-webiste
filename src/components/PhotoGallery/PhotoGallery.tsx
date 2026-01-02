@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
-import { Box, Container, Heading, Text, VStack, Image, useDisclosure } from '@chakra-ui/react'
+import { Box, Container, Heading, Text, VStack, Image, useDisclosure, Flex } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { ScrollReveal, fadeInUp } from '../animations'
+import { ScrollReveal, fadeInLeft, fadeInRight } from '../animations'
 import { GalleryLightbox } from './GalleryLightbox'
 import { useGalleryNavigation } from './useGalleryNavigation'
 import type { GalleryImage, PhotoGalleryProps } from './types'
@@ -24,40 +24,330 @@ import photo2021 from '../../assets/C&T-2021.webp'
 import photo2022 from '../../assets/C&T-2022.webp'
 import photo2023 from '../../assets/C&T-2023.webp'
 import photo2024 from '../../assets/C&T-2024.webp'
+import photo2025 from '../../assets/C&T-2025.webp'
 
-// Gallery images with our actual photos
-const defaultImages: GalleryImage[] = [
-  { src: photo2017, alt: 'Carolina and Thomas 2017', aspectRatio: 3 / 4 },
-  { src: photo2018, alt: 'Carolina and Thomas 2018', aspectRatio: 4 / 3 },
-  { src: photo2019, alt: 'Carolina and Thomas 2019', aspectRatio: 3 / 4 },
-  { src: photo2020, alt: 'Carolina and Thomas 2020', aspectRatio: 4 / 3 },
-  { src: photo2021, alt: 'Carolina and Thomas 2021', aspectRatio: 3 / 4 },
-  { src: photo2022, alt: 'Carolina and Thomas 2022', aspectRatio: 4 / 3 },
-  { src: photo2023, alt: 'Carolina and Thomas 2023', aspectRatio: 3 / 4 },
-  { src: photo2024, alt: 'Carolina and Thomas 2024', aspectRatio: 4 / 3 },
+// Timeline data with years and their photos
+const timelineData = [
+  { year: '2017', photo: photo2017, alt: 'Carolina and Thomas 2017' },
+  { year: '2018', photo: photo2018, alt: 'Carolina and Thomas 2018' },
+  { year: '2019', photo: photo2019, alt: 'Carolina and Thomas 2019' },
+  { year: '2020', photo: photo2020, alt: 'Carolina and Thomas 2020' },
+  { year: '2021', photo: photo2021, alt: 'Carolina and Thomas 2021' },
+  { year: '2022', photo: photo2022, alt: 'Carolina and Thomas 2022' },
+  { year: '2023', photo: photo2023, alt: 'Carolina and Thomas 2023' },
+  { year: '2024', photo: photo2024, alt: 'Carolina and Thomas 2024' },
+  { year: '2025', photo: photo2025, alt: 'Carolina and Thomas 2025' },
 ]
 
-// Photo layout configuration for scattered organic layout
-// Each photo has position (left/right alignment), size, and offset
-const photoLayouts = [
-  { align: 'left', width: ['120px', '140px', '160px'], ml: ['5%', '10%', '15%'], mr: 'auto', mt: 0 },
-  { align: 'right', width: ['130px', '160px', '180px'], ml: 'auto', mr: ['15%', '20%', '25%'], mt: ['-30px', '-40px', '-50px'] },
-  { align: 'left', width: ['110px', '130px', '150px'], ml: ['8%', '5%', '8%'], mr: 'auto', mt: ['20px', '30px', '40px'] },
-  { align: 'right', width: ['140px', '170px', '200px'], ml: 'auto', mr: ['5%', '10%', '12%'], mt: ['-20px', '-30px', '-40px'] },
-  { align: 'left', width: ['100px', '120px', '140px'], ml: ['3%', '8%', '10%'], mr: 'auto', mt: ['30px', '40px', '50px'] },
-  { align: 'right', width: ['130px', '160px', '190px'], ml: 'auto', mr: ['8%', '15%', '18%'], mt: ['-10px', '-20px', '-30px'] },
-  { align: 'left', width: ['90px', '110px', '130px'], ml: ['10%', '12%', '15%'], mr: 'auto', mt: ['20px', '30px', '40px'] },
-  { align: 'right', width: ['150px', '180px', '210px'], ml: 'auto', mr: ['10%', '15%', '20%'], mt: ['-40px', '-50px', '-60px'] },
-]
+// Gallery images for lightbox (in chronological order)
+const defaultImages: GalleryImage[] = timelineData.map(item => ({
+  src: item.photo,
+  alt: item.alt,
+  aspectRatio: 3 / 4,
+}))
+
+interface TimelineItemProps {
+  year: string
+  photo: string
+  alt: string
+  caption: string
+  storyText: string
+  isLeft: boolean
+  index: number
+  onImageClick: (index: number) => void
+  isLast: boolean
+}
+
+function TimelineItem({ year, photo, alt, caption, storyText, isLeft, index, onImageClick, isLast }: TimelineItemProps) {
+  return (
+    <Box position="relative" w="100%">
+      {/* Year marker on the center line - Desktop */}
+      <Box
+        position="absolute"
+        left="50%"
+        transform="translateX(-50%)"
+        top="0"
+        zIndex={3}
+        display={['none', 'none', 'flex']}
+        flexDirection="column"
+        alignItems="center"
+      >
+        <Box
+          bg="primary.soft"
+          color="white"
+          px={5}
+          py={2}
+          borderRadius="full"
+          fontWeight="600"
+          fontSize="lg"
+          boxShadow="md"
+          fontFamily="heading"
+        >
+          {year}
+        </Box>
+      </Box>
+
+      {/* Mobile: Year badge above content */}
+      <Box
+        display={['flex', 'flex', 'none']}
+        justifyContent="center"
+        mb={4}
+      >
+        <Box
+          bg="primary.soft"
+          color="white"
+          px={4}
+          py={2}
+          borderRadius="full"
+          fontWeight="600"
+          fontSize="md"
+          boxShadow="md"
+          fontFamily="heading"
+        >
+          {year}
+        </Box>
+      </Box>
+
+      {/* Desktop: Two-column layout */}
+      <Flex
+        display={['none', 'none', 'flex']}
+        direction="row"
+        align="flex-start"
+        justify="center"
+        gap={0}
+        pt={14}
+      >
+        {/* Left column */}
+        <Box flex="1" display="flex" justifyContent="flex-end" pr={10}>
+          {isLeft ? (
+            <ScrollReveal variants={fadeInLeft}>
+              <Box maxW="300px" textAlign="right">
+                <Box
+                  borderRadius="lg"
+                  overflow="hidden"
+                  boxShadow="xl"
+                  mb={3}
+                  display="inline-block"
+                  cursor="pointer"
+                  transition="transform 0.3s ease, box-shadow 0.3s ease"
+                  _hover={{ transform: 'scale(1.02)', boxShadow: '2xl' }}
+                  onClick={() => onImageClick(index)}
+                  position="relative"
+                >
+                  <Image
+                    src={photo}
+                    alt={alt}
+                    w="260px"
+                    h="auto"
+                    objectFit="cover"
+                  />
+                  {/* TC Monogram on the last photo */}
+                  {isLast && (
+                    <Box
+                      position="absolute"
+                      bottom="-40px"
+                      right="-40px"
+                      w="100px"
+                      h="100px"
+                      zIndex={3}
+                      pointerEvents="none"
+                    >
+                      <Image
+                        src={tcLogo}
+                        alt=""
+                        w="100%"
+                        h="100%"
+                        objectFit="contain"
+                        opacity={0.6}
+                      />
+                    </Box>
+                  )}
+                </Box>
+                <Text
+                  fontSize="sm"
+                  fontStyle="italic"
+                  color="neutral.soft"
+                  mt={2}
+                >
+                  {caption}
+                </Text>
+              </Box>
+            </ScrollReveal>
+          ) : (
+            <ScrollReveal variants={fadeInLeft}>
+              <Box maxW="320px" textAlign="right" pt={4}>
+                <Text fontSize="md" lineHeight="1.9" color="neutral.dark">
+                  {storyText}
+                </Text>
+              </Box>
+            </ScrollReveal>
+          )}
+        </Box>
+
+        {/* Center line */}
+        <Box w="4px" bg="transparent" position="relative" flexShrink={0}>
+          <Box
+            position="absolute"
+            top={0}
+            bottom={0}
+            left="50%"
+            transform="translateX(-50%)"
+            w="3px"
+            bgGradient="linear(to-b, primary.soft, accent.blush)"
+            opacity={0.4}
+          />
+        </Box>
+
+        {/* Right column */}
+        <Box flex="1" display="flex" justifyContent="flex-start" pl={10}>
+          {!isLeft ? (
+            <ScrollReveal variants={fadeInRight}>
+              <Box maxW="300px" textAlign="left">
+                <Box
+                  borderRadius="lg"
+                  overflow="hidden"
+                  boxShadow="xl"
+                  mb={3}
+                  display="inline-block"
+                  cursor="pointer"
+                  transition="transform 0.3s ease, box-shadow 0.3s ease"
+                  _hover={{ transform: 'scale(1.02)', boxShadow: '2xl' }}
+                  onClick={() => onImageClick(index)}
+                  position="relative"
+                >
+                  <Image
+                    src={photo}
+                    alt={alt}
+                    w="260px"
+                    h="auto"
+                    objectFit="cover"
+                  />
+                  {/* TC Monogram on the last photo */}
+                  {isLast && (
+                    <Box
+                      position="absolute"
+                      bottom="-40px"
+                      left="-40px"
+                      w="100px"
+                      h="100px"
+                      zIndex={3}
+                      pointerEvents="none"
+                    >
+                      <Image
+                        src={tcLogo}
+                        alt=""
+                        w="100%"
+                        h="100%"
+                        objectFit="contain"
+                        opacity={0.6}
+                      />
+                    </Box>
+                  )}
+                </Box>
+                <Text
+                  fontSize="sm"
+                  fontStyle="italic"
+                  color="neutral.soft"
+                  mt={2}
+                >
+                  {caption}
+                </Text>
+              </Box>
+            </ScrollReveal>
+          ) : (
+            <ScrollReveal variants={fadeInRight}>
+              <Box maxW="320px" textAlign="left" pt={4}>
+                <Text fontSize="md" lineHeight="1.9" color="neutral.dark">
+                  {storyText}
+                </Text>
+              </Box>
+            </ScrollReveal>
+          )}
+        </Box>
+      </Flex>
+
+      {/* Mobile: Stacked layout */}
+      <VStack display={['flex', 'flex', 'none']} spacing={4} align="center" px={4}>
+        <ScrollReveal>
+          <Box textAlign="center">
+            <Box
+              borderRadius="lg"
+              overflow="hidden"
+              boxShadow="xl"
+              mb={3}
+              display="inline-block"
+              cursor="pointer"
+              transition="transform 0.3s ease, box-shadow 0.3s ease"
+              _hover={{ transform: 'scale(1.02)', boxShadow: '2xl' }}
+              onClick={() => onImageClick(index)}
+              position="relative"
+            >
+              <Image
+                src={photo}
+                alt={alt}
+                w="220px"
+                h="auto"
+                objectFit="cover"
+              />
+              {/* TC Monogram on the last photo - Mobile */}
+              {isLast && (
+                <Box
+                  position="absolute"
+                  bottom="-30px"
+                  right="-30px"
+                  w="70px"
+                  h="70px"
+                  zIndex={3}
+                  pointerEvents="none"
+                >
+                  <Image
+                    src={tcLogo}
+                    alt=""
+                    w="100%"
+                    h="100%"
+                    objectFit="contain"
+                    opacity={0.6}
+                  />
+                </Box>
+              )}
+            </Box>
+            <Text
+              fontSize="sm"
+              fontStyle="italic"
+              color="neutral.soft"
+              mt={2}
+            >
+              {caption}
+            </Text>
+          </Box>
+        </ScrollReveal>
+        <ScrollReveal>
+          <Text
+            fontSize="md"
+            lineHeight="1.8"
+            color="neutral.dark"
+            textAlign="center"
+            maxW="320px"
+          >
+            {storyText}
+          </Text>
+        </ScrollReveal>
+      </VStack>
+    </Box>
+  )
+}
 
 /**
- * Photo gallery section with organic scattered layout.
+ * Photo gallery section with vertical timeline layout.
  * 
  * Features:
  * - Textured linen background
- * - Scattered/organic photo layout
+ * - Vertical timeline from 2017 to 2025
+ * - Alternating left/right photo placement
+ * - Year badges on center line
+ * - Photo captions and story text
  * - Belgium flower decorations
- * - TC monogram accent
+ * - TC monogram accent on final photo
  * - Full-screen lightbox modal
  * - Keyboard navigation (arrow keys, escape)
  * - Touch/swipe support on mobile
@@ -123,7 +413,7 @@ export function PhotoGallery({
         h={["200px", "300px", "400px"]}
         zIndex={0}
         pointerEvents="none"
-        opacity={0.25}
+        opacity={0.2}
       >
         <Image
           src={belgiumFlower}
@@ -134,17 +424,17 @@ export function PhotoGallery({
         />
       </Box>
 
-      {/* Belgium flower decoration - bottom right */}
+      {/* Belgium flower decoration - bottom left */}
       <Box
         position="absolute"
-        bottom={["50px", "80px", "100px"]}
-        right={["-80px", "-60px", "-40px"]}
+        bottom={["100px", "150px", "200px"]}
+        left={["-80px", "-60px", "-40px"]}
         w={["180px", "250px", "350px"]}
         h={["180px", "250px", "350px"]}
         zIndex={0}
         pointerEvents="none"
-        opacity={0.2}
-        transform="rotate(180deg)"
+        opacity={0.15}
+        transform="rotate(180deg) scaleX(-1)"
       >
         <Image
           src={belgiumFlower}
@@ -155,10 +445,10 @@ export function PhotoGallery({
         />
       </Box>
 
-      <Container maxW="container.lg" pt={["100px", "120px", "140px"]} pb={[16, 20, 24]} position="relative" zIndex={1}>
+      <Container maxW="container.xl" pt={["100px", "120px", "140px"]} pb={[16, 20, 24]} position="relative" zIndex={1}>
         {/* Section Header */}
         <ScrollReveal>
-          <VStack spacing={4} mb={[10, 12, 16]} textAlign="center">
+          <VStack spacing={4} mb={[10, 14, 16]} textAlign="center">
             <Text
               fontSize="xs"
               textTransform="uppercase"
@@ -169,7 +459,7 @@ export function PhotoGallery({
               {t('gallery.preheading')}
             </Text>
             <Heading
-              as="h2"
+              as="h1"
               fontFamily="heading"
               fontSize={['3xl', '4xl', '5xl']}
               fontWeight="300"
@@ -178,73 +468,65 @@ export function PhotoGallery({
             >
               {t('gallery.title')}
             </Heading>
+            <Text
+              fontSize={['md', 'lg']}
+              color="neutral.dark"
+              maxW="600px"
+              lineHeight="1.8"
+              mt={4}
+            >
+              {t('gallery.intro')}
+            </Text>
           </VStack>
         </ScrollReveal>
 
-        {/* Scattered Photo Layout */}
-        <Box position="relative" pb={[8, 12, 16]}>
-          {images.map((image, index) => {
-            const layout = photoLayouts[index % photoLayouts.length]
-            const isLastPhoto = index === images.length - 1
-            
-            return (
-              <ScrollReveal key={index} variants={fadeInUp} delay={index * 0.1}>
-                <Box
-                  position="relative"
-                  w={layout.width}
-                  ml={layout.ml}
-                  mr={layout.mr}
-                  mt={index === 0 ? 0 : layout.mt}
-                  mb={[4, 5, 6]}
-                >
-                  {/* Photo container */}
-                  <Box
-                    position="relative"
-                    overflow="hidden"
-                    boxShadow="lg"
-                    cursor="pointer"
-                    transition="transform 0.3s ease, box-shadow 0.3s ease"
-                    _hover={{
-                      transform: 'scale(1.02)',
-                      boxShadow: 'xl',
-                    }}
-                    onClick={() => openLightbox(index)}
-                  >
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      w="100%"
-                      h="auto"
-                      display="block"
-                    />
-                  </Box>
+        {/* Timeline */}
+        <VStack spacing={[12, 14, 8]} w="100%" position="relative">
+          {/* Vertical line - desktop only (full height) */}
+          <Box
+            position="absolute"
+            left="50%"
+            top={0}
+            bottom={0}
+            w="3px"
+            transform="translateX(-50%)"
+            bgGradient="linear(to-b, transparent, primary.soft 5%, accent.blush 95%, transparent)"
+            display={['none', 'none', 'block']}
+            zIndex={0}
+            opacity={0.4}
+          />
 
-                  {/* TC Monogram on the last photo */}
-                  {isLastPhoto && (
-                    <Box
-                      position="absolute"
-                      bottom={["-50px", "-60px", "-70px"]}
-                      right={["-40px", "-50px", "-60px"]}
-                      w={["80px", "100px", "120px"]}
-                      h={["80px", "100px", "120px"]}
-                      zIndex={2}
-                      pointerEvents="none"
-                    >
-                      <Image
-                        src={tcLogo}
-                        alt=""
-                        w="100%"
-                        h="100%"
-                        objectFit="contain"
-                        opacity={0.6}
-                      />
-                    </Box>
-                  )}
-                </Box>
-              </ScrollReveal>
-            )
-          })}
-        </Box>
+          {timelineData.map((item, index) => (
+            <TimelineItem
+              key={item.year}
+              year={item.year}
+              photo={item.photo}
+              alt={item.alt}
+              caption={t(`gallery.timeline.${item.year}.caption`, '')}
+              storyText={t(`gallery.timeline.${item.year}.text`, '')}
+              isLeft={index % 2 === 0}
+              index={index}
+              onImageClick={openLightbox}
+              isLast={index === timelineData.length - 1}
+            />
+          ))}
+        </VStack>
+
+        {/* Closing quote */}
+        <ScrollReveal>
+          <Box textAlign="center" mt={[12, 16, 20]} px={4} pb={[8, 10, 12]}>
+            <Text
+              fontSize={['xl', '2xl']}
+              fontFamily="heading"
+              fontStyle="italic"
+              color="primary.soft"
+              maxW="700px"
+              mx="auto"
+            >
+              {t('gallery.quote')}
+            </Text>
+          </Box>
+        </ScrollReveal>
       </Container>
 
       {/* Lightbox Modal */}

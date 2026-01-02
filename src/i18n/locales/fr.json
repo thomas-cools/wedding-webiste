@@ -23,9 +23,48 @@
   "story": {
     "label": "Notre Histoire",
     "title": "Deux Mondes, Un Cœur",
+    "intro": "Des rues vibrantes de Mexico aux places pavées de Bruxelles, notre histoire est une carte de deux cultures qui ont trouvé un foyer l'une dans l'autre.",
     "paragraph1": "Des rues vibrantes de Mexico aux places pavées de Bruxelles, notre histoire est une carte de deux cultures qui ont trouvé un foyer l'une dans l'autre.",
     "paragraph2": "Nous avons choisi la France comme lieu de rassemblement—un terrain neutre de beauté et de vin—pour célébrer le mélange de nos familles et le début de notre toujours.",
-    "quote": "Une Célébration d'Amor & Liefde"
+    "quote": "Une Célébration d'Amor & Liefde",
+    "timeline": {
+      "2017": {
+        "caption": "Là où tout a commencé",
+        "text": "Une rencontre fortuite à Bruxelles a réuni deux mondes. Aucun de nous ne savait que ce moment allait tout changer."
+      },
+      "2018": {
+        "caption": "Premières aventures ensemble",
+        "text": "Notre première année fut remplie de découvertes—apprendre les langues, les cultures et les petites choses qui font de nous ce que nous sommes."
+      },
+      "2019": {
+        "caption": "Se rapprocher",
+        "text": "Des voyages entre continents, des appels nocturnes et la certitude que la distance ne faisait que faire grandir nos cœurs."
+      },
+      "2020": {
+        "caption": "Traverser la tempête",
+        "text": "Une année qui a mis tout le monde à l'épreuve. Nous avons trouvé la force l'un dans l'autre, prouvant que notre amour pouvait surmonter toutes les tempêtes."
+      },
+      "2021": {
+        "caption": "Construire notre foyer",
+        "text": "Nous avons commencé à construire une vie ensemble, mélangeant gaufres belges et saveurs mexicaines dans notre petit coin du monde."
+      },
+      "2022": {
+        "caption": "Nouveaux horizons",
+        "text": "Les aventures nous ont emmenés vers de nouveaux endroits, créant des souvenirs et rêvant de notre avenir ensemble."
+      },
+      "2023": {
+        "caption": "La question",
+        "text": "Un moment magique quand un genou a touché le sol et une question a changé nos vies pour toujours. Elle a dit oui !"
+      },
+      "2024": {
+        "caption": "Planifier notre toujours",
+        "text": "Une année d'excitation, de planification et d'anticipation alors que nous nous préparions à célébrer notre amour avec famille et amis."
+      },
+      "2025": {
+        "caption": "Prêts pour l'éternité",
+        "text": "Alors que nous regardons vers le jour de notre mariage, nous sommes reconnaissants pour chaque étape de ce voyage qui nous a menés ici."
+      }
+    }
   },
   "details": {
     "label": "La Célébration",
@@ -174,9 +213,49 @@
     "hint": "Consultez votre invitation pour le mot de passe"
   },
   "gallery": {
-    "preheading": "Moments Capturés",
-    "title": "Notre Galerie",
+    "preheading": "Notre Histoire",
+    "title": "Deux Mondes, Un Cœur",
     "subtitle": "Une collection de souvenirs de notre parcours ensemble.",
+    "intro": "D'une rencontre fortuite en 2017 à dire 'oui' en 2024, notre voyage a été rempli d'aventures, de rires et d'amour infini. Voici notre histoire, année après année.",
+    "quote": "Et maintenant, nous avons hâte de commencer le prochain chapitre avec vous à nos côtés.",
+    "timeline": {
+      "2017": {
+        "caption": "Là où tout a commencé",
+        "text": "Nous nous sommes rencontrés pour la première fois et quelque chose a tout simplement cliqué. Nous ne savions pas que c'était le début de quelque chose de magnifique."
+      },
+      "2018": {
+        "caption": "Construire nos fondations",
+        "text": "Une année pour apprendre à se connaître, partager nos rêves et réaliser que nous voulions les mêmes choses dans la vie."
+      },
+      "2019": {
+        "caption": "Aventures ensemble",
+        "text": "Nous avons commencé à explorer le monde ensemble, créant des souvenirs qui dureraient toute une vie."
+      },
+      "2020": {
+        "caption": "Se rapprocher",
+        "text": "Une année difficile qui nous a rapprochés encore plus, prouvant que notre amour pouvait résister à toutes les tempêtes."
+      },
+      "2021": {
+        "caption": "Nouveaux départs",
+        "text": "Nous avons fait de grands pas en avant, construisant notre vie ensemble et faisant des projets pour l'avenir."
+      },
+      "2022": {
+        "caption": "Créer des souvenirs",
+        "text": "Une autre année d'aventures, de rires et de tomber encore plus amoureux l'un de l'autre chaque jour."
+      },
+      "2023": {
+        "caption": "Le moment parfait",
+        "text": "Nous savions que nous avions trouvé notre personne pour toujours. La question n'était qu'une question de temps."
+      },
+      "2024": {
+        "caption": "Elle a dit oui !",
+        "text": "Le moment le plus magique de notre voyage jusqu'à présent – nous sommes fiancés et ne pourrions pas être plus heureux !"
+      },
+      "2025": {
+        "caption": "Pour toujours commence",
+        "text": "C'est l'année où nous disons 'Oui, je le veux' et commençons notre plus grande aventure – la vie à deux !"
+      }
+    },
     "backToHome": "Retour",
     "viewImage": "Voir l'image",
     "close": "Fermer la galerie",

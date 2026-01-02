@@ -23,9 +23,48 @@
   "story": {
     "label": "Ons Verhaal",
     "title": "Twee Werelden, Één Hart",
+    "intro": "Van de bruisende straten van Mexico-Stad tot de geplaveide pleinen van Brussel, ons verhaal is een kaart van twee culturen die een thuis in elkaar vonden.",
     "paragraph1": "Van de bruisende straten van Mexico-Stad tot de geplaveide pleinen van Brussel, ons verhaal is een kaart van twee culturen die een thuis in elkaar vonden.",
     "paragraph2": "We kozen Frankrijk als onze ontmoetingsplaats—een neutrale grond van schoonheid en wijn—om de versmelting van onze families en het begin van ons voor altijd te vieren.",
-    "quote": "Une Célébration d'Amor & Liefde"
+    "quote": "Une Célébration d'Amor & Liefde",
+    "timeline": {
+      "2017": {
+        "caption": "Waar het allemaal begon",
+        "text": "Een toevallige ontmoeting in Brussel bracht twee werelden samen. Geen van ons wist dat dit moment alles zou veranderen."
+      },
+      "2018": {
+        "caption": "Eerste avonturen samen",
+        "text": "Ons eerste jaar zat vol ontdekkingen—elkaars talen leren, culturen en de kleine dingen die ons maken tot wie we zijn."
+      },
+      "2019": {
+        "caption": "Dichter bij elkaar",
+        "text": "Reizen tussen continenten, nachtelijke telefoontjes en de zekerheid dat afstand onze harten alleen maar deed groeien."
+      },
+      "2020": {
+        "caption": "De storm doorstaan",
+        "text": "Een jaar dat iedereen op de proef stelde. We vonden kracht in elkaar, bewijzend dat onze liefde elke storm kon doorstaan."
+      },
+      "2021": {
+        "caption": "Ons thuis bouwen",
+        "text": "We begonnen samen een leven op te bouwen, Belgische wafels mengend met Mexicaanse smaak in ons eigen hoekje van de wereld."
+      },
+      "2022": {
+        "caption": "Nieuwe horizonten",
+        "text": "Avonturen brachten ons naar nieuwe plekken, herinneringen creërend en dromend over onze toekomst samen."
+      },
+      "2023": {
+        "caption": "De vraag",
+        "text": "Een magisch moment toen een knie de grond raakte en een vraag ons leven voor altijd veranderde. Ze zei ja!"
+      },
+      "2024": {
+        "caption": "Ons voor altijd plannen",
+        "text": "Een jaar van opwinding, planning en anticipatie terwijl we ons voorbereidden om onze liefde te vieren met familie en vrienden."
+      },
+      "2025": {
+        "caption": "Klaar voor altijd",
+        "text": "Terwijl we uitkijken naar onze trouwdag, zijn we dankbaar voor elke stap van deze reis die ons hier bracht."
+      }
+    }
   },
   "details": {
     "label": "De Viering",
@@ -174,9 +213,49 @@
     "hint": "Controleer uw uitnodiging voor het wachtwoord"
   },
   "gallery": {
-    "preheading": "Vastgelegde Momenten",
-    "title": "Onze Galerij",
+    "preheading": "Ons Verhaal",
+    "title": "Twee Werelden, Eén Hart",
     "subtitle": "Een collectie herinneringen van onze reis samen.",
+    "intro": "Van een toevallige ontmoeting in 2017 tot 'ja' zeggen in 2024, onze reis zat vol avontuur, gelach en eindeloze liefde. Hier is ons verhaal, jaar na jaar.",
+    "quote": "En nu kunnen we niet wachten om het volgende hoofdstuk te beginnen met jullie aan onze zijde.",
+    "timeline": {
+      "2017": {
+        "caption": "Waar het allemaal begon",
+        "text": "We ontmoetten elkaar voor het eerst en er klikte gewoon iets. We wisten niet dat dit het begin was van iets moois."
+      },
+      "2018": {
+        "caption": "Onze basis bouwen",
+        "text": "Een jaar om elkaar te leren kennen, dromen te delen en te beseffen dat we dezelfde dingen wilden in het leven."
+      },
+      "2019": {
+        "caption": "Samen op avontuur",
+        "text": "We begonnen samen de wereld te verkennen en herinneringen te maken die een leven lang zouden duren."
+      },
+      "2020": {
+        "caption": "Dichter bij elkaar",
+        "text": "Een uitdagend jaar dat ons nog dichter bij elkaar bracht, wat bewees dat onze liefde elke storm kon doorstaan."
+      },
+      "2021": {
+        "caption": "Nieuwe beginnen",
+        "text": "We zetten grote stappen vooruit, bouwden ons leven samen op en maakten plannen voor de toekomst."
+      },
+      "2022": {
+        "caption": "Herinneringen maken",
+        "text": "Nog een jaar vol avonturen, gelach en elke dag meer verliefd worden op elkaar."
+      },
+      "2023": {
+        "caption": "Het perfecte moment",
+        "text": "We wisten dat we onze forever-persoon hadden gevonden. De vraag was slechts een kwestie van tijd."
+      },
+      "2024": {
+        "caption": "Ze zei ja!",
+        "text": "Het meest magische moment van onze reis tot nu toe – we zijn verloofd en kunnen niet gelukkiger zijn!"
+      },
+      "2025": {
+        "caption": "Voor altijd begint",
+        "text": "Dit is het jaar waarin we 'ja, ik wil' zeggen en ons grootste avontuur beginnen – het huwelijksleven!"
+      }
+    },
     "backToHome": "Terug",
     "viewImage": "Bekijk afbeelding",
     "close": "Sluit galerij",
