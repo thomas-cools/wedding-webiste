@@ -114,6 +114,8 @@ export function useRsvpForm(options: UseRsvpFormOptions = {}): UseRsvpFormReturn
   // Refs for callback stability
   const errorsRef = useRef<Record<string, string>>({})
   const validateFieldRef = useRef<(field: string) => void>(() => {})
+  // Track the last selected address to prevent autocomplete after selection
+  const selectedAddressRef = useRef<string | null>(null)
 
   useEffect(() => {
     errorsRef.current = errors
@@ -122,6 +124,17 @@ export function useRsvpForm(options: UseRsvpFormOptions = {}): UseRsvpFormReturn
   // Address autocomplete effect
   useEffect(() => {
     const query = mailingAddress.trim()
+    
+    // Skip autocomplete if this address was just selected from suggestions
+    if (selectedAddressRef.current === query) {
+      return
+    }
+    
+    // Clear the selected address ref when user starts typing something different
+    if (selectedAddressRef.current && query !== selectedAddressRef.current) {
+      selectedAddressRef.current = null
+    }
+    
     if (query.length < 3) {
       setMailingAddressSuggestions([])
       setMailingAddressSuggestionsOpen(false)
@@ -340,8 +353,11 @@ export function useRsvpForm(options: UseRsvpFormOptions = {}): UseRsvpFormReturn
 
   // Address suggestion selection
   const selectAddressSuggestion = useCallback((suggestion: AddressSuggestion) => {
+    // Mark this address as selected to prevent autocomplete from firing
+    selectedAddressRef.current = suggestion.description
     setMailingAddress(suggestion.description)
     setMailingAddressPlaceId(suggestion.placeId)
+    setMailingAddressSuggestions([])
     setMailingAddressSuggestionsOpen(false)
     if (errorsRef.current.mailingAddress) {
       window.setTimeout(() => validateFieldRef.current('mailingAddress'), 0)
