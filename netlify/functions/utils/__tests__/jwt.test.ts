@@ -100,21 +100,21 @@ describe('JWT utilities', () => {
     it('includes subject in payload', () => {
       const token = createToken('test-subject')
       const [, payloadB64] = token.split('.')
-      const payload = JSON.parse(Buffer.from(payloadB64, 'base64').toString())
+      const payload = JSON.parse(Buffer.from(payloadB64!, 'base64').toString())
       expect(payload.sub).toBe('test-subject')
     })
 
     it('includes expiration timestamp', () => {
       const token = createToken()
       const [, payloadB64] = token.split('.')
-      const payload = JSON.parse(Buffer.from(payloadB64, 'base64').toString())
+      const payload = JSON.parse(Buffer.from(payloadB64!, 'base64').toString())
       expect(payload.exp).toBeGreaterThan(Date.now() / 1000)
     })
 
     it('defaults subject to wedding-guest', () => {
       const token = createToken()
       const [, payloadB64] = token.split('.')
-      const payload = JSON.parse(Buffer.from(payloadB64, 'base64').toString())
+      const payload = JSON.parse(Buffer.from(payloadB64!, 'base64').toString())
       expect(payload.sub).toBe('wedding-guest')
     })
   })

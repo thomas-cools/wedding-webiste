@@ -127,7 +127,7 @@ export function verifyToken(token: string): JwtPayload | null {
       return null
     }
 
-    const [headerB64, payloadB64, signature] = parts
+    const [headerB64, payloadB64, signature] = parts as [string, string, string]
 
     // Verify signature
     const expectedSignature = sign(`${headerB64}.${payloadB64}`, secret)
@@ -164,7 +164,7 @@ export function extractToken(headers: Record<string, string | undefined>): strin
   const cookie = headers['cookie'] || headers['Cookie']
   if (cookie) {
     const match = cookie.match(/wedding_auth=([^;]+)/)
-    if (match) {
+    if (match && match[1]) {
       return match[1]
     }
   }

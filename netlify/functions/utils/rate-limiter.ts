@@ -113,7 +113,7 @@ export function getClientIp(headers: Record<string, string | undefined>): string
   if (clientIp) return clientIp.trim()
 
   const xff = getHeader(headers, 'x-forwarded-for')
-  if (xff) return xff.split(',')[0].trim()
+  if (xff) return xff.split(',')[0]!.trim()
 
   return 'unknown'
 }

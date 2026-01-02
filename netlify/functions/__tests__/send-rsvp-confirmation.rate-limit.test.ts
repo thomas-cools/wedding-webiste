@@ -21,12 +21,15 @@ describe('send-rsvp-confirmation rate limiting', () => {
     } as unknown as HandlerEvent
 
     const r1 = await mod.handler(event, {} as any)
+    if (!r1) throw new Error('No response')
     expect(r1.statusCode).toBe(400) // missing required fields
 
     const r2 = await mod.handler(event, {} as any)
+    if (!r2) throw new Error('No response')
     expect(r2.statusCode).toBe(400)
 
     const r3 = await mod.handler(event, {} as any)
+    if (!r3) throw new Error('No response')
     expect(r3.statusCode).toBe(429)
 
     expect(r3.headers?.['Content-Type']).toContain('application/json')

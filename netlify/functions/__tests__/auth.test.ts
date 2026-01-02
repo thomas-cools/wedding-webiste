@@ -72,6 +72,7 @@ describe('auth function', () => {
     it('handles OPTIONS preflight request', async () => {
       const event = createEvent({ httpMethod: 'OPTIONS' })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(204)
       expect(response.headers?.['Access-Control-Allow-Origin']).toBe('*')
@@ -83,6 +84,7 @@ describe('auth function', () => {
     it('rejects GET requests', async () => {
       const event = createEvent({ httpMethod: 'GET' })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(405)
       const body = JSON.parse(response.body || '')
@@ -93,6 +95,7 @@ describe('auth function', () => {
     it('rejects PUT requests', async () => {
       const event = createEvent({ httpMethod: 'PUT' })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(405)
     })
@@ -110,6 +113,7 @@ describe('auth function', () => {
 
       const event = createEvent()
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(429)
       const body = JSON.parse(response.body || '')
@@ -122,6 +126,7 @@ describe('auth function', () => {
     it('rejects invalid JSON body', async () => {
       const event = createEvent({ body: 'not valid json' })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(400)
       const body = JSON.parse(response.body || '')
@@ -131,6 +136,7 @@ describe('auth function', () => {
     it('rejects missing password', async () => {
       const event = createEvent({ body: JSON.stringify({}) })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(400)
       const body = JSON.parse(response.body || '')
@@ -140,6 +146,7 @@ describe('auth function', () => {
     it('rejects non-string password', async () => {
       const event = createEvent({ body: JSON.stringify({ password: 12345 }) })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(400)
       const body = JSON.parse(response.body || '')
@@ -149,6 +156,7 @@ describe('auth function', () => {
     it('rejects empty password', async () => {
       const event = createEvent({ body: JSON.stringify({ password: '' }) })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(400)
       const body = JSON.parse(response.body || '')
@@ -162,6 +170,7 @@ describe('auth function', () => {
         body: JSON.stringify({ password: 'wrongpassword' }),
       })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(401)
       const body = JSON.parse(response.body || '')
@@ -175,6 +184,7 @@ describe('auth function', () => {
         body: JSON.stringify({ password: 'correctpassword' }),
       })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(200)
       const body = JSON.parse(response.body || '')
@@ -188,6 +198,7 @@ describe('auth function', () => {
         body: JSON.stringify({ password: 'CORRECTPASSWORD' }),
       })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(200)
       const body = JSON.parse(response.body || '')
@@ -199,6 +210,7 @@ describe('auth function', () => {
         body: JSON.stringify({ password: 'correctpassword' }),
       })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       expect(response.statusCode).toBe(200)
       const setCookie = response.headers?.['Set-Cookie']
@@ -212,6 +224,7 @@ describe('auth function', () => {
         body: JSON.stringify({ password: 'correctpassword' }),
       })
       const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
       const body = JSON.parse(response.body || '')
       expect(body.token).toBeDefined()
@@ -234,6 +247,7 @@ describe('auth function', () => {
           body: JSON.stringify({ password: 'anypassword' }),
         })
         const response = await handler(event, mockContext)
+      if (!response) throw new Error("No response")
 
         expect(response.statusCode).toBe(500)
         const body = JSON.parse(response.body || '')
