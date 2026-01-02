@@ -142,8 +142,8 @@ describe('App', () => {
     // Navigation uses ghost buttons as links
     const header = document.querySelector('header')
     expect(header).toBeInTheDocument()
-    // Check that the header exists and has navigation structure
-    expect(header?.querySelector('a[href="#story"]') || header?.textContent?.includes('header.ourStory')).toBeTruthy()
+    // Check that the header exists and has navigation structure (RSVP is always enabled)
+    expect(header?.querySelector('a[href="/rsvp"]') || header?.textContent?.includes('header.rsvp')).toBeTruthy()
   })
 
   it('renders the Our Story section', async () => {

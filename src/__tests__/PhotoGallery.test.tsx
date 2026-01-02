@@ -2,55 +2,40 @@ import React from 'react'
 import { render, screen, fireEvent, waitFor } from '../test-utils'
 import { PhotoGallery, GalleryImage } from '../components/PhotoGallery'
 
-const mockImages: GalleryImage[] = [
-  {
-    src: '/images/photo1.jpg',
-    alt: 'First photo',
-    caption: 'Our first date',
-    aspectRatio: 4 / 3,
-  },
-  {
-    src: '/images/photo2.jpg',
-    alt: 'Second photo',
-    aspectRatio: 3 / 4,
-  },
-  {
-    src: '/images/photo3.jpg',
-    srcWebp: '/images/photo3.webp',
-    alt: 'Third photo with WebP',
-    aspectRatio: 1,
-  },
-]
+// The PhotoGallery component uses hardcoded timelineData (2017-2025)
+// The images prop is only used for the lightbox, not for rendering the timeline
+// So tests need to work with the actual timeline alt texts
 
 describe('PhotoGallery Component', () => {
   it('renders section header with translation keys', () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
     expect(screen.getByText('gallery.preheading')).toBeInTheDocument()
     expect(screen.getByText('gallery.title')).toBeInTheDocument()
   })
 
-  it('renders all images in the scattered layout', () => {
-    render(<PhotoGallery images={mockImages} />)
+  it('renders all images in the timeline layout', () => {
+    render(<PhotoGallery />)
     
     const images = screen.getAllByRole('img')
-    // Note: includes decorative flower images, so we check for at least our 3 photos
-    expect(images.length).toBeGreaterThanOrEqual(3)
+    // Timeline has 9 photos (2017-2025) + decorative flower images
+    expect(images.length).toBeGreaterThanOrEqual(9)
   })
 
   it('renders image alt text correctly', () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
-    expect(screen.getByAltText('First photo')).toBeInTheDocument()
-    expect(screen.getByAltText('Second photo')).toBeInTheDocument()
-    expect(screen.getByAltText('Third photo with WebP')).toBeInTheDocument()
+    // Timeline images use "Carolina and Thomas YEAR" alt text
+    expect(screen.getAllByAltText('Carolina and Thomas 2017').length).toBeGreaterThan(0)
+    expect(screen.getAllByAltText('Carolina and Thomas 2018').length).toBeGreaterThan(0)
+    expect(screen.getAllByAltText('Carolina and Thomas 2025').length).toBeGreaterThan(0)
   })
 
   it('opens lightbox when clicking an image', async () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
-    // Find and click the first photo
-    const firstPhoto = screen.getByAltText('First photo')
+    // Find and click the first timeline photo
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
     fireEvent.click(firstPhoto)
     
     // Check that modal opens (close button appears)
@@ -60,20 +45,20 @@ describe('PhotoGallery Component', () => {
   })
 
   it('shows image counter in lightbox', async () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
-    const firstPhoto = screen.getByAltText('First photo')
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
     fireEvent.click(firstPhoto)
     
     await waitFor(() => {
-      expect(screen.getByText('1 / 3')).toBeInTheDocument()
+      expect(screen.getByText('1 / 9')).toBeInTheDocument()
     })
   })
 
   it('closes lightbox with close button', async () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
-    const firstPhoto = screen.getByAltText('First photo')
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
     fireEvent.click(firstPhoto)
     
     await waitFor(() => {
@@ -84,37 +69,37 @@ describe('PhotoGallery Component', () => {
     fireEvent.click(closeButton)
     
     await waitFor(() => {
-      expect(screen.queryByText('1 / 3')).not.toBeInTheDocument()
+      expect(screen.queryByText('1 / 9')).not.toBeInTheDocument()
     })
   })
 
   it('handles keyboard navigation with arrow keys', async () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
-    const firstPhoto = screen.getByAltText('First photo')
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
     fireEvent.click(firstPhoto)
     
     await waitFor(() => {
-      expect(screen.getByText('1 / 3')).toBeInTheDocument()
+      expect(screen.getByText('1 / 9')).toBeInTheDocument()
     })
     
     // Navigate right
     fireEvent.keyDown(window, { key: 'ArrowRight' })
     await waitFor(() => {
-      expect(screen.getByText('2 / 3')).toBeInTheDocument()
+      expect(screen.getByText('2 / 9')).toBeInTheDocument()
     })
     
     // Navigate left
     fireEvent.keyDown(window, { key: 'ArrowLeft' })
     await waitFor(() => {
-      expect(screen.getByText('1 / 3')).toBeInTheDocument()
+      expect(screen.getByText('1 / 9')).toBeInTheDocument()
     })
   })
 
   it('closes lightbox with Escape key', async () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
-    const firstPhoto = screen.getByAltText('First photo')
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
     fireEvent.click(firstPhoto)
     
     await waitFor(() => {
@@ -124,50 +109,50 @@ describe('PhotoGallery Component', () => {
     fireEvent.keyDown(window, { key: 'Escape' })
     
     await waitFor(() => {
-      expect(screen.queryByText('1 / 3')).not.toBeInTheDocument()
+      expect(screen.queryByText('1 / 9')).not.toBeInTheDocument()
     })
   })
 
   it('wraps around when navigating past last image with keyboard', async () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
-    // Open on third image
-    const thirdPhoto = screen.getByAltText('Third photo with WebP')
-    fireEvent.click(thirdPhoto)
+    // Open on last image (2025)
+    const lastPhoto = screen.getAllByAltText('Carolina and Thomas 2025')[0]
+    fireEvent.click(lastPhoto)
     
     await waitFor(() => {
-      expect(screen.getByText('3 / 3')).toBeInTheDocument()
+      expect(screen.getByText('9 / 9')).toBeInTheDocument()
     })
     
     // Navigate right (should wrap to first)
     fireEvent.keyDown(window, { key: 'ArrowRight' })
     await waitFor(() => {
-      expect(screen.getByText('1 / 3')).toBeInTheDocument()
+      expect(screen.getByText('1 / 9')).toBeInTheDocument()
     })
   })
 
   it('wraps around when navigating before first image with keyboard', async () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
     // Open on first image
-    const firstPhoto = screen.getByAltText('First photo')
+    const firstPhoto = screen.getAllByAltText('Carolina and Thomas 2017')[0]
     fireEvent.click(firstPhoto)
     
     await waitFor(() => {
-      expect(screen.getByText('1 / 3')).toBeInTheDocument()
+      expect(screen.getByText('1 / 9')).toBeInTheDocument()
     })
     
     // Navigate left (should wrap to last)
     fireEvent.keyDown(window, { key: 'ArrowLeft' })
     await waitFor(() => {
-      expect(screen.getByText('3 / 3')).toBeInTheDocument()
+      expect(screen.getByText('9 / 9')).toBeInTheDocument()
     })
   })
 
   it('renders with default images when none provided', () => {
     render(<PhotoGallery />)
     
-    // Should render default images (C&T photos)
+    // Should render default images (C&T photos from 2017-2025)
     const images = screen.getAllByRole('img')
     expect(images.length).toBeGreaterThan(0)
   })
@@ -180,31 +165,31 @@ describe('PhotoGallery Component', () => {
   })
 
   it('has correct section id for navigation', () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
     const section = document.getElementById('gallery')
     expect(section).toBeInTheDocument()
   })
 
   it('shows different image when clicking different photos', async () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
-    // Open second image
-    const secondPhoto = screen.getByAltText('Second photo')
+    // Open second image (2018)
+    const secondPhoto = screen.getAllByAltText('Carolina and Thomas 2018')[0]
     fireEvent.click(secondPhoto)
     
     await waitFor(() => {
-      expect(screen.getByText('2 / 3')).toBeInTheDocument()
+      expect(screen.getByText('2 / 9')).toBeInTheDocument()
     })
   })
 
   it('renders decorative flower images', () => {
-    render(<PhotoGallery images={mockImages} />)
+    render(<PhotoGallery />)
     
     // The component renders Belgium flower decorations with empty alt (decorative)
     // So we check for img elements in the document directly
     const allImages = document.querySelectorAll('img')
-    // We should have our 3 mock images + decorative flower images + background
-    expect(allImages.length).toBeGreaterThan(3)
+    // We should have 9 timeline images + decorative flower images
+    expect(allImages.length).toBeGreaterThan(9)
   })
 })
