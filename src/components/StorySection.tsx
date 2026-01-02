@@ -55,8 +55,8 @@ export default function StorySection() {
         h={["300px", "400px", "500px"]}
         zIndex={0}
         pointerEvents="none"
-        opacity={0.3}
         sx={{
+          opacity: 0.15,
           maskImage: 'linear-gradient(to bottom, transparent 0%, transparent 15%, black 40%, black 100%)',
           WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, transparent 15%, black 40%, black 100%)',
         }}
