@@ -8,7 +8,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { ScrollReveal } from './animations'
-import footerDetailDark from '../assets/detail footer-dark.svg'
+import footerDetailDark from '../assets/detail-footer-dark.svg'
 import footerDetailLight from '../assets/detail-footer-light.svg'
 import signatureSvg from '../assets/carolina_and_thomas_signature.svg'
 
@@ -29,15 +29,37 @@ export default function Footer({ variant = 'dark' }: FooterProps) {
   const footerDetail = isLight ? footerDetailLight : footerDetailDark
   const bgColor = isLight ? '#E3DFCE' : '#300F0C'
   const textColor = isLight ? '#300F0C' : '#E3DFCE'
+  // Background for scallop gaps - should match the section above the footer
+  const scallopsGapBg = isLight ? '#300F0C' : '#E3DFCE'
 
   return (
     <Box
       as="footer"
       position="relative"
-      overflowX="hidden"
-      overflowY="visible"
-      zIndex={1}
+      zIndex={10}
     >
+      {/* Decorative scalloped border - only top half visible */}
+      <Box 
+        h="17px"
+        w="100%"
+        overflow="hidden"
+        bg={scallopsGapBg}
+        position="relative"
+      >
+        <ChakraImage
+          src={footerDetail}
+          alt=""
+          position="absolute"
+          top="0"
+          left="0"
+          h="34px"
+          w="100%"
+          minW="1440px"
+          objectFit="cover"
+          objectPosition="left top"
+        />
+      </Box>
+      
       {/* Footer content */}
       <Box 
         bg={bgColor} 
@@ -45,29 +67,6 @@ export default function Footer({ variant = 'dark' }: FooterProps) {
         textAlign="center"
         position="relative"
       >
-        {/* Decorative scalloped border - positioned at top of footer */}
-        <Box 
-          position="absolute"
-          top="0"
-          left="50%"
-          transform="translate(-50%, -50%)"
-          w="100%"
-          minW="1440px"
-          overflow="hidden"
-          pointerEvents="none"
-          h="34px"
-          zIndex={1}
-        >
-          <ChakraImage
-            src={footerDetail}
-            alt=""
-            w="100%"
-            h="auto"
-            display="block"
-            objectFit="cover"
-            objectPosition="center top"
-          />
-        </Box>
         
         <Container maxW="container.lg" px={{ base: 4, md: 6 }}>
           <ScrollReveal>

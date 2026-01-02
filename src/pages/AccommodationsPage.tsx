@@ -105,7 +105,7 @@ function AccommodationsPageContent() {
         </ErrorBoundary>
       </Box>
 
-      <Footer variant="light" />
+      <Footer />
     </Box>
   )
 }

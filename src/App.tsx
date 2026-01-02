@@ -372,7 +372,7 @@ function AppContent() {
 
       </Box>
 
-      <Footer variant="light" />
+      <Footer />
     </Box>
     </>
   )
