@@ -225,16 +225,23 @@ describe('auth function', () => {
 
   describe('server configuration', () => {
     it('returns 500 if SITE_PASSWORD_HASH not set', async () => {
+      const originalConsoleError = console.error
+      console.error = jest.fn()
       delete process.env.SITE_PASSWORD_HASH
 
-      const event = createEvent({
-        body: JSON.stringify({ password: 'anypassword' }),
-      })
-      const response = await handler(event, mockContext)
+      try {
+        const event = createEvent({
+          body: JSON.stringify({ password: 'anypassword' }),
+        })
+        const response = await handler(event, mockContext)
 
-      expect(response.statusCode).toBe(500)
-      const body = JSON.parse(response.body || '')
-      expect(body.error).toBe('Server configuration error')
+        expect(response.statusCode).toBe(500)
+        const body = JSON.parse(response.body || '')
+        expect(body.error).toBe('Server configuration error')
+        expect(console.error).toHaveBeenCalledWith('Auth configuration error:', expect.any(Error))
+      } finally {
+        console.error = originalConsoleError
+      }
     })
   })
 })

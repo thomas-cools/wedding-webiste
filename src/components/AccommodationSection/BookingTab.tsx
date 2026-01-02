@@ -34,7 +34,7 @@ export const BookingTab: React.FC = () => {
           fontSize="sm"
           fontWeight="500"
           letterSpacing="0.05em"
-          rightIcon={<ExternalLinkIcon boxSize={3} />}
+          rightIcon={<ExternalLinkIcon w={3} h={3} />}
           _hover={{ 
             bg: "neutral.dark", 
             color: "white", 
