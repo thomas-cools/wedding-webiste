@@ -7,6 +7,12 @@ import {
   HStack,
   Flex,
   Image as ChakraImage,
+  VStack,
+  Text,
+  Heading,
+  Grid,
+  GridItem,
+  Image
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { ArrowBackIcon } from '@chakra-ui/icons'
@@ -16,6 +22,7 @@ import PasswordGate from '../components/PasswordGate'
 import { GallerySkeleton } from '../components/SectionSkeletons'
 import Footer from '../components/Footer'
 import { useFeatureFlags } from '../contexts/FeatureFlagsContext'
+import { ScrollReveal } from '../components/animations'
 
 // Import logo
 import weddingLogoSmall from '../assets/monogram_websiteT&C-small.webp'
@@ -24,10 +31,23 @@ import weddingLogo2x from '../assets/monogram_websiteT&C-2x.webp'
 
 // Import background for footer scallop gaps
 import bgDesktop from '../assets/textured-background-desktop.webp'
+import bgTablet from '../assets/textured-background-tablet.webp'
+import bgMobile from '../assets/textured-background-mobile.webp'
 
-const PhotoGallery = React.lazy(() =>
-  import('../components/PhotoGallery').then((m) => ({ default: m.PhotoGallery }))
-)
+// Assets
+import tcLogo from '../assets/tc_logo.svg';
+import belgiumFlower from '../assets/Belgium_flower.svg';
+
+// Photos
+import photo2017 from '../assets/C&T-2017.webp';
+import photo2018 from '../assets/C&T-2018.webp';
+import photo2019 from '../assets/C&T-2019.webp';
+import photo2020 from '../assets/C&T-2020.webp';
+import photo2021 from '../assets/C&T-2021.webp';
+import photo2022 from '../assets/C&T-2022.webp';
+import photo2023 from '../assets/C&T-2023.webp';
+import photo2024 from '../assets/C&T-2024.webp';
+import photo2025 from '../assets/C&T-2025.webp';
 
 function GalleryPageContent() {
   const { t } = useTranslation()
@@ -99,12 +119,172 @@ function GalleryPageContent() {
         role="main" 
         tabIndex={-1}
         flex="1"
+        pt={24}
+        position="relative"
+        overflow="hidden"
       >
-        <ErrorBoundary sectionName="Photo Gallery">
-          <Suspense fallback={<GallerySkeleton />}>
-            <PhotoGallery />
-          </Suspense>
-        </ErrorBoundary>
+        {/* Background */}
+        <Box
+          position="absolute"
+          inset={0}
+          zIndex={0}
+          sx={{
+            backgroundImage: [
+              `url(${bgMobile})`,
+              `url(${bgTablet})`,
+              `url(${bgDesktop})`,
+            ],
+            backgroundRepeat: 'repeat',
+            backgroundSize: 'auto',
+            backgroundPosition: 'center top',
+          }}
+        />
+
+        {/* Decorative Flower Top Right */}
+        <Box
+          position="absolute"
+          top="100px"
+          right="-100px"
+          w={["300px", "500px", "600px"]}
+          opacity={0.15}
+          zIndex={1}
+          pointerEvents="none"
+        >
+          <Image src={belgiumFlower} w="100%" />
+        </Box>
+
+         {/* Decorative Flower Bottom Left */}
+        <Box
+          position="absolute"
+          bottom="-50px"
+          left="-50px"
+          w={["200px", "300px", "400px"]}
+          opacity={0.15}
+          zIndex={1}
+          pointerEvents="none"
+          transform="scaleX(-1)"
+        >
+          <Image src={belgiumFlower} w="100%" />
+        </Box>
+
+        <Container maxW="container.xl" position="relative" zIndex={2} py={20}>
+          <VStack spacing={16}>
+            {/* Header */}
+            <ScrollReveal>
+              <VStack spacing={4} textAlign="center">
+                <Text 
+                  fontSize="xs" 
+                  textTransform="uppercase" 
+                  letterSpacing="0.35em" 
+                  color="neutral.dark"
+                  fontWeight="500"
+                >
+                  {t('story.label')}
+                </Text>
+                <Heading 
+                  as="h2" 
+                  fontFamily="heading" 
+                  fontSize={["3xl", "4xl", "5xl"]} 
+                  fontWeight="400"
+                  color="primary.deep"
+                >
+                  {t('story.title')}
+                </Heading>
+              </VStack>
+            </ScrollReveal>
+
+            {/* Content Grid */}
+            <Grid
+              templateColumns={{ base: "1fr", lg: "1fr 1.5fr 1fr" }}
+              gap={8}
+              w="full"
+            >
+              {/* Left Column Images */}
+              <GridItem display={{ base: "none", lg: "block" }}>
+                 <VStack spacing={32} align="flex-start" pt={20}>
+                    <Box transform="rotate(-3deg)" w="80%">
+                      <Image src={photo2017} alt="Carolina & Thomas 2017" borderRadius="sm" boxShadow="md" />
+                    </Box>
+                    <Box transform="rotate(2deg)" w="70%" ml={8}>
+                      <Image src={photo2019} alt="Carolina & Thomas 2019" borderRadius="sm" boxShadow="md" />
+                    </Box>
+                    <Box transform="rotate(-1deg)" w="85%">
+                      <Image src={photo2021} alt="Carolina & Thomas 2021" borderRadius="sm" boxShadow="md" />
+                    </Box>
+                    <Box transform="rotate(2deg)" w="90%" ml={4}>
+                      <Image src={photo2024} alt="Carolina & Thomas 2024" borderRadius="sm" boxShadow="md" />
+                    </Box>
+                 </VStack>
+              </GridItem>
+
+              {/* Center Column - Text + Center Image */}
+              <GridItem>
+                <VStack spacing={12}>
+                  <Box 
+                    bg="whiteAlpha.600" 
+                    p={8} 
+                    borderRadius="md" 
+                    backdropFilter="blur(2px)"
+                    textAlign="center"
+                  >
+                    <VStack spacing={6}>
+                      <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
+                        {t('story.paragraph1')}
+                      </Text>
+                      <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
+                        {t('story.paragraph2')}
+                      </Text>
+                    </VStack>
+                  </Box>
+
+                  {/* Center Image */}
+                  <Box transform="rotate(1deg)" w="70%" mx="auto">
+                     <Image src={photo2023} alt="Carolina & Thomas 2023" borderRadius="sm" boxShadow="md" />
+                  </Box>
+                </VStack>
+              </GridItem>
+
+              {/* Right Column Images */}
+              <GridItem display={{ base: "none", lg: "block" }}>
+                <VStack spacing={40} align="flex-end" pt={40}>
+                    <Box transform="rotate(3deg)" w="75%" mr={8}>
+                      <Image src={photo2018} alt="Carolina & Thomas 2018" borderRadius="sm" boxShadow="md" />
+                    </Box>
+                    <Box transform="rotate(-2deg)" w="85%">
+                      <Image src={photo2020} alt="Carolina & Thomas 2020" borderRadius="sm" boxShadow="md" />
+                    </Box>
+                    <Box transform="rotate(1deg)" w="90%" mr={4}>
+                      <Image src={photo2022} alt="Carolina & Thomas 2022" borderRadius="sm" boxShadow="md" />
+                    </Box>
+                    
+                    {/* Bottom Right with Logo */}
+                    <Box position="relative" w="80%" transform="rotate(-2deg)">
+                      <Image src={photo2025} alt="Carolina & Thomas 2025" borderRadius="sm" boxShadow="md" />
+                      <Box 
+                        position="absolute" 
+                        bottom="-40px" 
+                        right="-40px" 
+                        w="120px" 
+                        zIndex={3}
+                        transform="rotate(15deg)"
+                      >
+                        <Image src={tcLogo} alt="TC Logo" opacity={0.8} />
+                      </Box>
+                    </Box>
+                </VStack>
+              </GridItem>
+            </Grid>
+            
+            {/* Mobile Layout (Simplified) */}
+            <VStack display={{ base: "flex", lg: "none" }} spacing={8} w="full">
+               {/* Just show a few photos on mobile */}
+               <Image src={photo2025} alt="Carolina & Thomas 2025" borderRadius="sm" boxShadow="md" w="80%" transform="rotate(-2deg)" />
+               <Image src={photo2017} alt="Carolina & Thomas 2017" borderRadius="sm" boxShadow="md" w="70%" transform="rotate(2deg)" alignSelf="flex-start" />
+               <Image src={photo2023} alt="Carolina & Thomas 2023" borderRadius="sm" boxShadow="md" w="75%" transform="rotate(-1deg)" alignSelf="flex-end" />
+            </VStack>
+
+          </VStack>
+        </Container>
       </Box>
 
       <Footer sectionAboveBgImage={bgDesktop} />
