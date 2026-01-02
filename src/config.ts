@@ -59,5 +59,5 @@ export const weddingConfig = {
   },
   rsvpDeadline: 'February 1, 2026',
   /** Contact email for wedding inquiries (also used in confirmation emails) */
-  contactEmail: 'wedding@example.com',
+  contactEmail: 'carolinaandthomaswedding@gmail.com',
 }

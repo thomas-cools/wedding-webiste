@@ -318,7 +318,7 @@ const weddingConfig = {
     name: 'Vallesvilles',
     location: 'Haute-Garonne, France',
   },
-  contactEmail: 'wedding@example.com', // Update with your actual contact email
+  contactEmail: 'carolinaandthomaswedding@gmail.com',
 }
 
 function getLikelihoodText(likelihood: string, s: EmailStrings): string {
