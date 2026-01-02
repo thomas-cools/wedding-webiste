@@ -122,7 +122,7 @@ function FaqPageContent() {
       </Box>
 
       {/* Footer */}
-      <Footer />
+      <Footer sectionAboveBg="#F6F1EB" />
     </Box>
   )
 }
