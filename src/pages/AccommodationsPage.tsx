@@ -125,7 +125,7 @@ function AccommodationsPageContent() {
         </ErrorBoundary>
       </Box>
 
-      <Footer sectionAboveBg="white" />
+      <Footer sectionAboveBg="#E3DFCE" />
     </Box>
   )
 }
@@ -135,7 +135,7 @@ export default function AccommodationsPage() {
 
   // Wrap with password gate if feature is enabled
   if (features.requirePassword) {
-    return <PasswordGate bg="white"><AccommodationsPageContent /></PasswordGate>
+    return <PasswordGate bg="#E3DFCE"><AccommodationsPageContent /></PasswordGate>
   }
 
   return <AccommodationsPageContent />
