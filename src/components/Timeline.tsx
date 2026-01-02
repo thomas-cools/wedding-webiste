@@ -52,6 +52,24 @@ export default function Timeline() {
     <Box as="section" id="timeline" py={[16, 20, 28]} bg="white" position="relative" zIndex={0}>
       <Container maxW="container.xl" px={[4, 6, 8]}>
         <VStack spacing={[12, 16, 20]}>
+          {/* Intro Text */}
+          <VStack spacing={4} textAlign="center" maxW="700px" mx="auto">
+            <Text
+              color="neutral.muted"
+              fontSize={["sm", "md"]}
+              lineHeight="1.8"
+              dangerouslySetInnerHTML={{ __html: t('timeline.intro') }}
+            />
+            <Text
+              color="neutral.muted"
+              fontSize={["sm", "md"]}
+              lineHeight="1.8"
+              fontStyle="italic"
+            >
+              {t('timeline.introClosing')}
+            </Text>
+          </VStack>
+
           {/* Section Header */}
           <VStack spacing={4} textAlign="center">
             <Heading

@@ -166,6 +166,8 @@
   },
   "timeline": {
     "title": "Programme du Mariage",
+    "intro": "Alors que nous entrons dans ce nouveau chapitre, cela signifierait tellement pour nous de vous avoir à nos côtés en ce jour si spécial. Sur cette page, vous trouverez tout ce dont vous avez besoin : le programme, les informations sur le lieu, les détails pour <strong>confirmer votre présence</strong>, et quelques touches supplémentaires.",
+    "introClosing": "À l'amour, à la joie, et au début de notre pour toujours !",
     "events": {
       "welcome": {
         "date": "25 Août 2026",
