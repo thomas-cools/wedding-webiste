@@ -94,22 +94,22 @@ export function PhotoGallery({
 
   return (
     <Box id="gallery" position="relative" overflow="hidden">
-      {/* Background with responsive images */}
-      <Box position="absolute" inset={0} zIndex={0}>
-        <picture>
-          <source media="(min-width: 1024px)" srcSet={bgDesktop} />
-          <source media="(min-width: 640px)" srcSet={bgTablet} />
-          <Image
-            src={bgMobile}
-            alt=""
-            position="absolute"
-            inset={0}
-            width="100%"
-            height="100%"
-            objectFit="cover"
-            objectPosition="center"
-          />
-        </picture>
+      {/* Background with tiling texture for crisp display at any size */}
+      <Box 
+        position="absolute" 
+        inset={0} 
+        zIndex={0}
+        sx={{
+          backgroundImage: [
+            `url(${bgMobile})`,
+            `url(${bgTablet})`,
+            `url(${bgDesktop})`,
+          ],
+          backgroundRepeat: 'repeat',
+          backgroundSize: 'auto',
+          backgroundPosition: 'center top',
+        }}
+      >
         {/* Subtle overlay for cohesion */}
         <Box position="absolute" inset={0} bg="whiteAlpha.300" />
       </Box>

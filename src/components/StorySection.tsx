@@ -22,26 +22,22 @@ export default function StorySection() {
       position="relative"
       overflow="hidden"
     >
-      {/* Background with responsive images using picture element pattern */}
+      {/* Background with tiling texture for crisp display at any size */}
       <Box
         position="absolute"
         inset={0}
         zIndex={0}
+        sx={{
+          backgroundImage: [
+            `url(${bgMobile})`,
+            `url(${bgTablet})`,
+            `url(${bgDesktop})`,
+          ],
+          backgroundRepeat: 'repeat',
+          backgroundSize: 'auto',
+          backgroundPosition: 'center top',
+        }}
       >
-        <picture>
-          <source media="(min-width: 1024px)" srcSet={bgDesktop} />
-          <source media="(min-width: 640px)" srcSet={bgTablet} />
-          <Image
-            src={bgMobile}
-            alt=""
-            position="absolute"
-            inset={0}
-            width="100%"
-            height="100%"
-            objectFit="cover"
-            objectPosition="center"
-          />
-        </picture>
         {/* Subtle overlay for better text readability */}
         <Box
           position="absolute"
