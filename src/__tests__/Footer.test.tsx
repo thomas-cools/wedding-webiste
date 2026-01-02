@@ -16,6 +16,8 @@ jest.mock('react-i18next', () => ({
 
 // Mock the SVG imports
 jest.mock('../assets/footer_detail.svg', () => 'footer_detail.svg')
+jest.mock('../assets/detail-footer-dark.svg', () => 'detail-footer-dark.svg')
+jest.mock('../assets/detail-footer-light.svg', () => 'detail-footer-light.svg')
 jest.mock('../assets/carolina_and_thomas_signature.svg', () => 'signature.svg')
 
 describe('Footer Component', () => {
@@ -102,6 +104,55 @@ describe('Footer Component', () => {
       // The footer content box should have the maroon background
       const footer = screen.getByRole('contentinfo')
       // Just verify it renders - specific CSS testing is better done in visual/e2e tests
+      expect(footer).toBeInTheDocument()
+    })
+  })
+
+  describe('Scallop Gap Background Props', () => {
+    it('renders with default scallop gap background for dark variant', () => {
+      render(<Footer />)
+      
+      const footer = screen.getByRole('contentinfo')
+      expect(footer).toBeInTheDocument()
+      // The scallop decorative image should be visible
+      const images = screen.getAllByRole('presentation')
+      const decorativeImage = images.find(img => img.getAttribute('alt') === '')
+      expect(decorativeImage).toBeInTheDocument()
+    })
+
+    it('renders with custom sectionAboveBg color prop', () => {
+      render(<Footer sectionAboveBg="white" />)
+      
+      const footer = screen.getByRole('contentinfo')
+      expect(footer).toBeInTheDocument()
+      // The scallop decorative image should still be visible
+      const images = screen.getAllByRole('presentation')
+      const decorativeImage = images.find(img => img.getAttribute('alt') === '')
+      expect(decorativeImage).toBeInTheDocument()
+    })
+
+    it('renders with sectionAboveBgImage prop', () => {
+      render(<Footer sectionAboveBgImage="url(/test-background.webp)" />)
+      
+      const footer = screen.getByRole('contentinfo')
+      expect(footer).toBeInTheDocument()
+      // The scallop decorative image should still be visible
+      const images = screen.getAllByRole('presentation')
+      const decorativeImage = images.find(img => img.getAttribute('alt') === '')
+      expect(decorativeImage).toBeInTheDocument()
+    })
+
+    it('renders with light variant', () => {
+      render(<Footer variant="light" />)
+      
+      const footer = screen.getByRole('contentinfo')
+      expect(footer).toBeInTheDocument()
+    })
+
+    it('renders with light variant and custom sectionAboveBg', () => {
+      render(<Footer variant="light" sectionAboveBg="#300F0C" />)
+      
+      const footer = screen.getByRole('contentinfo')
       expect(footer).toBeInTheDocument()
     })
   })
