@@ -16,14 +16,17 @@ interface FooterProps {
   variant?: 'dark' | 'light'
   /** Background color of the section above the footer (for scallop gaps) */
   sectionAboveBg?: string
+  /** Background image URL of the section above the footer (for scallop gaps) */
+  sectionAboveBgImage?: string
 }
 
 /**
  * Footer component with scalloped border and contact information
  * @param variant - 'dark' (default) for dark background, 'light' for cream background
  * @param sectionAboveBg - Background color of the section above (defaults based on variant)
+ * @param sectionAboveBgImage - Background image URL of the section above (takes precedence over color)
  */
-export default function Footer({ variant = 'dark', sectionAboveBg }: FooterProps) {
+export default function Footer({ variant = 'dark', sectionAboveBg, sectionAboveBgImage }: FooterProps) {
   const { t } = useTranslation()
   
   const isLight = variant === 'light'
@@ -48,6 +51,12 @@ export default function Footer({ variant = 'dark', sectionAboveBg }: FooterProps
         overflow="hidden"
         bg={scallopsGapBg}
         position="relative"
+        sx={sectionAboveBgImage ? {
+          backgroundImage: `url(${sectionAboveBgImage})`,
+          backgroundRepeat: 'repeat',
+          backgroundSize: 'auto',
+          backgroundPosition: 'center top',
+        } : undefined}
       >
         <ChakraImage
           src={footerDetail}

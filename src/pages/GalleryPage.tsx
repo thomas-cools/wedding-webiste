@@ -22,6 +22,9 @@ import weddingLogoSmall from '../assets/monogram_websiteT&C-small.webp'
 import weddingLogoMedium from '../assets/monogram_websiteT&C-medium.webp'
 import weddingLogo2x from '../assets/monogram_websiteT&C-2x.webp'
 
+// Import background for footer scallop gaps
+import bgDesktop from '../assets/simple_smooth_background-desktop.webp'
+
 const PhotoGallery = React.lazy(() =>
   import('../components/PhotoGallery').then((m) => ({ default: m.PhotoGallery }))
 )
@@ -104,7 +107,7 @@ function GalleryPageContent() {
         </ErrorBoundary>
       </Box>
 
-      <Footer sectionAboveBg="#E3DFCE" />
+      <Footer sectionAboveBgImage={bgDesktop} />
     </Box>
   )
 }
