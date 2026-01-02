@@ -137,9 +137,7 @@ function AppContent() {
   }, [])
 
   const navLinks = [
-    { href: '#story', label: t('header.ourStory'), enabled: features.showStory, isExternal: false },
-    { href: '#details', label: t('header.details'), enabled: true, isExternal: false },
-    { href: '/gallery', label: t('header.gallery'), enabled: features.showGallery, isExternal: true },
+    { href: '/gallery', label: t('header.ourStory'), enabled: features.showGallery, isExternal: true },
     { href: '/accommodations', label: t('header.travel'), enabled: features.showAccommodation, isExternal: true },
     { href: '/faq', label: t('header.faq'), enabled: true, isExternal: true },
     { href: '/rsvp', label: t('header.rsvp'), enabled: true, isExternal: true },
