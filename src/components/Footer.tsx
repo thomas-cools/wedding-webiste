@@ -14,13 +14,16 @@ import signatureSvg from '../assets/carolina_and_thomas_signature.svg'
 
 interface FooterProps {
   variant?: 'dark' | 'light'
+  /** Background color of the section above the footer (for scallop gaps) */
+  sectionAboveBg?: string
 }
 
 /**
  * Footer component with scalloped border and contact information
  * @param variant - 'dark' (default) for dark background, 'light' for cream background
+ * @param sectionAboveBg - Background color of the section above (defaults based on variant)
  */
-export default function Footer({ variant = 'dark' }: FooterProps) {
+export default function Footer({ variant = 'dark', sectionAboveBg }: FooterProps) {
   const { t } = useTranslation()
   
   const isLight = variant === 'light'
@@ -30,7 +33,7 @@ export default function Footer({ variant = 'dark' }: FooterProps) {
   const bgColor = isLight ? '#E3DFCE' : '#300F0C'
   const textColor = isLight ? '#300F0C' : '#E3DFCE'
   // Background for scallop gaps - should match the section above the footer
-  const scallopsGapBg = isLight ? '#300F0C' : '#E3DFCE'
+  const scallopsGapBg = sectionAboveBg ?? (isLight ? '#300F0C' : '#E3DFCE')
 
   return (
     <Box
