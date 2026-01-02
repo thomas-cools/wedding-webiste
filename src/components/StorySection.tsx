@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { ScrollReveal, fadeInLeft, fadeInRight } from './animations';
 
 // Import responsive background images
-import bgMobile from '../assets/simple_smooth_background-mobile.webp';
-import bgTablet from '../assets/simple_smooth_background-tablet.webp';
-import bgDesktop from '../assets/simple_smooth_background-desktop.webp';
+import bgMobile from '../assets/textured-background-mobile.webp';
+import bgTablet from '../assets/textured-background-tablet.webp';
+import bgDesktop from '../assets/textured-background-desktop.webp';
 
 // Import story section assets
 import couplePhoto from '../assets/C&T-2025.webp';

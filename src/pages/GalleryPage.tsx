@@ -23,7 +23,7 @@ import weddingLogoMedium from '../assets/monogram_websiteT&C-medium.webp'
 import weddingLogo2x from '../assets/monogram_websiteT&C-2x.webp'
 
 // Import background for footer scallop gaps
-import bgDesktop from '../assets/simple_smooth_background-desktop.webp'
+import bgDesktop from '../assets/textured-background-desktop.webp'
 
 const PhotoGallery = React.lazy(() =>
   import('../components/PhotoGallery').then((m) => ({ default: m.PhotoGallery }))
