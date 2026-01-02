@@ -31,7 +31,7 @@ export const HotelsTab: React.FC = () => {
   return (
     <VStack spacing={8}>
       {/* Hotels Introduction */}
-      <Box bg="neutral.light" borderWidth="1px" borderColor="primary.soft" p={[6, 8]} w="full" textAlign="center">
+      <Box bg="neutral.light" borderWidth="1px" borderColor="primary.soft" borderRadius="md" p={[6, 8]} w="full" textAlign="center">
         <VStack spacing={4}>
           <Box 
             as="svg" 

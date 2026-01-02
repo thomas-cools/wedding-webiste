@@ -55,7 +55,16 @@ interface CachedFlags {
  * Check if we're in development mode (Vite dev server without edge functions)
  */
 function isDevMode(): boolean {
-  return process.env.NODE_ENV !== 'production';
+  return import.meta.env.DEV;
+}
+
+function applyLocalDevOverrides(features: FeatureFlags): FeatureFlags {
+  // For local development we never want to block the UI behind a password gate.
+  // Production can still enable it via the edge config.
+  if (isDevMode()) {
+    return { ...features, requirePassword: false };
+  }
+  return features;
 }
 
 /**
@@ -99,13 +108,13 @@ function setCachedFlags(features: FeatureFlags): void {
 async function fetchFeatureFlags(): Promise<FeatureFlags> {
   // In dev mode, return defaults immediately (edge functions not available)
   if (isDevMode()) {
-    return defaultFeatures;
+    return applyLocalDevOverrides(defaultFeatures);
   }
 
   // Check cache first
   const cached = getCachedFlags();
   if (cached) {
-    return cached;
+    return applyLocalDevOverrides(cached);
   }
 
   // Fetch from edge function
@@ -124,7 +133,7 @@ async function fetchFeatureFlags(): Promise<FeatureFlags> {
   // Cache the result
   setCachedFlags(features);
   
-  return features;
+  return applyLocalDevOverrides(features);
 }
 
 interface FeatureFlagsProviderProps {
@@ -138,7 +147,7 @@ interface FeatureFlagsProviderProps {
  */
 export function FeatureFlagsProvider({ children, initialFeatures }: FeatureFlagsProviderProps) {
   const [features, setFeatures] = useState<FeatureFlags>(() => ({
-    ...defaultFeatures,
+    ...applyLocalDevOverrides(defaultFeatures),
     ...initialFeatures,
   }));
   const [isLoading, setIsLoading] = useState(!initialFeatures);
@@ -149,7 +158,7 @@ export function FeatureFlagsProvider({ children, initialFeatures }: FeatureFlags
     setError(null);
     try {
       const flags = await fetchFeatureFlags();
-      setFeatures({ ...flags, ...initialFeatures });
+      setFeatures({ ...applyLocalDevOverrides(flags), ...initialFeatures });
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Unknown error'));
       // Keep using current/default features on error
@@ -191,5 +200,5 @@ export function useFeature(flag: keyof FeatureFlags): boolean {
  */
 export function getFeatureFlags(): FeatureFlags {
   const cached = getCachedFlags();
-  return cached ?? defaultFeatures;
+  return applyLocalDevOverrides(cached ?? defaultFeatures);
 }

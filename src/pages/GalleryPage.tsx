@@ -96,7 +96,6 @@ function GalleryPageContent() {
         role="main" 
         tabIndex={-1}
         flex="1"
-        pt={["80px", "100px", "120px"]}
       >
         <ErrorBoundary sectionName="Photo Gallery">
           <Suspense fallback={<GallerySkeleton />}>

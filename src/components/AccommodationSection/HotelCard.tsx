@@ -15,7 +15,7 @@ interface HotelCardProps {
 
 export const HotelCard: React.FC<HotelCardProps> = ({ hotel }) => {
   return (
-    <Box bg="white" borderWidth="1px" borderColor="primary.soft" p={6}>
+    <Box bg="white" borderWidth="1px" borderColor="primary.soft" borderRadius="md" p={6}>
       <VStack align="start" spacing={3}>
         <Flex justify="space-between" align="flex-start" w="full" gap={2} minH="50px">
           <Heading as="h4" fontSize="md" fontWeight="500" color="neutral.dark">

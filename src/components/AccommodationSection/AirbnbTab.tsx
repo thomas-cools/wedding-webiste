@@ -10,7 +10,7 @@ export const AirbnbTab: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <Box bg="neutral.light" borderWidth="1px" borderColor="primary.soft" p={[8, 10]}>
+    <Box bg="neutral.light" borderWidth="1px" borderColor="primary.soft" borderRadius="md" p={[8, 10]}>
       <VStack spacing={6} textAlign="center">
         <Image src={airbnbLogo} alt="Airbnb" w="48px" h="48px" borderRadius="md" />
         <Heading as="h3" fontFamily="heading" fontSize="xl" fontWeight="400" color="primary.deep">

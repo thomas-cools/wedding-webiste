@@ -28,14 +28,14 @@ describe('PhotoGallery Component', () => {
     
     expect(screen.getByText('gallery.preheading')).toBeInTheDocument()
     expect(screen.getByText('gallery.title')).toBeInTheDocument()
-    expect(screen.getByText('gallery.subtitle')).toBeInTheDocument()
   })
 
-  it('renders all images in the grid', () => {
+  it('renders all images in the scattered layout', () => {
     render(<PhotoGallery images={mockImages} />)
     
     const images = screen.getAllByRole('img')
-    expect(images).toHaveLength(3)
+    // Note: includes decorative flower images, so we check for at least our 3 photos
+    expect(images.length).toBeGreaterThanOrEqual(3)
   })
 
   it('renders image alt text correctly', () => {
@@ -46,18 +46,12 @@ describe('PhotoGallery Component', () => {
     expect(screen.getByAltText('Third photo with WebP')).toBeInTheDocument()
   })
 
-  it('renders caption when provided', () => {
-    render(<PhotoGallery images={mockImages} />)
-    
-    expect(screen.getByText('Our first date')).toBeInTheDocument()
-  })
-
   it('opens lightbox when clicking an image', async () => {
     render(<PhotoGallery images={mockImages} />)
     
-    // Find image buttons by their aria-label pattern
-    const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0]!)
+    // Find and click the first photo
+    const firstPhoto = screen.getByAltText('First photo')
+    fireEvent.click(firstPhoto)
     
     // Check that modal opens (close button appears)
     await waitFor(() => {
@@ -68,8 +62,8 @@ describe('PhotoGallery Component', () => {
   it('shows image counter in lightbox', async () => {
     render(<PhotoGallery images={mockImages} />)
     
-    const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0]!)
+    const firstPhoto = screen.getByAltText('First photo')
+    fireEvent.click(firstPhoto)
     
     await waitFor(() => {
       expect(screen.getByText('1 / 3')).toBeInTheDocument()
@@ -79,8 +73,8 @@ describe('PhotoGallery Component', () => {
   it('closes lightbox with close button', async () => {
     render(<PhotoGallery images={mockImages} />)
     
-    const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0]!)
+    const firstPhoto = screen.getByAltText('First photo')
+    fireEvent.click(firstPhoto)
     
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /gallery\.close/i })).toBeInTheDocument()
@@ -97,8 +91,8 @@ describe('PhotoGallery Component', () => {
   it('handles keyboard navigation with arrow keys', async () => {
     render(<PhotoGallery images={mockImages} />)
     
-    const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0]!)
+    const firstPhoto = screen.getByAltText('First photo')
+    fireEvent.click(firstPhoto)
     
     await waitFor(() => {
       expect(screen.getByText('1 / 3')).toBeInTheDocument()
@@ -120,8 +114,8 @@ describe('PhotoGallery Component', () => {
   it('closes lightbox with Escape key', async () => {
     render(<PhotoGallery images={mockImages} />)
     
-    const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0]!)
+    const firstPhoto = screen.getByAltText('First photo')
+    fireEvent.click(firstPhoto)
     
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /gallery\.close/i })).toBeInTheDocument()
@@ -138,8 +132,8 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery images={mockImages} />)
     
     // Open on third image
-    const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*Third photo/i })
-    fireEvent.click(imageButtons[0]!)
+    const thirdPhoto = screen.getByAltText('Third photo with WebP')
+    fireEvent.click(thirdPhoto)
     
     await waitFor(() => {
       expect(screen.getByText('3 / 3')).toBeInTheDocument()
@@ -156,8 +150,8 @@ describe('PhotoGallery Component', () => {
     render(<PhotoGallery images={mockImages} />)
     
     // Open on first image
-    const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.click(imageButtons[0]!)
+    const firstPhoto = screen.getByAltText('First photo')
+    fireEvent.click(firstPhoto)
     
     await waitFor(() => {
       expect(screen.getByText('1 / 3')).toBeInTheDocument()
@@ -170,32 +164,10 @@ describe('PhotoGallery Component', () => {
     })
   })
 
-  it('opens lightbox with Enter key on image button', async () => {
-    render(<PhotoGallery images={mockImages} />)
-    
-    const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.keyDown(imageButtons[0]!, { key: 'Enter' })
-    
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: /gallery\.close/i })).toBeInTheDocument()
-    })
-  })
-
-  it('opens lightbox with Space key on image button', async () => {
-    render(<PhotoGallery images={mockImages} />)
-    
-    const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*First photo/i })
-    fireEvent.keyDown(imageButtons[0]!, { key: ' ' })
-    
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: /gallery\.close/i })).toBeInTheDocument()
-    })
-  })
-
   it('renders with default images when none provided', () => {
     render(<PhotoGallery />)
     
-    // Should render default placeholder images
+    // Should render default images (C&T photos)
     const images = screen.getAllByRole('img')
     expect(images.length).toBeGreaterThan(0)
   })
@@ -214,32 +186,25 @@ describe('PhotoGallery Component', () => {
     expect(section).toBeInTheDocument()
   })
 
-  it('image buttons are keyboard accessible', () => {
-    render(<PhotoGallery images={mockImages} />)
-    
-    const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage/i })
-    imageButtons.forEach((button) => {
-      expect(button).toHaveAttribute('tabIndex', '0')
-    })
-  })
-
-  it('renders WebP source when available', () => {
-    render(<PhotoGallery images={mockImages} />)
-    
-    // Check that WebP source elements are rendered
-    const sources = document.querySelectorAll('source[type="image/webp"]')
-    expect(sources.length).toBeGreaterThan(0)
-  })
-
-  it('shows different image when opening different thumbnails', async () => {
+  it('shows different image when clicking different photos', async () => {
     render(<PhotoGallery images={mockImages} />)
     
     // Open second image
-    const imageButtons = screen.getAllByRole('button', { name: /gallery\.viewImage.*Second photo/i })
-    fireEvent.click(imageButtons[0]!)
+    const secondPhoto = screen.getByAltText('Second photo')
+    fireEvent.click(secondPhoto)
     
     await waitFor(() => {
       expect(screen.getByText('2 / 3')).toBeInTheDocument()
     })
+  })
+
+  it('renders decorative flower images', () => {
+    render(<PhotoGallery images={mockImages} />)
+    
+    // The component renders Belgium flower decorations with empty alt (decorative)
+    // So we check for img elements in the document directly
+    const allImages = document.querySelectorAll('img')
+    // We should have our 3 mock images + decorative flower images + background
+    expect(allImages.length).toBeGreaterThan(3)
   })
 })

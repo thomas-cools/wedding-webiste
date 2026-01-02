@@ -24,12 +24,20 @@ export default function Footer({ variant = 'dark' }: FooterProps) {
   const { t } = useTranslation()
   
   const isLight = variant === 'light'
+  // The scalloped border should match the footer background color so that,
+  // when it protrudes upward, it creates a scalloped edge into the section above.
   const footerDetail = isLight ? footerDetailLight : footerDetailDark
   const bgColor = isLight ? '#E3DFCE' : '#300F0C'
   const textColor = isLight ? '#300F0C' : '#E3DFCE'
 
   return (
-    <Box as="footer" position="relative" overflow="hidden">
+    <Box
+      as="footer"
+      position="relative"
+      overflowX="hidden"
+      overflowY="visible"
+      zIndex={1}
+    >
       {/* Footer content */}
       <Box 
         bg={bgColor} 
@@ -40,14 +48,15 @@ export default function Footer({ variant = 'dark' }: FooterProps) {
         {/* Decorative scalloped border - positioned at top of footer */}
         <Box 
           position="absolute"
-          top="-1px"
+          top="0"
           left="50%"
-          transform="translateX(-50%)"
+          transform="translate(-50%, -50%)"
           w="100%"
           minW="1440px"
           overflow="hidden"
           pointerEvents="none"
-          h="18px"
+          h="34px"
+          zIndex={1}
         >
           <ChakraImage
             src={footerDetail}

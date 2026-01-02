@@ -23,7 +23,7 @@ import weddingLogoMedium from '../assets/monogram_websiteT&C-medium.webp'
 import weddingLogo2x from '../assets/monogram_websiteT&C-2x.webp'
 
 const AccommodationSection = React.lazy(() =>
-  import('../components/AccommodationSection').then((m) => ({ default: m.AccommodationSection }))
+  import('../components/AccommodationSection/AccommodationSection').then((m) => ({ default: m.AccommodationSection }))
 )
 
 function AccommodationsPageContent() {
@@ -105,7 +105,7 @@ function AccommodationsPageContent() {
         </ErrorBoundary>
       </Box>
 
-      <Footer />
+      <Footer variant="light" />
     </Box>
   )
 }
