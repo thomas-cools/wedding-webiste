@@ -20,7 +20,6 @@ export default function StorySection() {
       py={[20, 28]} 
       scrollMarginTop={["100px", "130px", "150px"]}
       position="relative"
-      overflow="hidden"
     >
       {/* Background with tiling texture for crisp display at any size */}
       <Box
@@ -53,12 +52,10 @@ export default function StorySection() {
         right={["-80px", "-60px", "-40px"]}
         w={["300px", "400px", "500px"]}
         h={["300px", "400px", "500px"]}
-        zIndex={0}
+        zIndex={10}
         pointerEvents="none"
         sx={{
           opacity: 0.15,
-          maskImage: 'linear-gradient(to bottom, transparent 0%, transparent 15%, black 40%, black 100%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, transparent 15%, black 40%, black 100%)',
         }}
       >
         <Image
