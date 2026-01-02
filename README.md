@@ -670,13 +670,13 @@ VITE_GOOGLE_MAPS_API_KEY=AIza...
 
 #### Generating a Password Hash
 
-The auth system uses HMAC-SHA256 with a salt. Generate a hash using Node.js:
+The auth system uses HMAC-SHA256 with a salt. **Important:** The password is lowercased before hashing. Generate a hash using Node.js:
 
 ```bash
-# Generate hash for your password
-node -e "const{createHmac}=require('crypto');const h=createHmac('sha256','wedding-site-salt');h.update('YOUR-PASSWORD');console.log(h.digest('hex'))"
+# Generate hash for your password (password is automatically lowercased)
+node -e "const{createHmac}=require('crypto');const h=createHmac('sha256','wedding-site-salt');h.update('YOUR-PASSWORD'.toLowerCase());console.log(h.digest('hex'))"
 
-# Example: hash for "test" 
+# Example: hash for "test" (or "TEST" or "Test" - all produce the same hash)
 # Output: bf2e447640106ffa5a533ce86996eb8a379635995902062e6020891bd3a80c09
 ```
 

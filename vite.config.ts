@@ -15,24 +15,25 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       // Increase limit slightly if needed (default is 500)
-      chunkSizeWarningLimit: 500,
+      chunkSizeWarningLimit: 600,
       rollupOptions: {
         output: {
-          manualChunks: {
-            // Split React into its own chunk (stable, rarely changes)
-            'react-vendor': ['react', 'react-dom'],
-            // Split Chakra UI and Emotion (largest dependency)
-            'chakra-vendor': [
-              '@chakra-ui/react',
-              '@chakra-ui/icons',
-              '@chakra-ui/theme-tools',
-              '@emotion/react',
-              '@emotion/styled',
-            ],
-            // Split Framer Motion (animation library)
-            'motion-vendor': ['framer-motion'],
-            // Split i18n (internationalization)
-            'i18n-vendor': ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+          manualChunks: (id) => {
+            // Bundle React + all React-dependent UI libraries together
+            // This ensures React is available when any of these initialize
+            if (
+              id.includes('node_modules/react/') ||
+              id.includes('node_modules/react-dom/') ||
+              id.includes('node_modules/framer-motion') ||
+              id.includes('node_modules/@chakra-ui') ||
+              id.includes('node_modules/@emotion')
+            ) {
+              return 'vendor'
+            }
+            // Split i18n (internationalization) - doesn't depend on React hooks at init
+            if (id.includes('i18next') && !id.includes('react-i18next')) {
+              return 'i18n-vendor'
+            }
           },
         },
       },
