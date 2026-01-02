@@ -21,6 +21,7 @@ import { useFeatureFlags } from '../contexts/FeatureFlagsContext'
 import weddingLogoSmall from '../assets/monogram_websiteT&C-small.webp'
 import weddingLogoMedium from '../assets/monogram_websiteT&C-medium.webp'
 import weddingLogo2x from '../assets/monogram_websiteT&C-2x.webp'
+import textureSvg from '../assets/texture.svg'
 
 const RsvpForm = React.lazy(() => import('../components/RsvpForm'))
 
@@ -34,7 +35,7 @@ function RsvpPageContent() {
   }
 
   return (
-    <Box minH="100vh" bg="#300F0C" display="flex" flexDirection="column">
+    <Box minH="100vh" bg="#300F0C" display="flex" flexDirection="column" position="relative" overflow="hidden">
       {/* Minimal Header */}
       <Box 
         as="header"
@@ -102,8 +103,24 @@ function RsvpPageContent() {
         flex="1"
         pt={["100px", "120px", "140px"]}
         pb={[12, 16, 20]}
+        position="relative"
       >
-        <Container maxW="container.lg">
+        {/* Texture Background Decoration - Positioned relative to form */}
+        <Box
+          position="absolute"
+          left={0}
+          top={["80px", "100px", "120px"]}
+          bottom={[12, 16, 20]}
+          w={["180px", "280px", "400px", "500px"]}
+          backgroundImage={`url(${textureSvg})`}
+          backgroundRepeat="no-repeat"
+          backgroundPosition="left top"
+          backgroundSize="cover"
+          opacity={0.2}
+          pointerEvents="none"
+          zIndex={0}
+        />
+        <Container maxW="container.lg" position="relative" zIndex={1}>
           <ErrorBoundary sectionName="RSVP form">
             <Suspense fallback={<RsvpFormSkeleton />}>
               <RsvpForm onSuccess={handleRsvpSuccess} />
