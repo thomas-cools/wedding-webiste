@@ -1,4 +1,3 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Box,
@@ -14,7 +13,6 @@ import {
   AccordionPanel,
   AccordionIcon,
   SimpleGrid,
-  Icon,
 } from '@chakra-ui/react'
 import { ScrollReveal, StaggerContainer, StaggerItem } from './animations'
 

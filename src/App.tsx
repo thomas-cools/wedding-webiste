@@ -2,8 +2,6 @@ import React, { Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Box,
-  Text,
-  Heading,
   Button,
   Image as ChakraImage,
   Container,
@@ -11,26 +9,16 @@ import {
   VStack,
   HStack,
   Divider,
-  SimpleGrid,
   Grid,
-  GridItem,
   IconButton,
   Drawer,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
   DrawerBody,
-  useDisclosure,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  Badge,
-  Link as ChakraLink
-} from '@chakra-ui/react';
+  useDisclosure} from '@chakra-ui/react';
 import { Link } from 'react-router-dom'
-import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons'
+import { HamburgerIcon } from '@chakra-ui/icons'
 import LanguageSwitcher from './components/LanguageSwitcher'
 import Hero from './components/Hero'
 import PasswordGate from './components/PasswordGate'
@@ -42,8 +30,6 @@ import {
   StorySkeleton,
   TimelineSkeleton,
 } from './components/SectionSkeletons'
-import { ScrollReveal, StaggerContainer, StaggerItem, fadeInLeft, fadeInRight, scaleIn } from './components/animations'
-import { weddingConfig } from './config'
 import { useFeatureFlags } from './contexts/FeatureFlagsContext'
 
 // Import assets

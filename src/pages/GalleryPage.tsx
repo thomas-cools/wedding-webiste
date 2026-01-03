@@ -1,4 +1,3 @@
-import React, { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Box,
@@ -17,9 +16,7 @@ import {
 import { Link } from 'react-router-dom'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import LanguageSwitcher from '../components/LanguageSwitcher'
-import ErrorBoundary from '../components/ErrorBoundary'
 import PasswordGate from '../components/PasswordGate'
-import { GallerySkeleton } from '../components/SectionSkeletons'
 import Footer from '../components/Footer'
 import { useFeatureFlags } from '../contexts/FeatureFlagsContext'
 import { ScrollReveal } from '../components/animations'

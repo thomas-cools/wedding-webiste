@@ -4,7 +4,6 @@ import {
   Heading,
   Text,
   VStack,
-  HStack,
   Flex,
   Circle,
   Image,

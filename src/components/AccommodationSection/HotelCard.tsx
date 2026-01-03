@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Box, VStack, Heading, Text, Flex, Badge } from '@chakra-ui/react';
 
 export interface Hotel {
