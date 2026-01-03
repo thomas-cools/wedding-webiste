@@ -164,7 +164,13 @@
       "thankYouUpdated": "Your response has been updated. Thank you."
     }
   },
+  "quickLinks": {
+    "label": "Explore",
+    "title": "Quick Links",
+    "stay": "STAY"
+  },
   "timeline": {
+    "label": "The Schedule",
     "title": "Wedding Timeline",
     "intro": "As we step into this new chapter, it would mean so much to have you by our side on our special day. On this page, you'll discover everything you need: the schedule, venue details, <strong>RSVP</strong> information, and a few extra touches.",
     "introClosing": "Here's to love, joy, and the beginning of our forever!",

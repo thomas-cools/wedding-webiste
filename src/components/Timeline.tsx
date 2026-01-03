@@ -72,14 +72,21 @@ export default function Timeline() {
 
           {/* Section Header */}
           <VStack spacing={4} textAlign="center">
+            <Text 
+              fontSize="xs" 
+              textTransform="uppercase" 
+              letterSpacing="0.35em" 
+              color="primary.soft"
+              fontWeight="500"
+            >
+              {t('timeline.label')}
+            </Text>
             <Heading
               as="h2"
               fontFamily="heading"
-              fontSize={["2xl", "3xl", "4xl"]}
+              fontSize={["3xl", "4xl"]}
               fontWeight="400"
-              textTransform="uppercase"
-              letterSpacing="0.15em"
-              color="primary.deep"
+              color="neutral.dark"
             >
               {t('timeline.title')}
             </Heading>
