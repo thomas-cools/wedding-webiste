@@ -268,70 +268,66 @@ function TimelineItem({ year, photo, alt, caption, storyText, isLeft, index, onI
 
       {/* Mobile: Stacked layout */}
       <VStack display={['flex', 'flex', 'none']} spacing={4} align="center" px={4}>
-        <ScrollReveal>
-          <Box textAlign="center">
-            <Box
-              borderRadius="lg"
-              overflow="hidden"
-              boxShadow="xl"
-              mb={3}
-              display="inline-block"
-              cursor="pointer"
-              transition="transform 0.3s ease, box-shadow 0.3s ease"
-              _hover={{ transform: 'scale(1.02)', boxShadow: '2xl' }}
-              onClick={() => onImageClick(index)}
-              position="relative"
-            >
-              <Image
-                src={photo}
-                alt={alt}
-                w="220px"
-                h="auto"
-                objectFit="cover"
-              />
-              {/* TC Monogram on the last photo - Mobile */}
-              {isLast && (
-                <Box
-                  position="absolute"
-                  bottom="-30px"
-                  right="-30px"
-                  w="70px"
-                  h="70px"
-                  zIndex={3}
-                  pointerEvents="none"
-                >
-                  <Image
-                    src={tcLogo}
-                    alt=""
-                    w="100%"
-                    h="100%"
-                    objectFit="contain"
-                    opacity={0.6}
-                  />
-                </Box>
-              )}
-            </Box>
-            <Text
-              fontSize="sm"
-              fontStyle="italic"
-              color="neutral.soft"
-              mt={2}
-            >
-              {caption}
-            </Text>
-          </Box>
-        </ScrollReveal>
-        <ScrollReveal>
-          <Text
-            fontSize="md"
-            lineHeight="1.8"
-            color="neutral.dark"
-            textAlign="center"
-            maxW="320px"
+        <Box textAlign="center">
+          <Box
+            borderRadius="lg"
+            overflow="hidden"
+            boxShadow="xl"
+            mb={3}
+            display="inline-block"
+            cursor="pointer"
+            transition="transform 0.3s ease, box-shadow 0.3s ease"
+            _hover={{ transform: 'scale(1.02)', boxShadow: '2xl' }}
+            onClick={() => onImageClick(index)}
+            position="relative"
           >
-            {storyText}
+            <Image
+              src={photo}
+              alt={alt}
+              w="220px"
+              h="auto"
+              objectFit="cover"
+            />
+            {/* TC Monogram on the last photo - Mobile */}
+            {isLast && (
+              <Box
+                position="absolute"
+                bottom="-30px"
+                right="-30px"
+                w="70px"
+                h="70px"
+                zIndex={3}
+                pointerEvents="none"
+              >
+                <Image
+                  src={tcLogo}
+                  alt=""
+                  w="100%"
+                  h="100%"
+                  objectFit="contain"
+                  opacity={0.6}
+                />
+              </Box>
+            )}
+          </Box>
+          <Text
+            fontSize="sm"
+            fontStyle="italic"
+            color="neutral.soft"
+            mt={2}
+          >
+            {caption}
           </Text>
-        </ScrollReveal>
+        </Box>
+        <Text
+          fontSize="md"
+          lineHeight="1.8"
+          color="neutral.dark"
+          textAlign="center"
+          maxW="320px"
+        >
+          {storyText}
+        </Text>
       </VStack>
     </Box>
   )
