@@ -267,8 +267,8 @@ function TimelineItem({ year, photo, alt, caption, storyText, isLeft, index, onI
       </Flex>
 
       {/* Mobile: Stacked layout */}
-      <VStack display={['flex', 'flex', 'none']} spacing={4} align="center" px={4}>
-        <Box textAlign="center">
+      <Box display={['block', 'block', 'none']} px={4} mb={12}>
+        <Box textAlign="center" mb={4}>
           <Box
             borderRadius="lg"
             overflow="hidden"
@@ -287,6 +287,7 @@ function TimelineItem({ year, photo, alt, caption, storyText, isLeft, index, onI
               w="220px"
               h="auto"
               objectFit="cover"
+              loading="eager"
             />
             {/* TC Monogram on the last photo - Mobile */}
             {isLast && (
@@ -325,10 +326,11 @@ function TimelineItem({ year, photo, alt, caption, storyText, isLeft, index, onI
           color="neutral.dark"
           textAlign="center"
           maxW="320px"
+          mx="auto"
         >
           {storyText}
         </Text>
-      </VStack>
+      </Box>
     </Box>
   )
 }
