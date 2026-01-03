@@ -68,7 +68,7 @@ function TimelineItem({ year, photo, alt, caption, storyText, isLeft, index, onI
         transform="translateX(-50%)"
         top="0"
         zIndex={3}
-        display={['none', 'none', 'flex']}
+        display={['none', 'none', 'none', 'flex']}
         flexDirection="column"
         alignItems="center"
       >
@@ -89,7 +89,7 @@ function TimelineItem({ year, photo, alt, caption, storyText, isLeft, index, onI
 
       {/* Mobile: Year badge above content */}
       <Box
-        display={['flex', 'flex', 'none']}
+        display={['flex', 'flex', 'flex', 'none']}
         justifyContent="center"
         mb={4}
       >
@@ -110,7 +110,7 @@ function TimelineItem({ year, photo, alt, caption, storyText, isLeft, index, onI
 
       {/* Desktop: Two-column layout */}
       <Flex
-        display={['none', 'none', 'flex']}
+        display={['none', 'none', 'none', 'flex']}
         direction="row"
         align="flex-start"
         justify="center"
@@ -120,67 +120,64 @@ function TimelineItem({ year, photo, alt, caption, storyText, isLeft, index, onI
         {/* Left column */}
         <Box flex="1" display="flex" justifyContent="flex-end" pr={10}>
           {isLeft ? (
-            <ScrollReveal variants={fadeInLeft}>
-              <Box maxW="300px" textAlign="right">
-                <Box
-                  borderRadius="lg"
-                  overflow="hidden"
-                  boxShadow="xl"
-                  mb={3}
-                  display="inline-block"
-                  cursor="pointer"
-                  transition="transform 0.3s ease, box-shadow 0.3s ease"
-                  _hover={{ transform: 'scale(1.02)', boxShadow: '2xl' }}
-                  onClick={() => onImageClick(index)}
-                  position="relative"
-                >
-                  <Image
-                    src={photo}
-                    alt={alt}
-                    w="260px"
-                    h="auto"
-                    objectFit="cover"
-                  />
-                  {/* TC Monogram on the last photo */}
-                  {isLast && (
-                    <Box
-                      position="absolute"
-                      bottom="-40px"
-                      right="-40px"
-                      w="100px"
-                      h="100px"
-                      zIndex={3}
-                      pointerEvents="none"
-                    >
-                      <Image
-                        src={tcLogo}
-                        alt=""
-                        w="100%"
-                        h="100%"
-                        objectFit="contain"
-                        opacity={0.6}
-                      />
-                    </Box>
-                  )}
-                </Box>
-                <Text
-                  fontSize="sm"
-                  fontStyle="italic"
-                  color="neutral.soft"
-                  mt={2}
-                >
-                  {caption}
-                </Text>
+            <Box maxW="300px" textAlign="right">
+              <Box
+                borderRadius="lg"
+                overflow="hidden"
+                boxShadow="xl"
+                mb={3}
+                display="inline-block"
+                cursor="pointer"
+                transition="transform 0.3s ease, box-shadow 0.3s ease"
+                _hover={{ transform: 'scale(1.02)', boxShadow: '2xl' }}
+                onClick={() => onImageClick(index)}
+                position="relative"
+              >
+                <Image
+                  src={photo}
+                  alt={alt}
+                  w="260px"
+                  h="auto"
+                  objectFit="cover"
+                  loading="eager"
+                />
+                {/* TC Monogram on the last photo */}
+                {isLast && (
+                  <Box
+                    position="absolute"
+                    bottom="-40px"
+                    right="-40px"
+                    w="100px"
+                    h="100px"
+                    zIndex={3}
+                    pointerEvents="none"
+                  >
+                    <Image
+                      src={tcLogo}
+                      alt=""
+                      w="100%"
+                      h="100%"
+                      objectFit="contain"
+                      opacity={0.6}
+                    />
+                  </Box>
+                )}
               </Box>
-            </ScrollReveal>
+              <Text
+                fontSize="sm"
+                fontStyle="italic"
+                color="neutral.soft"
+                mt={2}
+              >
+                {caption}
+              </Text>
+            </Box>
           ) : (
-            <ScrollReveal variants={fadeInLeft}>
-              <Box maxW="320px" textAlign="right" pt={4}>
-                <Text fontSize="md" lineHeight="1.9" color="neutral.dark">
-                  {storyText}
-                </Text>
-              </Box>
-            </ScrollReveal>
+            <Box maxW="320px" textAlign="right" pt={4}>
+              <Text fontSize="md" lineHeight="1.9" color="neutral.dark">
+                {storyText}
+              </Text>
+            </Box>
           )}
         </Box>
 
@@ -201,73 +198,70 @@ function TimelineItem({ year, photo, alt, caption, storyText, isLeft, index, onI
         {/* Right column */}
         <Box flex="1" display="flex" justifyContent="flex-start" pl={10}>
           {!isLeft ? (
-            <ScrollReveal variants={fadeInRight}>
-              <Box maxW="300px" textAlign="left">
-                <Box
-                  borderRadius="lg"
-                  overflow="hidden"
-                  boxShadow="xl"
-                  mb={3}
-                  display="inline-block"
-                  cursor="pointer"
-                  transition="transform 0.3s ease, box-shadow 0.3s ease"
-                  _hover={{ transform: 'scale(1.02)', boxShadow: '2xl' }}
-                  onClick={() => onImageClick(index)}
-                  position="relative"
-                >
-                  <Image
-                    src={photo}
-                    alt={alt}
-                    w="260px"
-                    h="auto"
-                    objectFit="cover"
-                  />
-                  {/* TC Monogram on the last photo */}
-                  {isLast && (
-                    <Box
-                      position="absolute"
-                      bottom="-40px"
-                      left="-40px"
-                      w="100px"
-                      h="100px"
-                      zIndex={3}
-                      pointerEvents="none"
-                    >
-                      <Image
-                        src={tcLogo}
-                        alt=""
-                        w="100%"
-                        h="100%"
-                        objectFit="contain"
-                        opacity={0.6}
-                      />
-                    </Box>
-                  )}
-                </Box>
-                <Text
-                  fontSize="sm"
-                  fontStyle="italic"
-                  color="neutral.soft"
-                  mt={2}
-                >
-                  {caption}
-                </Text>
+            <Box maxW="300px" textAlign="left">
+              <Box
+                borderRadius="lg"
+                overflow="hidden"
+                boxShadow="xl"
+                mb={3}
+                display="inline-block"
+                cursor="pointer"
+                transition="transform 0.3s ease, box-shadow 0.3s ease"
+                _hover={{ transform: 'scale(1.02)', boxShadow: '2xl' }}
+                onClick={() => onImageClick(index)}
+                position="relative"
+              >
+                <Image
+                  src={photo}
+                  alt={alt}
+                  w="260px"
+                  h="auto"
+                  objectFit="cover"
+                  loading="eager"
+                />
+                {/* TC Monogram on the last photo */}
+                {isLast && (
+                  <Box
+                    position="absolute"
+                    bottom="-40px"
+                    left="-40px"
+                    w="100px"
+                    h="100px"
+                    zIndex={3}
+                    pointerEvents="none"
+                  >
+                    <Image
+                      src={tcLogo}
+                      alt=""
+                      w="100%"
+                      h="100%"
+                      objectFit="contain"
+                      opacity={0.6}
+                    />
+                  </Box>
+                )}
               </Box>
-            </ScrollReveal>
+              <Text
+                fontSize="sm"
+                fontStyle="italic"
+                color="neutral.soft"
+                mt={2}
+              >
+                {caption}
+              </Text>
+            </Box>
           ) : (
-            <ScrollReveal variants={fadeInRight}>
-              <Box maxW="320px" textAlign="left" pt={4}>
-                <Text fontSize="md" lineHeight="1.9" color="neutral.dark">
-                  {storyText}
-                </Text>
-              </Box>
-            </ScrollReveal>
+            <Box maxW="320px" textAlign="left" pt={4}>
+              <Text fontSize="md" lineHeight="1.9" color="neutral.dark">
+                {storyText}
+              </Text>
+            </Box>
           )}
         </Box>
       </Flex>
 
       {/* Mobile: Stacked layout */}
-      <Box display={['block', 'block', 'none']} px={4} mb={12}>
+      <Box display={['block', 'block', 'block', 'none']} px={4} mb={12}>
         <Box textAlign="center" mb={4}>
           <Box
             borderRadius="lg"
@@ -489,7 +483,7 @@ export function PhotoGallery({
             w="3px"
             transform="translateX(-50%)"
             bgGradient="linear(to-b, transparent, primary.soft 5%, accent.blush 95%, transparent)"
-            display={['none', 'none', 'block']}
+            display={['none', 'none', 'none', 'block']}
             zIndex={0}
             opacity={0.4}
           />
