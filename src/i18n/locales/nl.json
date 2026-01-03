@@ -4,7 +4,7 @@
     "ourStory": "Ons Verhaal",
     "details": "Details",
     "gallery": "Galerij",
-    "travel": "Accommodatie",
+    "travel": "Verblijf",
     "faq": "FAQ",
     "rsvp": "RSVP"
   },
@@ -164,7 +164,13 @@
       "thankYouUpdated": "Je antwoord is bijgewerkt. Bedankt."
     }
   },
+  "quickLinks": {
+    "label": "Verkennen",
+    "title": "Snelle Links",
+    "stay": "Verblijf"
+  },
   "timeline": {
+    "label": "Het Programma",
     "title": "Bruiloft Programma",
     "intro": "Nu we aan dit nieuwe hoofdstuk beginnen, zou het zoveel voor ons betekenen om jullie aan onze zijde te hebben op deze bijzondere dag. Op deze pagina vinden jullie alles wat jullie nodig hebben: het programma, locatiedetails, <strong>RSVP</strong> informatie, en nog een paar extra's.",
     "introClosing": "Op de liefde, de vreugde, en het begin van ons voor altijd!",
