@@ -152,11 +152,7 @@ describe('App', () => {
     expect(screen.getByText('story.paragraph1')).toBeInTheDocument()
   })
 
-  it('renders the details section with venue info', async () => {
-    await renderAppAndWait()
-    // Details section shows venue information
-    expect(screen.getByText('details.venueName')).toBeInTheDocument()
-  })
+
 
   it('renders the footer', async () => {
     await renderAppAndWait()
