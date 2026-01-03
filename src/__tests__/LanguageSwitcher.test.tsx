@@ -8,14 +8,16 @@ beforeAll(() => {
 
 // Mock react-i18next
 const mockChangeLanguage = jest.fn()
+let mockI18n = {
+  language: 'en',
+  resolvedLanguage: 'en',
+  changeLanguage: mockChangeLanguage,
+}
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
-    i18n: {
-      language: 'en',
-      changeLanguage: mockChangeLanguage,
-    },
+    i18n: mockI18n,
   }),
 }))
 
@@ -33,6 +35,8 @@ jest.mock('../i18n', () => ({
 describe('LanguageSwitcher Component', () => {
   beforeEach(() => {
     mockChangeLanguage.mockClear()
+    mockI18n.language = 'en'
+    mockI18n.resolvedLanguage = 'en'
   })
 
   it('renders the language switcher button', () => {
@@ -138,5 +142,18 @@ describe('LanguageSwitcher Component', () => {
     const button = screen.getByRole('button')
     const svg = button.querySelector('svg')
     expect(svg).toBeInTheDocument()
+  })
+
+  it('correctly handles regional locales using resolvedLanguage', () => {
+    // Simulate browser language as en-US, but resolved language as en
+    mockI18n.language = 'en-US'
+    mockI18n.resolvedLanguage = 'en'
+    
+    render(<LanguageSwitcher />)
+    
+    // Should show English flag/text
+    expect(screen.getByText('EN')).toBeInTheDocument()
+    const flags = screen.getAllByText('🇬🇧')
+    expect(flags.length).toBeGreaterThanOrEqual(1)
   })
 })

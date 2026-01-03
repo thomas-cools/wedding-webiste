@@ -27,6 +27,8 @@ i18n
       nl: { translation: nl },
     },
     fallbackLng: 'en',
+    supportedLngs: ['en', 'es', 'fr', 'nl'],
+    load: 'languageOnly',
     debug: false,
     interpolation: {
       escapeValue: false, // React already escapes values
