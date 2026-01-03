@@ -9,7 +9,8 @@ import {
   Tab, 
   TabPanel, 
   Heading, 
-  Text
+  Text,
+  useBreakpointValue
 } from '@chakra-ui/react';
 import { OnsiteTab } from './OnsiteTab';
 import { AirbnbTab } from './AirbnbTab';
@@ -22,6 +23,7 @@ interface AccommodationSectionProps {
 
 export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enabled }) => {
   const { t } = useTranslation();
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   if (!enabled) return null;
 
@@ -69,26 +71,28 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
         </VStack>
 
         {/* Accommodation Tabs */}
-        <Box w="full" maxW="900px" mx="auto">
-          <Tabs variant="soft-rounded" colorScheme="gray" isFitted>
+        <Box w="full" maxW="900px" mx="auto" px={[4, 6]}>
+          <Tabs variant="soft-rounded" colorScheme="gray" isFitted={!isMobile}>
             <TabList 
               bg="neutral.light" 
               p={2} 
-              borderRadius="full"
+              borderRadius={isMobile ? "2xl" : "full"}
               border="1px solid"
               borderColor="primary.soft"
               mb={8}
+              flexWrap={isMobile ? "wrap" : "nowrap"}
+              gap={isMobile ? 2 : 0}
             >
-              <Tab _selected={{ bg: 'neutral.dark', color: 'white' }}>
+              <Tab w={isMobile ? "calc(50% - 4px)" : "auto"} _selected={{ bg: 'neutral.dark', color: 'white' }}>
                 {t('travel.tabs.onsite')}
               </Tab>
-              <Tab _selected={{ bg: 'neutral.dark', color: 'white' }}>
+              <Tab w={isMobile ? "calc(50% - 4px)" : "auto"} _selected={{ bg: 'neutral.dark', color: 'white' }}>
                 {t('travel.tabs.airbnb')}
               </Tab>
-              <Tab _selected={{ bg: 'neutral.dark', color: 'white' }}>
+              <Tab w={isMobile ? "calc(50% - 4px)" : "auto"} _selected={{ bg: 'neutral.dark', color: 'white' }}>
                 {t('travel.tabs.booking')}
               </Tab>
-              <Tab _selected={{ bg: 'neutral.dark', color: 'white' }}>
+              <Tab w={isMobile ? "calc(50% - 4px)" : "auto"} _selected={{ bg: 'neutral.dark', color: 'white' }}>
                 {t('travel.tabs.hotels')}
               </Tab>
             </TabList>

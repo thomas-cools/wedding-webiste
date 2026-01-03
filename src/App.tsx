@@ -12,6 +12,8 @@ import {
   HStack,
   Divider,
   SimpleGrid,
+  Grid,
+  GridItem,
   IconButton,
   Drawer,
   DrawerOverlay,
@@ -165,80 +167,81 @@ function AppContent() {
         bg="#300F0C"
       >
         <Container maxW="container.xl" px={[4, 6, 8]}>
-          <Flex justify="center" align="center" position="relative">
+          <Grid templateColumns="1fr auto 1fr" alignItems="center" width="100%">
             {/* Left Navigation - Desktop */}
-            <HStack 
-              as="nav" 
-              aria-label={t('accessibility.mainNavigation', 'Main navigation')}
-              spacing={10} 
-              display={["none", "none", "flex"]}
-              position="absolute"
-              left={0}
-            >
-              {navLinks.slice(0, Math.ceil(navLinks.length / 2)).map((link) => 
-                link.isExternal ? (
-                  <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                    {link.label}
-                  </Button>
-                ) : (
-                  <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                    {link.label}
-                  </Button>
-                )
-              )}
-            </HStack>
+            <Box>
+              <HStack 
+                as="nav" 
+                aria-label={t('accessibility.mainNavigation', 'Main navigation')}
+                spacing={10} 
+                display={["none", "none", "flex"]}
+              >
+                {navLinks.slice(0, Math.ceil(navLinks.length / 2)).map((link) => 
+                  link.isExternal ? (
+                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                      {link.label}
+                    </Button>
+                  ) : (
+                    <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                      {link.label}
+                    </Button>
+                  )
+                )}
+              </HStack>
+            </Box>
             
             {/* Centered Logo */}
-            <ChakraImage 
-              src={weddingLogoSmall} 
-              srcSet={`${weddingLogoSmall} 60w, ${weddingLogoMedium} 100w, ${weddingLogo2x} 200w`}
-              sizes="(max-width: 480px) 40px, (max-width: 768px) 45px, 50px"
-              alt={t('header.initials')}
-              h={["40px", "45px", "50px"]}
-              w="auto"
-            />
-            
-            {/* Right Navigation - Desktop */}
-            <HStack 
-              spacing={10} 
-              display={["none", "none", "flex"]}
-              position="absolute"
-              right={0}
-              align="center"
-            >
-              {navLinks.slice(Math.ceil(navLinks.length / 2)).map((link) => 
-                link.isExternal ? (
-                  <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                    {link.label}
-                  </Button>
-                ) : (
-                  <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                    {link.label}
-                  </Button>
-                )
-              )}
-              <LanguageSwitcher />
-            </HStack>
-            
-            {/* Mobile Controls */}
-            <HStack 
-              spacing={2} 
-              display={["flex", "flex", "none"]}
-              position="absolute"
-              right={0}
-            >
-              <LanguageSwitcher />
-              <IconButton
-                aria-label="Open menu"
-                icon={<HamburgerIcon />}
-                variant="ghost"
-                onClick={onOpen}
-                size="sm"
-                color="#E3DFCE"
-                _hover={{ bg: 'whiteAlpha.200' }}
+            <Flex justify="center">
+              <ChakraImage 
+                src={weddingLogoSmall} 
+                srcSet={`${weddingLogoSmall} 60w, ${weddingLogoMedium} 100w, ${weddingLogo2x} 200w`}
+                sizes="(max-width: 480px) 40px, (max-width: 768px) 45px, 50px"
+                alt={t('header.initials')}
+                h={["40px", "45px", "50px"]}
+                w="auto"
               />
-            </HStack>
-          </Flex>
+            </Flex>
+            
+            {/* Right Navigation - Desktop & Mobile Controls */}
+            <Flex justify="flex-end" align="center">
+              {/* Desktop Right Nav */}
+              <HStack 
+                spacing={10} 
+                display={["none", "none", "flex"]}
+                align="center"
+              >
+                {navLinks.slice(Math.ceil(navLinks.length / 2)).map((link) => 
+                  link.isExternal ? (
+                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                      {link.label}
+                    </Button>
+                  ) : (
+                    <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                      {link.label}
+                    </Button>
+                  )
+                )}
+                <LanguageSwitcher />
+              </HStack>
+              
+              {/* Mobile Controls */}
+              <HStack 
+                spacing={2} 
+                display={["flex", "flex", "none"]}
+              >
+                <LanguageSwitcher />
+                <IconButton
+                  aria-label="Open menu"
+                  icon={<HamburgerIcon />}
+                  variant="ghost"
+                  onClick={onOpen}
+                  size="sm"
+                  color="#E3DFCE"
+                  _hover={{ bg: 'whiteAlpha.200' }}
+                />
+              </HStack>
+            </Flex>
+          </Grid>
         </Container>
       </Box>
 

@@ -66,7 +66,6 @@ export default function Footer({ variant = 'dark', sectionAboveBg, sectionAboveB
           left="0"
           h="34px"
           w="100%"
-          minW="1440px"
           objectFit="cover"
           objectPosition="left top"
         />
