@@ -330,28 +330,6 @@ describe('send-rsvp-confirmation handler', () => {
       expect(callBody.html).toContain('Thank you for your RSVP')
     })
 
-    it('uses French strings when locale is fr', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ id: 'msg_123' }),
-      })
-
-      const event = createEvent({
-        body: JSON.stringify({
-          firstName: 'Jean',
-          email: 'jean@example.com',
-          likelihood: 'definitely',
-          guests: [],
-          locale: 'fr',
-        }),
-      })
-      await handler(event, mockContext)
-
-      const callBody = JSON.parse(mockFetch.mock.calls[0][1].body)
-      expect(callBody.subject).toContain('Confirmation RSVP')
-      expect(callBody.html).toContain('Merci pour votre RSVP')
-    })
-
     it('uses Spanish strings when locale is es', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
@@ -619,18 +597,18 @@ describe('send-rsvp-confirmation handler', () => {
       const event = createEvent({
         queryStringParameters: { preview: '1' },
         body: JSON.stringify({
-          firstName: 'Jean',
-          email: 'jean@example.com',
+          firstName: 'Juan',
+          email: 'juan@example.com',
           likelihood: 'definitely',
           guests: [],
-          locale: 'fr-FR',
+          locale: 'es-ES',
         }),
       })
       const response = await mod.handler(event, mockContext)
 
       const body = JSON.parse(response!.body || '{}')
-      expect(body.localeRequested).toBe('fr-FR')
-      expect(body.localeNormalized).toBe('fr')
+      expect(body.localeRequested).toBe('es-ES')
+      expect(body.localeNormalized).toBe('es')
     })
   })
 

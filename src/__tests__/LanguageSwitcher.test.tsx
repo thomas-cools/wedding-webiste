@@ -26,7 +26,6 @@ jest.mock('../i18n', () => ({
   languages: [
     { code: 'en', name: 'English', flag: '🇬🇧' },
     { code: 'es', name: 'Español', flag: '🇲🇽' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
     { code: 'nl', name: 'Nederlands', flag: '🇧🇪' },
   ],
   LanguageCode: {},
@@ -69,7 +68,6 @@ describe('LanguageSwitcher Component', () => {
     // Menu items should appear
     expect(await screen.findByText('English')).toBeInTheDocument()
     expect(screen.getByText('Español')).toBeInTheDocument()
-    expect(screen.getByText('Français')).toBeInTheDocument()
     expect(screen.getByText('Nederlands')).toBeInTheDocument()
   })
 
@@ -85,7 +83,6 @@ describe('LanguageSwitcher Component', () => {
     // Check all flags are present (there will be duplicates - one in button, one in menu)
     expect(screen.getAllByText('🇬🇧').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('🇲🇽')).toBeInTheDocument()
-    expect(screen.getByText('🇫🇷')).toBeInTheDocument()
     expect(screen.getByText('🇧🇪')).toBeInTheDocument()
   })
 
@@ -101,18 +98,6 @@ describe('LanguageSwitcher Component', () => {
     expect(mockChangeLanguage).toHaveBeenCalledWith('es')
   })
 
-  it('can switch to French', async () => {
-    render(<LanguageSwitcher />)
-    
-    const button = screen.getByRole('button')
-    fireEvent.click(button)
-    
-    const frenchOption = await screen.findByText('Français')
-    fireEvent.click(frenchOption)
-    
-    expect(mockChangeLanguage).toHaveBeenCalledWith('fr')
-  })
-
   it('can switch to Dutch', async () => {
     render(<LanguageSwitcher />)
     
@@ -125,14 +110,14 @@ describe('LanguageSwitcher Component', () => {
     expect(mockChangeLanguage).toHaveBeenCalledWith('nl')
   })
 
-  it('shows all 4 language options', async () => {
+  it('shows all 3 language options', async () => {
     render(<LanguageSwitcher />)
     
     const button = screen.getByRole('button')
     fireEvent.click(button)
     
     const menuItems = await screen.findAllByRole('menuitem')
-    expect(menuItems).toHaveLength(4)
+    expect(menuItems).toHaveLength(3)
   })
 
   it('has dropdown icon', () => {

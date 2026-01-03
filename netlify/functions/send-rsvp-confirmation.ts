@@ -29,7 +29,7 @@ interface RsvpData {
   locale?: string
 }
 
-type EmailLocale = 'en' | 'fr' | 'es' | 'nl'
+type EmailLocale = 'en' | 'es' | 'nl'
 
 type EmailStrings = {
   subjectPrefix: string
@@ -125,59 +125,7 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
       '': 'Not specified',
     },
   },
-  fr: {
-    subjectPrefix: 'Confirmation RSVP',
-    title: 'Confirmation RSVP',
-    thanks: (firstName) => `Merci pour votre RSVP, ${firstName} !`,
-    intro: "Nous avons bien reçu votre réponse et souhaitons vous en envoyer une copie pour vos dossiers.",
-    yourResponse: 'Votre Réponse',
-    contactDetails: 'Coordonnées',
-    email: 'Email',
-    mailingAddress: 'Adresse postale',
-    events: 'Événements',
-    fridayWelcomeDinner: 'Dîner de bienvenue (vendredi)',
-    saturdayCeremonyReception: 'Cérémonie & réception (samedi)',
-    sundayBrunch: 'Brunch (dimanche)',
-    accommodation: 'Hébergement',
-    travel: 'Voyage',
-    yourParty: 'Votre Groupe',
-    noAdditionalGuests: "Pas d'invités supplémentaires",
-    dietaryLabel: 'Régime',
-    dietaryRequirements: 'Restrictions alimentaires',
-    songRequest: 'Suggestion musicale',
-    franceTips: 'Conseils France',
-    additionalNotes: 'Notes supplémentaires',
-    notSpecified: 'Non précisé',
-    yes: 'Oui',
-    no: 'Non',
-    updateNote: "Si vous devez modifier votre réponse, retournez simplement sur notre site et renvoyez le formulaire avec la même adresse email.",
-    questions: 'Des questions ? Contactez-nous à',
-    withLove: 'Avec amour',
-    likelihood: {
-      definitely: 'Nous serons là avec certitude ! 🎉',
-      highly_likely: 'Nous viendrons très probablement',
-      maybe: "Nous ne sommes pas encore sûrs",
-      no: "Malheureusement, nous ne pourrons pas venir",
-    },
-    eventAnswer: {
-      yes: '✓ Présent',
-      no: '✗ Absent',
-      arriving_late: '⏰ En retard',
-      '': '— Non précisé',
-    },
-    accommodationValue: {
-      venue: 'Loger au château',
-      own: 'Organiser son hébergement',
-      recommend: 'Souhaite des recommandations',
-      '': 'Non précisé',
-    },
-    travelValue: {
-      rent_car: 'Location de voiture',
-      need_shuttle: 'Souhaite une navette',
-      no_plan: 'Pas encore de plan',
-      '': 'Non précisé',
-    },
-  },
+
   es: {
     subjectPrefix: 'Confirmación de RSVP',
     title: 'Confirmación de RSVP',
