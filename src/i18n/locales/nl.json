@@ -131,8 +131,8 @@
       "hasPlusOne": "Ik breng een plus one mee",
       "plusOneNamePlaceholder": "Volledige naam van je plus one",
       "plusOneDietaryPlaceholder": "Dieet van je plus one (optioneel)",
-      "childrenSection": "Kinderen",
-      "hasChildren": "Ik breng kinderen mee",
+      "childrenSection": "Kinderen (3 jaar en jonger)",
+      "hasChildren": "Ik breng kinderen mee (3 jaar en jonger)",
       "childName": "Naam kind {{number}}",
       "childAgePlaceholder": "Leeftijd",
       "childDietaryPlaceholder": "Dieetwensen (optioneel)",
@@ -374,7 +374,7 @@
       },
       {
         "question": "Zijn kinderen welkom?",
-        "answer": "Ja, kinderen zijn welkom bij onze viering! Vermeld eventuele kinderen die meekomen op je RSVP-formulier zodat we de juiste voorzieningen kunnen treffen."
+        "answer": "Ja, kinderen van 3 jaar en jonger zijn welkom bij onze viering! Vermeld eventuele kinderen die meekomen op je RSVP-formulier zodat we de juiste voorzieningen kunnen treffen."
       },
       {
         "question": "Wat zijn de vervoersopties?",

@@ -131,8 +131,8 @@
       "hasPlusOne": "I am bringing a plus one",
       "plusOneNamePlaceholder": "Plus one full name",
       "plusOneDietaryPlaceholder": "Plus one dietary (optional)",
-      "childrenSection": "Children",
-      "hasChildren": "I am bringing children",
+      "childrenSection": "Children (3 and under)",
+      "hasChildren": "I am bringing children (3 and under)",
       "childName": "Child {{number}} name",
       "childAgePlaceholder": "Age",
       "childDietaryPlaceholder": "Dietary restrictions (optional)",
@@ -374,7 +374,7 @@
       },
       {
         "question": "Are children welcome?",
-        "answer": "Yes, children are welcome at our celebration! Please indicate any children attending on your RSVP form so we can make appropriate arrangements."
+        "answer": "Yes, children aged 3 and under are welcome at our celebration! Please indicate any children attending on your RSVP form so we can make appropriate arrangements."
       },
       {
         "question": "What are the transportation options?",

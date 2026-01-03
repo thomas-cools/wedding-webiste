@@ -130,8 +130,8 @@
       "hasPlusOne": "Llevaré un acompañante",
       "plusOneNamePlaceholder": "Nombre completo del acompañante",
       "plusOneDietaryPlaceholder": "Dieta del acompañante (opcional)",
-      "childrenSection": "Niños",
-      "hasChildren": "Llevaré niños",
+      "childrenSection": "Niños (3 años o menos)",
+      "hasChildren": "Llevaré niños (3 años o menos)",
       "childName": "Nombre del niño {{number}}",
       "childAgePlaceholder": "Edad",
       "childDietaryPlaceholder": "Restricciones alimentarias (opcional)",
@@ -373,7 +373,7 @@
       },
       {
         "question": "¿Los niños son bienvenidos?",
-        "answer": "¡Sí, los niños son bienvenidos en nuestra celebración! Por favor indica cualquier niño que asistirá en tu formulario de confirmación para que podamos hacer los arreglos apropiados."
+        "answer": "¡Sí, los niños de 3 años o menos son bienvenidos en nuestra celebración! Por favor indica cualquier niño que asistirá en tu formulario de confirmación para que podamos hacer los arreglos apropiados."
       },
       {
         "question": "¿Cuáles son las opciones de transporte?",
