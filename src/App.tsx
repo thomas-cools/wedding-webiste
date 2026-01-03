@@ -340,31 +340,6 @@ function AppContent() {
           </ErrorBoundary>
         )}
 
-        {/* Details Section - Venue Info */}
-        <Box id="details" py={[12, 16]} bg="neutral.light" scrollMarginTop={["100px", "130px", "150px"]}>
-          <Container maxW="container.lg">
-            <VStack spacing={8}>
-              {/* Venue Info */}
-              <ScrollReveal>
-                <VStack spacing={2} textAlign="center">
-                  <Text fontSize="sm" textTransform="uppercase" letterSpacing="0.2em" color="neutral.dark">
-                    {t('details.venueName')}
-                  </Text>
-                  <ChakraLink 
-                    href={weddingConfig.venue.googleMapsUrl} 
-                    isExternal
-                    _hover={{ color: 'primary.deep' }}
-                  >
-                    <Text fontSize="sm" color="neutral.muted" fontStyle="italic" _hover={{ textDecoration: 'underline' }}>
-                      {t('details.venueAddress')} ↗
-                    </Text>
-                  </ChakraLink>
-                </VStack>
-              </ScrollReveal>
-            </VStack>
-          </Container>
-        </Box>
-
         {/* Quick Links Section */}
         <Suspense fallback={null}>
           <QuickLinks />
