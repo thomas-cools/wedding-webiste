@@ -43,10 +43,14 @@ function AccommodationsPageContent() {
         backgroundRepeat="no-repeat"
         backgroundPosition="right center"
         backgroundSize="cover"
-        opacity={0.2}
         pointerEvents="none"
         zIndex={0}
         transform="scaleX(-1)"
+        sx={{
+          opacity: 0.4,
+          mixBlendMode: 'overlay',
+          filter: 'drop-shadow(1px 1px 0px rgba(255,255,255,0.5)) drop-shadow(-1px -1px 0px rgba(0,0,0,0.2))',
+        }}
       />
       
       {/* Minimal Header */}

@@ -116,9 +116,13 @@ function RsvpPageContent() {
           backgroundRepeat="no-repeat"
           backgroundPosition="left top"
           backgroundSize="cover"
-          opacity={0.2}
           pointerEvents="none"
           zIndex={0}
+          sx={{
+            opacity: 0.4,
+            mixBlendMode: 'overlay',
+            filter: 'drop-shadow(1px 1px 0px rgba(255,255,255,0.5)) drop-shadow(-1px -1px 0px rgba(0,0,0,0.2))',
+          }}
         />
         <Container maxW="container.lg" position="relative" zIndex={1}>
           <ErrorBoundary sectionName="RSVP form">
