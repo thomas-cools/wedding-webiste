@@ -55,7 +55,9 @@ export default function StorySection() {
         zIndex={10}
         pointerEvents="none"
         sx={{
-          opacity: 0.15,
+          opacity: 0.4,
+          mixBlendMode: 'overlay',
+          filter: 'drop-shadow(1px 1px 0px rgba(255,255,255,0.5)) drop-shadow(-1px -1px 0px rgba(0,0,0,0.2))',
         }}
       >
         <Image
