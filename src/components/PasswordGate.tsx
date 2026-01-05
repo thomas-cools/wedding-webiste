@@ -177,8 +177,8 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
       position="relative"
     >
       {/* Language Switcher in corner */}
-      <Box position="absolute" top={4} right={4}>
-        <LanguageSwitcher />
+      <Box position="absolute" top={4} right={4} zIndex={10}>
+        <LanguageSwitcher color="neutral.dark" hoverBg="blackAlpha.50" activeBg="blackAlpha.100" />
       </Box>
 
       {/* Decorative elements */}

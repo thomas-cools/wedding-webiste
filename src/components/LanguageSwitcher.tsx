@@ -11,7 +11,17 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { languages, LanguageCode } from '../i18n'
 
-export default function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+  color?: string
+  hoverBg?: string
+  activeBg?: string
+}
+
+export default function LanguageSwitcher({ 
+  color = 'white', 
+  hoverBg = 'whiteAlpha.200',
+  activeBg = 'whiteAlpha.300'
+}: LanguageSwitcherProps) {
   const { i18n } = useTranslation()
   
   const currentLanguage = languages.find(lang => lang.code === i18n.resolvedLanguage) || languages.find(lang => lang.code === i18n.language) || languages[0]
@@ -26,15 +36,15 @@ export default function LanguageSwitcher() {
         as={Button}
         variant="ghost"
         size="sm"
-        rightIcon={<ChevronDownIcon color="white" />}
+        rightIcon={<ChevronDownIcon color={color} />}
         fontWeight="400"
-        color="white"
-        _hover={{ color: 'white', bg: 'whiteAlpha.200' }}
-        _active={{ bg: 'whiteAlpha.300' }}
+        color={color}
+        _hover={{ color: color, bg: hoverBg }}
+        _active={{ bg: activeBg }}
       >
         <HStack spacing={2}>
           <Text fontSize="lg">{currentLanguage.flag}</Text>
-          <Text display={['none', 'inline']} color="white">{currentLanguage.code.toUpperCase()}</Text>
+          <Text display={['none', 'inline']} color={color}>{currentLanguage.code.toUpperCase()}</Text>
         </HStack>
       </MenuButton>
       <MenuList 
