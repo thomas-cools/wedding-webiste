@@ -67,7 +67,7 @@ type EmailStrings = {
 
 function normalizeLocale(locale?: string): EmailLocale {
   const base = (locale || 'en').toLowerCase().split('-')[0]
-  if (base === 'fr' || base === 'es' || base === 'nl') return base
+  if (base === 'es' || base === 'nl') return base
   return 'en'
 }
 
