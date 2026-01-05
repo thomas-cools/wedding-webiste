@@ -6,8 +6,8 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
-        'travel.label': 'Travel & Stay',
-        'travel.title': 'Accommodation',
+        'travel.label': 'Vallesvilles & Toulouse',
+        'travel.title': 'Travel & Stay',
         'travel.subtitle': 'Vallesvilles is a rural village...',
         'travel.transportNote': 'If you are not providing your own transportation...',
         'travel.tabs.onsite': 'On-Site',
@@ -66,25 +66,25 @@ describe('AccommodationSection', () => {
     it('renders nothing when enabled is false', () => {
       render(<AccommodationSection enabled={false} />)
       // Component returns null, but Chakra adds environment span
-      expect(screen.queryByText('Accommodation')).not.toBeInTheDocument()
+      expect(screen.queryByText('Travel & Stay')).not.toBeInTheDocument()
       expect(screen.queryByRole('tablist')).not.toBeInTheDocument()
     })
 
     it('renders content when enabled is true', () => {
       render(<AccommodationSection enabled={true} />)
-      expect(screen.getByText('Accommodation')).toBeInTheDocument()
+      expect(screen.getByText('Travel & Stay')).toBeInTheDocument()
     })
   })
 
   describe('section header', () => {
     it('renders the section label', () => {
       render(<AccommodationSection enabled={true} />)
-      expect(screen.getByText('Travel & Stay')).toBeInTheDocument()
+      expect(screen.getByText('Vallesvilles & Toulouse')).toBeInTheDocument()
     })
 
     it('renders the section title', () => {
       render(<AccommodationSection enabled={true} />)
-      expect(screen.getByRole('heading', { level: 2, name: 'Accommodation' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { level: 2, name: 'Travel & Stay' })).toBeInTheDocument()
     })
 
     it('renders the transport note', () => {
@@ -147,7 +147,7 @@ describe('AccommodationSection', () => {
       render(<AccommodationSection enabled={true} />)
       
       const h2 = screen.getByRole('heading', { level: 2 })
-      expect(h2).toHaveTextContent('Accommodation')
+      expect(h2).toHaveTextContent('Travel & Stay')
     })
 
     it('has correct section id for navigation', () => {
