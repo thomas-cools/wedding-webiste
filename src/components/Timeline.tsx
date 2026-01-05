@@ -22,6 +22,7 @@ interface WeddingEvent {
   title: string
   dressCode: string
   icon: string
+  hash: string
 }
 
 export default function Timeline() {
@@ -34,18 +35,21 @@ export default function Timeline() {
       title: t('timeline.events.welcome.title'),
       dressCode: t('timeline.events.welcome.dressCode'),
       icon: CheersIcon,
+      hash: '#dress-code-welcome',
     },
     {
       date: t('timeline.events.wedding.date'),
       title: t('timeline.events.wedding.title'),
       dressCode: t('timeline.events.wedding.dressCode'),
       icon: WedCakeIcon,
+      hash: '#dress-code-wedding',
     },
     {
       date: t('timeline.events.brunch.date'),
       title: t('timeline.events.brunch.title'),
       dressCode: t('timeline.events.brunch.dressCode'),
       icon: PooldayIcon,
+      hash: '#dress-code-brunch',
     },
   ]
 
@@ -207,7 +211,7 @@ function EventCard({ event }: EventCardProps) {
       {/* Dress Code */}
       <Link 
         as={RouterLink} 
-        to="/faq#dress-code"
+        to={`/faq${event.hash}`}
         _hover={{ textDecoration: 'none' }}
       >
         <Text

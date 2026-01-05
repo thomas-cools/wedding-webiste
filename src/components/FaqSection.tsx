@@ -29,6 +29,7 @@ interface DressCodeEvent {
   day: string
   code: string
   description: string
+  id: string
 }
 
 // Custom component for rendering dress code with elegant styling
@@ -41,18 +42,21 @@ function DressCodeAnswer() {
       day: t('faq.dressCode.welcomeDinner.day', 'Tuesday Evening'),
       code: t('faq.dressCode.welcomeDinner.code', 'Cocktail Attire'),
       description: t('faq.dressCode.welcomeDinner.description', 'Think elegant but not overly formal. For women, a cocktail dress, jumpsuit, or dressy separates work beautifully. For men, a suit or blazer paired with dress pants. Feel free to add a pop of color!'),
+      id: 'dress-code-welcome',
     },
     {
       title: t('faq.dressCode.wedding.title', 'The Wedding'),
       day: t('faq.dressCode.wedding.day', 'Wednesday'),
       code: t('faq.dressCode.wedding.code', 'Formal Attire'),
       description: t('faq.dressCode.wedding.description', 'This is our most elegant celebration. For women, floor-length gowns, formal midi dresses, or elegant cocktail dresses are perfect. For men, a dark suit or tuxedo. Think black-tie optional.'),
+      id: 'dress-code-wedding',
     },
     {
       title: t('faq.dressCode.brunch.title', 'Farewell Brunch'),
       day: t('faq.dressCode.brunch.day', 'Thursday Morning'),
       code: t('faq.dressCode.brunch.code', 'Smart Casual'),
       description: t('faq.dressCode.brunch.description', 'Relaxed but polished. Sundresses, linen separates, chinos with a nice shirt, or a casual blazer all work well. Comfortable and chic!'),
+      id: 'dress-code-brunch',
     },
   ]
 
@@ -62,12 +66,14 @@ function DressCodeAnswer() {
         {events.map((event, index) => (
           <Box
             key={index}
+            id={event.id}
             bg="neutral.light"
             borderRadius="lg"
             p={5}
             position="relative"
             borderTop="3px solid"
             borderColor="primary.soft"
+            scrollMarginTop="120px"
           >
             <VStack align="start" spacing={3}>
               <Box>
@@ -137,19 +143,30 @@ export function FaqSection() {
   const faqItems: FaqItem[] = t('faq.items', { returnObjects: true }) as FaqItem[]
 
   const dressCodeIndex = faqItems.findIndex(item => isDressCodeQuestion(item.question))
-  const defaultIndices = hash === '#dress-code' && dressCodeIndex !== -1 ? [dressCodeIndex] : []
+  
+  // Check if hash matches any dress code related ID
+  const isDressCodeHash = hash === '#dress-code' || 
+                         hash === '#dress-code-welcome' || 
+                         hash === '#dress-code-wedding' || 
+                         hash === '#dress-code-brunch'
+
+  const defaultIndices = isDressCodeHash && dressCodeIndex !== -1 ? [dressCodeIndex] : []
 
   useEffect(() => {
-    if (hash === '#dress-code') {
+    if (isDressCodeHash) {
       // Small timeout to allow rendering
       setTimeout(() => {
-        const element = document.getElementById('dress-code')
+        // If specific event hash, scroll to that event card
+        // Otherwise scroll to the main accordion item
+        const targetId = hash === '#dress-code' ? 'dress-code' : hash.substring(1)
+        const element = document.getElementById(targetId)
+        
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
       }, 500)
     }
-  }, [hash])
+  }, [hash, isDressCodeHash])
 
   return (
     <Box py={[16, 20, 24]} bg="neutral.light">
