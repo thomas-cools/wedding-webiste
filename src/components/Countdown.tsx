@@ -100,7 +100,7 @@ export default function Countdown() {
   }, [])
 
   return (
-    <Box py={[16, 20]} bg="neutral.light" position="relative" overflow="hidden">
+    <Box py={[16, 20]} bg="neutral.light" position="relative">
       {/* Belgium flower decoration - lower left */}
       <Box
         position="absolute"
@@ -108,7 +108,7 @@ export default function Countdown() {
         left={["-80px", "-60px", "-40px"]}
         w={["300px", "400px", "500px"]}
         h={["300px", "400px", "500px"]}
-        zIndex={0}
+        zIndex={10}
         pointerEvents="none"
         sx={{
           opacity: 0.4,
