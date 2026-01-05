@@ -69,7 +69,7 @@ export default function StorySection() {
         />
       </Box>
 
-      <Container maxW="container.lg" position="relative" zIndex={1}>
+      <Container maxW="container.xl" position="relative" zIndex={1}>
         <VStack spacing={12}>
           {/* Section Header */}
           <ScrollReveal>
@@ -99,8 +99,8 @@ export default function StorySection() {
           <Flex 
             direction={["column", "column", "row"]} 
             gap={[8, 10, 12]} 
-            align="flex-start"
-            maxW="900px"
+            align="center"
+            maxW="1200px"
             position="relative"
           >
             {/* Left side - Rectangular photo with monogram overlay */}
@@ -144,7 +144,7 @@ export default function StorySection() {
 
             {/* Right side - Text content */}
             <ScrollReveal variants={fadeInRight} flex={1}>
-              <VStack align="center" spacing={5} textAlign="center">
+              <VStack align="start" spacing={5} textAlign="left" maxW="700px" mx="auto">
                 <Text fontSize={["md", "lg"]} lineHeight="1.9" color="neutral.dark">
                   {t('story.paragraph1')}
                 </Text>
@@ -153,6 +153,9 @@ export default function StorySection() {
                 </Text>
               </VStack>
             </ScrollReveal>
+
+            {/* Spacer to balance the image and center the text on desktop */}
+            <Box w="200px" display={["none", "none", "block"]} aria-hidden="true" />
           </Flex>
         </VStack>
       </Container>
