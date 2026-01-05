@@ -95,7 +95,7 @@ export function QuickLinks() {
   ]
 
   return (
-    <Box as="section" id="quick-links" py={[16, 20, 28]} bg="white">
+    <Box as="section" id="quick-links" py={[16, 20, 28]} bg="#F6F1EB">
       <Container maxW="container.xl" px={[4, 6, 8]}>
         <VStack spacing={[12, 16, 20]}>
           {/* Section Header */}

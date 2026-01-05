@@ -48,7 +48,7 @@ export default function Timeline() {
   ]
 
   return (
-    <Box as="section" id="timeline" py={[16, 20, 28]} bg="white" position="relative" zIndex={0}>
+    <Box as="section" id="timeline" py={[16, 20, 28]} bg="#F6F1EB" position="relative" zIndex={0}>
       <Container maxW="container.xl" px={[4, 6, 8]}>
         <VStack spacing={[12, 16, 20]}>
           {/* Intro Text */}
