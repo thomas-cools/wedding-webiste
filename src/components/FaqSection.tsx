@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 import {
   Box,
   Container,
@@ -13,6 +13,7 @@ import {
   AccordionPanel,
   AccordionIcon,
   SimpleGrid,
+  Link,
 } from '@chakra-ui/react'
 import { ScrollReveal, StaggerContainer, StaggerItem } from './animations'
 
@@ -246,7 +247,19 @@ export function FaqSection() {
                 fontStyle="italic"
                 lineHeight="1.8"
               >
-                {t('faq.contactNote')}
+                <Trans
+                  i18nKey="faq.contactNote"
+                  components={{
+                    emailLink: (
+                      <Link
+                        href="mailto:carolinaandthomaswedding@gmail.com"
+                        color="primary.deep"
+                        textDecoration="underline"
+                        _hover={{ color: 'primary.main' }}
+                      />
+                    )
+                  }}
+                />
               </Text>
             </Box>
           </ScrollReveal>
