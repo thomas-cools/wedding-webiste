@@ -200,7 +200,7 @@ function GalleryPageContent() {
 
             {/* Content Grid */}
             <Grid
-              templateColumns={{ base: "1fr", lg: "1fr 1.5fr 1fr" }}
+              templateColumns={{ base: "1fr", lg: "1fr 1.9fr 1fr" }}
               gap={8}
               w="full"
             >
@@ -226,13 +226,13 @@ function GalleryPageContent() {
               <GridItem>
                 <VStack spacing={12}>
                   <Box 
-                    bg="whiteAlpha.600" 
+                    bg="whiteAlpha.300" 
                     p={8} 
                     borderRadius="md" 
                     backdropFilter="blur(2px)"
-                    textAlign="center"
+                    textAlign="left"
                   >
-                    <VStack spacing={6}>
+                    <VStack spacing={6} align="start">
                       <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
                         {t('gallery.story.paragraph1')}
                       </Text>
