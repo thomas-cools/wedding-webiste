@@ -9,6 +9,7 @@ import FaqPage from './pages/FaqPage'
 import GalleryPage from './pages/GalleryPage'
 import theme from './theme'
 import { FeatureFlagsProvider } from './contexts/FeatureFlagsContext'
+import ScrollToTop from './components/ScrollToTop'
 import './index.css'
 
 // Initialize i18n (must be imported before App)
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
     <ChakraProvider theme={theme}>
       <FeatureFlagsProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/rsvp" element={<RsvpPage />} />

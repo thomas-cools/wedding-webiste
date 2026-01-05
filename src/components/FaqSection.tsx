@@ -147,7 +147,7 @@ export function FaqSection() {
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
-      }, 300)
+      }, 500)
     }
   }, [hash])
 
