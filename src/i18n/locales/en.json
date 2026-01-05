@@ -20,6 +20,17 @@
     "invitationToFollow": "invitation to follow",
     "respond": "RSVP"
   },
+  "gallery": {
+    "backToHome": "Back",
+    "story": {
+      "paragraph1": "It began in New York, in the rush of a city where two worlds, Belgium and Mexico, unexpectedly found each other. On their first date, it only took Thomas an hour to ask Carolina for a second date. That first night, we spent nearly five hours together and it became clear that we had common goals for the future. Thomas wanted to get a Master’s degree in Europe and go back to the place where he was from, and Carolina planned to live in Europe at some point after working at Heineken Mexico (Heineken Amsterdam HQ, hint, hint).",
+      "paragraph2": "That first date slowly became eight years of shared life, navigating a year of long distance, a global pandemic, and a trans-Atlantic move to Amsterdam. Each year, we grew in different ways, shaped by movement, change, and a growing love for each other’s cultures. Although Thomas initially spoke zero Spanish, he began immersing himself in the language, watching shows, movies, and eventually taking two years of classes during the pandemic. Eventually, he understood all of the “chistes” at gatherings with family and friends and started trying to make some of his own (even though sometimes Carolina wished he didn’t). At the same time, he started to appreciate Mexican cuisine and stop calling \"Chipotle\" Mexican food. And Carolina appreciated he was not American, spoke directly (sometimes too much), was well-read, and shared her love of fries, chocolate, and desserts. Like Thomas, Carolina has been learning one of the most difficult languages for a speaker of a Romance language – “Dutch” – finding it challenging and learning at a very slow pace (though she now has a 60+ day streak on Duolingo). Since living in Amsterdam, Carolina has learned to understand restaurant menus, slang, and, most importantly, shop in grocery stores without buying the wrong products. Lekker hoor!",
+      "paragraph3": "Over time, we fell not only for one another, but for the life we were creating side by side.",
+      "paragraph4": "Thomas knew early on that Carolina was different - she made him feel safe, special, and challenged him in ways no one else had (and still does). After living together for nearly seven years, he decided to make it “official” and see if he could take her off the market for real. Nine months later, he proposed on June 1st, 2025, after a beautiful day (and week) on the Amalfi coast in Italy on a boat at sunset. The moment was magical! It took some time, but Carolina eventually confirmed that yes, she would marry him (phew), and saved herself from being left at sea (according to the boat captain, Rubens – just kidding, of course). Since the proposal, we have thrown ourselves into planning the wedding, learning more about ourselves (and weddings in general) – we sincerely appreciate your patience as many of you have been asking for information already!",
+      "paragraph5": "All that being said, we’re really looking forward to celebrating with all of you and taking another step in our journey together.",
+      "paragraph6": "Enjoy some of our pictures from when we first met until today!"
+    }
+  },
   "story": {
     "label": "Our Story",
     "title": "Two Worlds, One Heart",
@@ -219,57 +230,6 @@
     "error": "Incorrect password. Please try again.",
     "cooldown": "Too many attempts. Please try again in {{time}}.",
     "hint": "Check your invitation for the password"
-  },
-  "gallery": {
-    "preheading": "Our Story",
-    "title": "Two Worlds, One Heart",
-    "subtitle": "A collection of memories from our journey together.",
-    "intro": "It began in New York, in the rush of a city where two worlds, Belgium and Mexico, unexpectedly found each other. On their first date, it only took Thomas an hour to ask Carolina for a second date. That first night, we spent nearly five hours together and it became clear that we had common goals for the future. Thomas wanted to get a Master’s degree in Europe and go back to the place where he was from, and Carolina planned to live in Europe at some point after working at Heineken Mexico (Heineken Amsterdam HQ, hint, hint).\n\nThat first date slowly became eight years of shared life, navigating a year of long distance, a global pandemic, and a trans-Atlantic move to Amsterdam. Each year, we grew in different ways, shaped by movement, change, and a growing love for each other’s cultures. Although Thomas initially spoke zero Spanish, he began immersing himself in the language, watching shows, movies, and eventually taking two years of classes during the pandemic. Eventually, he understood all of the “chistes” at gatherings with family and friends and started trying to make some of his own (even though sometimes Carolina wished he didn’t). At the same time, he started to appreciate Mexican cuisine and stop calling \"Chipotle\" Mexican food. And Carolina appreciated he was not American, spoke directly (sometimes too much), was well-read, and shared her love of fries, chocolate, and desserts. Like Thomas, Carolina has been learning one of the most difficult languages for a speaker of a Romance language – “Dutch” – finding it challenging and learning at a very slow pace (though she now has a 60+ day streak on Duolingo). Since living in Amsterdam, Carolina has learned to understand restaurant menus, slang, and, most importantly, shop in grocery stores without buying the wrong products. Lekker hoor!\n\nOver time, we fell not only for one another, but for the life we were creating side by side.\n\nThomas knew early on that Carolina was different - she made him feel safe, special, and challenged him in ways no one else had (and still does). After living together for nearly seven years, he decided to make it “official” and see if he could take her off the market for real. Nine months later, he proposed on June 1st, 2025, after a beautiful day (and week) on the Amalfi coast in Italy on a boat at sunset. The moment was magical! It took some time, but Carolina eventually confirmed that yes, she would marry him (phew), and saved herself from being left at sea (according to the boat captain, Rubens – just kidding, of course). Since the proposal, we have thrown ourselves into planning the wedding, learning more about ourselves (and weddings in general) – we sincerely appreciate your patience as many of you have been asking for information already!\n\nAll that being said, we’re really looking forward to celebrating with all of you and taking another step in our journey together.\n\nEnjoy some of our pictures from when we first met until today!",
-    "quote": "And now, we can't wait to begin the next chapter with you by our side.",
-    "timeline": {
-      "2017": {
-        "caption": "Where it all began",
-        "text": "We met for the first time and something just clicked. Little did we know this was the start of something beautiful."
-      },
-      "2018": {
-        "caption": "Building our foundation",
-        "text": "A year of getting to know each other, sharing dreams, and realizing we wanted the same things in life."
-      },
-      "2019": {
-        "caption": "Adventures together",
-        "text": "We started exploring the world together, creating memories that would last a lifetime."
-      },
-      "2020": {
-        "caption": "Growing closer",
-        "text": "A challenging year that brought us even closer together, proving that our love could weather any storm."
-      },
-      "2021": {
-        "caption": "New beginnings",
-        "text": "We took big steps forward, building our life together and making plans for the future."
-      },
-      "2022": {
-        "caption": "Creating memories",
-        "text": "Another year of adventures, laughter, and falling more in love with each other every day."
-      },
-      "2023": {
-        "caption": "The perfect moment",
-        "text": "We knew we had found our forever person. The question was just a matter of time."
-      },
-      "2024": {
-        "caption": "She said yes!",
-        "text": "The most magical moment of our journey so far – we're engaged and couldn't be happier!"
-      },
-      "2025": {
-        "caption": "Forever begins",
-        "text": "This is the year we say 'I do' and begin our greatest adventure yet – married life!"
-      }
-    },
-    "backToHome": "Back",
-    "viewImage": "View image",
-    "close": "Close gallery",
-    "previous": "Previous image",
-    "next": "Next image",
-    "swipeHint": "Swipe to navigate"
   },
   "travel": {
     "label": "Vallesvilles & Toulouse",

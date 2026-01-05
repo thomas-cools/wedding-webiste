@@ -20,6 +20,17 @@
     "invitationToFollow": "invitation to follow",
     "respond": "RSVP"
   },
+  "gallery": {
+    "backToHome": "Volver",
+    "story": {
+      "paragraph1": "Comenzó en Nueva York, en el ajetreo de una ciudad donde dos mundos, Bélgica y México, se encontraron inesperadamente. En su primera cita, a Thomas solo le tomó una hora pedirle a Carolina una segunda cita. Esa primera noche, pasamos casi cinco horas juntos y quedó claro que teníamos objetivos comunes para el futuro. Thomas quería obtener una maestría en Europa y regresar al lugar de donde era, y Carolina planeaba vivir en Europa en algún momento después de trabajar en Heineken México (Heineken Amsterdam HQ, pista, pista).",
+      "paragraph2": "Esa primera cita se convirtió lentamente en ocho años de vida compartida, navegando un año de larga distancia, una pandemia global y una mudanza transatlántica a Ámsterdam. Cada año, crecimos de diferentes maneras, moldeados por el movimiento, el cambio y un amor creciente por las culturas del otro. Aunque Thomas inicialmente hablaba cero español, comenzó a sumergirse en el idioma, viendo programas, películas y finalmente tomando dos años de clases durante la pandemia. Eventualmente, entendió todos los \"chistes\" en las reuniones con familiares y amigos y comenzó a tratar de hacer algunos propios (aunque a veces Carolina deseaba que no lo hiciera). Al mismo tiempo, comenzó a apreciar la cocina mexicana y dejó de llamar \"comida mexicana\" a Chipotle. Y Carolina apreció que él no fuera estadounidense, hablara directamente (a veces demasiado), fuera culto y compartiera su amor por las papas fritas, el chocolate y los postres. Al igual que Thomas, Carolina ha estado aprendiendo uno de los idiomas más difíciles para un hablante de una lengua romance – \"holandés\" – encontrándolo desafiante y aprendiendo a un ritmo muy lento (aunque ahora tiene una racha de más de 60 días en Duolingo). Desde que vive en Ámsterdam, Carolina ha aprendido a entender los menús de los restaurantes, la jerga y, lo más importante, a comprar en los supermercados sin comprar los productos equivocados. ¡Lekker hoor!",
+      "paragraph3": "Con el tiempo, nos enamoramos no solo el uno del otro, sino de la vida que estábamos creando lado a lado.",
+      "paragraph4": "Thomas supo desde el principio que Carolina era diferente: lo hacía sentir seguro, especial y lo desafiaba de maneras que nadie más lo había hecho (y aún lo hace). Después de vivir juntos durante casi siete años, decidió hacerlo \"oficial\" y ver si podía sacarla del mercado de verdad. Nueve meses después, le propuso matrimonio el 1 de junio de 2025, después de un hermoso día (y semana) en la costa de Amalfi en Italia en un barco al atardecer. ¡El momento fue mágico! Tomó algún tiempo, pero Carolina finalmente confirmó que sí, se casaría con él (uf), y se salvó de ser dejada en el mar (según el capitán del barco, Rubens – es broma, por supuesto). Desde la propuesta, nos hemos volcado a planificar la boda, aprendiendo más sobre nosotros mismos (y las bodas en general) – ¡agradecemos sinceramente su paciencia ya que muchos de ustedes han estado pidiendo información!",
+      "paragraph5": "Dicho todo esto, tenemos muchas ganas de celebrar con todos ustedes y dar un paso más en nuestro viaje juntos.",
+      "paragraph6": "¡Disfruten de algunas de nuestras fotos desde que nos conocimos hasta hoy!"
+    }
+  },
   "story": {
     "label": "Nuestra Historia",
     "title": "Dos Mundos, Un Corazón",
@@ -218,57 +229,6 @@
     "error": "Contraseña incorrecta. Por favor intenta de nuevo.",
     "cooldown": "Demasiados intentos. Por favor intenta de nuevo en {{time}}.",
     "hint": "Revisa tu invitación para la contraseña"
-  },
-  "gallery": {
-    "preheading": "Nuestra Historia",
-    "title": "Dos Mundos, Un Corazón",
-    "subtitle": "Una colección de recuerdos de nuestro camino juntos.",
-    "intro": "Comenzó en Nueva York, en el ajetreo de una ciudad donde dos mundos, Bélgica y México, se encontraron inesperadamente. En su primera cita, a Thomas solo le tomó una hora pedirle a Carolina una segunda cita. Esa primera noche, pasamos casi cinco horas juntos y quedó claro que teníamos objetivos comunes para el futuro. Thomas quería obtener una maestría en Europa y regresar al lugar de donde era, y Carolina planeaba vivir en Europa en algún momento después de trabajar en Heineken México (Heineken Amsterdam HQ, pista, pista).\n\nEsa primera cita se convirtió lentamente en ocho años de vida compartida, navegando un año de larga distancia, una pandemia global y una mudanza transatlántica a Ámsterdam. Cada año, crecimos de diferentes maneras, moldeados por el movimiento, el cambio y un amor creciente por las culturas del otro. Aunque Thomas inicialmente hablaba cero español, comenzó a sumergirse en el idioma, viendo programas, películas y finalmente tomando dos años de clases durante la pandemia. Eventualmente, entendió todos los \"chistes\" en las reuniones con familiares y amigos y comenzó a tratar de hacer algunos propios (aunque a veces Carolina deseaba que no lo hiciera). Al mismo tiempo, comenzó a apreciar la cocina mexicana y dejó de llamar \"comida mexicana\" a Chipotle. Y Carolina apreció que él no fuera estadounidense, hablara directamente (a veces demasiado), fuera culto y compartiera su amor por las papas fritas, el chocolate y los postres. Al igual que Thomas, Carolina ha estado aprendiendo uno de los idiomas más difíciles para un hablante de una lengua romance – \"holandés\" – encontrándolo desafiante y aprendiendo a un ritmo muy lento (aunque ahora tiene una racha de más de 60 días en Duolingo). Desde que vive en Ámsterdam, Carolina ha aprendido a entender los menús de los restaurantes, la jerga y, lo más importante, a comprar en los supermercados sin comprar los productos equivocados. ¡Lekker hoor!\n\nCon el tiempo, nos enamoramos no solo el uno del otro, sino de la vida que estábamos creando lado a lado.\n\nThomas supo desde el principio que Carolina era diferente: lo hacía sentir seguro, especial y lo desafiaba de maneras que nadie más lo había hecho (y aún lo hace). Después de vivir juntos durante casi siete años, decidió hacerlo \"oficial\" y ver si podía sacarla del mercado de verdad. Nueve meses después, le propuso matrimonio el 1 de junio de 2025, después de un hermoso día (y semana) en la costa de Amalfi en Italia en un barco al atardecer. ¡El momento fue mágico! Tomó algún tiempo, pero Carolina finalmente confirmó que sí, se casaría con él (uf), y se salvó de ser dejada en el mar (según el capitán del barco, Rubens – es broma, por supuesto). Desde la propuesta, nos hemos volcado a planificar la boda, aprendiendo más sobre nosotros mismos (y las bodas en general) – ¡agradecemos sinceramente su paciencia ya que muchos de ustedes han estado pidiendo información!\n\nDicho todo esto, tenemos muchas ganas de celebrar con todos ustedes y dar un paso más en nuestro viaje juntos.\n\n¡Disfruten de algunas de nuestras fotos desde que nos conocimos hasta hoy!",
-    "quote": "Y ahora, no podemos esperar para comenzar el próximo capítulo con ustedes a nuestro lado.",
-    "timeline": {
-      "2017": {
-        "caption": "Donde todo comenzó",
-        "text": "Nos conocimos por primera vez y algo simplemente encajó. No sabíamos que este era el comienzo de algo hermoso."
-      },
-      "2018": {
-        "caption": "Construyendo nuestra base",
-        "text": "Un año de conocernos, compartir sueños y darnos cuenta de que queríamos las mismas cosas en la vida."
-      },
-      "2019": {
-        "caption": "Aventuras juntos",
-        "text": "Comenzamos a explorar el mundo juntos, creando recuerdos que durarían toda la vida."
-      },
-      "2020": {
-        "caption": "Creciendo más cerca",
-        "text": "Un año desafiante que nos acercó aún más, demostrando que nuestro amor podía superar cualquier tormenta."
-      },
-      "2021": {
-        "caption": "Nuevos comienzos",
-        "text": "Dimos grandes pasos hacia adelante, construyendo nuestra vida juntos y haciendo planes para el futuro."
-      },
-      "2022": {
-        "caption": "Creando recuerdos",
-        "text": "Otro año de aventuras, risas y enamorándonos más el uno del otro cada día."
-      },
-      "2023": {
-        "caption": "El momento perfecto",
-        "text": "Sabíamos que habíamos encontrado a nuestra persona para siempre. La pregunta era solo cuestión de tiempo."
-      },
-      "2024": {
-        "caption": "¡Ella dijo que sí!",
-        "text": "El momento más mágico de nuestro viaje hasta ahora – ¡estamos comprometidos y no podríamos estar más felices!"
-      },
-      "2025": {
-        "caption": "Para siempre comienza",
-        "text": "Este es el año en que decimos 'Sí, quiero' y comenzamos nuestra mayor aventura – ¡la vida de casados!"
-      }
-    },
-    "backToHome": "Volver",
-    "viewImage": "Ver imagen",
-    "close": "Cerrar galería",
-    "previous": "Imagen anterior",
-    "next": "Imagen siguiente",
-    "swipeHint": "Desliza para navegar"
   },
   "travel": {
     "label": "Vallesvilles y Toulouse",

@@ -20,6 +20,17 @@
     "invitationToFollow": "invitation to follow",
     "respond": "RSVP"
   },
+  "gallery": {
+    "backToHome": "Terug",
+    "story": {
+      "paragraph1": "Het begon in New York, in de drukte van een stad waar twee werelden, België en Mexico, elkaar onverwachts vonden. Op hun eerste date had Thomas maar een uur nodig om Carolina voor een tweede date te vragen. Die eerste avond brachten we bijna vijf uur samen door en werd het duidelijk dat we gemeenschappelijke doelen voor de toekomst hadden. Thomas wilde een masterdiploma halen in Europa en teruggaan naar de plek waar hij vandaan kwam, en Carolina was van plan om op een gegeven moment in Europa te wonen na bij Heineken Mexico te hebben gewerkt (Heineken Amsterdam HQ, hint, hint).",
+      "paragraph2": "Die eerste date werd langzaam acht jaar van een gedeeld leven, waarin we een jaar lange afstand, een wereldwijde pandemie en een trans-Atlantische verhuizing naar Amsterdam navigeerden. Elk jaar groeiden we op verschillende manieren, gevormd door beweging, verandering en een groeiende liefde voor elkaars culturen. Hoewel Thomas aanvankelijk nul Spaans sprak, begon hij zich onder te dompelen in de taal, keek hij series, films en volgde hij uiteindelijk twee jaar lessen tijdens de pandemie. Uiteindelijk begreep hij alle \"chistes\" op bijeenkomsten met familie en vrienden en begon hij te proberen er zelf een paar te maken (ook al wenste Carolina soms dat hij dat niet deed). Tegelijkertijd begon hij de Mexicaanse keuken te waarderen en stopte hij met \"Chipotle\" Mexicaans eten te noemen. En Carolina waardeerde dat hij geen Amerikaan was, direct sprak (soms te veel), belezen was en haar liefde voor friet, chocolade en desserts deelde. Net als Thomas leert Carolina een van de moeilijkste talen voor een spreker van een Romaanse taal – \"Nederlands\" – wat ze uitdagend vindt en in een heel langzaam tempo leert (hoewel ze nu een streak van 60+ dagen op Duolingo heeft). Sinds ze in Amsterdam woont, heeft Carolina geleerd restaurantmenu's en straattaal te begrijpen en, belangrijker nog, boodschappen te doen in supermarkten zonder de verkeerde producten te kopen. Lekker hoor!",
+      "paragraph3": "Na verloop van tijd vielen we niet alleen voor elkaar, maar ook voor het leven dat we zij aan zij aan het creëren waren.",
+      "paragraph4": "Thomas wist al vroeg dat Carolina anders was - ze gaf hem een veilig en speciaal gevoel en daagde hem uit op manieren die niemand anders had gedaan (en nog steeds doet). Na bijna zeven jaar samen te hebben gewoond, besloot hij het \"officieel\" te maken en te kijken of hij haar echt van de markt kon halen. Negen maanden later vroeg hij haar ten huwelijk op 1 juni 2025, na een prachtige dag (en week) aan de Amalfikust in Italië op een boot bij zonsondergang. Het moment was magisch! Het duurde even, maar Carolina bevestigde uiteindelijk dat ja, ze met hem zou trouwen (oef), en redde zichzelf ervan om op zee achtergelaten te worden (volgens de kapitein van de boot, Rubens – grapje natuurlijk). Sinds het aanzoek hebben we ons gestort op het plannen van de bruiloft, meer over onszelf (en bruiloften in het algemeen) geleerd – we waarderen jullie geduld oprecht, aangezien velen van jullie al om informatie hebben gevraagd!",
+      "paragraph5": "Dat gezegd hebbende, kijken we er echt naar uit om met jullie allemaal te vieren en weer een stap te zetten in onze reis samen.",
+      "paragraph6": "Geniet van enkele van onze foto's van toen we elkaar voor het eerst ontmoetten tot vandaag!"
+    }
+  },
   "story": {
     "label": "Ons Verhaal",
     "title": "Twee Werelden, Één Hart",
@@ -219,57 +230,6 @@
     "error": "Onjuist wachtwoord. Probeer het opnieuw.",
     "cooldown": "Te veel pogingen. Probeer het opnieuw over {{time}}.",
     "hint": "Controleer uw uitnodiging voor het wachtwoord"
-  },
-  "gallery": {
-    "preheading": "Ons Verhaal",
-    "title": "Twee Werelden, Eén Hart",
-    "subtitle": "Een collectie herinneringen van onze reis samen.",
-    "intro": "Het begon in New York, in de drukte van een stad waar twee werelden, België en Mexico, elkaar onverwachts vonden. Op hun eerste date had Thomas maar een uur nodig om Carolina voor een tweede date te vragen. Die eerste avond brachten we bijna vijf uur samen door en werd het duidelijk dat we gemeenschappelijke doelen voor de toekomst hadden. Thomas wilde een masterdiploma halen in Europa en teruggaan naar de plek waar hij vandaan kwam, en Carolina was van plan om op een gegeven moment in Europa te wonen na bij Heineken Mexico te hebben gewerkt (Heineken Amsterdam HQ, hint, hint).\n\nDie eerste date werd langzaam acht jaar van een gedeeld leven, waarin we een jaar lange afstand, een wereldwijde pandemie en een trans-Atlantische verhuizing naar Amsterdam navigeerden. Elk jaar groeiden we op verschillende manieren, gevormd door beweging, verandering en een groeiende liefde voor elkaars culturen. Hoewel Thomas aanvankelijk nul Spaans sprak, begon hij zich onder te dompelen in de taal, keek hij series, films en volgde hij uiteindelijk twee jaar lessen tijdens de pandemie. Uiteindelijk begreep hij alle \"chistes\" op bijeenkomsten met familie en vrienden en begon hij te proberen er zelf een paar te maken (ook al wenste Carolina soms dat hij dat niet deed). Tegelijkertijd begon hij de Mexicaanse keuken te waarderen en stopte hij met \"Chipotle\" Mexicaans eten te noemen. En Carolina waardeerde dat hij geen Amerikaan was, direct sprak (soms te veel), belezen was en haar liefde voor friet, chocolade en desserts deelde. Net als Thomas leert Carolina een van de moeilijkste talen voor een spreker van een Romaanse taal – \"Nederlands\" – wat ze uitdagend vindt en in een heel langzaam tempo leert (hoewel ze nu een streak van 60+ dagen op Duolingo heeft). Sinds ze in Amsterdam woont, heeft Carolina geleerd restaurantmenu's en straattaal te begrijpen en, belangrijker nog, boodschappen te doen in supermarkten zonder de verkeerde producten te kopen. Lekker hoor!\n\nNa verloop van tijd vielen we niet alleen voor elkaar, maar ook voor het leven dat we zij aan zij aan het creëren waren.\n\nThomas wist al vroeg dat Carolina anders was - ze gaf hem een veilig en speciaal gevoel en daagde hem uit op manieren die niemand anders had gedaan (en nog steeds doet). Na bijna zeven jaar samen te hebben gewoond, besloot hij het \"officieel\" te maken en te kijken of hij haar echt van de markt kon halen. Negen maanden later vroeg hij haar ten huwelijk op 1 juni 2025, na een prachtige dag (en week) aan de Amalfikust in Italië op een boot bij zonsondergang. Het moment was magisch! Het duurde even, maar Carolina bevestigde uiteindelijk dat ja, ze met hem zou trouwen (oef), en redde zichzelf ervan om op zee achtergelaten te worden (volgens de kapitein van de boot, Rubens – grapje natuurlijk). Sinds het aanzoek hebben we ons gestort op het plannen van de bruiloft, meer over onszelf (en bruiloften in het algemeen) geleerd – we waarderen jullie geduld oprecht, aangezien velen van jullie al om informatie hebben gevraagd!\n\nDat gezegd hebbende, kijken we er echt naar uit om met jullie allemaal te vieren en weer een stap te zetten in onze reis samen.\n\nGeniet van enkele van onze foto's van toen we elkaar voor het eerst ontmoetten tot vandaag!",
-    "quote": "En nu kunnen we niet wachten om het volgende hoofdstuk te beginnen met jullie aan onze zijde.",
-    "timeline": {
-      "2017": {
-        "caption": "Waar het allemaal begon",
-        "text": "We ontmoetten elkaar voor het eerst en er klikte gewoon iets. We wisten niet dat dit het begin was van iets moois."
-      },
-      "2018": {
-        "caption": "Onze basis bouwen",
-        "text": "Een jaar om elkaar te leren kennen, dromen te delen en te beseffen dat we dezelfde dingen wilden in het leven."
-      },
-      "2019": {
-        "caption": "Samen op avontuur",
-        "text": "We begonnen samen de wereld te verkennen en herinneringen te maken die een leven lang zouden duren."
-      },
-      "2020": {
-        "caption": "Dichter bij elkaar",
-        "text": "Een uitdagend jaar dat ons nog dichter bij elkaar bracht, wat bewees dat onze liefde elke storm kon doorstaan."
-      },
-      "2021": {
-        "caption": "Nieuwe beginnen",
-        "text": "We zetten grote stappen vooruit, bouwden ons leven samen op en maakten plannen voor de toekomst."
-      },
-      "2022": {
-        "caption": "Herinneringen maken",
-        "text": "Nog een jaar vol avonturen, gelach en elke dag meer verliefd worden op elkaar."
-      },
-      "2023": {
-        "caption": "Het perfecte moment",
-        "text": "We wisten dat we onze forever-persoon hadden gevonden. De vraag was slechts een kwestie van tijd."
-      },
-      "2024": {
-        "caption": "Ze zei ja!",
-        "text": "Het meest magische moment van onze reis tot nu toe – we zijn verloofd en kunnen niet gelukkiger zijn!"
-      },
-      "2025": {
-        "caption": "Voor altijd begint",
-        "text": "Dit is het jaar waarin we 'ja, ik wil' zeggen en ons grootste avontuur beginnen – het huwelijksleven!"
-      }
-    },
-    "backToHome": "Terug",
-    "viewImage": "Bekijk afbeelding",
-    "close": "Sluit galerij",
-    "previous": "Vorige afbeelding",
-    "next": "Volgende afbeelding",
-    "swipeHint": "Veeg om te navigeren"
   },
   "travel": {
     "label": "Vallesvilles en Toulouse",

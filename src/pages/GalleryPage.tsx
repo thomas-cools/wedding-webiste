@@ -234,10 +234,22 @@ function GalleryPageContent() {
                   >
                     <VStack spacing={6}>
                       <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
-                        {t('story.paragraph1')}
+                        {t('gallery.story.paragraph1')}
                       </Text>
                       <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
-                        {t('story.paragraph2')}
+                        {t('gallery.story.paragraph2')}
+                      </Text>
+                      <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
+                        {t('gallery.story.paragraph3')}
+                      </Text>
+                      <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
+                        {t('gallery.story.paragraph4')}
+                      </Text>
+                      <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
+                        {t('gallery.story.paragraph5')}
+                      </Text>
+                      <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
+                        {t('gallery.story.paragraph6')}
                       </Text>
                     </VStack>
                   </Box>
