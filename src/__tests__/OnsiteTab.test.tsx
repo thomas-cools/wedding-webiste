@@ -73,8 +73,10 @@ describe('OnsiteTab', () => {
   it('displays room prices', () => {
     render(<OnsiteTab />)
     
-    expect(screen.getByText('€90 / night')).toBeInTheDocument()
+    expect(screen.getAllByText('€150 / night').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('€260 / night').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('€140 / night').length).toBeGreaterThan(0)
     expect(screen.getAllByText('€70 / night').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('€TBD / night').length).toBe(4)
+    expect(screen.getAllByText('€275 / night').length).toBeGreaterThan(0)
   })
 })
