@@ -251,6 +251,15 @@ function GalleryPageContent() {
                       <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
                         {t('gallery.story.paragraph6')}
                       </Text>
+                      <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
+                        {t('gallery.story.paragraph7')}
+                      </Text>
+                      <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
+                        {t('gallery.story.paragraph8')}
+                      </Text>
+                      <Text fontSize="lg" lineHeight="1.8" color="neutral.dark">
+                        {t('gallery.story.paragraph9')}
+                      </Text>
                     </VStack>
                   </Box>
 

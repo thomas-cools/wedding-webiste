@@ -44,9 +44,9 @@ describe('QuickLinks Component', () => {
     const faqLink = screen.getByRole('link', { name: /faq/i })
     const stayLink = screen.getByRole('link', { name: /stay/i })
     
-    expect(rsvpLink).toHaveAttribute('href', '/rsvp')
-    expect(faqLink).toHaveAttribute('href', '/faq')
-    expect(stayLink).toHaveAttribute('href', '/accommodations')
+    expect(rsvpLink).toHaveAttribute('href', '/rsvp#page-top')
+    expect(faqLink).toHaveAttribute('href', '/faq#page-top')
+    expect(stayLink).toHaveAttribute('href', '/accommodations#page-top')
   })
 
   it('renders icons for each quick link', () => {
