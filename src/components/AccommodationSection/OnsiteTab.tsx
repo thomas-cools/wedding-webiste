@@ -196,7 +196,7 @@ export const OnsiteTab: React.FC = () => {
       {
         name: "Bedroom India",
         subtitle: "(2 persons / 1st floor)",
-        price: "€90 / night",
+        price: "€150 / night",
         beds: [
           "1 double bed (180x200)",
           "OR 2 single beds (90x200)"
@@ -208,7 +208,7 @@ export const OnsiteTab: React.FC = () => {
       {
         name: "Pyrenees' Bedroom",
         subtitle: "(4 persons (2 in the room, 2 in the antechamber))",
-        price: "€70 / night",
+        price: "€260 / night",
         beds: [
           "1 double bed (180x200)",
           "Antechamber AND 2 single beds (90x200)"
@@ -220,7 +220,7 @@ export const OnsiteTab: React.FC = () => {
       {
         name: "Bedroom Provence",
         subtitle: "(2 persons / 1st floor)",
-        price: "€70 / night",
+        price: "€150 / night",
         beds: [
           "1 double bed (180x200)",
           "OR 2 single beds (90x200)"
@@ -232,7 +232,7 @@ export const OnsiteTab: React.FC = () => {
       {
         name: "Bedroom Occitanie",
         subtitle: "(2 persons / 1st floor)",
-        price: "€70 / night",
+        price: "€140 / night",
         beds: [
           "1 double bed (160x200)"
         ],
@@ -262,7 +262,7 @@ export const OnsiteTab: React.FC = () => {
       {
         name: "Rez de Chaussée (Room 1)",
         subtitle: "1st floor",
-        price: "€TBD / night",
+        price: "€275 / night",
         beds: ["2 beds (160 cm)"],
         amenities: "",
         capacity: 4,
@@ -271,7 +271,7 @@ export const OnsiteTab: React.FC = () => {
       {
         name: "Rez de Chaussée (Room 2 - family)",
         subtitle: "1st floor",
-        price: "€TBD / night",
+        price: "€275 / night",
         beds: ["1 bed (160 cm) + mezzanine 1 bed (160 cm)"],
         amenities: "",
         capacity: 4,
@@ -280,7 +280,7 @@ export const OnsiteTab: React.FC = () => {
       {
         name: "1er Etage (Room 3)",
         subtitle: "2nd floor",
-        price: "€TBD / night",
+        price: "€275 / night",
         beds: ["2 beds (160 cm)"],
         amenities: "",
         capacity: 4,
@@ -289,7 +289,7 @@ export const OnsiteTab: React.FC = () => {
       {
         name: "1er Etage (Room 4)",
         subtitle: "1st floor",
-        price: "€TBD / night",
+        price: "€140 / night",
         beds: ["1 bed (160 cm)"],
         amenities: "",
         capacity: 2,
