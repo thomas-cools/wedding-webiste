@@ -28,7 +28,7 @@ const ICON_FILTER = 'brightness(0) saturate(100%) invert(12%) sepia(24%) saturat
 function QuickLinkCard({ to, icon, label, alt }: QuickLinkItem) {
   return (
     <StaggerItem flex={1}>
-      <Link to={to} style={{ textDecoration: 'none' }}>
+      <Link to={to} style={{ textDecoration: 'none' }} onClick={() => window.scrollTo(0, 0)}>
         <VStack
           spacing={4}
           textAlign="center"
