@@ -94,13 +94,13 @@ describe('AccommodationSection', () => {
   })
 
   describe('tabs', () => {
-    it('renders all four tabs', () => {
+    it('renders all three tabs', () => {
       render(<AccommodationSection enabled={true} />)
       
       expect(screen.getByRole('tab', { name: 'On-Site' })).toBeInTheDocument()
       expect(screen.getByRole('tab', { name: 'Airbnb' })).toBeInTheDocument()
       expect(screen.getByRole('tab', { name: 'Booking.com' })).toBeInTheDocument()
-      expect(screen.getByRole('tab', { name: 'Hotels' })).toBeInTheDocument()
+      expect(screen.queryByRole('tab', { name: 'Hotels' })).not.toBeInTheDocument()
     })
 
     it('shows on-site tab content by default', () => {
@@ -127,17 +127,6 @@ describe('AccommodationSection', () => {
       
       await waitFor(() => {
         expect(screen.getByText('Search Hotels & More')).toBeInTheDocument()
-      })
-    })
-
-    it('switches to Hotels tab when clicked', async () => {
-      render(<AccommodationSection enabled={true} />)
-      
-      const hotelsTab = screen.getByRole('tab', { name: 'Hotels' })
-      fireEvent.click(hotelsTab)
-      
-      await waitFor(() => {
-        expect(screen.getByText('Nearby Hotels')).toBeInTheDocument()
       })
     })
   })

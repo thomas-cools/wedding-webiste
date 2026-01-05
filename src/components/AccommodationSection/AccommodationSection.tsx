@@ -15,7 +15,6 @@ import {
 import { OnsiteTab } from './OnsiteTab';
 import { AirbnbTab } from './AirbnbTab';
 import { BookingTab } from './BookingTab';
-import { HotelsTab } from './HotelsTab';
 
 interface AccommodationSectionProps {
   enabled: boolean;
@@ -92,9 +91,6 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
               <Tab w={isMobile ? "calc(50% - 4px)" : "auto"} _selected={{ bg: 'neutral.dark', color: 'white' }}>
                 {t('travel.tabs.booking')}
               </Tab>
-              <Tab w={isMobile ? "calc(50% - 4px)" : "auto"} _selected={{ bg: 'neutral.dark', color: 'white' }}>
-                {t('travel.tabs.hotels')}
-              </Tab>
             </TabList>
             <TabPanels>
               <TabPanel p={0}>
@@ -105,9 +101,6 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
               </TabPanel>
               <TabPanel p={0}>
                 <BookingTab />
-              </TabPanel>
-              <TabPanel p={0}>
-                <HotelsTab />
               </TabPanel>
             </TabPanels>
           </Tabs>
