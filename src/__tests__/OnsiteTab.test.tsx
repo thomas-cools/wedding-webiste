@@ -55,7 +55,7 @@ describe('OnsiteTab', () => {
     
     expect(screen.getByText('Main building')).toBeInTheDocument()
     expect(screen.getByText(/1 kitchen, 6 bedrooms, 6 bathrooms \(20 persons\)/)).toBeInTheDocument()
-    // Main building accordion is open by default
+    
     expect(screen.getByText(/Bedroom India/)).toBeInTheDocument()
     expect(screen.getByText(/Pyrenees' Bedroom/)).toBeInTheDocument()
     expect(screen.getByText(/Bedroom Provence/)).toBeInTheDocument()
