@@ -53,8 +53,6 @@ function DressCodeAnswer() {
     },
   ]
 
-  const shoeTip = t('faq.dressCode.shoeTip', 'The ceremony and reception will be outdoors on grass and gravel paths, so we recommend comfortable shoes—block heels or wedges are great alternatives to stilettos.')
-
   return (
     <VStack spacing={6} align="stretch">
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
@@ -116,26 +114,6 @@ function DressCodeAnswer() {
           </Box>
         ))}
       </SimpleGrid>
-      
-      {/* Shoe tip */}
-      <HStack
-        spacing={3}
-        p={4}
-        bg="chateau.stone"
-        borderRadius="lg"
-        align="start"
-      >
-        <Text fontSize="lg">👠</Text>
-        <Text
-          fontFamily="elegant"
-          fontSize="md"
-          color="neutral.dark"
-          fontStyle="italic"
-          lineHeight="1.7"
-        >
-          {shoeTip}
-        </Text>
-      </HStack>
     </VStack>
   )
 }
