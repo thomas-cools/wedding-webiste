@@ -144,7 +144,7 @@ export default function StorySection() {
 
             {/* Right side - Text content */}
             <ScrollReveal variants={fadeInRight} flex={1}>
-              <VStack align={["center", "center", "flex-start"]} spacing={5} textAlign={["center", "center", "left"]}>
+              <VStack align="center" spacing={5} textAlign="center">
                 <Text fontSize={["md", "lg"]} lineHeight="1.9" color="neutral.dark">
                   {t('story.paragraph1')}
                 </Text>
