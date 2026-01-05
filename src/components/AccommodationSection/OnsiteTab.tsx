@@ -331,7 +331,7 @@ export const OnsiteTab: React.FC = () => {
             components={{
               emailLink: (
                 <Link 
-                  href="mailto:rsvp@carolinaandthomas.com" 
+                  href="mailto:carolinaandthomaswedding@gmail.com" 
                   color="primary.deep" 
                   fontWeight="500" 
                   _hover={{ textDecoration: 'underline' }} 

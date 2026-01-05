@@ -16,7 +16,7 @@ jest.mock('react-i18next', () => ({
         'travel.tabs.hotels': 'Hotels',
         'travel.onsiteTitle': 'Stay at the Venue',
         'travel.onsiteDescription': 'We offer limited on-site accommodation...',
-        'travel.onsiteDetails': 'Priority will be given to immediate family. Email <emailLink>rsvp@carolinaandthomas.com</emailLink>.',
+        'travel.onsiteDetails': 'Priority will be given to immediate family. Email <emailLink>carolinaandthomaswedding@gmail.com</emailLink>.',
         'travel.airbnbTitle': 'Find Nearby Stays',
         'travel.airbnbDescription': 'Discover charming vacation rentals...',
         'travel.searchAirbnb': 'Search on Airbnb',
@@ -44,12 +44,12 @@ jest.mock('react-i18next', () => ({
     i18n: { language: 'en' },
   }),
   Trans: ({ i18nKey, components }: { i18nKey: string; components?: Record<string, React.ReactNode> }) => {
-    const text = 'Priority will be given to immediate family. Email rsvp@carolinaandthomas.com.'
+    const text = 'Priority will be given to immediate family. Email carolinaandthomaswedding@gmail.com.'
     if (components?.emailLink) {
       return (
         <>
           Priority will be given to immediate family. Email{' '}
-          <a href="mailto:rsvp@carolinaandthomas.com">rsvp@carolinaandthomas.com</a>.
+          <a href="mailto:carolinaandthomaswedding@gmail.com">carolinaandthomaswedding@gmail.com</a>.
         </>
       )
     }

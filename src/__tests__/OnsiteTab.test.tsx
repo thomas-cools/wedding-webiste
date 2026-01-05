@@ -18,7 +18,7 @@ jest.mock('react-i18next', () => ({
     return (
       <>
         Priority will be given to immediate family. Email{' '}
-        <a href="mailto:rsvp@carolinaandthomas.com">rsvp@carolinaandthomas.com</a>.
+        <a href="mailto:carolinaandthomaswedding@gmail.com">carolinaandthomaswedding@gmail.com</a>.
       </>
     )
   },
@@ -38,8 +38,8 @@ describe('OnsiteTab', () => {
   it('renders the email link with mailto href', () => {
     render(<OnsiteTab />)
     
-    const emailLink = screen.getByRole('link', { name: 'rsvp@carolinaandthomas.com' })
-    expect(emailLink).toHaveAttribute('href', 'mailto:rsvp@carolinaandthomas.com')
+    const emailLink = screen.getByRole('link', { name: 'carolinaandthomaswedding@gmail.com' })
+    expect(emailLink).toHaveAttribute('href', 'mailto:carolinaandthomaswedding@gmail.com')
   })
 
   it('renders the building icon', () => {
