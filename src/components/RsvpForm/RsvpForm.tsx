@@ -466,15 +466,18 @@ export default function RsvpForm({ onSuccess }: RsvpFormProps) {
                                   placeholder={t('rsvp.form.childName', { number: i + 1 })}
                                   flex={2}
                                 />
-                                <Input
+                                <Select
                                   value={c.age || ''}
                                   onChange={e => form.updateChild(i, { age: e.target.value })}
                                   placeholder={t('rsvp.form.childAgePlaceholder')}
-                                  maxW={['100%', '80px']}
-                                  type="number"
-                                  min="0"
-                                  max="17"
-                                />
+                                  maxW={['100%', '140px']}
+                                >
+                                  <option value="< 6 months">{t('rsvp.form.childAgeOptions.under6months')}</option>
+                                  <option value="6-12 months">{t('rsvp.form.childAgeOptions.6to12months')}</option>
+                                  <option value="1 year">{t('rsvp.form.childAgeOptions.1year')}</option>
+                                  <option value="2 years">{t('rsvp.form.childAgeOptions.2years')}</option>
+                                  <option value="3 years">{t('rsvp.form.childAgeOptions.3years')}</option>
+                                </Select>
                               </Flex>
                               <Flex direction={['column', 'row']} gap={3}>
                                 <Input
