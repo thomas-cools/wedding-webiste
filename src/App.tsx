@@ -336,7 +336,7 @@ function AppContent() {
 
       </Box>
 
-      <Footer sectionAboveBg="white" />
+      <Footer sectionAboveBg="#F6F1EB" />
     </Box>
     </>
   )
