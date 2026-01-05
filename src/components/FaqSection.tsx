@@ -56,7 +56,7 @@ function DressCodeAnswer() {
 
   return (
     <VStack spacing={6} align="stretch">
-      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+      <SimpleGrid columns={1} spacing={4}>
         {events.map((event, index) => (
           <Box
             key={index}
@@ -98,7 +98,7 @@ function DressCodeAnswer() {
                 borderRadius="full"
                 fontFamily="elegant"
                 fontSize="sm"
-                fontWeight="500"
+                fontWeight="bold"
                 letterSpacing="0.05em"
               >
                 {event.code}
