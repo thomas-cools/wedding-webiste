@@ -178,7 +178,7 @@
       "welcome": {
         "date": "August 25th, 2026",
         "title": "Welcome Dinner",
-        "dressCode": "Dress Code | Cocktail Attire"
+        "dressCode": "Dress Code | Semi-Formal"
       },
       "wedding": {
         "date": "August 26th, 2026",
@@ -362,7 +362,7 @@
     "items": [
       {
         "question": "When and where is the wedding?",
-        "answer": "Our wedding will take place on August 26, 2026 at Vallesvilles, France. The ceremony will begin mid-afternoon, with a specific time to follow in your invitation."
+        "answer": "Our wedding ceremony will take place on August 26, 2026 at Vallesvilles, France. The ceremony will begin mid-afternoon (we’ll provide a specific time in our invites). There will also be a welcome dinner on August 25th and a pool brunch on August 27th. These wedding week events are optional but we would love for you to join if you can."
       },
       {
         "question": "What is the dress code?",
@@ -378,7 +378,7 @@
       },
       {
         "question": "What are the transportation options?",
-        "answer": "The nearest major airport is Toulouse-Blagnac (TLS), approximately 45 minutes from the venue. We recommend renting a car or arranging a taxi. We will provide more detailed transportation information closer to the date."
+        "answer": "The nearest major airport is Toulouse-Blagnac (TLS), approximately 35 minutes from the venue. We recommend renting a car or arranging a taxi. We will provide more detailed transportation information closer to the wedding."
       },
       {
         "question": "Will there be vegetarian or special dietary options?",
@@ -386,19 +386,19 @@
       },
       {
         "question": "What time should I arrive?",
-        "answer": "We recommend arriving 15-30 minutes before each event begins to find your seat and settle in."
+        "answer": "We recommend arriving 15-30 minutes before each event begins to find your seat and settle in. A more detailed timeline for all three days will be shared closer to the wedding week."
       },
       {
         "question": "Can I take photos during the ceremony?",
-        "answer": "We kindly ask for an unplugged ceremony—please keep phones and cameras away during the ceremony so you can be fully present. Our photographer will capture all the special moments!"
+        "answer": "We kindly ask for an unplugged ceremony – please put your phones and cameras away during the ceremony so you can be fully present. Our photographer will capture all the special moments!"
       },
       {
         "question": "Is there parking at the venue?",
-        "answer": "Yes, there is free parking available at the venue. Parking attendants will guide you upon arrival."
+        "answer": "Yes, there is free parking available at the venue."
       },
       {
         "question": "When do I need to RSVP by?",
-        "answer": "Please respond by February 1, 2026 so we can finalize arrangements with our vendors."
+        "answer": "Please respond by February 1, 2026, so we can finalize arrangements with our vendors."
       }
     ]
   }

@@ -177,7 +177,7 @@
       "welcome": {
         "date": "25 de Agosto, 2026",
         "title": "Cena de Bienvenida",
-        "dressCode": "Vestimenta | Cóctel"
+        "dressCode": "Vestimenta | Semiformal"
       },
       "wedding": {
         "date": "26 de Agosto, 2026",
@@ -361,7 +361,7 @@
     "items": [
       {
         "question": "¿Cuándo y dónde es la boda?",
-        "answer": "Nuestra boda tendrá lugar el 26 de agosto de 2026 en Vallesvilles, Francia. La ceremonia comenzará a media tarde, con la hora específica indicada en tu invitación."
+        "answer": "Nuestra ceremonia de boda tendrá lugar el 26 de agosto de 2026 en Vallesvilles, Francia. La ceremonia comenzará a media tarde (proporcionaremos una hora específica en nuestras invitaciones). También habrá una cena de bienvenida el 25 de agosto y un brunch en la piscina el 27 de agosto. Estos eventos de la semana de la boda son opcionales, pero nos encantaría que nos acompañaran si pueden."
       },
       {
         "question": "¿Cuál es el código de vestimenta?",
@@ -377,7 +377,7 @@
       },
       {
         "question": "¿Cuáles son las opciones de transporte?",
-        "answer": "El aeropuerto principal más cercano es Toulouse-Blagnac (TLS), aproximadamente a 45 minutos del lugar. Recomendamos alquilar un auto o coordinar un taxi. Proporcionaremos información de transporte más detallada cerca de la fecha."
+        "answer": "El aeropuerto principal más cercano es Toulouse-Blagnac (TLS), aproximadamente a 35 minutos del lugar. Recomendamos alquilar un auto o coordinar un taxi. Proporcionaremos información de transporte más detallada más cerca de la boda."
       },
       {
         "question": "¿Habrá opciones vegetarianas o para dietas especiales?",
@@ -385,19 +385,19 @@
       },
       {
         "question": "¿A qué hora debo llegar?",
-        "answer": "Recomendamos llegar 15-30 minutos antes de que comience cada evento para encontrar tu asiento y acomodarte."
+        "answer": "Recomendamos llegar 15-30 minutos antes de que comience cada evento para encontrar tu asiento y acomodarte. Se compartirá un cronograma más detallado para los tres días más cerca de la semana de la boda."
       },
       {
         "question": "¿Puedo tomar fotos durante la ceremonia?",
-        "answer": "Solicitamos amablemente una ceremonia sin dispositivos—por favor mantén teléfonos y cámaras guardados durante la ceremonia para que puedas estar completamente presente. ¡Nuestro fotógrafo capturará todos los momentos especiales!"
+        "answer": "Solicitamos amablemente una ceremonia sin dispositivos – por favor guarda tus teléfonos y cámaras durante la ceremonia para que puedas estar completamente presente. ¡Nuestro fotógrafo capturará todos los momentos especiales!"
       },
       {
         "question": "¿Hay estacionamiento en el lugar?",
-        "answer": "Sí, hay estacionamiento gratuito disponible en el lugar. Los asistentes de estacionamiento te guiarán a tu llegada."
+        "answer": "Sí, hay estacionamiento gratuito disponible en el lugar."
       },
       {
         "question": "¿Para cuándo necesito confirmar mi asistencia?",
-        "answer": "Por favor responde antes del 1 de febrero de 2026 para que podamos finalizar los arreglos con nuestros proveedores."
+        "answer": "Por favor responde antes del 1 de febrero de 2026, para que podamos finalizar los arreglos con nuestros proveedores."
       }
     ]
   }

@@ -178,7 +178,7 @@
       "welcome": {
         "date": "25 Augustus 2026",
         "title": "Welkomstdiner",
-        "dressCode": "Dresscode | Cocktailkledij"
+        "dressCode": "Dresscode | Semi-formeel"
       },
       "wedding": {
         "date": "26 Augustus 2026",
@@ -362,7 +362,7 @@
     "items": [
       {
         "question": "Wanneer en waar is de bruiloft?",
-        "answer": "Onze bruiloft vindt plaats op 26 augustus 2026 in Vallesvilles, Frankrijk. De ceremonie begint in de middag, met een specifieke tijd die later in je uitnodiging wordt vermeld."
+        "answer": "Onze huwelijksceremonie vindt plaats op 26 augustus 2026 in Vallesvilles, Frankrijk. De ceremonie begint halverwege de middag (we zullen een specifieke tijd in onze uitnodigingen vermelden). Er is ook een welkomstdiner op 25 augustus en een zwembadbrunch op 27 augustus. Deze evenementen tijdens de huwelijksweek zijn optioneel, maar we zouden het geweldig vinden als jullie erbij kunnen zijn."
       },
       {
         "question": "Wat is de dresscode?",
@@ -378,7 +378,7 @@
       },
       {
         "question": "Wat zijn de vervoersopties?",
-        "answer": "De dichtstbijzijnde grote luchthaven is Toulouse-Blagnac (TLS), ongeveer 45 minuten van de locatie. We raden aan een auto te huren of een taxi te regelen. We zullen meer gedetailleerde vervoersinformatie verstrekken dichter bij de datum."
+        "answer": "De dichtstbijzijnde grote luchthaven is Toulouse-Blagnac (TLS), ongeveer 35 minuten van de locatie. We raden aan een auto te huren of een taxi te regelen. We zullen meer gedetailleerde vervoersinformatie verstrekken dichter bij de bruiloft."
       },
       {
         "question": "Zijn er vegetarische of speciale dieetopties?",
@@ -386,19 +386,19 @@
       },
       {
         "question": "Hoe laat moet ik aankomen?",
-        "answer": "We raden aan 15-30 minuten voor aanvang van elk evenement te arriveren om je plaats te vinden en te settelen."
+        "answer": "We raden aan 15-30 minuten voor aanvang van elk evenement te arriveren om je plaats te vinden en te settelen. Een meer gedetailleerde tijdlijn voor alle drie de dagen zal dichter bij de huwelijksweek worden gedeeld."
       },
       {
         "question": "Mag ik foto's maken tijdens de ceremonie?",
-        "answer": "We vragen vriendelijk om een ceremonie zonder apparaten—houd telefoons en camera's alstublieft weg tijdens de ceremonie zodat je volledig aanwezig kunt zijn. Onze fotograaf legt alle speciale momenten vast!"
+        "answer": "We vragen vriendelijk om een ceremonie zonder apparaten – berg je telefoons en camera's alstublieft op tijdens de ceremonie zodat je volledig aanwezig kunt zijn. Onze fotograaf legt alle speciale momenten vast!"
       },
       {
         "question": "Is er parkeerruimte bij de locatie?",
-        "answer": "Ja, er is gratis parkeren beschikbaar bij de locatie. Parkeerbegeleiders wijzen je de weg bij aankomst."
+        "answer": "Ja, er is gratis parkeren beschikbaar bij de locatie."
       },
       {
         "question": "Wanneer moet ik uiterlijk bevestigen?",
-        "answer": "Reageer alstublieft vóór 1 februari 2026 zodat we de afspraken met onze leveranciers kunnen afronden."
+        "answer": "Reageer alstublieft vóór 1 februari 2026, zodat we de afspraken met onze leveranciers kunnen afronden."
       }
     ]
   }
