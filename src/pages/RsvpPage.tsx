@@ -36,6 +36,25 @@ function RsvpPageContent() {
 
   return (
     <Box minH="100vh" bg="#300F0C" display="flex" flexDirection="column" position="relative" overflow="hidden">
+      {/* Texture Background Decoration - Left Side */}
+      <Box
+        position="fixed"
+        left={0}
+        top={0}
+        bottom={0}
+        w={["200px", "300px", "450px", "550px"]}
+        backgroundImage={`url(${textureSvg})`}
+        backgroundRepeat="no-repeat"
+        backgroundPosition="left center"
+        backgroundSize="cover"
+        pointerEvents="none"
+        zIndex={0}
+        sx={{
+          opacity: 0.4,
+          mixBlendMode: 'overlay',
+          filter: 'drop-shadow(1px 1px 0px rgba(255,255,255,0.5)) drop-shadow(-1px -1px 0px rgba(0,0,0,0.2))',
+        }}
+      />
       {/* Minimal Header */}
       <Box 
         as="header"
@@ -105,25 +124,6 @@ function RsvpPageContent() {
         pb={[12, 16, 20]}
         position="relative"
       >
-        {/* Texture Background Decoration - Positioned relative to form */}
-        <Box
-          position="absolute"
-          left={0}
-          top={["80px", "100px", "120px"]}
-          bottom={[12, 16, 20]}
-          w={["180px", "280px", "400px", "500px"]}
-          backgroundImage={`url(${textureSvg})`}
-          backgroundRepeat="no-repeat"
-          backgroundPosition="left top"
-          backgroundSize="cover"
-          pointerEvents="none"
-          zIndex={0}
-          sx={{
-            opacity: 0.4,
-            mixBlendMode: 'overlay',
-            filter: 'drop-shadow(1px 1px 0px rgba(255,255,255,0.5)) drop-shadow(-1px -1px 0px rgba(0,0,0,0.2))',
-          }}
-        />
         <Container maxW="container.lg" position="relative" zIndex={1}>
           <ErrorBoundary sectionName="RSVP form">
             <Suspense fallback={<RsvpFormSkeleton />}>
