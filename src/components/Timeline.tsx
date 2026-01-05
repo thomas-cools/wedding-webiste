@@ -7,8 +7,10 @@ import {
   Flex,
   Circle,
   Image,
+  Link,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { Link as RouterLink } from 'react-router-dom'
 
 // Import icons
 import CheersIcon from '../assets/Cheers_icon.svg'
@@ -203,13 +205,24 @@ function EventCard({ event }: EventCardProps) {
       </Text>
 
       {/* Dress Code */}
-      <Text
-        fontSize={["sm", "md"]}
-        color="neutral.muted"
-        fontStyle="italic"
+      <Link 
+        as={RouterLink} 
+        to="/faq#dress-code"
+        _hover={{ textDecoration: 'none' }}
       >
-        {event.dressCode}
-      </Text>
+        <Text
+          fontSize={["sm", "md"]}
+          color="neutral.muted"
+          fontStyle="italic"
+          textDecoration="underline"
+          textUnderlineOffset="4px"
+          textDecorationColor="primary.soft"
+          _hover={{ color: 'primary.deep' }}
+          transition="color 0.2s"
+        >
+          {event.dressCode}
+        </Text>
+      </Link>
 
       {/* Mobile dot */}
       <Circle

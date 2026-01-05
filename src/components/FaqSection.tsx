@@ -1,4 +1,5 @@
 import { useTranslation, Trans } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import {
   Box,
   Container,
@@ -16,6 +17,7 @@ import {
   Link,
 } from '@chakra-ui/react'
 import { ScrollReveal, StaggerContainer, StaggerItem } from './animations'
+import { useEffect } from 'react'
 
 interface FaqItem {
   question: string
@@ -129,9 +131,25 @@ function isDressCodeQuestion(question: string): boolean {
 
 export function FaqSection() {
   const { t } = useTranslation()
+  const { hash } = useLocation()
 
   // Get FAQ items from translations
   const faqItems: FaqItem[] = t('faq.items', { returnObjects: true }) as FaqItem[]
+
+  const dressCodeIndex = faqItems.findIndex(item => isDressCodeQuestion(item.question))
+  const defaultIndices = hash === '#dress-code' && dressCodeIndex !== -1 ? [dressCodeIndex] : []
+
+  useEffect(() => {
+    if (hash === '#dress-code') {
+      // Small timeout to allow rendering
+      setTimeout(() => {
+        const element = document.getElementById('dress-code')
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }, 300)
+    }
+  }, [hash])
 
   return (
     <Box py={[16, 20, 24]} bg="neutral.light">
@@ -176,7 +194,7 @@ export function FaqSection() {
 
           {/* FAQ Accordion */}
           <StaggerContainer>
-            <Accordion allowMultiple width="100%">
+            <Accordion allowMultiple width="100%" defaultIndex={defaultIndices}>
               {Array.isArray(faqItems) && faqItems.map((item, index) => (
                 <StaggerItem key={index}>
                   <AccordionItem
@@ -186,6 +204,7 @@ export function FaqSection() {
                     borderRadius="lg"
                     boxShadow="sm"
                     overflow="hidden"
+                    id={isDressCodeQuestion(item.question) ? "dress-code" : undefined}
                   >
                     <AccordionButton
                       py={5}
