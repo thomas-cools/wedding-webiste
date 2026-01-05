@@ -341,21 +341,21 @@
     "dressCode": {
       "welcomeDinner": {
         "title": "Welcome Dinner",
-        "day": "Tuesday Evening",
-        "code": "Cocktail Attire",
-        "description": "Think elegant but not overly formal. For women, a cocktail dress, jumpsuit, or dressy separates work beautifully. For men, a suit or blazer paired with dress pants. Feel free to add a pop of color!"
+        "day": "August 25th, 2026",
+        "code": "Semi-Formal",
+        "description": "For our pre-wedding dinner, we invite you to dress semi-formal, polished, elegant, and comfortable. Think elevated evening wear without being overly formal.\nFor example:\nSuits or tailored jackets, dress shirts, and smart shoes for men\nCocktail dresses, elegant midi dresses, or refined separates with dressy flats or heels for women\nTies are optional; we encourage you to be comfortable. Most importantly, wear something that makes you feel confident and ready to celebrate with us!"
       },
       "wedding": {
         "title": "The Wedding",
-        "day": "Wednesday",
-        "code": "Formal Attire",
-        "description": "This is our most elegant celebration. For women, floor-length gowns, formal midi dresses, or elegant cocktail dresses are perfect. For men, a dark suit or tuxedo. Think black-tie optional."
+        "day": "August 26th, 2026",
+        "code": "Formal",
+        "description": "For our wedding day, we kindly invite you to dress formally: timeless, elegant, and celebratory.\nThe groom will be wearing a tuxedo, and we’d love for the overall look and feel to match the occasion.\nFor example:\nDark suits or tuxedos, crisp dress shirts, polished shoes for men\nLong evening gowns or formal cocktail dresses for women\nElevated fabrics, classic silhouettes, and refined details\nThink classic evening elegance rather than casual or daytime wear. Above all, choose something that makes you feel confident, comfortable, and ready to celebrate with us."
       },
       "brunch": {
-        "title": "Farewell Brunch",
-        "day": "Thursday Morning",
-        "code": "Smart Casual",
-        "description": "Relaxed but polished. Sundresses, linen separates, chinos with a nice shirt, or a casual blazer all work well. Comfortable and chic!"
+        "title": "Pool Brunch",
+        "day": "August 27th, 2026",
+        "code": "Casual",
+        "description": "For our final day together, it’s all about relaxing and soaking up the sunshine.\nDress casually and comfortably, perfect for a laid-back poolside celebration.\nThink:\nSwimwear, light cover-ups, sundresses, or linen shirts\nSandals, espadrilles, or barefoot-friendly shoes\nSunglasses, hats, and easy summer layers are welcome\nCome as you are, ready to unwind, swim, laugh, and enjoy one last day together."
       },
       "shoeTip": "The ceremony and reception will be outdoors on grass and gravel paths, so we recommend comfortable shoes—block heels or wedges are great alternatives to stilettos."
     },

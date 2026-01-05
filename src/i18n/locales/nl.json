@@ -341,21 +341,21 @@
     "dressCode": {
       "welcomeDinner": {
         "title": "Welkomstdiner",
-        "day": "Dinsdagavond",
-        "code": "Cocktailkleding",
-        "description": "Elegant maar niet overdreven formeel. Voor vrouwen werkt een cocktailjurk, jumpsuit of chique ensemble prachtig. Voor mannen een pak of blazer met nette broek. Voel je vrij om een vleugje kleur toe te voegen!"
+        "day": "25 Augustus 2026",
+        "code": "Semi-formeel",
+        "description": "Voor ons diner voorafgaand aan de bruiloft nodigen we jullie uit om semi-formeel, verzorgd, elegant en comfortabel gekleed te gaan. Denk aan verhoogde avondkleding zonder overdreven formeel te zijn.\nBijvoorbeeld:\nPakken of getailleerde jasjes, overhemden en nette schoenen voor mannen\nCocktailjurken, elegante midi-jurken of verfijnde ensembles met nette platte schoenen of hakken voor vrouwen\nDassen zijn optioneel; we moedigen jullie aan om comfortabel te zijn. Het belangrijkste is dat je iets draagt waarin je je zelfverzekerd voelt en klaar bent om met ons te vieren!"
       },
       "wedding": {
-        "title": "De Bruiloft",
-        "day": "Woensdag",
-        "code": "Formele Kleding",
-        "description": "Dit is onze meest elegante viering. Voor vrouwen zijn lange jurken, formele midi-jurken of elegante cocktailjurken perfect. Voor mannen een donker pak of smoking. Denk aan optioneel black-tie."
+        "title": "Het Huwelijk",
+        "day": "26 Augustus 2026",
+        "code": "Formeel",
+        "description": "Voor onze trouwdag nodigen we jullie vriendelijk uit om formeel gekleed te gaan: tijdloos, elegant en feestelijk.\nDe bruidegom draagt een smoking en we zouden het geweldig vinden als de algehele uitstraling bij de gelegenheid past.\nBijvoorbeeld:\nDonkere pakken of smokings, frisse overhemden, gepoetste schoenen voor mannen\nLange avondjurken of formele cocktailjurken voor vrouwen\nVerheven stoffen, klassieke silhouetten en verfijnde details\nDenk aan klassieke avondelegantie in plaats van casual of dagkleding. Kies vooral iets waarin je je zelfverzekerd, comfortabel en klaar voelt om met ons te vieren."
       },
       "brunch": {
-        "title": "Afscheidsbrunch",
-        "day": "Donderdagochtend",
-        "code": "Smart Casual",
-        "description": "Ontspannen maar verzorgd. Zomerjurken, linnen ensembles, chino's met een mooi overhemd of een casual blazer werken allemaal goed. Comfortabel en chic!"
+        "title": "Zwembad Brunch",
+        "day": "27 Augustus 2026",
+        "code": "Casual",
+        "description": "Voor onze laatste dag samen draait alles om ontspannen en genieten van de zon.\nKleed je casual en comfortabel, perfect voor een ontspannen viering aan het zwembad.\nDenk aan:\nZwemkleding, lichte cover-ups, zomerjurken of linnen overhemden\nSandalen, espadrilles of schoenen die makkelijk uit kunnen\nZonnebrillen, hoeden en makkelijke zomerlaagjes zijn welkom\nKom zoals je bent, klaar om te ontspannen, zwemmen, lachen en te genieten van een laatste dag samen."
       },
       "shoeTip": "De ceremonie en receptie zijn buiten op gras en grindpaden, dus we raden comfortabele schoenen aan—blokhakken of sleehakken zijn geweldige alternatieven voor naaldhakken."
     },
