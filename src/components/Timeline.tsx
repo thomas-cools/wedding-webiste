@@ -52,7 +52,7 @@ export default function Timeline() {
       <Container maxW="container.xl" px={[4, 6, 8]}>
         <VStack spacing={[12, 16, 20]}>
           {/* Intro Text */}
-          <VStack spacing={4} textAlign="left" alignItems="flex-start" maxW="700px" mx="auto">
+          <VStack spacing={4} textAlign="center" alignItems="center" maxW="700px" mx="auto">
             <Text
               color="neutral.muted"
               fontSize={["sm", "md"]}

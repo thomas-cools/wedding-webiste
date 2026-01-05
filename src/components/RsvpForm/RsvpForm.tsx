@@ -75,7 +75,7 @@ export default function RsvpForm({ onSuccess }: RsvpFormProps) {
           <Text
             color="rgba(246,241,235,0.75)"
             fontSize={['sm', 'md']}
-            textAlign="left"
+            textAlign="center"
             lineHeight="1.8"
             px={[2, 0]}
           >
