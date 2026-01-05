@@ -191,7 +191,7 @@ export function FaqSection() {
                       py={5}
                       px={6}
                       _hover={{ bg: 'gray.50' }}
-                      _expanded={{ bg: 'primary.soft', color: 'white' }}
+                      _expanded={{ bg: 'neutral.dark', color: 'white' }}
                     >
                       <Box
                         flex="1"
