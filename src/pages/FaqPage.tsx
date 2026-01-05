@@ -54,7 +54,7 @@ function FaqPageContent() {
   const { t } = useTranslation()
 
   return (
-    <Box minH="100vh" bg="neutral.light" display="flex" flexDirection="column">
+    <Box id="page-top" minH="100vh" bg="neutral.light" display="flex" flexDirection="column">
       {/* Minimal Header */}
       <Box
         as="header"

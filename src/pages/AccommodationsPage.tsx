@@ -31,7 +31,7 @@ function AccommodationsPageContent() {
   const { t } = useTranslation()
 
   return (
-    <Box minH="100vh" bg="#E3DFCE" display="flex" flexDirection="column" position="relative" overflow="hidden">
+    <Box id="page-top" minH="100vh" bg="#E3DFCE" display="flex" flexDirection="column" position="relative" overflow="hidden">
       {/* Texture Background Decoration - Right Side */}
       <Box
         position="fixed"

@@ -35,7 +35,7 @@ function RsvpPageContent() {
   }
 
   return (
-    <Box minH="100vh" bg="#300F0C" display="flex" flexDirection="column" position="relative" overflow="hidden">
+    <Box id="page-top" minH="100vh" bg="#300F0C" display="flex" flexDirection="column" position="relative" overflow="hidden">
       {/* Texture Background Decoration - Left Side */}
       <Box
         position="fixed"

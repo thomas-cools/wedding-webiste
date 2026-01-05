@@ -75,19 +75,19 @@ export function QuickLinks() {
 
   const quickLinks: QuickLinkItem[] = [
     {
-      to: '/rsvp',
+      to: '/rsvp#page-top',
       icon: loveBirdsIcon,
       label: t('header.rsvp'),
       alt: 'RSVP',
     },
     {
-      to: '/faq',
+      to: '/faq#page-top',
       icon: luchadorIcon,
       label: t('header.faq'),
       alt: 'FAQ',
     },
     {
-      to: '/accommodations',
+      to: '/accommodations#page-top',
       icon: restIcon,
       label: t('quickLinks.stay', 'STAY'),
       alt: 'Stay',
