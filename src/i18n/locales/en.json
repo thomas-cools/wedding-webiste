@@ -275,7 +275,7 @@
     "label": "Travel & Stay",
     "title": "Accommodation",
     "backToHome": "Back",
-    "subtitle": "Vallesvilles is a rural village in the Toulouse countryside with approximately 500 inhabitants. This charming village offers a peaceful and authentic setting, typical of the Lauragais region, with its hillsides, open fields, and pretty brick houses. The atmosphere is gentle and welcoming, ideal for hosting a wedding surrounded by nature, far from the hustle and bustle, yet easily accessible from Toulouse.",
+    "subtitle": "Vallesvilles is a rural village in the Toulouse countryside with approximately 500 inhabitants. This charming village offers a peaceful and authentic setting, typical of the Lauragais region, with its hillsides, open fields, and pretty brick houses. The atmosphere is gentle and welcoming, ideal for hosting a wedding surrounded by nature, far from the hustle and bustle, yet easily accessible from Toulouse (35 minutes by car).",
     "transportNote": "If you are not providing your own transportation to and from the venue, we strongly recommend staying in Toulouse, only a 35 minute drive away, so we can help organize transportation for you.",
     "tabs": {
       "onsite": "On-Site",
@@ -284,8 +284,8 @@
       "hotels": "Hotels"
     },
     "onsiteTitle": "Stay at the Venue",
-    "onsiteDescription": "We're delighted to offer limited on-site accommodation at the château for our guests. Priority will be given to immediate family members.",
-    "onsiteDetails": "If you're interested in staying at the venue, please indicate this in your RSVP or send an email to <emailLink>rsvp@carolinaandthomas.com</emailLink>. We'll follow up with availability and details.",
+    "onsiteDescription": "We’re delighted to offer limited on-site accommodations at the venue for our guests. Priority will be given to family members.",
+    "onsiteDetails": "If you’re interested in staying at the venue, please indicate this in your RSVP or send an email to <emailLink>carolinaandthomaswedding@gmail.com</emailLink>. We’ll follow up with availability and details.",
     "viewFloorplan": "Room Plan",
     "clickToEnlarge": "Click image to enlarge",
     "airbnbTitle": "Find Nearby Stays",
