@@ -8,6 +8,7 @@ import {
   Link, 
   Divider, 
   HStack,
+  Flex,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -49,15 +50,15 @@ interface BuildingSection {
 
 const RoomCard: React.FC<{ room: RoomInfo }> = ({ room }) => (
   <Box py={4}>
-    <HStack 
+    <Flex 
+      direction={["column", "row"]} 
       justify="space-between" 
-      align="flex-start" 
-      flexDir={["column", "row"]} 
-      gap={[3, 8]}
+      align={["stretch", "flex-start"]} 
+      gap={[2, 8]}
       w="100%"
     >
       {/* Room details - flexible width */}
-      <Box flex="1" textAlign={["center", "left"]}>
+      <Box flex="1" textAlign="left">
         <Text fontWeight="600" fontSize={["sm", "md"]} color="neutral.dark">
           {room.name}
         </Text>
@@ -83,36 +84,46 @@ const RoomCard: React.FC<{ room: RoomInfo }> = ({ room }) => (
         )}
       </Box>
 
-      {/* Capacity icons column - fixed width for consistent alignment */}
-      <HStack 
-        spacing={3} 
-        color="neutral.muted" 
-        minW={["auto", "70px"]}
-        justify={["center", "center"]}
-        flexShrink={0}
+      {/* Info Row (Mobile) / Columns (Desktop) */}
+      <Flex 
+        direction={["row", "row"]} 
+        justify={["space-between", "flex-end"]}
+        align={["center", "flex-start"]}
+        w={["100%", "auto"]}
+        gap={[4, 8]}
+        mt={[3, 0]}
       >
-        <HStack spacing={1} title={`${room.capacity} ${room.capacity === 1 ? 'person' : 'people'}`}>
-          <PersonIcon boxSize="14px" />
-          <Text fontSize="xs" fontWeight="500">{room.capacity}</Text>
+        {/* Capacity icons */}
+        <HStack 
+          spacing={3} 
+          color="neutral.muted" 
+          minW={["auto", "70px"]}
+          justify={["flex-start", "center"]}
+          flexShrink={0}
+        >
+          <HStack spacing={1} title={`${room.capacity} ${room.capacity === 1 ? 'person' : 'people'}`}>
+            <PersonIcon boxSize="14px" />
+            <Text fontSize="xs" fontWeight="500">{room.capacity}</Text>
+          </HStack>
+          <HStack spacing={1} title={`${room.bedCount} ${room.bedCount === 1 ? 'bed' : 'beds'}`}>
+            <BedIcon boxSize="16px" />
+            <Text fontSize="xs" fontWeight="500">{room.bedCount}</Text>
+          </HStack>
         </HStack>
-        <HStack spacing={1} title={`${room.bedCount} ${room.bedCount === 1 ? 'bed' : 'beds'}`}>
-          <BedIcon boxSize="16px" />
-          <Text fontSize="xs" fontWeight="500">{room.bedCount}</Text>
-        </HStack>
-      </HStack>
 
-      {/* Price column - fixed width */}
-      <Text 
-        fontSize={["xs", "sm"]} 
-        fontWeight="600" 
-        color="primary.deep" 
-        minW={["auto", "100px"]}
-        textAlign={["center", "right"]}
-        flexShrink={0}
-      >
-        {room.price}
-      </Text>
-    </HStack>
+        {/* Price */}
+        <Text 
+          fontSize={["sm", "sm"]} 
+          fontWeight="600" 
+          color="primary.deep" 
+          minW={["auto", "100px"]}
+          textAlign="right"
+          flexShrink={0}
+        >
+          {room.price}
+        </Text>
+      </Flex>
+    </Flex>
   </Box>
 );
 
