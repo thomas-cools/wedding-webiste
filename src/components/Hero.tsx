@@ -428,7 +428,7 @@ export default function Hero({
       {hasCollage && (
         <Box
           position="absolute"
-          top={['12%', '12%', '12%']}
+          top={['15%', '15%', '15%']}
           left="50%"
           transform="translateX(-50%)"
           zIndex={3}
@@ -451,7 +451,7 @@ export default function Hero({
                   fontFamily="heading"
                   fontSize={["3xl", "5xl", "6xl"]}
                   fontWeight="300"
-                  color="white"
+                  color="#F6F1EB"
                   letterSpacing="0.03em"
                   lineHeight="1"
                 >
@@ -462,7 +462,7 @@ export default function Hero({
                   fontFamily="heading"
                   fontSize={["xl", "3xl", "4xl"]}
                   fontWeight="300"
-                  color="whiteAlpha.800"
+                  color="#F6F1EB"
                   fontStyle="italic"
                   lineHeight="1"
                 >
@@ -474,7 +474,7 @@ export default function Hero({
                   fontFamily="heading"
                   fontSize={["3xl", "5xl", "6xl"]}
                   fontWeight="300"
-                  color="white"
+                  color="#F6F1EB"
                   letterSpacing="0.03em"
                   lineHeight="1"
                 >
