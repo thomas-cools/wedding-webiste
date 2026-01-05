@@ -207,16 +207,16 @@ function GalleryPageContent() {
               {/* Left Column Images */}
               <GridItem display={{ base: "none", lg: "block" }}>
                  <VStack spacing={32} align="flex-start" pt={20}>
-                    <Box transform="rotate(-3deg)" w="80%">
+                    <Box w="80%">
                       <Image src={photo2017} alt="Carolina & Thomas 2017" borderRadius="sm" boxShadow="md" />
                     </Box>
-                    <Box transform="rotate(2deg)" w="70%" ml={8}>
+                    <Box w="70%" ml={8}>
                       <Image src={photo2019} alt="Carolina & Thomas 2019" borderRadius="sm" boxShadow="md" />
                     </Box>
-                    <Box transform="rotate(-1deg)" w="85%">
+                    <Box w="85%">
                       <Image src={photo2021} alt="Carolina & Thomas 2021" borderRadius="sm" boxShadow="md" />
                     </Box>
-                    <Box transform="rotate(2deg)" w="90%" ml={4}>
+                    <Box w="90%" ml={4}>
                       <Image src={photo2024} alt="Carolina & Thomas 2024" borderRadius="sm" boxShadow="md" />
                     </Box>
                  </VStack>
@@ -243,7 +243,7 @@ function GalleryPageContent() {
                   </Box>
 
                   {/* Center Image */}
-                  <Box transform="rotate(1deg)" w="70%" mx="auto">
+                  <Box w="70%" mx="auto">
                      <Image src={photo2023} alt="Carolina & Thomas 2023" borderRadius="sm" boxShadow="md" />
                   </Box>
                 </VStack>
@@ -252,18 +252,18 @@ function GalleryPageContent() {
               {/* Right Column Images */}
               <GridItem display={{ base: "none", lg: "block" }}>
                 <VStack spacing={40} align="flex-end" pt={40}>
-                    <Box transform="rotate(3deg)" w="75%" mr={8}>
+                    <Box w="75%" mr={8}>
                       <Image src={photo2018} alt="Carolina & Thomas 2018" borderRadius="sm" boxShadow="md" />
                     </Box>
-                    <Box transform="rotate(-2deg)" w="85%">
+                    <Box w="85%">
                       <Image src={photo2020} alt="Carolina & Thomas 2020" borderRadius="sm" boxShadow="md" />
                     </Box>
-                    <Box transform="rotate(1deg)" w="90%" mr={4}>
+                    <Box w="90%" mr={4}>
                       <Image src={photo2022} alt="Carolina & Thomas 2022" borderRadius="sm" boxShadow="md" />
                     </Box>
                     
                     {/* Bottom Right with Logo */}
-                    <Box position="relative" w="80%" transform="rotate(-2deg)">
+                    <Box position="relative" w="80%">
                       <Image src={photo2025} alt="Carolina & Thomas 2025" borderRadius="sm" boxShadow="md" />
                       <Box 
                         position="absolute" 
@@ -271,7 +271,6 @@ function GalleryPageContent() {
                         right="-40px" 
                         w="120px" 
                         zIndex={3}
-                        transform="rotate(15deg)"
                       >
                         <Image src={tcLogo} alt="TC Logo" opacity={0.8} />
                       </Box>
@@ -282,17 +281,17 @@ function GalleryPageContent() {
             
             {/* Mobile Layout (All Photos) */}
             <VStack display={{ base: "flex", lg: "none" }} spacing={12} w="full" pt={8}>
-               <Image src={photo2017} alt="Carolina & Thomas 2017" borderRadius="sm" boxShadow="md" w="80%" transform="rotate(-2deg)" alignSelf="flex-start" />
-               <Image src={photo2018} alt="Carolina & Thomas 2018" borderRadius="sm" boxShadow="md" w="75%" transform="rotate(2deg)" alignSelf="flex-end" />
-               <Image src={photo2019} alt="Carolina & Thomas 2019" borderRadius="sm" boxShadow="md" w="85%" transform="rotate(-1deg)" alignSelf="center" />
-               <Image src={photo2020} alt="Carolina & Thomas 2020" borderRadius="sm" boxShadow="md" w="70%" transform="rotate(3deg)" alignSelf="flex-start" />
-               <Image src={photo2021} alt="Carolina & Thomas 2021" borderRadius="sm" boxShadow="md" w="80%" transform="rotate(-2deg)" alignSelf="flex-end" />
-               <Image src={photo2022} alt="Carolina & Thomas 2022" borderRadius="sm" boxShadow="md" w="75%" transform="rotate(1deg)" alignSelf="center" />
-               <Image src={photo2023} alt="Carolina & Thomas 2023" borderRadius="sm" boxShadow="md" w="85%" transform="rotate(-3deg)" alignSelf="flex-start" />
-               <Image src={photo2024} alt="Carolina & Thomas 2024" borderRadius="sm" boxShadow="md" w="70%" transform="rotate(2deg)" alignSelf="flex-end" />
+               <Image src={photo2017} alt="Carolina & Thomas 2017" borderRadius="sm" boxShadow="md" w="80%" alignSelf="flex-start" />
+               <Image src={photo2018} alt="Carolina & Thomas 2018" borderRadius="sm" boxShadow="md" w="75%" alignSelf="flex-end" />
+               <Image src={photo2019} alt="Carolina & Thomas 2019" borderRadius="sm" boxShadow="md" w="85%" alignSelf="center" />
+               <Image src={photo2020} alt="Carolina & Thomas 2020" borderRadius="sm" boxShadow="md" w="70%" alignSelf="flex-start" />
+               <Image src={photo2021} alt="Carolina & Thomas 2021" borderRadius="sm" boxShadow="md" w="80%" alignSelf="flex-end" />
+               <Image src={photo2022} alt="Carolina & Thomas 2022" borderRadius="sm" boxShadow="md" w="75%" alignSelf="center" />
+               <Image src={photo2023} alt="Carolina & Thomas 2023" borderRadius="sm" boxShadow="md" w="85%" alignSelf="flex-start" />
+               <Image src={photo2024} alt="Carolina & Thomas 2024" borderRadius="sm" boxShadow="md" w="70%" alignSelf="flex-end" />
                
                {/* Final photo with logo */}
-               <Box position="relative" w="80%" transform="rotate(-2deg)" alignSelf="center">
+               <Box position="relative" w="80%" alignSelf="center">
                   <Image src={photo2025} alt="Carolina & Thomas 2025" borderRadius="sm" boxShadow="md" />
                   <Box 
                     position="absolute" 
@@ -300,7 +299,6 @@ function GalleryPageContent() {
                     right="-30px" 
                     w="100px" 
                     zIndex={3}
-                    transform="rotate(15deg)"
                   >
                     <Image src={tcLogo} alt="TC Logo" opacity={0.8} />
                   </Box>
