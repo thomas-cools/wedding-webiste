@@ -68,7 +68,7 @@ export interface UseRsvpFormReturn {
 
   // Validation
   errors: Record<string, string>
-  validateField: (field: string) => void
+  validateField: (field: string, value?: any) => void
   hasAttemptedSubmit: boolean
 
   // Submission
@@ -221,8 +221,11 @@ export function useRsvpForm(options: UseRsvpFormOptions = {}): UseRsvpFormReturn
 
     if (!firstName.trim()) errs.firstName = t('rsvp.validation.nameRequired')
     if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) errs.email = t('rsvp.validation.emailRequired')
-    if (!mailingAddress.trim()) errs.mailingAddress = t('rsvp.validation.addressRequired')
     if (!likelihood) errs.likelihood = t('rsvp.validation.likelihoodRequired')
+
+    if (likelihood !== 'no') {
+      if (!mailingAddress.trim()) errs.mailingAddress = t('rsvp.validation.addressRequired')
+    }
 
     if (likelihood === 'definitely' || likelihood === 'highly_likely') {
       const anyEvent = Object.values(events).some(v => v === 'yes' || v === 'arriving_late')
@@ -239,32 +242,40 @@ export function useRsvpForm(options: UseRsvpFormOptions = {}): UseRsvpFormReturn
     return errs
   }, [firstName, email, mailingAddress, likelihood, events, hasPlusOne, plusOne, hasChildren, children, t])
 
-  const validateField = useCallback((field: string) => {
+  const validateField = useCallback((field: string, value?: any) => {
     setErrors(prevErrors => {
       const copy = { ...prevErrors }
       switch (field) {
         case 'firstName':
-          if (!firstName.trim()) copy.firstName = t('rsvp.validation.nameRequired')
+          const nameVal = value !== undefined ? value : firstName
+          if (!nameVal.trim()) copy.firstName = t('rsvp.validation.nameRequired')
           else delete copy.firstName
           break
         case 'email':
-          if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) copy.email = t('rsvp.validation.emailRequired')
+          const emailVal = value !== undefined ? value : email
+          if (!emailVal.trim() || !/\S+@\S+\.\S+/.test(emailVal)) copy.email = t('rsvp.validation.emailRequired')
           else delete copy.email
           break
         case 'mailingAddress':
-          if (!mailingAddress.trim()) copy.mailingAddress = t('rsvp.validation.addressRequired')
+          const addressVal = value !== undefined ? value : mailingAddress
+          if (likelihood !== 'no' && !addressVal.trim()) copy.mailingAddress = t('rsvp.validation.addressRequired')
           else delete copy.mailingAddress
           break
         case 'likelihood':
-          if (!likelihood) copy.likelihood = t('rsvp.validation.likelihoodRequired')
+          const likelihoodVal = value !== undefined ? value : likelihood
+          if (!likelihoodVal) copy.likelihood = t('rsvp.validation.likelihoodRequired')
           else delete copy.likelihood
-          if (!(likelihood === 'definitely' || likelihood === 'highly_likely')) {
+          if (!(likelihoodVal === 'definitely' || likelihoodVal === 'highly_likely')) {
             delete copy.events
+          }
+          if (likelihoodVal === 'no') {
+            delete copy.mailingAddress
           }
           break
         case 'events':
+          const eventsVal = value !== undefined ? value : events
           if (likelihood === 'definitely' || likelihood === 'highly_likely') {
-            const anyEvent = Object.values(events).some(v => v === 'yes' || v === 'arriving_late')
+            const anyEvent = Object.values(eventsVal).some((v: any) => v === 'yes' || v === 'arriving_late')
             if (!anyEvent) copy.events = t('rsvp.validation.eventRequired')
             else delete copy.events
           } else {
@@ -272,15 +283,17 @@ export function useRsvpForm(options: UseRsvpFormOptions = {}): UseRsvpFormReturn
           }
           break
         case 'plusOne':
-          if (hasPlusOne && !plusOne.name.trim()) copy.plusOne = t('rsvp.validation.plusOneNameRequired')
+          const plusOneVal = value !== undefined ? value : plusOne
+          if (hasPlusOne && !plusOneVal.name.trim()) copy.plusOne = t('rsvp.validation.plusOneNameRequired')
           else delete copy.plusOne
           break
         case 'children':
+          const childrenVal = value !== undefined ? value : children
           if (!hasChildren) {
             delete copy.children
-          } else if (children.length === 0) {
+          } else if (childrenVal.length === 0) {
             copy.children = t('rsvp.validation.childrenRequired')
-          } else if (children.some(c => !c.name.trim())) {
+          } else if (childrenVal.some((c: any) => !c.name.trim())) {
             copy.children = t('rsvp.validation.childNameRequired')
           } else {
             delete copy.children

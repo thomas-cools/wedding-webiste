@@ -3,6 +3,12 @@ import { render, screen, fireEvent, waitFor } from '../test-utils'
 import userEvent from '@testing-library/user-event'
 import RsvpForm from '../components/RsvpForm'
 
+// Mock @zag-js/focus-visible to prevent TypeError in tests
+jest.mock('@zag-js/focus-visible', () => ({
+  trackFocusVisible: jest.fn(() => () => {}),
+  setupGlobalFocusEvents: jest.fn(),
+}))
+
 /**
  * Integration tests for the RsvpForm component.
  *
@@ -59,14 +65,17 @@ describe('RsvpForm Integration Tests', () => {
   })
 
   describe('Rendering', () => {
-    it('renders the form with all required fields', () => {
+    it('renders the form with initial required fields', () => {
       render(<RsvpForm />)
       
       expect(screen.getByRole('heading', { name: 'rsvp.title' })).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.yourName')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.email')).toBeInTheDocument()
-      expect(screen.getByText('rsvp.form.mailingAddress')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.willYouJoin')).toBeInTheDocument()
+      
+      // Conditional fields should not be visible initially
+      expect(screen.queryByText('rsvp.form.mailingAddress')).not.toBeInTheDocument()
+      expect(screen.queryByText('rsvp.form.accommodation')).not.toBeInTheDocument()
     })
 
     it('renders the RSVP header section', () => {
@@ -76,9 +85,14 @@ describe('RsvpForm Integration Tests', () => {
       expect(screen.getByText('rsvp.description')).toBeInTheDocument()
     })
 
-    it('renders optional fields', () => {
+    it('renders optional fields when attending', async () => {
+      const user = userEvent.setup()
       render(<RsvpForm />)
       
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      await user.selectOptions(likelihoodSelect, 'definitely')
+
+      expect(screen.getByText('rsvp.form.mailingAddress')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.accommodation')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.travel')).toBeInTheDocument()
       expect(screen.getByText('rsvp.form.dietary')).toBeInTheDocument()
@@ -91,12 +105,6 @@ describe('RsvpForm Integration Tests', () => {
       render(<RsvpForm />)
       
       expect(screen.getByRole('button', { name: 'rsvp.form.submit' })).toBeInTheDocument()
-    })
-
-    it('renders France tips checkbox', () => {
-      render(<RsvpForm />)
-      
-      expect(screen.getByText('rsvp.form.franceTips')).toBeInTheDocument()
     })
   })
 
@@ -138,14 +146,34 @@ describe('RsvpForm Integration Tests', () => {
       const emailInput = screen.getByPlaceholderText('rsvp.form.emailPlaceholder')
       await user.type(emailInput, 'john@example.com')
 
-      const addressInput = screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder')
-      await user.type(addressInput, '123 Main St, City')
+      // Address is hidden initially, so we don't fill it
       
       const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
       
       await waitFor(() => {
         expect(screen.getByText('rsvp.validation.likelihoodRequired')).toBeInTheDocument()
+      })
+    })
+
+    it('does not require address when declining', async () => {
+      const user = userEvent.setup()
+      render(<RsvpForm />)
+      
+      const nameInput = screen.getByPlaceholderText('rsvp.form.namePlaceholder')
+      await user.type(nameInput, 'John Doe')
+      
+      const emailInput = screen.getByPlaceholderText('rsvp.form.emailPlaceholder')
+      await user.type(emailInput, 'john@example.com')
+
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      await user.selectOptions(likelihoodSelect, 'no')
+      
+      const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
+      await user.click(submitButton)
+      
+      await waitFor(() => {
+        expect(screen.queryByText('rsvp.validation.addressRequired')).not.toBeInTheDocument()
       })
     })
 
@@ -186,11 +214,10 @@ describe('RsvpForm Integration Tests', () => {
 
   describe('Conditional Event Selection', () => {
     it('shows event selection when user selects "Joyfully Accept"', async () => {
-      const user = userEvent.setup()
       render(<RsvpForm />)
       
       const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
-      await user.selectOptions(likelihoodSelect, 'definitely')
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
       
       await waitFor(() => {
         expect(screen.getByText('rsvp.form.eventsTitle')).toBeInTheDocument()
@@ -198,11 +225,10 @@ describe('RsvpForm Integration Tests', () => {
     })
 
     it('shows event selection when user selects "Likely to Attend"', async () => {
-      const user = userEvent.setup()
       render(<RsvpForm />)
       
       const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
-      await user.selectOptions(likelihoodSelect, 'highly_likely')
+      fireEvent.change(likelihoodSelect, { target: { value: 'highly_likely' } })
       
       await waitFor(() => {
         expect(screen.getByText('rsvp.form.eventsTitle')).toBeInTheDocument()
@@ -210,11 +236,10 @@ describe('RsvpForm Integration Tests', () => {
     })
 
     it('shows event selection when user selects "Not Yet Certain"', async () => {
-      const user = userEvent.setup()
       render(<RsvpForm />)
       
       const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
-      await user.selectOptions(likelihoodSelect, 'maybe')
+      fireEvent.change(likelihoodSelect, { target: { value: 'maybe' } })
       
       await waitFor(() => {
         expect(screen.getByText('rsvp.form.eventsTitle')).toBeInTheDocument()
@@ -222,11 +247,10 @@ describe('RsvpForm Integration Tests', () => {
     })
 
     it('hides event selection when user selects "Regretfully Decline"', async () => {
-      const user = userEvent.setup()
       render(<RsvpForm />)
       
       const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
-      await user.selectOptions(likelihoodSelect, 'no')
+      fireEvent.change(likelihoodSelect, { target: { value: 'no' } })
       
       await waitFor(() => {
         expect(screen.queryByText('rsvp.form.eventsTitle')).not.toBeInTheDocument()
@@ -234,11 +258,10 @@ describe('RsvpForm Integration Tests', () => {
     })
 
     it('does not show event validation error until submit', async () => {
-      const user = userEvent.setup()
       render(<RsvpForm />)
 
       const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
-      await user.selectOptions(likelihoodSelect, 'definitely')
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
 
       // Event section appears, but the error message should not.
       expect(await screen.findByText('rsvp.form.eventsTitle')).toBeInTheDocument()
@@ -251,8 +274,11 @@ describe('RsvpForm Integration Tests', () => {
       
       await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
       await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
+      
       await user.type(screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder'), '123 Main St, City')
-      await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'definitely')
       
       const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
@@ -268,6 +294,9 @@ describe('RsvpForm Integration Tests', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
 
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
+
       const plusOneCheckbox = screen.getByRole('checkbox', { name: 'rsvp.form.hasPlusOne' })
       await user.click(plusOneCheckbox)
 
@@ -281,8 +310,11 @@ describe('RsvpForm Integration Tests', () => {
 
       await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
       await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
+      
       await user.type(screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder'), '123 Main St, City')
-      await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'no')
 
       const plusOneCheckbox = screen.getByRole('checkbox', { name: 'rsvp.form.hasPlusOne' })
       await user.click(plusOneCheckbox)
@@ -299,6 +331,9 @@ describe('RsvpForm Integration Tests', () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
 
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
+
       const childrenCheckbox = screen.getByRole('checkbox', { name: 'rsvp.form.hasChildren' })
       await user.click(childrenCheckbox)
 
@@ -314,8 +349,11 @@ describe('RsvpForm Integration Tests', () => {
 
       await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
       await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
+      
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
+      
       await user.type(screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder'), '123 Main St, City')
-      await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'no')
 
       const childrenCheckbox = screen.getByRole('checkbox', { name: 'rsvp.form.hasChildren' })
       await user.click(childrenCheckbox)
@@ -336,8 +374,9 @@ describe('RsvpForm Integration Tests', () => {
       
       await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
       await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
-      await user.type(screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder'), '123 Main St, City')
-      await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'no')
+      // Address not needed for 'no'
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'no' } })
       
       const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
@@ -357,8 +396,9 @@ describe('RsvpForm Integration Tests', () => {
       
       await user.type(screen.getByPlaceholderText('rsvp.form.namePlaceholder'), 'John Doe')
       await user.type(screen.getByPlaceholderText('rsvp.form.emailPlaceholder'), 'john@example.com')
-      await user.type(screen.getByPlaceholderText('rsvp.form.mailingAddressPlaceholder'), '123 Main St, City')
-      await user.selectOptions(screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' }), 'no')
+      // Address not needed for 'no'
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'no' } })
       
       const submitButton = screen.getByRole('button', { name: 'rsvp.form.submit' })
       await user.click(submitButton)
@@ -377,6 +417,9 @@ describe('RsvpForm Integration Tests', () => {
     it('allows selecting accommodation preference', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
+
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
       
       const accommodationSelect = screen.getByRole('combobox', { name: 'rsvp.form.accommodation' })
       await user.selectOptions(accommodationSelect, 'venue')
@@ -387,6 +430,9 @@ describe('RsvpForm Integration Tests', () => {
     it('allows selecting travel arrangements', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
+
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
       
       const travelSelect = screen.getByRole('combobox', { name: 'rsvp.form.travel' })
       await user.selectOptions(travelSelect, 'rent_car')
@@ -397,6 +443,9 @@ describe('RsvpForm Integration Tests', () => {
     it('allows entering dietary requirements', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
+
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
       
       const dietaryInput = screen.getByPlaceholderText('rsvp.form.dietaryPlaceholder')
       await user.type(dietaryInput, 'Vegetarian')
@@ -407,6 +456,9 @@ describe('RsvpForm Integration Tests', () => {
     it('allows checking France tips checkbox', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
+
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
       
       const checkbox = screen.getByRole('checkbox', { name: 'rsvp.form.franceTips' })
       await user.click(checkbox)
@@ -417,6 +469,9 @@ describe('RsvpForm Integration Tests', () => {
     it('allows entering additional notes', async () => {
       const user = userEvent.setup()
       render(<RsvpForm />)
+
+      const likelihoodSelect = screen.getByRole('combobox', { name: 'rsvp.form.willYouJoin' })
+      fireEvent.change(likelihoodSelect, { target: { value: 'definitely' } })
       
       const notesTextarea = screen.getByPlaceholderText('rsvp.form.notesPlaceholder')
       await user.type(notesTextarea, 'Looking forward to it!')
