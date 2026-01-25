@@ -257,6 +257,77 @@
     "onsiteDescription": "We’re delighted to offer limited on-site accommodations at the venue for our guests. Priority will be given to family members.",
     "onsiteDetails": "If you’re interested in staying at the venue, please indicate this in your RSVP or send an email to <emailLink>carolinaandthomaswedding@gmail.com</emailLink>. We’ll follow up with availability and details.",
     "onsiteDisclaimer": "Please note that these are not the final prices, which will be confirmed later and may vary depending on the room. This is just to give you an idea. If you're interested, once you contact us, we will confirm the price.",
+    "roomDetails": "Room Details",
+    "capacity": "Capacity",
+    "price": "Price",
+    "person": "person",
+    "people": "people",
+    "bed": "bed",
+    "beds": "beds",
+    "perNight": "/ night",
+    "perPersonPerNight": "per person per night",
+    "mainBuilding": {
+      "title": "Main Building",
+      "description": "1 kitchen, 6 bedrooms, 6 bathrooms (20 persons)",
+      "rooms": {
+        "india": {
+          "name": "Bedroom India",
+          "subtitle": "(2 persons / 1st floor)",
+          "beds": ["1 double bed (180x200)", "OR 2 single beds (90x200)"],
+          "amenities": "*Private bathroom, shower, sink, WC"
+        },
+        "pyrenees": {
+          "name": "Pyrenees' Bedroom",
+          "subtitle": "(4 persons (2 in the room, 2 in the antechamber))",
+          "beds": ["1 double bed (180x200)", "Antechamber AND 2 single beds (90x200)"],
+          "amenities": "*Private bathroom, shower, sink, WC"
+        },
+        "provence": {
+          "name": "Bedroom Provence",
+          "subtitle": "(2 persons / 1st floor)",
+          "beds": ["1 double bed (180x200)", "OR 2 single beds (90x200)"],
+          "amenities": "*Private bathroom, shower, sink, WC"
+        },
+        "occitanie": {
+          "name": "Bedroom Occitanie",
+          "subtitle": "(2 persons / 1st floor)",
+          "beds": ["1 double bed (160x200)"],
+          "amenities": "Private bathroom, shower, sink, WC"
+        },
+        "lauragais": {
+          "name": "Lauragais' Dormitory",
+          "subtitle": "(8 persons / 1st floor)",
+          "beds": ["4 beds (160x200) in the same bedroom", "(separated by curtains)"],
+          "amenities": "*2 Shared bathroom, shower, sink, WC (to confirm)"
+        }
+      }
+    },
+    "annex": {
+      "title": "Annex",
+      "description": "1 kitchen, 4 bedrooms, 4 bathrooms (14 persons)",
+      "rooms": {
+        "room1": {
+          "name": "Ground Floor (Room 1)",
+          "subtitle": "1st floor",
+          "beds": ["2 beds (160 cm)"]
+        },
+        "room2": {
+          "name": "Ground Floor (Room 2 - family)",
+          "subtitle": "1st floor",
+          "beds": ["1 bed (160 cm) + mezzanine 1 bed (160 cm)"]
+        },
+        "room3": {
+          "name": "1st Floor (Room 3)",
+          "subtitle": "2nd floor",
+          "beds": ["2 beds (160 cm)"]
+        },
+        "room4": {
+          "name": "1st Floor (Room 4)",
+          "subtitle": "1st floor",
+          "beds": ["1 bed (160 cm)"]
+        }
+      }
+    },
     "viewFloorplan": "Room Plan",
     "clickToEnlarge": "Click image to enlarge",
     "airbnbTitle": "Find Nearby Stays",

@@ -32,234 +32,229 @@ const BedIcon: React.FC<{ boxSize?: string | number }> = ({ boxSize = "16px" }) 
 );
 
 interface RoomInfo {
-  name: string;
-  subtitle?: string;
+  nameKey: string;
+  subtitleKey?: string;
   price: string;
-  beds: string[];
-  amenities: string;
+  bedsKey: string;
+  amenitiesKey?: string;
   note?: string;
   capacity: number;
   bedCount: number;
 }
 
 interface BuildingSection {
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   rooms: RoomInfo[];
 }
 
-const RoomCard: React.FC<{ room: RoomInfo }> = ({ room }) => (
-  <Box py={4}>
-    <Flex 
-      direction={["column", "row"]} 
-      justify="space-between" 
-      align={["stretch", "flex-start"]} 
-      gap={[2, 8]}
-      w="100%"
-    >
-      {/* Room details - flexible width */}
-      <Box flex="1" textAlign="left">
-        <Text fontWeight="600" fontSize={["sm", "md"]} color="neutral.dark">
-          {room.name}
-        </Text>
-        {room.subtitle && (
-          <Text fontSize="xs" color="primary.deep" fontWeight="500">
-            {room.subtitle}
-          </Text>
-        )}
-        {room.beds.map((bed, idx) => (
-          <Text key={idx} fontSize="xs" color="neutral.muted">
-            {bed}
-          </Text>
-        ))}
-        {room.amenities && (
-          <Text fontSize="xs" color="neutral.muted" fontStyle="italic" mt={1}>
-            {room.amenities}
-          </Text>
-        )}
-        {room.note && (
-          <Text fontSize="xs" color="neutral.muted" fontStyle="italic">
-            {room.note}
-          </Text>
-        )}
-      </Box>
-
-      {/* Info Row (Mobile) / Columns (Desktop) */}
+const RoomCard: React.FC<{ room: RoomInfo }> = ({ room }) => {
+  const { t } = useTranslation();
+  const beds = t(room.bedsKey, { returnObjects: true }) as string[];
+  
+  return (
+    <Box py={4}>
       <Flex 
-        direction={["row", "row"]} 
-        justify={["space-between", "flex-end"]}
-        align={["center", "flex-start"]}
-        w={["100%", "auto"]}
-        gap={[4, 8]}
-        mt={[3, 0]}
-      >
-        {/* Capacity icons */}
-        <HStack 
-          spacing={3} 
-          color="neutral.muted" 
-          minW={["auto", "70px"]}
-          justify={["flex-start", "center"]}
-          flexShrink={0}
-        >
-          <HStack spacing={1} title={`${room.capacity} ${room.capacity === 1 ? 'person' : 'people'}`}>
-            <PersonIcon boxSize="14px" />
-            <Text fontSize="xs" fontWeight="500">{room.capacity}</Text>
-          </HStack>
-          <HStack spacing={1} title={`${room.bedCount} ${room.bedCount === 1 ? 'bed' : 'beds'}`}>
-            <BedIcon boxSize="16px" />
-            <Text fontSize="xs" fontWeight="500">{room.bedCount}</Text>
-          </HStack>
-        </HStack>
-
-        {/* Price */}
-        <Text 
-          fontSize={["sm", "sm"]} 
-          fontWeight="600" 
-          color="primary.deep" 
-          minW={["auto", "100px"]}
-          textAlign="right"
-          flexShrink={0}
-        >
-          {room.price}
-        </Text>
-      </Flex>
-    </Flex>
-  </Box>
-);
-
-const BuildingAccordion: React.FC<{ section: BuildingSection; defaultOpen?: boolean }> = ({ section, defaultOpen = false }) => (
-  <AccordionItem border="none" mb={4}>
-    <AccordionButton 
-      px={[4, 5, 6]} 
-      py={[4, 5]}
-      bg="neutral.dark"
-      borderWidth="1px"
-      borderColor="neutral.dark"
-      borderRadius="md"
-      _hover={{ bg: 'neutral.muted' }}
-      _expanded={{ 
-        bg: 'neutral.dark',
-        borderColor: 'neutral.dark',
-        borderBottomRadius: 0,
-        borderBottomWidth: 0
-      }}
-    >
-      <Box flex="1" textAlign="left">
-        <Heading 
-          as="h4" 
-          fontFamily="heading" 
-          fontSize={["lg", "xl", "2xl"]} 
-          fontWeight="600" 
-          color="white"
-          letterSpacing="wide"
-        >
-          {section.title}
-        </Heading>
-        <Text fontSize={["xs", "sm"]} color="whiteAlpha.800" mt={1}>
-          {section.description}
-        </Text>
-      </Box>
-      <AccordionIcon color="white" boxSize={6} />
-    </AccordionButton>
-    <AccordionPanel 
-      pb={4} 
-      px={4}
-      bg="white"
-      borderWidth="1px"
-      borderTopWidth={0}
-      borderColor="primary.soft"
-      borderBottomRadius="md"
-    >
-      <HStack 
+        direction={["column", "row"]} 
         justify="space-between" 
-        py={3} 
-        display={["none", "flex"]}
-        borderBottom="1px"
-        borderColor="primary.soft"
-        gap={8}
+        align={["stretch", "flex-start"]} 
+        gap={[2, 8]}
+        w="100%"
       >
-        <Text fontSize="xs" fontWeight="600" color="neutral.muted" textTransform="uppercase" letterSpacing="wide" flex="1" textAlign="left">
-          Room Details
-        </Text>
-        <Text fontSize="xs" fontWeight="600" color="neutral.muted" textTransform="uppercase" letterSpacing="wide" minW="70px" textAlign="center">
-          Capacity
-        </Text>
-        <Text fontSize="xs" fontWeight="600" color="neutral.muted" textTransform="uppercase" letterSpacing="wide" minW="100px" textAlign="right">
-          Price
-        </Text>
-      </HStack>
-      <VStack divider={<Divider borderColor="primary.soft" />} spacing={0} align="stretch">
-        {section.rooms.map((room, idx) => (
-          <RoomCard key={idx} room={room} />
-        ))}
-      </VStack>
-    </AccordionPanel>
-  </AccordionItem>
-);
+        {/* Room details - flexible width */}
+        <Box flex="1" textAlign="left">
+          <Text fontWeight="600" fontSize={["sm", "md"]} color="neutral.dark">
+            {t(room.nameKey)}
+          </Text>
+          {room.subtitleKey && (
+            <Text fontSize="xs" color="primary.deep" fontWeight="500">
+              {t(room.subtitleKey)}
+            </Text>
+          )}
+          {Array.isArray(beds) && beds.map((bed, idx) => (
+            <Text key={idx} fontSize="xs" color="neutral.muted">
+              {bed}
+            </Text>
+          ))}
+          {room.amenitiesKey && (
+            <Text fontSize="xs" color="neutral.muted" fontStyle="italic" mt={1}>
+              {t(room.amenitiesKey)}
+            </Text>
+          )}
+          {room.note && (
+            <Text fontSize="xs" color="neutral.muted" fontStyle="italic">
+              {room.note}
+            </Text>
+          )}
+        </Box>
+
+        {/* Info Row (Mobile) / Columns (Desktop) */}
+        <Flex 
+          direction={["row", "row"]} 
+          justify={["space-between", "flex-end"]}
+          align={["center", "flex-start"]}
+          w={["100%", "auto"]}
+          gap={[4, 8]}
+          mt={[3, 0]}
+        >
+          {/* Capacity icons */}
+          <HStack 
+            spacing={3} 
+            color="neutral.muted" 
+            minW={["auto", "70px"]}
+            justify={["flex-start", "center"]}
+            flexShrink={0}
+          >
+            <HStack spacing={1} title={`${room.capacity} ${room.capacity === 1 ? t('travel.person') : t('travel.people')}`}>
+              <PersonIcon boxSize="14px" />
+              <Text fontSize="xs" fontWeight="500">{room.capacity}</Text>
+            </HStack>
+            <HStack spacing={1} title={`${room.bedCount} ${room.bedCount === 1 ? t('travel.bed') : t('travel.beds')}`}>
+              <BedIcon boxSize="16px" />
+              <Text fontSize="xs" fontWeight="500">{room.bedCount}</Text>
+            </HStack>
+          </HStack>
+
+          {/* Price */}
+          <Text 
+            fontSize={["sm", "sm"]} 
+            fontWeight="600" 
+            color="primary.deep" 
+            minW={["auto", "100px"]}
+            textAlign="right"
+            flexShrink={0}
+          >
+            {room.price}
+          </Text>
+        </Flex>
+      </Flex>
+    </Box>
+  );
+};
+
+const BuildingAccordion: React.FC<{ section: BuildingSection; defaultOpen?: boolean }> = ({ section, defaultOpen = false }) => {
+  const { t } = useTranslation();
+  
+  return (
+    <AccordionItem border="none" mb={4}>
+      <AccordionButton 
+        px={[4, 5, 6]} 
+        py={[4, 5]}
+        bg="neutral.dark"
+        borderWidth="1px"
+        borderColor="neutral.dark"
+        borderRadius="md"
+        _hover={{ bg: 'neutral.muted' }}
+        _expanded={{ 
+          bg: 'neutral.dark',
+          borderColor: 'neutral.dark',
+          borderBottomRadius: 0,
+          borderBottomWidth: 0
+        }}
+      >
+        <Box flex="1" textAlign="left">
+          <Heading 
+            as="h4" 
+            fontFamily="heading" 
+            fontSize={["lg", "xl", "2xl"]} 
+            fontWeight="600" 
+            color="white"
+            letterSpacing="wide"
+          >
+            {t(section.titleKey)}
+          </Heading>
+          <Text fontSize={["xs", "sm"]} color="whiteAlpha.800" mt={1}>
+            {t(section.descriptionKey)}
+          </Text>
+        </Box>
+        <AccordionIcon color="white" boxSize={6} />
+      </AccordionButton>
+      <AccordionPanel 
+        pb={4} 
+        px={4}
+        bg="white"
+        borderWidth="1px"
+        borderTopWidth={0}
+        borderColor="primary.soft"
+        borderBottomRadius="md"
+      >
+        <HStack 
+          justify="space-between" 
+          py={3} 
+          display={["none", "flex"]}
+          borderBottom="1px"
+          borderColor="primary.soft"
+          gap={8}
+        >
+          <Text fontSize="xs" fontWeight="600" color="neutral.muted" textTransform="uppercase" letterSpacing="wide" flex="1" textAlign="left">
+            {t('travel.roomDetails')}
+          </Text>
+          <Text fontSize="xs" fontWeight="600" color="neutral.muted" textTransform="uppercase" letterSpacing="wide" minW="70px" textAlign="center">
+            {t('travel.capacity')}
+          </Text>
+          <Text fontSize="xs" fontWeight="600" color="neutral.muted" textTransform="uppercase" letterSpacing="wide" minW="100px" textAlign="right">
+            {t('travel.price')}
+          </Text>
+        </HStack>
+        <VStack divider={<Divider borderColor="primary.soft" />} spacing={0} align="stretch">
+          {section.rooms.map((room, idx) => (
+            <RoomCard key={idx} room={room} />
+          ))}
+        </VStack>
+      </AccordionPanel>
+    </AccordionItem>
+  );
+};
 
 export const OnsiteTab: React.FC = () => {
   const { t } = useTranslation();
 
   const mainBuilding: BuildingSection = {
-    title: "Main building",
-    description: "1 kitchen, 6 bedrooms, 6 bathrooms (20 persons)",
+    titleKey: "travel.mainBuilding.title",
+    descriptionKey: "travel.mainBuilding.description",
     rooms: [
       {
-        name: "Bedroom India",
-        subtitle: "(2 persons / 1st floor)",
-        price: "€150 / night",
-        beds: [
-          "1 double bed (180x200)",
-          "OR 2 single beds (90x200)"
-        ],
-        amenities: "*Private bathroom, shower, sink, WC",
+        nameKey: "travel.mainBuilding.rooms.india.name",
+        subtitleKey: "travel.mainBuilding.rooms.india.subtitle",
+        price: `€230 ${t('travel.perNight')}`,
+        bedsKey: "travel.mainBuilding.rooms.india.beds",
+        amenitiesKey: "travel.mainBuilding.rooms.india.amenities",
         capacity: 2,
         bedCount: 1
       },
       {
-        name: "Pyrenees' Bedroom",
-        subtitle: "(4 persons (2 in the room, 2 in the antechamber))",
-        price: "€260 / night",
-        beds: [
-          "1 double bed (180x200)",
-          "Antechamber AND 2 single beds (90x200)"
-        ],
-        amenities: "*Private bathroom, shower, sink, WC",
+        nameKey: "travel.mainBuilding.rooms.pyrenees.name",
+        subtitleKey: "travel.mainBuilding.rooms.pyrenees.subtitle",
+        price: `€350 ${t('travel.perNight')}`,
+        bedsKey: "travel.mainBuilding.rooms.pyrenees.beds",
+        amenitiesKey: "travel.mainBuilding.rooms.pyrenees.amenities",
         capacity: 4,
         bedCount: 3
       },
       {
-        name: "Bedroom Provence",
-        subtitle: "(2 persons / 1st floor)",
-        price: "€150 / night",
-        beds: [
-          "1 double bed (180x200)",
-          "OR 2 single beds (90x200)"
-        ],
-        amenities: "*Private bathroom, shower, sink, WC",
+        nameKey: "travel.mainBuilding.rooms.provence.name",
+        subtitleKey: "travel.mainBuilding.rooms.provence.subtitle",
+        price: `€230 ${t('travel.perNight')}`,
+        bedsKey: "travel.mainBuilding.rooms.provence.beds",
+        amenitiesKey: "travel.mainBuilding.rooms.provence.amenities",
         capacity: 2,
         bedCount: 1
       },
       {
-        name: "Bedroom Occitanie",
-        subtitle: "(2 persons / 1st floor)",
-        price: "€140 / night",
-        beds: [
-          "1 double bed (160x200)"
-        ],
-        amenities: "Private bathroom, shower, sink, WC",
+        nameKey: "travel.mainBuilding.rooms.occitanie.name",
+        subtitleKey: "travel.mainBuilding.rooms.occitanie.subtitle",
+        price: `€185 ${t('travel.perNight')}`,
+        bedsKey: "travel.mainBuilding.rooms.occitanie.beds",
+        amenitiesKey: "travel.mainBuilding.rooms.occitanie.amenities",
         capacity: 2,
         bedCount: 1
       },
       {
-        name: "Lauragais' Dormitory",
-        subtitle: "(8 persons / 1st floor)",
-        price: "€70 / night",
-        beds: [
-          "4 beds (90x200) in the same bedroom",
-          "(splitted by curtains)"
-        ],
-        amenities: "*2 Shared bathroom, shower, sink, WC (to confirm)",
+        nameKey: "travel.mainBuilding.rooms.lauragais.name",
+        subtitleKey: "travel.mainBuilding.rooms.lauragais.subtitle",
+        price: `€80 ${t('travel.perPersonPerNight')}`,
+        bedsKey: "travel.mainBuilding.rooms.lauragais.beds",
+        amenitiesKey: "travel.mainBuilding.rooms.lauragais.amenities",
         capacity: 8,
         bedCount: 4
       }
@@ -267,42 +262,38 @@ export const OnsiteTab: React.FC = () => {
   };
 
   const annex: BuildingSection = {
-    title: "Annex",
-    description: "1 kitchen, 4 bedrooms, 4 bathrooms (14 persons)",
+    titleKey: "travel.annex.title",
+    descriptionKey: "travel.annex.description",
     rooms: [
       {
-        name: "Rez de Chaussée (Room 1)",
-        subtitle: "1st floor",
-        price: "€275 / night",
-        beds: ["2 beds (160 cm)"],
-        amenities: "",
+        nameKey: "travel.annex.rooms.room1.name",
+        subtitleKey: "travel.annex.rooms.room1.subtitle",
+        price: `€365 ${t('travel.perNight')}`,
+        bedsKey: "travel.annex.rooms.room1.beds",
         capacity: 4,
         bedCount: 2
       },
       {
-        name: "Rez de Chaussée (Room 2 - family)",
-        subtitle: "1st floor",
-        price: "€275 / night",
-        beds: ["1 bed (160 cm) + mezzanine 1 bed (160 cm)"],
-        amenities: "",
+        nameKey: "travel.annex.rooms.room2.name",
+        subtitleKey: "travel.annex.rooms.room2.subtitle",
+        price: `€365 ${t('travel.perNight')}`,
+        bedsKey: "travel.annex.rooms.room2.beds",
         capacity: 4,
         bedCount: 2
       },
       {
-        name: "1er Etage (Room 3)",
-        subtitle: "2nd floor",
-        price: "€275 / night",
-        beds: ["2 beds (160 cm)"],
-        amenities: "",
+        nameKey: "travel.annex.rooms.room3.name",
+        subtitleKey: "travel.annex.rooms.room3.subtitle",
+        price: `€365 ${t('travel.perNight')}`,
+        bedsKey: "travel.annex.rooms.room3.beds",
         capacity: 4,
         bedCount: 2
       },
       {
-        name: "1er Etage (Room 4)",
-        subtitle: "1st floor",
-        price: "€140 / night",
-        beds: ["1 bed (160 cm)"],
-        amenities: "",
+        nameKey: "travel.annex.rooms.room4.name",
+        subtitleKey: "travel.annex.rooms.room4.subtitle",
+        price: `€185 ${t('travel.perNight')}`,
+        bedsKey: "travel.annex.rooms.room4.beds",
         capacity: 2,
         bedCount: 1
       }

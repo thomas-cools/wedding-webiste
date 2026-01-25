@@ -256,6 +256,77 @@
     "onsiteDescription": "Nos complace ofrecer alojamiento limitado en el lugar para nuestros invitados. Se dará prioridad a los familiares.",
     "onsiteDetails": "Si estás interesado en alojarte en el lugar, indícalo en tu RSVP o envía un email a <emailLink>carolinaandthomaswedding@gmail.com</emailLink>. Te contactaremos con la disponibilidad y los detalles.",
     "onsiteDisclaimer": "Tenga en cuenta que estos no son los precios finales, los cuales serán confirmados más adelante y pueden variar según la habitación. Esto es solo para darles una idea. Si están interesados, una vez que nos contacten, confirmaremos el precio.",
+    "roomDetails": "Detalles de Habitación",
+    "capacity": "Capacidad",
+    "price": "Precio",
+    "person": "persona",
+    "people": "personas",
+    "bed": "cama",
+    "beds": "camas",
+    "perNight": "/ noche",
+    "perPersonPerNight": "por persona por noche",
+    "mainBuilding": {
+      "title": "Edificio Principal",
+      "description": "1 cocina, 6 habitaciones, 6 baños (20 personas)",
+      "rooms": {
+        "india": {
+          "name": "Habitación India",
+          "subtitle": "(2 personas / 1er piso)",
+          "beds": ["1 cama doble (180x200)", "O 2 camas individuales (90x200)"],
+          "amenities": "*Baño privado, ducha, lavabo, WC"
+        },
+        "pyrenees": {
+          "name": "Habitación Pirineos",
+          "subtitle": "(4 personas (2 en la habitación, 2 en la antecámara))",
+          "beds": ["1 cama doble (180x200)", "Antecámara Y 2 camas individuales (90x200)"],
+          "amenities": "*Baño privado, ducha, lavabo, WC"
+        },
+        "provence": {
+          "name": "Habitación Provenza",
+          "subtitle": "(2 personas / 1er piso)",
+          "beds": ["1 cama doble (180x200)", "O 2 camas individuales (90x200)"],
+          "amenities": "*Baño privado, ducha, lavabo, WC"
+        },
+        "occitanie": {
+          "name": "Habitación Occitania",
+          "subtitle": "(2 personas / 1er piso)",
+          "beds": ["1 cama doble (160x200)"],
+          "amenities": "Baño privado, ducha, lavabo, WC"
+        },
+        "lauragais": {
+          "name": "Dormitorio Lauragais",
+          "subtitle": "(8 personas / 1er piso)",
+          "beds": ["4 camas (160x200) en la misma habitación", "(separadas por cortinas)"],
+          "amenities": "*2 Baños compartidos, ducha, lavabo, WC (por confirmar)"
+        }
+      }
+    },
+    "annex": {
+      "title": "Anexo",
+      "description": "1 cocina, 4 habitaciones, 4 baños (14 personas)",
+      "rooms": {
+        "room1": {
+          "name": "Planta Baja (Habitación 1)",
+          "subtitle": "1er piso",
+          "beds": ["2 camas (160 cm)"]
+        },
+        "room2": {
+          "name": "Planta Baja (Habitación 2 - familiar)",
+          "subtitle": "1er piso",
+          "beds": ["1 cama (160 cm) + entresuelo 1 cama (160 cm)"]
+        },
+        "room3": {
+          "name": "1er Piso (Habitación 3)",
+          "subtitle": "2do piso",
+          "beds": ["2 camas (160 cm)"]
+        },
+        "room4": {
+          "name": "1er Piso (Habitación 4)",
+          "subtitle": "1er piso",
+          "beds": ["1 cama (160 cm)"]
+        }
+      }
+    },
     "viewFloorplan": "Plano de Habitaciones",
     "clickToEnlarge": "Haz clic en la imagen para ampliar",
     "airbnbTitle": "Encuentra Alojamiento Cercano",
