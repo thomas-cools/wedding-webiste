@@ -14,6 +14,11 @@ A modern, elegant wedding website built with React, TypeScript, and Chakra UI. F
 - [Security](#security)
   - [Password Protection](#password-protection)
   - [Server-Side Authentication](#server-side-authentication)
+- [Admin Panel](#admin-panel)
+  - [Overview](#overview)
+  - [Authentication Flow](#authentication-flow)
+  - [Setup](#setup)
+  - [Admin Features](#admin-features)
 - [Form Submissions](#form-submissions)
   - [RSVP Confirmation Emails (Resend + Netlify Function)](#rsvp-confirmation-emails-resend--netlify-function)
 - [Performance Optimizations](#performance-optimizations)
@@ -34,7 +39,8 @@ A modern, elegant wedding website built with React, TypeScript, and Chakra UI. F
 - ⚡ **Optimized performance** with lazy loading and bundle splitting
 - ♿ **Accessible** components following WCAG guidelines
 - 🎨 **Elegant animations** powered by Framer Motion
-- 🧪 **Comprehensive testing** (391 unit tests + E2E tests)
+- 🛡️ **Admin panel** with TOTP MFA, RSVP dashboard, and bulk email actions
+- 🧪 **Comprehensive testing** (438 unit tests + E2E tests)
 
 ---
 
@@ -77,6 +83,7 @@ Heavy components are lazy-loaded to reduce initial bundle size:
 - `Timeline` - Story/timeline section
 - `StorySection` - Couple's story
 - `AccommodationSection` - Venue/hotel info
+- `AdminPage` - Admin panel (hidden route at `/admin`)
 
 ### Serverless Functions
 
@@ -86,6 +93,10 @@ Heavy components are lazy-loaded to reduce initial bundle size:
 | `send-rsvp-confirmation` | `/.netlify/functions/send-rsvp-confirmation` | Email confirmations via Resend |
 | `send-drink-notification` | `/.netlify/functions/send-drink-notification` | Notify couple when a guest submits drink preferences |
 | `send-drink-invitations` | `/.netlify/functions/send-drink-invitations` | Bulk-email confirmed guests to fill out drink preferences |
+| `admin-auth` | `/.netlify/functions/admin-auth` | Admin login (password + TOTP MFA), MFA enrollment |
+| `admin-rsvps` | `/.netlify/functions/admin-rsvps` | Fetch & normalize all RSVP submissions from Netlify Forms API |
+| `admin-send-email` | `/.netlify/functions/admin-send-email` | Send bulk HTML emails to selected guests via Resend |
+| `admin-send-reminders` | `/.netlify/functions/admin-send-reminders` | Send pre-built or custom reminder emails (RSVP, event, custom) |
 | `places-autocomplete` | `/.netlify/functions/places-autocomplete` | Google Places autocomplete proxy |
 | `validate-address` | `/.netlify/functions/validate-address` | Google Address Validation API proxy |
 
@@ -137,11 +148,18 @@ wedding-website/
 ├── netlify/
 │   └── functions/          # Serverless functions
 │       ├── auth.ts         # Password authentication + JWT
+│       ├── admin-auth.ts   # Admin login + TOTP MFA + enrollment
+│       ├── admin-rsvps.ts  # Fetch RSVP submissions from Netlify Forms API
+│       ├── admin-send-email.ts       # Bulk email via Resend
+│       ├── admin-send-reminders.ts   # Pre-built & custom reminder emails
 │       ├── send-rsvp-confirmation.ts  # Email sending via Resend
+│       ├── send-drink-invitations.ts  # Bulk drink preference invitations
 │       ├── places-autocomplete.ts     # Google Places API proxy
 │       ├── validate-address.ts        # Address validation proxy
 │       ├── utils/
 │       │   ├── jwt.ts      # JWT creation/verification utilities
+│       │   ├── totp.ts     # RFC 6238 TOTP implementation
+│       │   ├── admin-auth.ts  # Admin auth middleware & helpers
 │       │   └── rate-limiter.ts  # Rate limiting for functions
 │       └── __tests__/      # Serverless function tests
 └── src/
@@ -156,6 +174,9 @@ wedding-website/
     ├── utils/
     │   ├── auth.ts         # Client-side auth utilities
     │   └── crypto.ts       # Password hashing utilities
+    ├── pages/
+    │   ├── AdminPage.tsx       # Admin auth gate + lazy admin layout
+    │   └── ...                 # Other page components
     ├── components/
     │   ├── PasswordGate.tsx    # Server-side password protection
     │   ├── RsvpForm.tsx        # RSVP form with validation
@@ -166,6 +187,16 @@ wedding-website/
     │   ├── LanguageSwitcher.tsx # i18n language selector
     │   ├── LoadingScreen.tsx   # Skeleton loading states
     │   ├── animations.tsx      # Reusable Framer Motion components
+    │   ├── Admin/              # Admin panel components
+    │   │   ├── AdminLogin.tsx          # Password + TOTP login form
+    │   │   ├── MfaEnrollment.tsx       # QR code MFA setup flow
+    │   │   ├── AdminLayout.tsx         # Tabbed admin layout
+    │   │   ├── RsvpDashboard.tsx       # Search/filter/select RSVP table
+    │   │   ├── RsvpDetailModal.tsx     # Full RSVP detail view
+    │   │   ├── EmailComposer.tsx       # Tiptap WYSIWYG email editor
+    │   │   ├── DrinkInvitationsPanel.tsx  # Bulk drink invitation sender
+    │   │   ├── RemindersPanel.tsx      # Pre-built & custom reminders
+    │   │   └── useAdminRsvps.ts        # Data fetching & selection hook
     │   └── ...                 # Other UI components
     ├── i18n/
     │   ├── index.ts        # i18next configuration
@@ -375,9 +406,136 @@ netlify dev
 
 ---
 
+## Admin Panel
+
+### Overview
+
+A hidden admin panel at `/admin` provides a secure dashboard for managing RSVPs and communicating with guests. The panel is **not linked** from the main site navigation — only accessible by typing the URL directly.
+
+**Key capabilities:**
+
+- **RSVP Dashboard** — View all submissions with search, filter, and detail views
+- **Email Composer** — Send rich HTML emails to selected guests via a WYSIWYG editor
+- **Drink Invitations** — Bulk-send drink preference invitations to confirmed guests
+- **Reminders** — Send pre-built or custom reminder emails (RSVP, event, custom)
+
+### Authentication Flow
+
+Admin access requires **two-factor authentication**: a password followed by a TOTP code from an authenticator app (Google Authenticator, Authy, 1Password, etc.).
+
+```
+┌──────────┐  1. Password   ┌─────────────────┐
+│ Browser  │ ─────────────► │ admin-auth      │
+│ /admin   │                │ ?action=login   │
+└──────────┘                └───────┬─────────┘
+     │                              │ Verify password
+     │     MFA pending token (5min) │
+     │◄─────────────────────────────┘
+     │
+     │  2. TOTP code        ┌─────────────────┐
+     │ ────────────────────►│ admin-auth      │
+     │                      │ ?action=        │
+     │                      │  verify-mfa     │
+     │   Admin JWT (8h)     └───────┬─────────┘
+     │◄─────────────────────────────┘ Verify TOTP
+     │
+     │  3. API requests     ┌─────────────────┐
+     │ ────────────────────►│ admin-rsvps,    │
+     │  Authorization:      │ admin-send-*    │
+     │  Bearer <jwt>        └─────────────────┘
+```
+
+**Security characteristics:**
+
+- **TOTP** — RFC 6238, HMAC-SHA1, 30-second period, 6-digit codes, ±1 step tolerance
+- **Two-phase login** — Password returns a short-lived MFA-pending token (5 min); TOTP verification upgrades it to a full admin JWT (8 hours)
+- **JWT validation** — All admin endpoints verify the JWT has `sub: "admin"`
+- **No client-side secrets** — Password hash and TOTP secret are server-side environment variables only
+
+### Setup
+
+#### 1. Set the Admin Password
+
+Generate a password hash and add it as an environment variable:
+
+```bash
+# Generate ADMIN_PASSWORD_HASH (uses the same HMAC-SHA256 scheme as site password)
+node -e "const{createHmac}=require('crypto');const h=createHmac('sha256','wedding-site-salt');h.update('YOUR-ADMIN-PASSWORD'.toLowerCase());console.log(h.digest('hex'))"
+```
+
+Set `ADMIN_PASSWORD_HASH` in your Netlify environment variables.
+
+#### 2. Enroll MFA (First Login)
+
+1. Navigate to `https://your-site.netlify.app/admin`
+2. Enter the admin password
+3. Since `ADMIN_TOTP_SECRET` is not yet set, the UI will show the **MFA Enrollment** screen
+4. Scan the QR code with your authenticator app (or enter the secret manually)
+5. Enter the 6-digit code to verify
+6. **Copy the displayed secret** and save it as the `ADMIN_TOTP_SECRET` environment variable in Netlify
+
+After saving the env var, subsequent logins will use the standard password → TOTP flow.
+
+#### 3. Required Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `ADMIN_PASSWORD_HASH` | HMAC-SHA256 hash of the admin password |
+| `ADMIN_TOTP_SECRET` | Base32-encoded TOTP secret (generated during enrollment) |
+| `JWT_SECRET` | Shared JWT signing secret (same as site auth) |
+| `NETLIFY_API_TOKEN` | [Netlify Personal Access Token](https://app.netlify.com/user/applications#personal-access-tokens) for Forms API |
+| `SITE_ID` | Your Netlify site ID (Site settings → General) |
+| `RESEND_API_KEY` | Resend API key for sending emails |
+| `FROM_EMAIL` | Sender email address |
+
+### Admin Features
+
+#### RSVP Dashboard
+
+The dashboard fetches all RSVP submissions live from the Netlify Forms API and displays:
+
+- **Stats cards** — Total RSVPs, Definitely, Highly Likely, Maybe, Declined, Total Attendees
+- **Search** — Filter by guest name or email
+- **Likelihood filter** — Toggle pills to show/hide by response type
+- **Sortable table** — Name, email, likelihood, party size, events (Fri/Sat/Sun), submission date
+- **Selection** — Checkbox selection for bulk actions
+- **Detail modal** — Click any row to see full RSVP details: events, party members (with ages and dietary needs), accommodation, travel plans, and notes
+
+#### Email Composer
+
+A rich text email editor powered by [Tiptap](https://tiptap.dev/) for sending custom HTML emails to selected guests:
+
+- **WYSIWYG toolbar** — Bold, italic, underline, headings (H2/H3), bullet/ordered lists, text alignment, links
+- **Subject line** and optional plain-text fallback
+- **Recipient targeting** — Sends to all guests selected in the RSVP Dashboard
+- **Email template** — Automatically wraps content in the wedding email template (navy header, maroon footer)
+
+#### Drink Invitations
+
+Send bulk invitations to confirmed guests asking them to submit their drink preferences:
+
+- **Locale selector** — English, Dutch, or Spanish
+- **Dry run preview** — See the full guest list and a sample email before sending
+- **Attendee-aware** — Emails include party size and companion names (e.g., "You and 2 guests: Alice, Bob")
+- **Smart filtering** — Only guests with likelihood "definitely" or "highly_likely" are included, deduplicated by email
+
+#### Reminders
+
+Send pre-built or custom reminder emails:
+
+- **RSVP Reminder** — Localized template prompting guests to RSVP, with a CTA button linking to `/rsvp`
+- **Event Reminder** — Localized template reminding guests about upcoming events
+- **Custom** — Free-form subject and body for any other communication
+- **Locale support** — English, Dutch, and Spanish templates
+- **Recipient filter** — Target guests by likelihood (all, definitely, highly likely, etc.)
+
+---
+
 ### Drink Preference Invitations
 
 Once guests have RSVPed, you can send all confirmed guests (likelihood = "definitely" or "highly_likely") an email inviting them to fill out their drink preferences.
+
+> **Tip:** The [Admin Panel](#admin-panel) at `/admin` provides a UI for this (the **Drink Invitations** tab) — no curl required. The instructions below document the direct API approach as an alternative.
 
 #### How It Works
 
@@ -757,6 +915,10 @@ FROM_EMAIL=Wedding RSVP <noreply@yourdomain.com>
 # Google Maps (optional, for address autocomplete)
 GOOGLE_MAPS_API_KEY=AIza...
 VITE_GOOGLE_MAPS_API_KEY=AIza...
+
+# Admin panel (optional, for /admin)
+ADMIN_PASSWORD_HASH=<hmac-sha256-hash-of-admin-password>
+ADMIN_TOTP_SECRET=<base32-totp-secret-from-enrollment>
 ```
 
 #### Generating a Password Hash
@@ -804,6 +966,8 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 | `GOOGLE_MAPS_API_KEY` | Google Maps API key for address features |
 | `VITE_GOOGLE_MAPS_API_KEY` | Client-side Google Maps key (if needed) |
 | `ADMIN_API_KEY` | Secret key for admin-only endpoints (e.g. bulk invitations) |
+| `ADMIN_PASSWORD_HASH` | HMAC-SHA256 hash of the admin panel password |
+| `ADMIN_TOTP_SECRET` | Base32-encoded TOTP secret for admin MFA (generated during enrollment) |
 | `NETLIFY_API_TOKEN` | Netlify personal access token for Forms API access |
 | `SITE_ID` | Netlify site ID for Forms API queries |
 
@@ -820,6 +984,8 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 | `VITE_GOOGLE_MAPS_API_KEY` | Client | Google Maps API key (exposed to browser) |
 | `VITE_API_URL` | Client | Optional API endpoint override |
 | `ADMIN_API_KEY` | Server | Secret key for admin-only endpoints |
+| `ADMIN_PASSWORD_HASH` | Server | HMAC-SHA256 hash of admin panel password |
+| `ADMIN_TOTP_SECRET` | Server | Base32 TOTP secret for admin MFA |
 | `NETLIFY_API_TOKEN` | Server | Netlify personal access token for Forms API |
 | `SITE_ID` | Server | Netlify site ID for Forms API queries |
 | `NODE_VERSION` | Build | Node.js version for Netlify builds |
