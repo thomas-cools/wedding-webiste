@@ -34,5 +34,18 @@
       <input type="text" name="franceTips" />
       <textarea name="additionalNotes"></textarea>
     </form>
+
+    <!-- Netlify Forms detection for drink preferences -->
+    <form name="drink-preferences" method="POST" data-netlify="true" hidden>
+      <input type="hidden" name="form-name" value="drink-preferences" />
+      <input type="text" name="firstName" />
+      <input type="email" name="email" />
+      <input type="text" name="cocktail" />
+      <input type="text" name="favoriteCocktail" />
+      <input type="text" name="wine" />
+      <input type="text" name="beer" />
+      <input type="text" name="nonAlcoholic" />
+      <textarea name="comments"></textarea>
+    </form>
   </body>
 </html>

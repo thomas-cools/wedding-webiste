@@ -7,6 +7,7 @@ import RsvpPage from './pages/RsvpPage'
 import AccommodationsPage from './pages/AccommodationsPage'
 import FaqPage from './pages/FaqPage'
 import GalleryPage from './pages/GalleryPage'
+import DrinkPreferencesPage from './pages/DrinkPreferencesPage'
 import theme from './theme'
 import { FeatureFlagsProvider } from './contexts/FeatureFlagsContext'
 import ScrollToTop from './components/ScrollToTop'
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
             <Route path="/accommodations" element={<AccommodationsPage />} />
             <Route path="/faq" element={<FaqPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/drinks" element={<DrinkPreferencesPage />} />
           </Routes>
         </BrowserRouter>
       </FeatureFlagsProvider>

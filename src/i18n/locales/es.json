@@ -6,7 +6,8 @@
     "gallery": "Galería",
     "travel": "Estancia",
     "faq": "Preguntas",
-    "rsvp": "Confirmar"
+    "rsvp": "Confirmar",
+    "drinks": "Bebidas"
   },
   "hero": {
     "invited": "Estás invitado/a",
@@ -365,6 +366,63 @@
     "venueAddress": "Vallesvilles, Francia",
     "tip": "Recomendamos reservar con anticipación ya que agosto es temporada alta en Francia.",
     "nearbyTowns": "Los pueblos cercanos con opciones de alojamiento incluyen Vallesvilles, Toulouse y Montauban."
+  },
+  "drinkPreferences": {
+    "label": "Preferencias de Bebidas",
+    "title": "Preferencias de Bebidas",
+    "backToHome": "Volver",
+    "description": "¡Estamos finalizando el menú del bar para nuestro fin de semana de boda en Toulouse! Para asegurarnos de tener suficiente de exactamente lo que te gusta beber en el calor de agosto, por favor completa rápidamente tus preferencias abajo. (¡No te preocupes, no estás comprometido/a, solo nos ayuda con los cálculos!)",
+    "form": {
+      "yourName": "Tu Nombre",
+      "namePlaceholder": "Nombre Completo",
+      "email": "Correo Electrónico",
+      "emailPlaceholder": "tu@email.com",
+      "wineTitle": "La Elección de Vino",
+      "wineSubtitle": "Habrá vino fluyendo todo el fin de semana — ayúdanos a elegir el balance correcto.",
+      "wine": {
+        "white": "Bebo vino blanco",
+        "red": "Bebo vino tinto",
+        "sparkling": "Dame las burbujas (espumoso/cava/prosecco)",
+        "skip": "Paso del vino, gracias"
+      },
+      "beerTitle": "La Elección de Cerveza",
+      "beerSubtitle": "Piensa en Jupiler meets Sol — tendremos la mezcla perfecta.",
+      "beer": {
+        "light_crisp": "Ligera y refrescante (lager, pilsner, estilo mexicano)",
+        "belgian_blonde": "Rubia belga o cerveza de trigo",
+        "no_beer": "No soy cervecero/a"
+      },
+      "cocktailTitle": "La Preferencia de Cóctel",
+      "cocktailSubtitle": "Lo mantenemos simple con algunos favoritos del público. ¿Qué suena bien?",
+      "cocktail": {
+        "agave": "A base de Tequila / Mezcal (Margarita, Paloma)",
+        "aperitivo": "Aperol Spritz / Hugo / ligero y burbujeante",
+        "classic_mixers": "Gin tonic, Vodka soda, Ron con cola — los clásicos",
+        "beer_wine_only": "Me quedo con cerveza y vino"
+      },
+      "favoriteCocktailLabel": "¿Tienes un cóctel favorito? ¡Cuéntanos!",
+      "favoriteCocktailPlaceholder": "ej. Espresso Martini, Mojito, Negroni...",
+      "nonAlcoholicTitle": "La Opción Sin Alcohol y de Alternancia",
+      "nonAlcoholicSubtitle": "Sin juicios, solo buenas bebidas — para toda la noche o entre rondas.",
+      "nonAlcoholic": {
+        "af_wine": "Vino sin alcohol",
+        "af_beer": "Cerveza sin alcohol",
+        "mocktails": "Mocktails divertidos (shrubs, refrescos con sabor, cosas fancy)",
+        "sparkling_water": "Solo agua con gas y refrescos está bien"
+      },
+      "commentsTitle": "El Cajón de Cualquier Otra Cosa",
+      "commentsPlaceholder": "Alergias, cosas que no te gustan, una bebida específica que te haría llorar de felicidad — cuéntanos aquí.",
+      "submit": "Enviar Preferencias"
+    },
+    "validation": {
+      "nameRequired": "Por favor ingresa tu nombre completo.",
+      "emailRequired": "Por favor ingresa un correo electrónico válido.",
+      "atLeastOneDrink": "Por favor selecciona al menos una preferencia de bebida."
+    },
+    "success": {
+      "title": "¡Preferencias guardadas!",
+      "message": "Gracias por compartir tus preferencias de bebidas. ¡Salud!"
+    }
   },
   "accessibility": {
     "skipNavigation": "Saltar navegación",

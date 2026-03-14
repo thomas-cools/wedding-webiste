@@ -84,6 +84,8 @@ Heavy components are lazy-loaded to reduce initial bundle size:
 |----------|----------|---------|
 | `auth` | `/.netlify/functions/auth` | Password validation, JWT token issuance |
 | `send-rsvp-confirmation` | `/.netlify/functions/send-rsvp-confirmation` | Email confirmations via Resend |
+| `send-drink-notification` | `/.netlify/functions/send-drink-notification` | Notify couple when a guest submits drink preferences |
+| `send-drink-invitations` | `/.netlify/functions/send-drink-invitations` | Bulk-email confirmed guests to fill out drink preferences |
 | `places-autocomplete` | `/.netlify/functions/places-autocomplete` | Google Places autocomplete proxy |
 | `validate-address` | `/.netlify/functions/validate-address` | Google Address Validation API proxy |
 
@@ -373,6 +375,94 @@ netlify dev
 
 ---
 
+### Drink Preference Invitations
+
+Once guests have RSVPed, you can send all confirmed guests (likelihood = "definitely" or "highly_likely") an email inviting them to fill out their drink preferences.
+
+#### How It Works
+
+```
+┌───────────┐  POST + x-admin-key  ┌─────────────────────────┐
+│  You      │ ────────────────────► │ send-drink-invitations  │
+│  (curl)   │                       │   Netlify Function      │
+└───────────┘                       └──────────┬──────────────┘
+                                               │
+                                    ┌──────────▼──────────────┐
+                                    │ Netlify Forms API       │
+                                    │ GET /forms → submissions│
+                                    └──────────┬──────────────┘
+                                               │
+                                    ┌──────────▼──────────────┐
+                                    │ Filter: "definitely" or │
+                                    │ "highly_likely" only    │
+                                    │ Dedupe by email         │
+                                    └──────────┬──────────────┘
+                                               │
+                                    ┌──────────▼──────────────┐
+                                    │ Resend API              │
+                                    │ Send personalized email │
+                                    │ with link to /drinks    │
+                                    └─────────────────────────┘
+```
+
+#### Step 1: Set Environment Variables
+
+In the Netlify dashboard, add:
+
+| Variable | Description |
+|----------|-------------|
+| `ADMIN_API_KEY` | A secret key you choose (used to authorize the request) |
+| `NETLIFY_API_TOKEN` | A [Netlify Personal Access Token](https://app.netlify.com/user/applications#personal-access-tokens) |
+| `SITE_ID` | Your Netlify site ID (found in Site settings → General) |
+| `RESEND_API_KEY` | Your Resend API key (already set if RSVP emails work) |
+| `FROM_EMAIL` | Sender email address (already set if RSVP emails work) |
+
+#### Step 2: Dry Run (Preview)
+
+First, preview which guests would receive the email without actually sending:
+
+```bash
+curl -s -X POST 'https://YOUR-SITE/.netlify/functions/send-drink-invitations' \
+  -H 'x-admin-key: YOUR_ADMIN_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{"dryRun": true}' | python3 -m json.tool
+```
+
+This returns the list of confirmed guests, total count, and a sample email preview.
+
+#### Step 3: Send for Real
+
+```bash
+curl -s -X POST 'https://YOUR-SITE/.netlify/functions/send-drink-invitations' \
+  -H 'x-admin-key: YOUR_ADMIN_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{"dryRun": false}' | python3 -m json.tool
+```
+
+You can also override the locale for all emails:
+
+```bash
+curl -s -X POST '...' \
+  -d '{"dryRun": false, "locale": "nl"}' | python3 -m json.tool
+```
+
+Supported locales: `en` (default), `nl`, `es`.
+
+#### Response
+
+```json
+{
+  "message": "Sent 12 emails, 0 failed",
+  "sent": 12,
+  "failed": 0,
+  "total": 12,
+  "results": [
+    { "email": "guest@example.com", "success": true },
+    ...
+  ]
+}
+```
+
 ## Form Submissions
 
 ### Netlify Forms Integration
@@ -449,6 +539,7 @@ All Netlify Functions include rate limiting to prevent abuse:
 |----------|-------|--------|
 | `auth` | 10 requests | 10 minutes |
 | `send-rsvp-confirmation` | 5 requests | 1 minute |
+| `send-drink-notification` | 5 requests | 15 minutes |
 | `places-autocomplete` | 100 requests | 1 minute |
 | `validate-address` | 50 requests | 1 minute |
 
@@ -712,6 +803,9 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 | `FROM_EMAIL` | Sender email for RSVP confirmations |
 | `GOOGLE_MAPS_API_KEY` | Google Maps API key for address features |
 | `VITE_GOOGLE_MAPS_API_KEY` | Client-side Google Maps key (if needed) |
+| `ADMIN_API_KEY` | Secret key for admin-only endpoints (e.g. bulk invitations) |
+| `NETLIFY_API_TOKEN` | Netlify personal access token for Forms API access |
+| `SITE_ID` | Netlify site ID for Forms API queries |
 
 ### Environment Variable Reference
 
@@ -725,6 +819,9 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 | `GOOGLE_MAPS_API_KEY` | Server | Google Maps API key (for serverless functions) |
 | `VITE_GOOGLE_MAPS_API_KEY` | Client | Google Maps API key (exposed to browser) |
 | `VITE_API_URL` | Client | Optional API endpoint override |
+| `ADMIN_API_KEY` | Server | Secret key for admin-only endpoints |
+| `NETLIFY_API_TOKEN` | Server | Netlify personal access token for Forms API |
+| `SITE_ID` | Server | Netlify site ID for Forms API queries |
 | `NODE_VERSION` | Build | Node.js version for Netlify builds |
 
 ---

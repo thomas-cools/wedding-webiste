@@ -6,7 +6,8 @@
     "gallery": "Galerij",
     "travel": "Verblijf",
     "faq": "FAQ",
-    "rsvp": "RSVP"
+    "rsvp": "RSVP",
+    "drinks": "Dranken"
   },
   "hero": {
     "invited": "Je bent uitgenodigd",
@@ -366,6 +367,63 @@
     "venueAddress": "Vallesvilles, Frankrijk",
     "tip": "We raden aan vroeg te boeken omdat augustus hoogseizoen is in Frankrijk.",
     "nearbyTowns": "Nabijgelegen steden met accommodatiemogelijkheden zijn onder andere Vallesvilles, Toulouse en Montauban."
+  },
+  "drinkPreferences": {
+    "label": "Drankvoorkeuren",
+    "title": "Drankvoorkeuren",
+    "backToHome": "Terug",
+    "description": "We zijn het barmenu aan het afronden voor ons trouwweekend in Toulouse! Om ervoor te zorgen dat we genoeg hebben van precies wat jij lekker vindt in de augustushitte, vul hieronder snel je voorkeuren in. (Geen zorgen, je zit nergens aan vast, het helpt ons gewoon met de berekeningen!)",
+    "form": {
+      "yourName": "Je Naam",
+      "namePlaceholder": "Volledige Naam",
+      "email": "E-mailadres",
+      "emailPlaceholder": "jouw@email.com",
+      "wineTitle": "De Wijnkeuze",
+      "wineSubtitle": "Het hele weekend vloeit de wijn — help ons de juiste balans te vinden.",
+      "wine": {
+        "white": "Ik drink witte wijn",
+        "red": "Ik drink rode wijn",
+        "sparkling": "Geef mij de bubbels (mousserende/cava/prosecco)",
+        "skip": "Ik sla de wijn over, bedankt"
+      },
+      "beerTitle": "De Bierkeuze",
+      "beerSubtitle": "Denk Jupiler meets Sol — we zorgen voor de perfecte mix.",
+      "beer": {
+        "light_crisp": "Licht & fris (lager, pils, Mexicaanse stijl)",
+        "belgian_blonde": "Belgisch blond of witbier",
+        "no_beer": "Ik ben geen bierliefhebber"
+      },
+      "cocktailTitle": "De Cocktailvoorkeur",
+      "cocktailSubtitle": "We houden het simpel met een paar crowd-pleasers. Wat klinkt goed?",
+      "cocktail": {
+        "agave": "Tequila / Mezcal-gebaseerd (Margarita, Paloma)",
+        "aperitivo": "Aperol Spritz / Hugo / licht & bubbelig",
+        "classic_mixers": "Gin-tonic, Vodka soda, Rum-cola — de klassiekers",
+        "beer_wine_only": "Ik blijf bij bier & wijn"
+      },
+      "favoriteCocktailLabel": "Heb je een favoriete cocktail? Vertel het ons!",
+      "favoriteCocktailPlaceholder": "bijv. Espresso Martini, Mojito, Negroni...",
+      "nonAlcoholicTitle": "De Alcoholvrije & Afwisselingskeuze",
+      "nonAlcoholicSubtitle": "Geen oordeel, gewoon lekkere drankjes — voor de hele avond of tussendoor.",
+      "nonAlcoholic": {
+        "af_wine": "Alcoholvrije wijn",
+        "af_beer": "Alcoholvrij bier",
+        "mocktails": "Leuke mocktails (shrubs, smaakjes frisdrank, fancy stuff)",
+        "sparkling_water": "Gewoon bruisend water & frisdrank is prima"
+      },
+      "commentsTitle": "Het Verder-Nog-Iets-Vakje",
+      "commentsPlaceholder": "Allergieën, sterke afkeren, een specifiek drankje waar je blij van wordt — vertel het hier.",
+      "submit": "Voorkeuren Verzenden"
+    },
+    "validation": {
+      "nameRequired": "Vul alsjeblieft je volledige naam in.",
+      "emailRequired": "Vul alsjeblieft een geldig e-mailadres in.",
+      "atLeastOneDrink": "Selecteer alsjeblieft minstens één drankvoorkeur."
+    },
+    "success": {
+      "title": "Voorkeuren opgeslagen!",
+      "message": "Bedankt voor het delen van je drankvoorkeuren. Proost!"
+    }
   },
   "accessibility": {
     "skipNavigation": "Navigatie overslaan",

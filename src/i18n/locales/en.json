@@ -6,7 +6,8 @@
     "gallery": "Gallery",
     "travel": "Stay",
     "faq": "FAQ",
-    "rsvp": "RSVP"
+    "rsvp": "RSVP",
+    "drinks": "Drinks"
   },
   "hero": {
     "invited": "You're invited",
@@ -366,6 +367,63 @@
     "venueAddress": "Vallesvilles, France",
     "tip": "We recommend booking early as August is peak season in France.",
     "nearbyTowns": "Nearby towns with accommodation options include Vallesvilles, Toulouse, and Montauban."
+  },
+  "drinkPreferences": {
+    "label": "Drink Preferences",
+    "title": "Drink Preferences",
+    "backToHome": "Back",
+    "description": "We are finalizing the bar menu for our wedding weekend in Toulouse! To make sure we have plenty of exactly what you love to drink in the August heat, please quickly fill out your top preferences below. (Don't worry, you aren't locked into this, it just helps us with the math!)",
+    "form": {
+      "yourName": "Your Name",
+      "namePlaceholder": "Full Name",
+      "email": "Email Address",
+      "emailPlaceholder": "your@email.com",
+      "wineTitle": "The Wine Pour",
+      "wineSubtitle": "We'll have wine flowing all weekend — help us pick the right balance.",
+      "wine": {
+        "white": "I drink white wine",
+        "red": "I drink red wine",
+        "sparkling": "Give me the bubbles (sparkling/cava/prosecco)",
+        "skip": "I'll skip the wine, thanks"
+      },
+      "beerTitle": "The Beer Choice",
+      "beerSubtitle": "Think Jupiler meets Sol — we'll stock a perfect mix.",
+      "beer": {
+        "light_crisp": "Light & crisp (lager, pilsner, Mexican-style)",
+        "belgian_blonde": "Belgian blonde or wheat beer",
+        "no_beer": "Not a beer person"
+      },
+      "cocktailTitle": "The Cocktail Preference",
+      "cocktailSubtitle": "We're keeping it simple with a few crowd-pleasers. What sounds good?",
+      "cocktail": {
+        "agave": "Tequila / Mezcal-based (Margarita, Paloma)",
+        "aperitivo": "Aperol Spritz / Hugo / light & bubbly",
+        "classic_mixers": "Gin & tonic, Vodka soda, Rum & coke — the classics",
+        "beer_wine_only": "I'll stick to beer & wine"
+      },
+      "favoriteCocktailLabel": "Got a favorite cocktail? Tell us!",
+      "favoriteCocktailPlaceholder": "e.g. Espresso Martini, Mojito, Negroni...",
+      "nonAlcoholicTitle": "The Alcohol-Free & Pacing Choice",
+      "nonAlcoholicSubtitle": "No judgment, just good drinks — for full-timers or in between rounds.",
+      "nonAlcoholic": {
+        "af_wine": "Alcohol-free wine",
+        "af_beer": "Alcohol-free beer",
+        "mocktails": "Fun mocktails (shrubs, flavored sodas, fancy stuff)",
+        "sparkling_water": "Just sparkling water & soft drinks is fine"
+      },
+      "commentsTitle": "The Anything Else Box",
+      "commentsPlaceholder": "Allergies, strong dislikes, a specific drink you'd cry happy tears over — tell us here.",
+      "submit": "Submit Preferences"
+    },
+    "validation": {
+      "nameRequired": "Please enter your full name.",
+      "emailRequired": "Please enter a valid email.",
+      "atLeastOneDrink": "Please select at least one drink preference."
+    },
+    "success": {
+      "title": "Preferences saved!",
+      "message": "Thank you for sharing your drink preferences. Cheers!"
+    }
   },
   "accessibility": {
     "skipNavigation": "Skip navigation",

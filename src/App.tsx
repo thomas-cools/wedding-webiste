@@ -129,6 +129,7 @@ function AppContent() {
     { href: '/accommodations', label: t('header.travel'), enabled: features.showAccommodation, isExternal: true },
     { href: '/faq', label: t('header.faq'), enabled: true, isExternal: true },
     { href: '/rsvp', label: t('header.rsvp'), enabled: true, isExternal: true },
+    { href: '/drinks', label: t('header.drinks'), enabled: true, isExternal: true },
   ].filter((link) => link.enabled)
 
   const content = (
