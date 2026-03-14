@@ -2,11 +2,16 @@
  * @jest-environment node
  */
 
-import type { HandlerEvent, HandlerContext } from '@netlify/functions'
+import type { HandlerEvent, HandlerContext, HandlerResponse } from '@netlify/functions'
 
 // Mock fetch globally
 const mockFetch = jest.fn()
 global.fetch = mockFetch
+
+function assertResponse(result: void | HandlerResponse): HandlerResponse {
+  expect(result).toBeDefined()
+  return result as HandlerResponse
+}
 
 function createEvent(overrides: Partial<HandlerEvent> = {}): HandlerEvent {
   return {
@@ -97,7 +102,7 @@ describe('send-drink-invitations handler', () => {
 
   it('rejects non-POST requests', async () => {
     const event = createEvent({ httpMethod: 'GET' })
-    const result = await handler(event, mockContext)
+    const result = assertResponse(await handler(event, mockContext))
     expect(result.statusCode).toBe(405)
   })
 
@@ -105,7 +110,7 @@ describe('send-drink-invitations handler', () => {
     const event = createEvent({
       headers: { 'content-type': 'application/json' },
     })
-    const result = await handler(event, mockContext)
+    const result = assertResponse(await handler(event, mockContext))
     expect(result.statusCode).toBe(401)
   })
 
@@ -113,7 +118,7 @@ describe('send-drink-invitations handler', () => {
     const event = createEvent({
       headers: { 'content-type': 'application/json', 'x-admin-key': 'wrong-key' },
     })
-    const result = await handler(event, mockContext)
+    const result = assertResponse(await handler(event, mockContext))
     expect(result.statusCode).toBe(401)
   })
 
@@ -123,7 +128,7 @@ describe('send-drink-invitations handler', () => {
     const mod = await import('../send-drink-invitations')
 
     const event = createEvent()
-    const result = await mod.handler(event, mockContext)
+    const result = assertResponse(await mod.handler(event, mockContext))
     expect(result.statusCode).toBe(500)
     expect(JSON.parse(result.body!)).toMatchObject({ error: 'ADMIN_API_KEY not configured' })
   })
@@ -141,7 +146,7 @@ describe('send-drink-invitations handler', () => {
     })
 
     const event = createEvent({ body: JSON.stringify({ dryRun: true }) })
-    const result = await handler(event, mockContext)
+    const result = assertResponse(await handler(event, mockContext))
 
     expect(result.statusCode).toBe(200)
     const body = JSON.parse(result.body!)
@@ -165,7 +170,7 @@ describe('send-drink-invitations handler', () => {
     mockFetch.mockResolvedValueOnce({ ok: true, json: async () => dupeSubmissions })
 
     const event = createEvent({ body: JSON.stringify({ dryRun: true }) })
-    const result = await handler(event, mockContext)
+    const result = assertResponse(await handler(event, mockContext))
 
     const body = JSON.parse(result.body!)
     expect(body.totalCount).toBe(1)
@@ -179,7 +184,7 @@ describe('send-drink-invitations handler', () => {
     mockFetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: 'msg-2' }) })
 
     const event = createEvent({ body: JSON.stringify({ dryRun: false }) })
-    const result = await handler(event, mockContext)
+    const result = assertResponse(await handler(event, mockContext))
 
     expect(result.statusCode).toBe(200)
     const body = JSON.parse(result.body!)
@@ -201,7 +206,7 @@ describe('send-drink-invitations handler', () => {
     mockFetch.mockResolvedValueOnce({ ok: false, status: 429, text: async () => 'Rate limited' })
 
     const event = createEvent({ body: JSON.stringify({ dryRun: false }) })
-    const result = await handler(event, mockContext)
+    const result = assertResponse(await handler(event, mockContext))
 
     const body = JSON.parse(result.body!)
     expect(body.sent).toBe(1)
@@ -217,7 +222,7 @@ describe('send-drink-invitations handler', () => {
     mockFetch.mockResolvedValueOnce({ ok: true, json: async () => noConfirmed })
 
     const event = createEvent()
-    const result = await handler(event, mockContext)
+    const result = assertResponse(await handler(event, mockContext))
 
     const body = JSON.parse(result.body!)
     expect(body.sent).toBe(0)
@@ -228,7 +233,7 @@ describe('send-drink-invitations handler', () => {
     mockFetch.mockResolvedValueOnce({ ok: false, status: 403, text: async () => 'Forbidden' })
 
     const event = createEvent()
-    const result = await handler(event, mockContext)
+    const result = assertResponse(await handler(event, mockContext))
 
     expect(result.statusCode).toBe(500)
     const body = JSON.parse(result.body!)
@@ -245,7 +250,7 @@ describe('send-drink-invitations handler', () => {
     })
 
     const event = createEvent({ body: JSON.stringify({ dryRun: true, locale: 'es' }) })
-    const result = await handler(event, mockContext)
+    const result = assertResponse(await handler(event, mockContext))
 
     const body = JSON.parse(result.body!)
     expect(body.locale).toBe('es')
