@@ -96,7 +96,7 @@ export function verifyPassword(password: string, expectedHash: string): boolean 
 /**
  * Create a signed JWT token
  */
-export function createToken(subject: string = 'wedding-guest'): string {
+export function createToken(subject: string = 'wedding-guest', expirySeconds: number = JWT_EXPIRY_SECONDS): string {
   const secret = getJwtSecret()
   const now = Math.floor(Date.now() / 1000)
 
@@ -104,7 +104,7 @@ export function createToken(subject: string = 'wedding-guest'): string {
   const payload: JwtPayload = {
     sub: subject,
     iat: now,
-    exp: now + JWT_EXPIRY_SECONDS,
+    exp: now + expirySeconds,
   }
 
   const headerB64 = base64urlEncode(JSON.stringify(header))

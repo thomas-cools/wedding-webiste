@@ -1,4 +1,5 @@
 import type { Handler, HandlerEvent } from '@netlify/functions'
+import { verifyAdminRequest } from './utils/admin-auth'
 
 /**
  * Sends drink preference invitation emails to all confirmed RSVP guests.
@@ -25,6 +26,7 @@ interface RsvpSubmission {
   firstName?: string
   email?: string
   likelihood?: string
+  guests?: string
   [key: string]: unknown
 }
 
@@ -108,9 +110,37 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;')
 }
 
-function generateInvitationHtml(name: string, drinksUrl: string, locale: EmailLocale): string {
+const PARTY_STRINGS: Record<EmailLocale, { partyNote: (count: number, names: string[]) => string }> = {
+  en: {
+    partyNote: (count, names) =>
+      count > 1
+        ? `You've RSVP'd for ${count} people${names.length > 0 ? ` (${names.join(', ')})` : ''}. Please fill out drink preferences for everyone in your party.`
+        : '',
+  },
+  es: {
+    partyNote: (count, names) =>
+      count > 1
+        ? `Has confirmado para ${count} personas${names.length > 0 ? ` (${names.join(', ')})` : ''}. Por favor completa las preferencias de bebida para todos.`
+        : '',
+  },
+  nl: {
+    partyNote: (count, names) =>
+      count > 1
+        ? `Je hebt gereserveerd voor ${count} personen${names.length > 0 ? ` (${names.join(', ')})` : ''}. Vul alsjeblieft de drankvoorkeuren in voor iedereen.`
+        : '',
+  },
+}
+
+function generateInvitationHtml(
+  name: string,
+  drinksUrl: string,
+  locale: EmailLocale,
+  partySize: number = 1,
+  partyNames: string[] = []
+): string {
   const s = EMAIL_STRINGS[locale]
   const safeName = escapeHtml(name)
+  const partyNote = PARTY_STRINGS[locale].partyNote(partySize, partyNames)
 
   return `
 <!DOCTYPE html>
@@ -147,6 +177,10 @@ function generateInvitationHtml(name: string, drinksUrl: string, locale: EmailLo
               <p style="margin: 0 0 20px; font-size: 16px; line-height: 1.6; color: #0B1937;">
                 ${escapeHtml(s.intro)}
               </p>
+
+              ${partyNote ? `<p style="margin: 0 0 20px; font-size: 16px; line-height: 1.6; color: #300F0C; font-weight: bold;">
+                ${escapeHtml(partyNote)}
+              </p>` : ''}
 
               <p style="margin: 0 0 30px; font-size: 16px; line-height: 1.6; color: #0B1937;">
                 ${escapeHtml(s.callToAction)}
@@ -190,15 +224,22 @@ function generateInvitationHtml(name: string, drinksUrl: string, locale: EmailLo
 `
 }
 
-function generateInvitationText(name: string, drinksUrl: string, locale: EmailLocale): string {
+function generateInvitationText(
+  name: string,
+  drinksUrl: string,
+  locale: EmailLocale,
+  partySize: number = 1,
+  partyNames: string[] = []
+): string {
   const s = EMAIL_STRINGS[locale]
+  const partyNote = PARTY_STRINGS[locale].partyNote(partySize, partyNames)
 
   return `
 ${s.greeting(name)}
 
 ${s.intro}
 
-${s.callToAction}
+${partyNote ? partyNote + '\n' : ''}${s.callToAction}
 
 → ${s.buttonLabel}: ${drinksUrl}
 
@@ -254,10 +295,28 @@ async function fetchRsvpSubmissions(siteId: string, token: string): Promise<Rsvp
   return allSubmissions
 }
 
-function getConfirmedGuests(submissions: RsvpSubmission[]): { name: string; email: string }[] {
+interface ConfirmedGuest {
+  name: string
+  email: string
+  partySize: number
+  partyNames: string[]
+}
+
+function parseGuestsField(raw?: string): Array<{ name: string }> {
+  if (!raw) return []
+  try {
+    const parsed = JSON.parse(raw)
+    if (Array.isArray(parsed)) return parsed.filter((g: { name?: string }) => g.name)
+    return []
+  } catch {
+    return []
+  }
+}
+
+function getConfirmedGuests(submissions: RsvpSubmission[]): ConfirmedGuest[] {
   const confirmedLikelihoods = new Set(['definitely', 'highly_likely'])
   const seen = new Set<string>()
-  const guests: { name: string; email: string }[] = []
+  const guests: ConfirmedGuest[] = []
 
   for (const sub of submissions) {
     const email = sub.email?.trim().toLowerCase()
@@ -269,7 +328,14 @@ function getConfirmedGuests(submissions: RsvpSubmission[]): { name: string; emai
     if (seen.has(email)) continue
 
     seen.add(email)
-    guests.push({ name, email })
+    const additionalGuests = parseGuestsField(sub.guests as string | undefined)
+    const partyNames = additionalGuests.map((g) => g.name)
+    guests.push({
+      name,
+      email,
+      partySize: 1 + additionalGuests.length,
+      partyNames,
+    })
   }
 
   return guests
@@ -280,14 +346,21 @@ const handler: Handler = async (event: HandlerEvent) => {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) }
   }
 
-  // Authenticate with admin key
-  const adminKey = process.env.ADMIN_API_KEY
-  if (!adminKey) {
-    return { statusCode: 500, body: JSON.stringify({ error: 'ADMIN_API_KEY not configured' }) }
+  // Authenticate with admin JWT or legacy admin key
+  const adminPayload = verifyAdminRequest(
+    event.headers as Record<string, string | undefined>
+  )
+  let authenticated = !!adminPayload
+
+  if (!authenticated) {
+    const adminKey = process.env.ADMIN_API_KEY
+    const providedKey = event.headers['x-admin-key']
+    if (adminKey && providedKey && providedKey === adminKey) {
+      authenticated = true
+    }
   }
 
-  const providedKey = event.headers['x-admin-key']
-  if (!providedKey || providedKey !== adminKey) {
+  if (!authenticated) {
     return { statusCode: 401, body: JSON.stringify({ error: 'Unauthorized' }) }
   }
 
@@ -322,7 +395,7 @@ const handler: Handler = async (event: HandlerEvent) => {
   }
 
   // Fetch confirmed guests
-  let guests: { name: string; email: string }[]
+  let guests: ConfirmedGuest[]
   try {
     const submissions = await fetchRsvpSubmissions(SITE_ID, NETLIFY_API_TOKEN)
     guests = getConfirmedGuests(submissions)
@@ -353,8 +426,8 @@ const handler: Handler = async (event: HandlerEvent) => {
         drinksUrl,
         confirmedGuests: guests,
         totalCount: guests.length,
-        sampleHtml: generateInvitationHtml(guests[0].name, drinksUrl, locale),
-        sampleText: generateInvitationText(guests[0].name, drinksUrl, locale),
+        sampleHtml: generateInvitationHtml(guests[0].name, drinksUrl, locale, guests[0].partySize, guests[0].partyNames),
+        sampleText: generateInvitationText(guests[0].name, drinksUrl, locale, guests[0].partySize, guests[0].partyNames),
       }),
     }
   }
@@ -375,8 +448,8 @@ const handler: Handler = async (event: HandlerEvent) => {
           from: fromEmail,
           to: [guest.email],
           subject: `${EMAIL_STRINGS[locale].subject} — ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
-          html: generateInvitationHtml(guest.name, drinksUrl, locale),
-          text: generateInvitationText(guest.name, drinksUrl, locale),
+          html: generateInvitationHtml(guest.name, drinksUrl, locale, guest.partySize, guest.partyNames),
+          text: generateInvitationText(guest.name, drinksUrl, locale, guest.partySize, guest.partyNames),
         }),
       })
 

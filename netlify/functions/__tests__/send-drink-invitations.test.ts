@@ -122,15 +122,15 @@ describe('send-drink-invitations handler', () => {
     expect(result.statusCode).toBe(401)
   })
 
-  it('returns 500 if ADMIN_API_KEY is not set', async () => {
+  it('returns 401 if neither admin JWT nor admin key is provided', async () => {
     delete process.env.ADMIN_API_KEY
     jest.resetModules()
     const mod = await import('../send-drink-invitations')
 
-    const event = createEvent()
+    const event = createEvent({ headers: {} })
     const result = assertResponse(await mod.handler(event, mockContext))
-    expect(result.statusCode).toBe(500)
-    expect(JSON.parse(result.body!)).toMatchObject({ error: 'ADMIN_API_KEY not configured' })
+    expect(result.statusCode).toBe(401)
+    expect(JSON.parse(result.body!)).toMatchObject({ error: 'Unauthorized' })
   })
 
   it('returns confirmed guests in dry run mode', async () => {
@@ -153,8 +153,8 @@ describe('send-drink-invitations handler', () => {
     expect(body.dryRun).toBe(true)
     expect(body.totalCount).toBe(2) // Alice (definitely) + Bob (highly_likely)
     expect(body.confirmedGuests).toEqual([
-      { name: 'Alice', email: 'alice@example.com' },
-      { name: 'Bob', email: 'bob@example.com' },
+      { name: 'Alice', email: 'alice@example.com', partySize: 1, partyNames: [] },
+      { name: 'Bob', email: 'bob@example.com', partySize: 1, partyNames: [] },
     ])
     expect(body.sampleHtml).toContain('Alice')
     expect(body.drinksUrl).toBe('https://our-wedding.netlify.app/drinks')

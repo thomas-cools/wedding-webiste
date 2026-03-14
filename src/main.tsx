@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -16,6 +16,9 @@ import './index.css'
 // Initialize i18n (must be imported before App)
 import './i18n'
 
+// Lazy-loaded admin page (hidden route, not in nav)
+const AdminPage = lazy(() => import('./pages/AdminPage'))
+
 createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
@@ -29,6 +32,14 @@ createRoot(document.getElementById('root') as HTMLElement).render(
             <Route path="/faq" element={<FaqPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/drinks" element={<DrinkPreferencesPage />} />
+            <Route
+              path="/admin"
+              element={
+                <Suspense fallback={null}>
+                  <AdminPage />
+                </Suspense>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </FeatureFlagsProvider>
