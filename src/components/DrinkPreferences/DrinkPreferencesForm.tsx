@@ -4,7 +4,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Textarea,
   Button,
   FormErrorMessage,
   Heading,
@@ -115,6 +114,7 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
     { value: 'white', label: t('drinkPreferences.form.wine.white') },
     { value: 'red', label: t('drinkPreferences.form.wine.red') },
     { value: 'sparkling', label: t('drinkPreferences.form.wine.sparkling') },
+    { value: 'rose', label: t('drinkPreferences.form.wine.rose') },
     { value: 'skip', label: t('drinkPreferences.form.wine.skip') },
   ]
 
@@ -128,6 +128,7 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
     { value: 'agave', label: t('drinkPreferences.form.cocktail.agave') },
     { value: 'aperitivo', label: t('drinkPreferences.form.cocktail.aperitivo') },
     { value: 'classic_mixers', label: t('drinkPreferences.form.cocktail.classic_mixers') },
+    { value: 'whiskey', label: t('drinkPreferences.form.cocktail.whiskey') },
     { value: 'beer_wine_only', label: t('drinkPreferences.form.cocktail.beer_wine_only') },
   ]
 
@@ -216,7 +217,6 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
         <input type="hidden" name="cocktail" />
         <input type="hidden" name="favoriteCocktail" />
         <input type="hidden" name="nonAlcoholic" />
-        <input type="hidden" name="comments" />
 
         <Stack spacing={8}>
           {/* Name */}
@@ -320,12 +320,12 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
               name="favoriteCocktail"
               value={form.favoriteCocktail}
               onChange={(e) => form.setFavoriteCocktail(e.target.value)}
-              placeholder={t('drinkPreferences.form.favoriteCocktailPlaceholder')}
+              placeholder={t('drinkPreferences.form.goToDrinkPlaceholder')}
               mt={4}
               maxLength={120}
             />
             <Text color="rgba(48,15,12,0.5)" fontSize="xs" mt={1.5}>
-              {t('drinkPreferences.form.favoriteCocktailLabel')}
+              {t('drinkPreferences.form.goToDrinkLabel')}
             </Text>
           </FormControl>
 
@@ -354,23 +354,6 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
                 {form.errors.drinks}
               </Text>
             )}
-          </FormControl>
-
-          {/* Divider */}
-          <Box><Box as="hr" borderColor="rgba(48,15,12,0.15)" /></Box>
-
-          {/* 5. Comments */}
-          <FormControl>
-            <FormLabel fontWeight="600" fontSize={['md', 'lg']}>
-              {t('drinkPreferences.form.commentsTitle')}
-            </FormLabel>
-            <Textarea
-              name="comments"
-              value={form.comments}
-              onChange={(e) => form.setComments(e.target.value)}
-              placeholder={t('drinkPreferences.form.commentsPlaceholder')}
-              rows={4}
-            />
           </FormControl>
 
           {/* Submit */}

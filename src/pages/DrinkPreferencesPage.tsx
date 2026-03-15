@@ -149,7 +149,7 @@ export default function DrinkPreferencesPage() {
   const { features } = useFeatureFlags()
 
   if (features.requirePassword) {
-    return <PasswordGate bg="#300F0C"><DrinkPreferencesPageContent /></PasswordGate>
+    return <PasswordGate><DrinkPreferencesPageContent /></PasswordGate>
   }
 
   return <DrinkPreferencesPageContent />

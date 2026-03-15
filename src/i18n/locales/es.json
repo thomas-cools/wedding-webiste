@@ -383,6 +383,7 @@
         "white": "Bebo vino blanco",
         "red": "Bebo vino tinto",
         "sparkling": "Dame las burbujas (espumoso/cava/prosecco)",
+        "rose": "Me encanta un buen rosado",
         "skip": "Paso del vino, gracias"
       },
       "beerTitle": "La Elección de Cerveza",
@@ -398,10 +399,11 @@
         "agave": "A base de Tequila / Mezcal (Margarita, Paloma)",
         "aperitivo": "Aperol Spritz / Hugo / ligero y burbujeante",
         "classic_mixers": "Gin tonic, Vodka soda, Ron con cola — los clásicos",
+        "whiskey": "A base de Whiskey (Old Fashioned, Whiskey Sour)",
         "beer_wine_only": "Me quedo con cerveza y vino"
       },
-      "favoriteCocktailLabel": "¿Tienes un cóctel favorito? ¡Cuéntanos!",
-      "favoriteCocktailPlaceholder": "ej. Espresso Martini, Mojito, Negroni...",
+      "goToDrinkLabel": "¿Cuál es tu bebida favorita en bodas?",
+      "goToDrinkPlaceholder": "ej. Espresso Martini, Mojito, Negroni, Whiskey Sour...",
       "nonAlcoholicTitle": "La Opción Sin Alcohol y de Alternancia",
       "nonAlcoholicSubtitle": "Sin juicios, solo buenas bebidas — para toda la noche o entre rondas.",
       "nonAlcoholic": {
@@ -410,8 +412,6 @@
         "mocktails": "Mocktails divertidos (shrubs, refrescos con sabor, cosas fancy)",
         "sparkling_water": "Solo agua con gas y refrescos está bien"
       },
-      "commentsTitle": "El Cajón de Cualquier Otra Cosa",
-      "commentsPlaceholder": "Alergias, cosas que no te gustan, una bebida específica que te haría llorar de felicidad — cuéntanos aquí.",
       "submit": "Enviar Preferencias"
     },
     "validation": {

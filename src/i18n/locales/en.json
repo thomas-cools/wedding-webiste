@@ -384,6 +384,7 @@
         "white": "I drink white wine",
         "red": "I drink red wine",
         "sparkling": "Give me the bubbles (sparkling/cava/prosecco)",
+        "rose": "I love a good rosé",
         "skip": "I'll skip the wine, thanks"
       },
       "beerTitle": "The Beer Choice",
@@ -399,10 +400,11 @@
         "agave": "Tequila / Mezcal-based (Margarita, Paloma)",
         "aperitivo": "Aperol Spritz / Hugo / light & bubbly",
         "classic_mixers": "Gin & tonic, Vodka soda, Rum & coke — the classics",
+        "whiskey": "Whiskey-based (Old Fashioned, Whiskey Sour)",
         "beer_wine_only": "I'll stick to beer & wine"
       },
-      "favoriteCocktailLabel": "Got a favorite cocktail? Tell us!",
-      "favoriteCocktailPlaceholder": "e.g. Espresso Martini, Mojito, Negroni...",
+      "goToDrinkLabel": "What is your go-to drink at weddings?",
+      "goToDrinkPlaceholder": "e.g. Espresso Martini, Mojito, Negroni, Whiskey Sour...",
       "nonAlcoholicTitle": "The Alcohol-Free & Pacing Choice",
       "nonAlcoholicSubtitle": "No judgment, just good drinks — for full-timers or in between rounds.",
       "nonAlcoholic": {
@@ -411,8 +413,6 @@
         "mocktails": "Fun mocktails (shrubs, flavored sodas, fancy stuff)",
         "sparkling_water": "Just sparkling water & soft drinks is fine"
       },
-      "commentsTitle": "The Anything Else Box",
-      "commentsPlaceholder": "Allergies, strong dislikes, a specific drink you'd cry happy tears over — tell us here.",
       "submit": "Submit Preferences"
     },
     "validation": {

@@ -384,6 +384,7 @@
         "white": "Ik drink witte wijn",
         "red": "Ik drink rode wijn",
         "sparkling": "Geef mij de bubbels (mousserende/cava/prosecco)",
+        "rose": "Ik hou van een goede rosé",
         "skip": "Ik sla de wijn over, bedankt"
       },
       "beerTitle": "De Bierkeuze",
@@ -399,10 +400,11 @@
         "agave": "Tequila / Mezcal-gebaseerd (Margarita, Paloma)",
         "aperitivo": "Aperol Spritz / Hugo / licht & bubbelig",
         "classic_mixers": "Gin-tonic, Vodka soda, Rum-cola — de klassiekers",
+        "whiskey": "Whiskey-gebaseerd (Old Fashioned, Whiskey Sour)",
         "beer_wine_only": "Ik blijf bij bier & wijn"
       },
-      "favoriteCocktailLabel": "Heb je een favoriete cocktail? Vertel het ons!",
-      "favoriteCocktailPlaceholder": "bijv. Espresso Martini, Mojito, Negroni...",
+      "goToDrinkLabel": "Wat is je go-to drankje op bruiloften?",
+      "goToDrinkPlaceholder": "bijv. Espresso Martini, Mojito, Negroni, Whiskey Sour...",
       "nonAlcoholicTitle": "De Alcoholvrije & Afwisselingskeuze",
       "nonAlcoholicSubtitle": "Geen oordeel, gewoon lekkere drankjes — voor de hele avond of tussendoor.",
       "nonAlcoholic": {
@@ -411,8 +413,6 @@
         "mocktails": "Leuke mocktails (shrubs, smaakjes frisdrank, fancy stuff)",
         "sparkling_water": "Gewoon bruisend water & frisdrank is prima"
       },
-      "commentsTitle": "Het Verder-Nog-Iets-Vakje",
-      "commentsPlaceholder": "Allergieën, sterke afkeren, een specifiek drankje waar je blij van wordt — vertel het hier.",
       "submit": "Voorkeuren Verzenden"
     },
     "validation": {

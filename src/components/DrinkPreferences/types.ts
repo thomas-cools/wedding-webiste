@@ -1,6 +1,6 @@
-export type WineChoice = 'white' | 'red' | 'sparkling' | 'skip'
+export type WineChoice = 'white' | 'red' | 'sparkling' | 'rose' | 'skip'
 export type BeerChoice = 'light_crisp' | 'belgian_blonde' | 'no_beer'
-export type CocktailChoice = 'agave' | 'aperitivo' | 'classic_mixers' | 'beer_wine_only'
+export type CocktailChoice = 'agave' | 'aperitivo' | 'classic_mixers' | 'whiskey' | 'beer_wine_only'
 export type NonAlcoholicChoice = 'af_wine' | 'af_beer' | 'mocktails' | 'sparkling_water'
 
 export type DrinkPreferencesData = {

@@ -68,9 +68,8 @@ describe('DrinkPreferencesForm', () => {
     expect(screen.getByText('drinkPreferences.form.wine.red')).toBeInTheDocument()
     expect(screen.getByText('drinkPreferences.form.beer.light_crisp')).toBeInTheDocument()
     expect(screen.getByText('drinkPreferences.form.cocktail.agave')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('drinkPreferences.form.favoriteCocktailPlaceholder')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('drinkPreferences.form.goToDrinkPlaceholder')).toBeInTheDocument()
     expect(screen.getByText('drinkPreferences.form.nonAlcoholic.mocktails')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('drinkPreferences.form.commentsPlaceholder')).toBeInTheDocument()
   })
 
   it('shows validation errors when submitting empty form', async () => {
