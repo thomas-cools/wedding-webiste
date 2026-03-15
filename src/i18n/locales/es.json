@@ -371,14 +371,14 @@
     "label": "Preferencias de Bebidas",
     "title": "Preferencias de Bebidas",
     "backToHome": "Volver",
-    "description": "¡Estamos finalizando el menú del bar para nuestro fin de semana de boda en Toulouse! Para asegurarnos de tener suficiente de exactamente lo que te gusta beber en el calor de agosto, por favor completa rápidamente tus preferencias abajo. (¡No te preocupes, no estás comprometido/a, solo nos ayuda con los cálculos!)",
+    "description": "¡Estamos finalizando el menú del bar para nuestra semana de boda en Toulouse! Para asegurarnos de tener suficiente de exactamente lo que te gusta beber en el calor de agosto, por favor completa rápidamente tus preferencias abajo. (¡No te preocupes, no estás comprometido/a, solo nos ayuda con los cálculos!)",
     "form": {
       "yourName": "Tu Nombre",
       "namePlaceholder": "Nombre Completo",
       "email": "Correo Electrónico",
       "emailPlaceholder": "tu@email.com",
       "wineTitle": "La Elección de Vino",
-      "wineSubtitle": "Habrá vino fluyendo todo el fin de semana — ayúdanos a elegir el balance correcto.",
+      "wineSubtitle": "Habrá vino fluyendo toda la semana — ayúdanos a elegir el balance correcto.",
       "wine": {
         "white": "Bebo vino blanco",
         "red": "Bebo vino tinto",
@@ -412,7 +412,10 @@
         "mocktails": "Mocktails divertidos (shrubs, refrescos con sabor, cosas fancy)",
         "sparkling_water": "Solo agua con gas y refrescos está bien"
       },
-      "submit": "Enviar Preferencias"
+      "submit": "Enviar Preferencias",
+      "submitAll": "Enviar Todas las Preferencias",
+      "submittingFor": "Enviando preferencias para {{count}} invitados",
+      "prefilledNote": "Pre-llenado desde tu RSVP"
     },
     "validation": {
       "nameRequired": "Por favor ingresa tu nombre completo.",

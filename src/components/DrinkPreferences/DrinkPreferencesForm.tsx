@@ -12,13 +12,16 @@ import {
   Icon,
   Wrap,
   WrapItem,
+  HStack,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useDrinkPreferencesForm } from './useDrinkPreferencesForm'
 import type { WineChoice, BeerChoice, CocktailChoice, NonAlcoholicChoice } from './types'
+import type { GuestData } from './useDrinkToken'
 
 export interface DrinkPreferencesFormProps {
   onSuccess?: () => void
+  guestData?: GuestData | null
 }
 
 function DrinkIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -91,11 +94,12 @@ function OptionPill({ isSelected, onToggle, children }: OptionPillProps) {
   )
 }
 
-export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesFormProps) {
+export default function DrinkPreferencesForm({ onSuccess, guestData }: DrinkPreferencesFormProps) {
   const { t } = useTranslation()
   const toast = useToast()
 
   const form = useDrinkPreferencesForm({
+    guestData,
     onSuccess: () => {
       toast({
         title: t('drinkPreferences.success.title'),
@@ -211,6 +215,8 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
         {/* Hidden fields for Netlify Forms */}
         <input type="hidden" name="form-name" value="drink-preferences" />
         <input type="hidden" name="firstName" />
+        <input type="hidden" name="guestName" />
+        <input type="hidden" name="submissionId" />
         <input type="hidden" name="email" />
         <input type="hidden" name="wine" />
         <input type="hidden" name="beer" />
@@ -219,6 +225,18 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
         <input type="hidden" name="nonAlcoholic" />
 
         <Stack spacing={8}>
+          {/* Pre-filled note */}
+          {form.isPreFilled && (
+            <Text
+              fontSize="sm"
+              color="rgba(48,15,12,0.6)"
+              textAlign="center"
+              fontStyle="italic"
+            >
+              {t('drinkPreferences.form.prefilledNote')}
+            </Text>
+          )}
+
           {/* Name */}
           <FormControl isInvalid={!!form.errors.firstName}>
             <FormLabel>{t('drinkPreferences.form.yourName')}</FormLabel>
@@ -231,6 +249,8 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
               }}
               onBlur={() => form.validateField('firstName')}
               placeholder={t('drinkPreferences.form.namePlaceholder')}
+              isReadOnly={form.isPreFilled}
+              opacity={form.isPreFilled ? 0.7 : 1}
             />
             <FormErrorMessage>{form.errors.firstName}</FormErrorMessage>
           </FormControl>
@@ -248,12 +268,62 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
               }}
               onBlur={() => form.validateField('email')}
               placeholder={t('drinkPreferences.form.emailPlaceholder')}
+              isReadOnly={form.isPreFilled}
+              opacity={form.isPreFilled ? 0.7 : 1}
             />
             <FormErrorMessage>{form.errors.email}</FormErrorMessage>
           </FormControl>
 
           {/* Divider */}
           <Box><Box as="hr" borderColor="rgba(48,15,12,0.15)" /></Box>
+
+          {/* Guest Tabs — only shown for multi-guest parties */}
+          {form.partyMembers.length > 1 && (
+            <Box>
+              <Text fontSize="sm" color="rgba(48,15,12,0.65)" mb={3} textAlign="center">
+                {t('drinkPreferences.form.submittingFor', { count: form.partyMembers.length })}
+              </Text>
+              <HStack
+                spacing={0}
+                overflowX="auto"
+                css={{
+                  '&::-webkit-scrollbar': { display: 'none' },
+                  scrollbarWidth: 'none',
+                }}
+              >
+                {form.partyMembers.map((name, i) => {
+                  const isActive = i === form.activeGuestIndex
+                  const hasError = !!form.guestErrors[i]
+                  return (
+                    <Box
+                      key={i}
+                      as="button"
+                      type="button"
+                      onClick={() => form.setActiveGuestIndex(i)}
+                      px={[3, 5]}
+                      py={[2, 2.5]}
+                      fontSize={['xs', 'sm']}
+                      fontFamily="'Montserrat', sans-serif"
+                      fontWeight={isActive ? '600' : '400'}
+                      color={isActive ? '#300F0C' : 'rgba(48,15,12,0.5)'}
+                      borderBottom="2px solid"
+                      borderColor={isActive ? '#94B1C8' : hasError ? '#4C050C' : 'transparent'}
+                      bg={isActive ? 'rgba(148,177,200,0.08)' : 'transparent'}
+                      transition="all 0.2s ease"
+                      whiteSpace="nowrap"
+                      _hover={{ color: '#300F0C', bg: 'rgba(148,177,200,0.04)' }}
+                    >
+                      {name}
+                      {hasError && (
+                        <Box as="span" ml={1} color="#4C050C" fontSize="xs">●</Box>
+                      )}
+                    </Box>
+                  )
+                })}
+              </HStack>
+              <Box as="hr" borderColor="rgba(48,15,12,0.1)" mt={0} mb={2} />
+            </Box>
+          )}
 
           {/* 1. Wine */}
           <FormControl>
@@ -352,6 +422,15 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
             {form.errors.drinks && (
               <Text color="#4C050C" fontSize="sm" mt={3}>
                 {form.errors.drinks}
+                {form.partyMembers.length > 1 && Object.keys(form.guestErrors).length > 0 && (
+                  <Box as="span" display="block" mt={1} fontSize="xs">
+                    {Object.entries(form.guestErrors).map(([idx]) => (
+                      <Box as="span" key={idx} display="block">
+                        {form.partyMembers[Number(idx)]}
+                      </Box>
+                    ))}
+                  </Box>
+                )}
               </Text>
             )}
           </FormControl>
@@ -360,7 +439,9 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
           <Button
             type="submit"
             isLoading={form.status === 'submitting'}
-            loadingText={t('drinkPreferences.form.submit')}
+            loadingText={form.partyMembers.length > 1
+              ? t('drinkPreferences.form.submitAll')
+              : t('drinkPreferences.form.submit')}
             bg="#300F0C"
             color="#E3DFCE"
             size="lg"
@@ -371,7 +452,9 @@ export default function DrinkPreferencesForm({ onSuccess }: DrinkPreferencesForm
             _hover={{ bg: '#4a1f1a' }}
             _active={{ bg: '#1a0806' }}
           >
-            {t('drinkPreferences.form.submit')}
+            {form.partyMembers.length > 1
+              ? t('drinkPreferences.form.submitAll')
+              : t('drinkPreferences.form.submit')}
           </Button>
         </Stack>
       </Box>

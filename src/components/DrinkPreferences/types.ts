@@ -6,6 +6,8 @@ export type NonAlcoholicChoice = 'af_wine' | 'af_beer' | 'mocktails' | 'sparklin
 export type DrinkPreferencesData = {
   id: string
   firstName: string
+  guestName: string
+  submissionId?: string
   email: string
   wine: WineChoice[]
   beer: BeerChoice[]

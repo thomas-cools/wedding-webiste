@@ -25,6 +25,7 @@ export interface AdminRsvp {
 export interface AdminDrinkPrefs {
   id: string
   firstName: string
+  guestName: string
   email: string
   wine: string[]
   beer: string[]
@@ -81,7 +82,7 @@ export interface UseAdminRsvpsReturn {
   setGuestLocale: (id: string, locale: string) => void
   getEffectiveLocale: (rsvp: AdminRsvp) => string
   // Drink preferences & email opens
-  drinkPrefsMap: Map<string, AdminDrinkPrefs>
+  drinkPrefsMap: Map<string, AdminDrinkPrefs[]>
   emailOpensMap: Map<string, EmailOpen[]>
 }
 
@@ -105,7 +106,7 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [localeOverrides, setLocaleOverrides] = useState<Map<string, string>>(new Map())
-  const [drinkPrefsMap, setDrinkPrefsMap] = useState<Map<string, AdminDrinkPrefs>>(new Map())
+  const [drinkPrefsMap, setDrinkPrefsMap] = useState<Map<string, AdminDrinkPrefs[]>>(new Map())
   const [emailOpensMap, setEmailOpensMap] = useState<Map<string, EmailOpen[]>>(new Map())
 
   const fetchRsvps = useCallback(async () => {
@@ -134,12 +135,16 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
       setRsvps(rsvpData.rsvps || [])
       setStats(rsvpData.stats || EMPTY_STATS)
 
-      // Drink preferences — map by email
+      // Drink preferences — group by email (multiple guests per party)
       if (drinksRes?.ok) {
         const drinksData = await drinksRes.json()
-        const map = new Map<string, AdminDrinkPrefs>()
+        const map = new Map<string, AdminDrinkPrefs[]>()
         for (const dp of drinksData.drinkPrefs || []) {
-          if (dp.email) map.set(dp.email.toLowerCase(), dp)
+          if (!dp.email) continue
+          const key = dp.email.toLowerCase()
+          const list = map.get(key) || []
+          list.push(dp)
+          map.set(key, list)
         }
         setDrinkPrefsMap(map)
       }

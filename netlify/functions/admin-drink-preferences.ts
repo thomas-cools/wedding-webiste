@@ -27,6 +27,8 @@ interface NetlifyFormSubmission {
 export interface AdminDrinkPrefs {
   id: string
   firstName: string
+  guestName: string
+  submissionId: string
   email: string
   wine: string[]
   beer: string[]
@@ -48,9 +50,12 @@ function parseJsonField<T>(value: string | undefined, fallback: T): T {
 
 function normalizeSubmission(sub: NetlifyFormSubmission): AdminDrinkPrefs {
   const d = sub.data
+  const explicitGuestName = (d.guestName || d.guest_name || '').trim()
   return {
     id: sub.id,
     firstName: (d.firstName || d.first_name || '').trim(),
+    guestName: explicitGuestName || (d.firstName || d.first_name || '').trim(),
+    submissionId: (d.submissionId || d.submission_id || '').trim(),
     email: (d.email || '').trim().toLowerCase(),
     wine: parseJsonField(d.wine, []),
     beer: parseJsonField(d.beer, []),
@@ -134,19 +139,54 @@ export const handler: Handler = async (event) => {
   try {
     const submissions = await fetchAllDrinkPrefsSubmissions(SITE_ID, NETLIFY_API_TOKEN)
 
-    // Deduplicate by email (keep latest submission)
-    const byEmail = new Map<string, AdminDrinkPrefs>()
-    for (const sub of submissions) {
-      const prefs = normalizeSubmission(sub)
-      if (!prefs.email) continue
+    const normalized = submissions
+      .map(normalizeSubmission)
+      .filter((p) => p.email)
 
-      const existing = byEmail.get(prefs.email)
-      if (!existing || new Date(prefs.submittedAt) > new Date(existing.submittedAt)) {
-        byEmail.set(prefs.email, prefs)
+    // Group by email, then keep only the latest submission batch.
+    // If a submissionId is present, all entries sharing it belong to the
+    // same form submit. Pick the newest submissionId per email, and
+    // discard older batches. For legacy entries (no submissionId),
+    // fall back to per-guestName dedup.
+    const byEmail = new Map<string, AdminDrinkPrefs[]>()
+    for (const prefs of normalized) {
+      const list = byEmail.get(prefs.email) || []
+      list.push(prefs)
+      byEmail.set(prefs.email, list)
+    }
+
+    const result: AdminDrinkPrefs[] = []
+    for (const entries of byEmail.values()) {
+      // Find the latest submissionId for this email
+      const withSid = entries.filter((e) => e.submissionId)
+      if (withSid.length > 0) {
+        // Get the most recent submissionId by timestamp
+        let latestSid = withSid[0].submissionId
+        let latestTime = new Date(withSid[0].submittedAt).getTime()
+        for (const e of withSid) {
+          const t = new Date(e.submittedAt).getTime()
+          if (t > latestTime) {
+            latestTime = t
+            latestSid = e.submissionId
+          }
+        }
+        // Keep only entries from the latest submission batch
+        result.push(...withSid.filter((e) => e.submissionId === latestSid))
+      } else {
+        // Legacy: no submissionId — dedup by guestName, keep latest
+        const byGuest = new Map<string, AdminDrinkPrefs>()
+        for (const e of entries) {
+          const gk = e.guestName.toLowerCase()
+          const existing = byGuest.get(gk)
+          if (!existing || new Date(e.submittedAt) > new Date(existing.submittedAt)) {
+            byGuest.set(gk, e)
+          }
+        }
+        result.push(...byGuest.values())
       }
     }
 
-    const drinkPrefs = Array.from(byEmail.values())
+    const drinkPrefs: AdminDrinkPrefs[] = result
 
     return adminJson(200, { ok: true, drinkPrefs })
   } catch (error) {

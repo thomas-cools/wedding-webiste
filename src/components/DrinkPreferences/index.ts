@@ -1,5 +1,7 @@
 export { default } from './DrinkPreferencesForm'
 export { useDrinkPreferencesForm } from './useDrinkPreferencesForm'
 export type { UseDrinkPreferencesFormReturn, UseDrinkPreferencesFormOptions } from './useDrinkPreferencesForm'
+export { useDrinkToken } from './useDrinkToken'
+export type { GuestData } from './useDrinkToken'
 export * from './types'
 export * from './drinkPreferencesApi'

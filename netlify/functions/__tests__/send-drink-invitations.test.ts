@@ -157,7 +157,7 @@ describe('send-drink-invitations handler', () => {
       { name: 'Bob', email: 'bob@example.com', partySize: 1, partyNames: [] },
     ])
     expect(body.sampleHtml).toContain('Alice')
-    expect(body.drinksUrl).toBe('https://our-wedding.netlify.app/drinks')
+    expect(body.drinksUrl).toContain('https://our-wedding.netlify.app/drinks?t=')
   })
 
   it('deduplicates guests by email', async () => {

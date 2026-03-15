@@ -383,7 +383,7 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
                     </HStack>
                   </Td>
                   <Td>
-                    {drinkPrefsMap.has(rsvp.email) ? (
+                    {(drinkPrefsMap.get(rsvp.email.toLowerCase())?.length ?? 0) > 0 ? (
                       <Badge colorScheme="purple" variant="subtle" fontSize="2xs">
                         ✓
                       </Badge>
@@ -430,7 +430,7 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
         rsvp={selectedRsvp}
         isOpen={isOpen}
         onClose={onClose}
-        drinkPrefs={selectedRsvp ? drinkPrefsMap.get(selectedRsvp.email) : undefined}
+        drinkPrefs={selectedRsvp ? drinkPrefsMap.get(selectedRsvp.email.toLowerCase()) : undefined}
         emailOpens={selectedRsvp ? emailOpensMap.get(selectedRsvp.email) : undefined}
       />
     </Box>

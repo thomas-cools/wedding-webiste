@@ -13,14 +13,29 @@ import {
   submitDrinkPreferencesToNetlify,
   sendDrinkNotificationEmail,
 } from './drinkPreferencesApi'
+import type { GuestData } from './useDrinkToken'
 
 export type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
+
+export interface GuestFormState {
+  guestName: string
+  wine: WineChoice[]
+  beer: BeerChoice[]
+  cocktail: CocktailChoice[]
+  favoriteCocktail: string
+  nonAlcoholic: NonAlcoholicChoice[]
+}
 
 export interface UseDrinkPreferencesFormReturn {
   firstName: string
   setFirstName: (v: string) => void
   email: string
   setEmail: (v: string) => void
+  isPreFilled: boolean
+  partyMembers: string[]
+  activeGuestIndex: number
+  setActiveGuestIndex: (i: number) => void
+  // Active guest drink state
   wine: WineChoice[]
   toggleWine: (v: WineChoice) => void
   beer: BeerChoice[]
@@ -38,73 +53,126 @@ export interface UseDrinkPreferencesFormReturn {
   hasAttemptedSubmit: boolean
   status: FormStatus
   handleSubmit: (e: React.FormEvent) => Promise<void>
+  guestErrors: Record<number, string[]>
 }
 
 export interface UseDrinkPreferencesFormOptions {
   onSuccess?: () => void
+  guestData?: GuestData | null
 }
 
 function toggleInArray<T>(arr: T[], value: T): T[] {
   return arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value]
 }
 
+function createEmptyGuestState(guestName: string): GuestFormState {
+  return { guestName, wine: [], beer: [], cocktail: [], favoriteCocktail: '', nonAlcoholic: [] }
+}
+
 export function useDrinkPreferencesForm(
   options: UseDrinkPreferencesFormOptions = {}
 ): UseDrinkPreferencesFormReturn {
   const { t, i18n } = useTranslation()
+  const guestData = options.guestData ?? null
+  const isPreFilled = guestData !== null
+  const partyMembers = guestData?.partyMembers ?? []
+  const isMultiGuest = partyMembers.length > 1
 
-  const [firstName, setFirstName] = useState('')
-  const [email, setEmail] = useState('')
-  const [wine, setWine] = useState<WineChoice[]>([])
-  const [beer, setBeer] = useState<BeerChoice[]>([])
-  const [cocktail, setCocktail] = useState<CocktailChoice[]>([])
-  const [favoriteCocktail, setFavoriteCocktail] = useState('')
-  const [nonAlcoholic, setNonAlcoholic] = useState<NonAlcoholicChoice[]>([])
+  const [firstName, setFirstName] = useState(guestData?.primaryName ?? '')
+  const [email, setEmail] = useState(guestData?.email ?? '')
+
+  // Multi-guest state: one form state per party member
+  const [guestStates, setGuestStates] = useState<GuestFormState[]>(() => {
+    if (isMultiGuest) {
+      // Load any previously saved preferences from localStorage
+      const saved = loadDrinkPreferences()
+      return partyMembers.map((name) => {
+        const prev = saved.find(
+          (s) =>
+            s.email.toLowerCase() === (guestData?.email ?? '').toLowerCase() &&
+            s.guestName.toLowerCase() === name.toLowerCase()
+        )
+        if (prev) {
+          return {
+            guestName: name,
+            wine: prev.wine,
+            beer: prev.beer,
+            cocktail: prev.cocktail,
+            favoriteCocktail: prev.favoriteCocktail,
+            nonAlcoholic: prev.nonAlcoholic,
+          }
+        }
+        return createEmptyGuestState(name)
+      })
+    }
+    return [createEmptyGuestState(guestData?.primaryName ?? '')]
+  })
+
+  const [activeGuestIndex, setActiveGuestIndex] = useState(0)
   const [comments, setComments] = useState('')
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [guestErrors, setGuestErrors] = useState<Record<number, string[]>>({})
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
   const [status, setStatus] = useState<FormStatus>('idle')
 
-  const toggleWine = useCallback((v: WineChoice) => {
-    setWine((prev) => {
-      const next = toggleInArray(prev, v)
-      // Clear drinks error if we just added something
-      if (next.length > 0) {
-        setErrors((e) => { const n = { ...e }; delete n.drinks; return n })
-      }
+  // Helpers to get/set active guest fields
+  const activeGuest = guestStates[activeGuestIndex] ?? guestStates[0]
+
+  const updateActiveGuest = useCallback(
+    (updater: (state: GuestFormState) => GuestFormState) => {
+      setGuestStates((prev) => {
+        const next = [...prev]
+        next[activeGuestIndex] = updater(next[activeGuestIndex])
+        return next
+      })
+    },
+    [activeGuestIndex]
+  )
+
+  const clearDrinksError = useCallback(() => {
+    setErrors((e) => { const n = { ...e }; delete n.drinks; return n })
+    setGuestErrors((prev) => {
+      const next = { ...prev }
+      delete next[activeGuestIndex]
       return next
     })
-  }, [])
+  }, [activeGuestIndex])
+
+  const toggleWine = useCallback((v: WineChoice) => {
+    updateActiveGuest((g) => {
+      const next = toggleInArray(g.wine, v)
+      if (next.length > 0) clearDrinksError()
+      return { ...g, wine: next }
+    })
+  }, [updateActiveGuest, clearDrinksError])
 
   const toggleBeer = useCallback((v: BeerChoice) => {
-    setBeer((prev) => {
-      const next = toggleInArray(prev, v)
-      if (next.length > 0) {
-        setErrors((e) => { const n = { ...e }; delete n.drinks; return n })
-      }
-      return next
+    updateActiveGuest((g) => {
+      const next = toggleInArray(g.beer, v)
+      if (next.length > 0) clearDrinksError()
+      return { ...g, beer: next }
     })
-  }, [])
+  }, [updateActiveGuest, clearDrinksError])
 
   const toggleCocktail = useCallback((v: CocktailChoice) => {
-    setCocktail((prev) => {
-      const next = toggleInArray(prev, v)
-      if (next.length > 0) {
-        setErrors((e) => { const n = { ...e }; delete n.drinks; return n })
-      }
-      return next
+    updateActiveGuest((g) => {
+      const next = toggleInArray(g.cocktail, v)
+      if (next.length > 0) clearDrinksError()
+      return { ...g, cocktail: next }
     })
-  }, [])
+  }, [updateActiveGuest, clearDrinksError])
 
   const toggleNonAlcoholic = useCallback((v: NonAlcoholicChoice) => {
-    setNonAlcoholic((prev) => {
-      const next = toggleInArray(prev, v)
-      if (next.length > 0) {
-        setErrors((e) => { const n = { ...e }; delete n.drinks; return n })
-      }
-      return next
+    updateActiveGuest((g) => {
+      const next = toggleInArray(g.nonAlcoholic, v)
+      if (next.length > 0) clearDrinksError()
+      return { ...g, nonAlcoholic: next }
     })
-  }, [])
+  }, [updateActiveGuest, clearDrinksError])
+
+  const setFavoriteCocktail = useCallback((v: string) => {
+    updateActiveGuest((g) => ({ ...g, favoriteCocktail: v }))
+  }, [updateActiveGuest])
 
   const validateField = useCallback(
     (field: string, value?: string) => {
@@ -128,7 +196,8 @@ export function useDrinkPreferencesForm(
             break
           }
           case 'drinks': {
-            if (wine.length === 0 && beer.length === 0 && cocktail.length === 0 && nonAlcoholic.length === 0) {
+            const g = guestStates[activeGuestIndex]
+            if (g.wine.length === 0 && g.beer.length === 0 && g.cocktail.length === 0 && g.nonAlcoholic.length === 0) {
               next.drinks = t('drinkPreferences.validation.atLeastOneDrink')
             } else {
               delete next.drinks
@@ -139,11 +208,12 @@ export function useDrinkPreferencesForm(
         return next
       })
     },
-    [firstName, email, wine, beer, cocktail, nonAlcoholic, t]
+    [firstName, email, guestStates, activeGuestIndex, t]
   )
 
   const validateAll = useCallback((): boolean => {
     const newErrors: Record<string, string> = {}
+    const newGuestErrors: Record<number, string[]> = {}
 
     if (!firstName.trim()) {
       newErrors.firstName = t('drinkPreferences.validation.nameRequired')
@@ -152,13 +222,23 @@ export function useDrinkPreferencesForm(
     if (!emailVal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
       newErrors.email = t('drinkPreferences.validation.emailRequired')
     }
-    if (wine.length === 0 && beer.length === 0 && cocktail.length === 0 && nonAlcoholic.length === 0) {
+
+    // Validate each guest has at least one drink preference
+    let anyGuestMissingDrinks = false
+    guestStates.forEach((g, i) => {
+      if (g.wine.length === 0 && g.beer.length === 0 && g.cocktail.length === 0 && g.nonAlcoholic.length === 0) {
+        anyGuestMissingDrinks = true
+        newGuestErrors[i] = [t('drinkPreferences.validation.atLeastOneDrink')]
+      }
+    })
+    if (anyGuestMissingDrinks) {
       newErrors.drinks = t('drinkPreferences.validation.atLeastOneDrink')
     }
 
     setErrors(newErrors)
+    setGuestErrors(newGuestErrors)
     return Object.keys(newErrors).length === 0
-  }, [firstName, email, wine, beer, cocktail, nonAlcoholic, t])
+  }, [firstName, email, guestStates, t])
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -169,39 +249,60 @@ export function useDrinkPreferencesForm(
 
       setStatus('submitting')
 
-      const entry: DrinkPreferencesData = {
-        id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        firstName: firstName.trim(),
-        email: email.trim(),
-        wine: [...wine],
-        beer: [...beer],
-        cocktail: [...cocktail],
-        favoriteCocktail: favoriteCocktail.trim(),
-        nonAlcoholic: [...nonAlcoholic],
-        comments: comments.trim(),
-        timestamp: Date.now(),
+      const trimmedFirstName = firstName.trim()
+      const trimmedEmail = email.trim()
+      const existing = loadDrinkPreferences()
+      const submissions: DrinkPreferencesData[] = []
+      // Shared submission ID links all guests from the same form submission
+      const submissionId = crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`
+
+      for (const guestState of guestStates) {
+        const entry: DrinkPreferencesData = {
+          id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+          firstName: trimmedFirstName,
+          guestName: isMultiGuest ? guestState.guestName : trimmedFirstName,
+          submissionId,
+          email: trimmedEmail,
+          wine: [...guestState.wine],
+          beer: [...guestState.beer],
+          cocktail: [...guestState.cocktail],
+          favoriteCocktail: guestState.favoriteCocktail.trim(),
+          nonAlcoholic: [...guestState.nonAlcoholic],
+          comments: comments.trim(),
+          timestamp: Date.now(),
+        }
+
+        // Save locally — dedup by email + guestName
+        const idx = existing.findIndex(
+          (r) =>
+            r.email.toLowerCase() === entry.email.toLowerCase() &&
+            (r.guestName ?? r.firstName).toLowerCase() === entry.guestName.toLowerCase()
+        )
+        if (idx >= 0) {
+          existing[idx] = entry
+        } else {
+          existing.push(entry)
+        }
+
+        submissions.push(entry)
       }
 
-      // Save locally
-      const existing = loadDrinkPreferences()
-      const idx = existing.findIndex(
-        (r) => r.email.toLowerCase() === entry.email.toLowerCase()
-      )
-      if (idx >= 0) {
-        existing[idx] = entry
-      } else {
-        existing.push(entry)
-      }
       saveDrinkPreferences(existing)
 
-      // Submit to Netlify Forms (fire and forget in production)
-      void submitDrinkPreferencesToNetlify(entry)
-
-      // Send notification email to couple
-      void sendDrinkNotificationEmail({
-        ...entry,
-        locale: i18n.language,
-      })
+      // Submit all guests sequentially with a delay to avoid Netlify dropping
+      // concurrent POSTs and to stay within notification rate limits
+      for (let i = 0; i < submissions.length; i++) {
+        const entry = submissions[i]
+        try {
+          await submitDrinkPreferencesToNetlify(entry)
+        } catch { /* best-effort */ }
+        try {
+          await sendDrinkNotificationEmail({ ...entry, locale: i18n.language })
+        } catch { /* best-effort */ }
+        if (i < submissions.length - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 250))
+        }
+      }
 
       setStatus('success')
       options.onSuccess?.()
@@ -209,10 +310,8 @@ export function useDrinkPreferencesForm(
     [
       firstName,
       email,
-      wine,
-      beer,
-      cocktail,
-      nonAlcoholic,
+      guestStates,
+      isMultiGuest,
       comments,
       validateAll,
       i18n.language,
@@ -225,15 +324,19 @@ export function useDrinkPreferencesForm(
     setFirstName,
     email,
     setEmail,
-    wine,
+    isPreFilled,
+    partyMembers,
+    activeGuestIndex,
+    setActiveGuestIndex,
+    wine: activeGuest.wine,
     toggleWine,
-    beer,
+    beer: activeGuest.beer,
     toggleBeer,
-    cocktail,
+    cocktail: activeGuest.cocktail,
     toggleCocktail,
-    favoriteCocktail,
+    favoriteCocktail: activeGuest.favoriteCocktail,
     setFavoriteCocktail,
-    nonAlcoholic,
+    nonAlcoholic: activeGuest.nonAlcoholic,
     toggleNonAlcoholic,
     comments,
     setComments,
@@ -242,5 +345,6 @@ export function useDrinkPreferencesForm(
     hasAttemptedSubmit,
     status,
     handleSubmit,
+    guestErrors,
   }
 }

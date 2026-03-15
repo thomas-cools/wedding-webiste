@@ -22,6 +22,8 @@ export async function submitDrinkPreferencesToNetlify(
     const body = new URLSearchParams()
     body.append('form-name', 'drink-preferences')
     body.append('firstName', data.firstName)
+    body.append('guestName', data.guestName)
+    if (data.submissionId) body.append('submissionId', data.submissionId)
     body.append('email', data.email)
     body.append('wine', JSON.stringify(data.wine))
     body.append('beer', JSON.stringify(data.beer))

@@ -1,5 +1,6 @@
 import type { Handler, HandlerEvent } from '@netlify/functions'
 import { verifyAdminRequest } from './utils/admin-auth'
+import { encodeDrinkToken } from './utils/drink-token'
 
 /**
  * Sends drink preference invitation emails to all confirmed RSVP guests.
@@ -72,7 +73,7 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
   en: {
     subject: 'Help Us Pick the Drinks!',
     greeting: (name) => `Hi ${name}!`,
-    intro: "We're finalizing the bar menu for our wedding weekend in Toulouse and we'd love your input!",
+    intro: "We're finalizing the bar menu for our wedding week in Toulouse and we'd love your input!",
     callToAction: 'Please take a quick moment to let us know what you like to drink — it helps us make sure we have plenty of exactly the right stuff for the August heat.',
     buttonLabel: 'Choose Your Drinks',
     closing: "Don't worry, you aren't locked into anything — it just helps us with the math!",
@@ -82,7 +83,7 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
   es: {
     subject: '¡Ayúdanos a Elegir las Bebidas!',
     greeting: (name) => `¡Hola ${name}!`,
-    intro: 'Estamos finalizando el menú del bar para nuestro fin de semana de boda en Toulouse y ¡nos encantaría tu opinión!',
+    intro: 'Estamos finalizando el menú del bar para nuestra semana de boda en Toulouse y ¡nos encantaría tu opinión!',
     callToAction: 'Por favor tómate un momento para contarnos qué te gusta beber — nos ayuda a asegurarnos de tener suficiente de todo lo bueno para el calor de agosto.',
     buttonLabel: 'Elige Tus Bebidas',
     closing: 'No te preocupes, no estás comprometido/a con nada — ¡solo nos ayuda con los cálculos!',
@@ -92,7 +93,7 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
   nl: {
     subject: 'Help Ons de Drankjes Kiezen!',
     greeting: (name) => `Hoi ${name}!`,
-    intro: 'We zijn het barmenu aan het afronden voor ons trouwweekend in Toulouse en we horen graag jouw voorkeur!',
+    intro: 'We zijn het barmenu aan het afronden voor onze trouwweek in Toulouse en we horen graag jouw voorkeur!',
     callToAction: 'Neem even een momentje om ons te laten weten wat je graag drinkt — het helpt ons om genoeg van precies de juiste dingen in huis te halen voor de augustushitte.',
     buttonLabel: 'Kies Je Drankjes',
     closing: 'Geen zorgen, je zit nergens aan vast — het helpt ons gewoon met de berekeningen!',
@@ -430,21 +431,23 @@ const handler: Handler = async (event: HandlerEvent) => {
     }
   }
 
-  const drinksUrl = `${SITE_URL}/drinks`
+  const baseDrinksUrl = `${SITE_URL}/drinks`
 
   // Dry run: return guest list without sending
   if (dryRun) {
     const sampleLocale = normalizeLocale(guests[0].locale || localeOverride)
+    const sampleToken = encodeDrinkToken({ name: guests[0].name, email: guests[0].email, partyNames: guests[0].partyNames })
+    const sampleDrinksUrl = `${baseDrinksUrl}?t=${sampleToken}`
     return {
       statusCode: 200,
       body: JSON.stringify({
         dryRun: true,
         locale,
-        drinksUrl,
+        drinksUrl: sampleDrinksUrl,
         confirmedGuests: guests,
         totalCount: guests.length,
-        sampleHtml: generateInvitationHtml(guests[0].name, drinksUrl, sampleLocale, guests[0].partySize, guests[0].partyNames, undefined),
-        sampleText: generateInvitationText(guests[0].name, drinksUrl, sampleLocale, guests[0].partySize, guests[0].partyNames),
+        sampleHtml: generateInvitationHtml(guests[0].name, sampleDrinksUrl, sampleLocale, guests[0].partySize, guests[0].partyNames, undefined),
+        sampleText: generateInvitationText(guests[0].name, sampleDrinksUrl, sampleLocale, guests[0].partySize, guests[0].partyNames),
       }),
     }
   }
@@ -455,6 +458,9 @@ const handler: Handler = async (event: HandlerEvent) => {
 
   for (const guest of guests) {
     const guestLocale = normalizeLocale(guest.locale || localeOverride)
+    // Build per-recipient token URL with pre-populated guest data
+    const guestToken = encodeDrinkToken({ name: guest.name, email: guest.email, partyNames: guest.partyNames })
+    const drinksUrl = `${baseDrinksUrl}?t=${guestToken}`
     // Build per-recipient tracking pixel URL
     const pixelUrl = SITE_URL
       ? `${SITE_URL}/.netlify/functions/track-email-open?e=${encodeURIComponent(guest.email)}&c=drink_invitation`

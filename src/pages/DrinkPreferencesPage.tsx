@@ -16,6 +16,7 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import PasswordGate from '../components/PasswordGate'
 import Footer from '../components/Footer'
 import { useFeatureFlags } from '../contexts/FeatureFlagsContext'
+import { useDrinkToken } from '../components/DrinkPreferences/useDrinkToken'
 
 import weddingLogoSmall from '../assets/monogram_websiteT&C-small.webp'
 import weddingLogoMedium from '../assets/monogram_websiteT&C-medium.webp'
@@ -46,6 +47,7 @@ function DrinkPreferencesFormSkeleton() {
 function DrinkPreferencesPageContent() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const guestData = useDrinkToken()
 
   const handleSuccess = () => {
     navigate('/')
@@ -134,7 +136,7 @@ function DrinkPreferencesPageContent() {
         <Container maxW="container.lg" position="relative" zIndex={1}>
           <ErrorBoundary sectionName="Drink preferences form">
             <Suspense fallback={<DrinkPreferencesFormSkeleton />}>
-              <DrinkPreferencesForm onSuccess={handleSuccess} />
+              <DrinkPreferencesForm onSuccess={handleSuccess} guestData={guestData} />
             </Suspense>
           </ErrorBoundary>
         </Container>

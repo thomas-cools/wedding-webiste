@@ -3,6 +3,7 @@ import { consumeRateLimit, getClientIp, rateLimitHeaders, rateLimitKey } from '.
 
 interface DrinkPreferencesData {
   firstName: string
+  guestName?: string
   email: string
   wine?: string[]
   beer?: string[]
@@ -179,7 +180,11 @@ function generateEmailHtml(data: DrinkPreferencesData): string {
                       <tr>
                         <td style="color: #666;">${s.name}</td>
                         <td style="text-align: right;">${safeFirstName}</td>
-                      </tr>
+                      </tr>${data.guestName && data.guestName !== data.firstName ? `
+                      <tr>
+                        <td style="color: #666;">Guest</td>
+                        <td style="text-align: right;">${escapeHtml(data.guestName)}</td>
+                      </tr>` : ''}
                       <tr>
                         <td style="color: #666;">${s.email}</td>
                         <td style="text-align: right;">${safeEmail}</td>
@@ -249,7 +254,7 @@ ${s.intro}
 
 ${s.guestDetails.toUpperCase()}
 ──────────────
-${s.name}: ${data.firstName}
+${s.name}: ${data.firstName}${data.guestName && data.guestName !== data.firstName ? `\nGuest: ${data.guestName}` : ''}
 ${s.email}: ${data.email}
 
 ${s.drinkPreferences.toUpperCase()}

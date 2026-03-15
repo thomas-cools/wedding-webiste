@@ -372,14 +372,14 @@
     "label": "Drink Preferences",
     "title": "Drink Preferences",
     "backToHome": "Back",
-    "description": "We are finalizing the bar menu for our wedding weekend in Toulouse! To make sure we have plenty of exactly what you love to drink in the August heat, please quickly fill out your top preferences below. (Don't worry, you aren't locked into this, it just helps us with the math!)",
+    "description": "We are finalizing the bar menu for our wedding week in Toulouse! To make sure we have plenty of exactly what you love to drink in the August heat, please quickly fill out your top preferences below. (Don't worry, you aren't locked into this, it just helps us with the math!)",
     "form": {
       "yourName": "Your Name",
       "namePlaceholder": "Full Name",
       "email": "Email Address",
       "emailPlaceholder": "your@email.com",
       "wineTitle": "The Wine Pour",
-      "wineSubtitle": "We'll have wine flowing all weekend — help us pick the right balance.",
+      "wineSubtitle": "We'll have wine flowing all week — help us pick the right balance.",
       "wine": {
         "white": "I drink white wine",
         "red": "I drink red wine",
@@ -413,7 +413,10 @@
         "mocktails": "Fun mocktails (shrubs, flavored sodas, fancy stuff)",
         "sparkling_water": "Just sparkling water & soft drinks is fine"
       },
-      "submit": "Submit Preferences"
+      "submit": "Submit Preferences",
+      "submitAll": "Submit All Preferences",
+      "submittingFor": "Submitting preferences for {{count}} guests",
+      "prefilledNote": "Pre-filled from your RSVP"
     },
     "validation": {
       "nameRequired": "Please enter your full name.",

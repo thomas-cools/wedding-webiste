@@ -372,14 +372,14 @@
     "label": "Drankvoorkeuren",
     "title": "Drankvoorkeuren",
     "backToHome": "Terug",
-    "description": "We zijn het barmenu aan het afronden voor ons trouwweekend in Toulouse! Om ervoor te zorgen dat we genoeg hebben van precies wat jij lekker vindt in de augustushitte, vul hieronder snel je voorkeuren in. (Geen zorgen, je zit nergens aan vast, het helpt ons gewoon met de berekeningen!)",
+    "description": "We zijn het barmenu aan het afronden voor onze trouwweek in Toulouse! Om ervoor te zorgen dat we genoeg hebben van precies wat jij lekker vindt in de augustushitte, vul hieronder snel je voorkeuren in. (Geen zorgen, je zit nergens aan vast, het helpt ons gewoon met de berekeningen!)",
     "form": {
       "yourName": "Je Naam",
       "namePlaceholder": "Volledige Naam",
       "email": "E-mailadres",
       "emailPlaceholder": "jouw@email.com",
       "wineTitle": "De Wijnkeuze",
-      "wineSubtitle": "Het hele weekend vloeit de wijn — help ons de juiste balans te vinden.",
+      "wineSubtitle": "De hele week vloeit de wijn — help ons de juiste balans te vinden.",
       "wine": {
         "white": "Ik drink witte wijn",
         "red": "Ik drink rode wijn",
@@ -413,7 +413,10 @@
         "mocktails": "Leuke mocktails (shrubs, smaakjes frisdrank, fancy stuff)",
         "sparkling_water": "Gewoon bruisend water & frisdrank is prima"
       },
-      "submit": "Voorkeuren Verzenden"
+      "submit": "Voorkeuren Verzenden",
+      "submitAll": "Alle Voorkeuren Verzenden",
+      "submittingFor": "Voorkeuren indienen voor {{count}} gasten",
+      "prefilledNote": "Vooraf ingevuld vanuit je RSVP"
     },
     "validation": {
       "nameRequired": "Vul alsjeblieft je volledige naam in.",

@@ -28,7 +28,7 @@ interface RsvpDetailModalProps {
   rsvp: AdminRsvp | null
   isOpen: boolean
   onClose: () => void
-  drinkPrefs?: AdminDrinkPrefs
+  drinkPrefs?: AdminDrinkPrefs[]
   emailOpens?: EmailOpen[]
 }
 
@@ -189,74 +189,88 @@ export function RsvpDetailModal({ rsvp, isOpen, onClose, drinkPrefs, emailOpens 
             )}
 
             {/* Drink Preferences */}
-            {drinkPrefs && (
+            {drinkPrefs && drinkPrefs.length > 0 && (
               <>
                 <Divider />
                 <Box>
                   <Text fontWeight="bold" fontSize="sm" color="neutral.muted" mb={2}>
-                    Drink Preferences
+                    Drink Preferences ({drinkPrefs.length} {drinkPrefs.length === 1 ? 'guest' : 'guests'})
                   </Text>
-                  <VStack align="stretch" spacing={2}>
-                    {drinkPrefs.wine.length > 0 && (
-                      <HStack>
-                        <Text fontSize="sm" color="gray.600" minW="90px">Wine</Text>
-                        <Wrap spacing={1}>
-                          {drinkPrefs.wine.map((w) => (
-                            <WrapItem key={w}>
-                              <Tag size="sm" colorScheme="red" variant="subtle">{w}</Tag>
-                            </WrapItem>
-                          ))}
-                        </Wrap>
-                      </HStack>
-                    )}
-                    {drinkPrefs.beer.length > 0 && (
-                      <HStack>
-                        <Text fontSize="sm" color="gray.600" minW="90px">Beer</Text>
-                        <Wrap spacing={1}>
-                          {drinkPrefs.beer.map((b) => (
-                            <WrapItem key={b}>
-                              <Tag size="sm" colorScheme="yellow" variant="subtle">{b}</Tag>
-                            </WrapItem>
-                          ))}
-                        </Wrap>
-                      </HStack>
-                    )}
-                    {drinkPrefs.cocktail.length > 0 && (
-                      <HStack>
-                        <Text fontSize="sm" color="gray.600" minW="90px">Cocktail</Text>
-                        <Wrap spacing={1}>
-                          {drinkPrefs.cocktail.map((c) => (
-                            <WrapItem key={c}>
-                              <Tag size="sm" colorScheme="purple" variant="subtle">{c}</Tag>
-                            </WrapItem>
-                          ))}
-                        </Wrap>
-                      </HStack>
-                    )}
-                    {drinkPrefs.favoriteCocktail && (
-                      <HStack>
-                        <Text fontSize="sm" color="gray.600" minW="90px">Favorite</Text>
-                        <Text fontSize="sm">{drinkPrefs.favoriteCocktail}</Text>
-                      </HStack>
-                    )}
-                    {drinkPrefs.nonAlcoholic.length > 0 && (
-                      <HStack>
-                        <Text fontSize="sm" color="gray.600" minW="90px">Non-Alc</Text>
-                        <Wrap spacing={1}>
-                          {drinkPrefs.nonAlcoholic.map((n) => (
-                            <WrapItem key={n}>
-                              <Tag size="sm" colorScheme="green" variant="subtle">{n}</Tag>
-                            </WrapItem>
-                          ))}
-                        </Wrap>
-                      </HStack>
-                    )}
-                    {drinkPrefs.comments && (
-                      <HStack align="start">
-                        <Text fontSize="sm" color="gray.600" minW="90px">Comments</Text>
-                        <Text fontSize="sm" whiteSpace="pre-wrap">{drinkPrefs.comments}</Text>
-                      </HStack>
-                    )}
+                  <VStack align="stretch" spacing={4}>
+                    {drinkPrefs.map((dp) => (
+                      <Box key={dp.id} pl={drinkPrefs.length > 1 ? 3 : 0} borderLeftWidth={drinkPrefs.length > 1 ? '2px' : 0} borderColor="purple.200">
+                        {drinkPrefs.length > 1 && (
+                          <Text fontSize="sm" fontWeight="semibold" mb={1}>
+                            {dp.guestName || dp.firstName}
+                          </Text>
+                        )}
+                        <VStack align="stretch" spacing={1}>
+                          {dp.wine.length > 0 && (
+                            <HStack>
+                              <Text fontSize="sm" color="gray.600" minW="90px">Wine</Text>
+                              <Wrap spacing={1}>
+                                {dp.wine.map((w) => (
+                                  <WrapItem key={w}>
+                                    <Tag size="sm" colorScheme="red" variant="subtle">{w}</Tag>
+                                  </WrapItem>
+                                ))}
+                              </Wrap>
+                            </HStack>
+                          )}
+                          {dp.beer.length > 0 && (
+                            <HStack>
+                              <Text fontSize="sm" color="gray.600" minW="90px">Beer</Text>
+                              <Wrap spacing={1}>
+                                {dp.beer.map((b) => (
+                                  <WrapItem key={b}>
+                                    <Tag size="sm" colorScheme="yellow" variant="subtle">{b}</Tag>
+                                  </WrapItem>
+                                ))}
+                              </Wrap>
+                            </HStack>
+                          )}
+                          {dp.cocktail.length > 0 && (
+                            <HStack>
+                              <Text fontSize="sm" color="gray.600" minW="90px">Cocktail</Text>
+                              <Wrap spacing={1}>
+                                {dp.cocktail.map((c) => (
+                                  <WrapItem key={c}>
+                                    <Tag size="sm" colorScheme="purple" variant="subtle">{c}</Tag>
+                                  </WrapItem>
+                                ))}
+                              </Wrap>
+                            </HStack>
+                          )}
+                          {dp.favoriteCocktail && (
+                            <HStack>
+                              <Text fontSize="sm" color="gray.600" minW="90px">Favorite</Text>
+                              <Text fontSize="sm">{dp.favoriteCocktail}</Text>
+                            </HStack>
+                          )}
+                          {dp.nonAlcoholic.length > 0 && (
+                            <HStack>
+                              <Text fontSize="sm" color="gray.600" minW="90px">Non-Alc</Text>
+                              <Wrap spacing={1}>
+                                {dp.nonAlcoholic.map((n) => (
+                                  <WrapItem key={n}>
+                                    <Tag size="sm" colorScheme="green" variant="subtle">{n}</Tag>
+                                  </WrapItem>
+                                ))}
+                              </Wrap>
+                            </HStack>
+                          )}
+                          {dp.comments && (
+                            <HStack align="start">
+                              <Text fontSize="sm" color="gray.600" minW="90px">Comments</Text>
+                              <Text fontSize="sm" whiteSpace="pre-wrap">{dp.comments}</Text>
+                            </HStack>
+                          )}
+                          <Text fontSize="2xs" color="gray.400">
+                            Submitted {new Date(dp.submittedAt).toLocaleString()}
+                          </Text>
+                        </VStack>
+                      </Box>
+                    ))}
                   </VStack>
                 </Box>
               </>
