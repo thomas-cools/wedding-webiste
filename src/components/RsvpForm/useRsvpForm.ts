@@ -455,7 +455,7 @@ export function useRsvpForm(options: UseRsvpFormOptions = {}): UseRsvpFormReturn
     }
 
     // Submit to Netlify Forms
-    await submitToNetlifyForms(entry)
+    await submitToNetlifyForms(entry, i18n.language)
 
     // Send confirmation email
     sendConfirmationEmail({

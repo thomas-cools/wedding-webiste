@@ -280,7 +280,7 @@ describe('admin-auth handler', () => {
       const body = JSON.parse(result.body!)
       expect(body.enrollment).toBe(true)
       expect(body.secret).toMatch(/^[A-Z2-7]+$/)
-      expect(body.uri).toContain('otpauth://totp/')
+      expect(body.totpUri).toContain('otpauth://totp/')
     })
 
     it('verifies enrollment code and returns admin token', async () => {

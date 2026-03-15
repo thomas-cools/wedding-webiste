@@ -136,7 +136,8 @@ function generateInvitationHtml(
   drinksUrl: string,
   locale: EmailLocale,
   partySize: number = 1,
-  partyNames: string[] = []
+  partyNames: string[] = [],
+  trackingPixelUrl?: string
 ): string {
   const s = EMAIL_STRINGS[locale]
   const safeName = escapeHtml(name)
@@ -219,7 +220,7 @@ function generateInvitationHtml(
       </td>
     </tr>
   </table>
-</body>
+${trackingPixelUrl ? `<img src="${trackingPixelUrl}" width="1" height="1" alt="" style="display:none" />` : ''}</body>
 </html>
 `
 }
@@ -300,6 +301,7 @@ interface ConfirmedGuest {
   email: string
   partySize: number
   partyNames: string[]
+  locale?: string
 }
 
 function parseGuestsField(raw?: string): Array<{ name: string }> {
@@ -367,10 +369,20 @@ const handler: Handler = async (event: HandlerEvent) => {
   // Parse request body
   let dryRun = false
   let localeOverride: string | undefined
+  let providedGuests: ConfirmedGuest[] | undefined
   try {
     const body = JSON.parse(event.body || '{}')
     dryRun = body.dryRun === true
     localeOverride = body.locale
+    if (Array.isArray(body.guests) && body.guests.length > 0) {
+      providedGuests = body.guests.map((g: Record<string, unknown>) => ({
+        name: String(g.name || ''),
+        email: String(g.email || ''),
+        partySize: typeof g.partySize === 'number' ? g.partySize : 1,
+        partyNames: Array.isArray(g.partyNames) ? g.partyNames.map(String) : [],
+        locale: typeof g.locale === 'string' ? g.locale : undefined,
+      }))
+    }
   } catch {
     // defaults are fine
   }
@@ -383,7 +395,7 @@ const handler: Handler = async (event: HandlerEvent) => {
   const RESEND_API_KEY = process.env.RESEND_API_KEY
   const SITE_URL = process.env.URL || process.env.DEPLOY_PRIME_URL || ''
 
-  if (!NETLIFY_API_TOKEN || !SITE_ID) {
+  if (!providedGuests && (!NETLIFY_API_TOKEN || !SITE_ID)) {
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'NETLIFY_API_TOKEN and SITE_ID must be configured' }),
@@ -394,16 +406,20 @@ const handler: Handler = async (event: HandlerEvent) => {
     return { statusCode: 500, body: JSON.stringify({ error: 'RESEND_API_KEY not configured' }) }
   }
 
-  // Fetch confirmed guests
+  // Resolve guest list: use provided guests or auto-fetch from Netlify Forms
   let guests: ConfirmedGuest[]
-  try {
-    const submissions = await fetchRsvpSubmissions(SITE_ID, NETLIFY_API_TOKEN)
-    guests = getConfirmedGuests(submissions)
-  } catch (error) {
-    console.error('Error fetching RSVP submissions:', error)
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to fetch RSVP submissions', details: String(error) }),
+  if (providedGuests) {
+    guests = providedGuests
+  } else {
+    try {
+      const submissions = await fetchRsvpSubmissions(SITE_ID!, NETLIFY_API_TOKEN!)
+      guests = getConfirmedGuests(submissions)
+    } catch (error) {
+      console.error('Error fetching RSVP submissions:', error)
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: 'Failed to fetch RSVP submissions', details: String(error) }),
+      }
     }
   }
 
@@ -418,6 +434,7 @@ const handler: Handler = async (event: HandlerEvent) => {
 
   // Dry run: return guest list without sending
   if (dryRun) {
+    const sampleLocale = normalizeLocale(guests[0].locale || localeOverride)
     return {
       statusCode: 200,
       body: JSON.stringify({
@@ -426,8 +443,8 @@ const handler: Handler = async (event: HandlerEvent) => {
         drinksUrl,
         confirmedGuests: guests,
         totalCount: guests.length,
-        sampleHtml: generateInvitationHtml(guests[0].name, drinksUrl, locale, guests[0].partySize, guests[0].partyNames),
-        sampleText: generateInvitationText(guests[0].name, drinksUrl, locale, guests[0].partySize, guests[0].partyNames),
+        sampleHtml: generateInvitationHtml(guests[0].name, drinksUrl, sampleLocale, guests[0].partySize, guests[0].partyNames, undefined),
+        sampleText: generateInvitationText(guests[0].name, drinksUrl, sampleLocale, guests[0].partySize, guests[0].partyNames),
       }),
     }
   }
@@ -437,6 +454,11 @@ const handler: Handler = async (event: HandlerEvent) => {
   const results: { email: string; success: boolean; error?: string }[] = []
 
   for (const guest of guests) {
+    const guestLocale = normalizeLocale(guest.locale || localeOverride)
+    // Build per-recipient tracking pixel URL
+    const pixelUrl = SITE_URL
+      ? `${SITE_URL}/.netlify/functions/track-email-open?e=${encodeURIComponent(guest.email)}&c=drink_invitation`
+      : undefined
     try {
       const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -447,9 +469,9 @@ const handler: Handler = async (event: HandlerEvent) => {
         body: JSON.stringify({
           from: fromEmail,
           to: [guest.email],
-          subject: `${EMAIL_STRINGS[locale].subject} — ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
-          html: generateInvitationHtml(guest.name, drinksUrl, locale, guest.partySize, guest.partyNames),
-          text: generateInvitationText(guest.name, drinksUrl, locale, guest.partySize, guest.partyNames),
+          subject: `${EMAIL_STRINGS[guestLocale].subject} — ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
+          html: generateInvitationHtml(guest.name, drinksUrl, guestLocale, guest.partySize, guest.partyNames, pixelUrl),
+          text: generateInvitationText(guest.name, drinksUrl, guestLocale, guest.partySize, guest.partyNames),
         }),
       })
 

@@ -140,13 +140,24 @@ export const handler: Handler = async (event) => {
   const fromEmail =
     process.env.FROM_EMAIL || 'Wedding RSVP <onboarding@resend.dev>'
 
-  const wrappedHtml = wrapInEmailTemplate(subject, htmlBody)
+  const SITE_URL = process.env.URL || process.env.DEPLOY_PRIME_URL || ''
+  const baseHtml = wrapInEmailTemplate(subject, htmlBody)
   const results: Array<{ email: string; success: boolean; error?: string }> = []
 
   for (const recipient of recipients) {
     if (!recipient.email) {
       results.push({ email: '', success: false, error: 'Missing email address' })
       continue
+    }
+
+    // Inject tracking pixel per recipient
+    let finalHtml = baseHtml
+    if (SITE_URL) {
+      const pixelUrl = `${SITE_URL}/.netlify/functions/track-email-open?e=${encodeURIComponent(recipient.email)}&c=custom_email`
+      finalHtml = baseHtml.replace(
+        '</body>',
+        `<img src="${pixelUrl}" width="1" height="1" alt="" style="display:none" /></body>`
+      )
     }
 
     try {
@@ -160,7 +171,7 @@ export const handler: Handler = async (event) => {
           from: fromEmail,
           to: [recipient.email],
           subject,
-          html: wrappedHtml,
+          html: finalHtml,
           text: textBody || '',
         }),
       })

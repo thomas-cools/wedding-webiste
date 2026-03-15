@@ -18,13 +18,18 @@ import {
   Tr,
   Th,
   Td,
+  Wrap,
+  WrapItem,
+  Tag,
 } from '@chakra-ui/react'
-import type { AdminRsvp } from './useAdminRsvps'
+import type { AdminRsvp, AdminDrinkPrefs, EmailOpen } from './useAdminRsvps'
 
 interface RsvpDetailModalProps {
   rsvp: AdminRsvp | null
   isOpen: boolean
   onClose: () => void
+  drinkPrefs?: AdminDrinkPrefs
+  emailOpens?: EmailOpen[]
 }
 
 const likelihoodColors: Record<string, string> = {
@@ -54,7 +59,7 @@ const eventAnswerLabels: Record<string, string> = {
   '': 'Not specified',
 }
 
-export function RsvpDetailModal({ rsvp, isOpen, onClose }: RsvpDetailModalProps) {
+export function RsvpDetailModal({ rsvp, isOpen, onClose, drinkPrefs, emailOpens }: RsvpDetailModalProps) {
   if (!rsvp) return null
 
   return (
@@ -165,6 +170,8 @@ export function RsvpDetailModal({ rsvp, isOpen, onClose }: RsvpDetailModalProps)
               <Text>{rsvp.franceTips ? 'Yes' : 'No'}</Text>
               <Text color="gray.600">Submitted</Text>
               <Text>{new Date(rsvp.submittedAt).toLocaleString()}</Text>
+              <Text color="gray.600">Locale</Text>
+              <Text>{(rsvp.locale || 'en').toUpperCase()}</Text>
             </SimpleGrid>
 
             {rsvp.additionalNotes && (
@@ -177,6 +184,114 @@ export function RsvpDetailModal({ rsvp, isOpen, onClose }: RsvpDetailModalProps)
                   <Text fontSize="sm" whiteSpace="pre-wrap">
                     {rsvp.additionalNotes}
                   </Text>
+                </Box>
+              </>
+            )}
+
+            {/* Drink Preferences */}
+            {drinkPrefs && (
+              <>
+                <Divider />
+                <Box>
+                  <Text fontWeight="bold" fontSize="sm" color="neutral.muted" mb={2}>
+                    Drink Preferences
+                  </Text>
+                  <VStack align="stretch" spacing={2}>
+                    {drinkPrefs.wine.length > 0 && (
+                      <HStack>
+                        <Text fontSize="sm" color="gray.600" minW="90px">Wine</Text>
+                        <Wrap spacing={1}>
+                          {drinkPrefs.wine.map((w) => (
+                            <WrapItem key={w}>
+                              <Tag size="sm" colorScheme="red" variant="subtle">{w}</Tag>
+                            </WrapItem>
+                          ))}
+                        </Wrap>
+                      </HStack>
+                    )}
+                    {drinkPrefs.beer.length > 0 && (
+                      <HStack>
+                        <Text fontSize="sm" color="gray.600" minW="90px">Beer</Text>
+                        <Wrap spacing={1}>
+                          {drinkPrefs.beer.map((b) => (
+                            <WrapItem key={b}>
+                              <Tag size="sm" colorScheme="yellow" variant="subtle">{b}</Tag>
+                            </WrapItem>
+                          ))}
+                        </Wrap>
+                      </HStack>
+                    )}
+                    {drinkPrefs.cocktail.length > 0 && (
+                      <HStack>
+                        <Text fontSize="sm" color="gray.600" minW="90px">Cocktail</Text>
+                        <Wrap spacing={1}>
+                          {drinkPrefs.cocktail.map((c) => (
+                            <WrapItem key={c}>
+                              <Tag size="sm" colorScheme="purple" variant="subtle">{c}</Tag>
+                            </WrapItem>
+                          ))}
+                        </Wrap>
+                      </HStack>
+                    )}
+                    {drinkPrefs.favoriteCocktail && (
+                      <HStack>
+                        <Text fontSize="sm" color="gray.600" minW="90px">Favorite</Text>
+                        <Text fontSize="sm">{drinkPrefs.favoriteCocktail}</Text>
+                      </HStack>
+                    )}
+                    {drinkPrefs.nonAlcoholic.length > 0 && (
+                      <HStack>
+                        <Text fontSize="sm" color="gray.600" minW="90px">Non-Alc</Text>
+                        <Wrap spacing={1}>
+                          {drinkPrefs.nonAlcoholic.map((n) => (
+                            <WrapItem key={n}>
+                              <Tag size="sm" colorScheme="green" variant="subtle">{n}</Tag>
+                            </WrapItem>
+                          ))}
+                        </Wrap>
+                      </HStack>
+                    )}
+                    {drinkPrefs.comments && (
+                      <HStack align="start">
+                        <Text fontSize="sm" color="gray.600" minW="90px">Comments</Text>
+                        <Text fontSize="sm" whiteSpace="pre-wrap">{drinkPrefs.comments}</Text>
+                      </HStack>
+                    )}
+                  </VStack>
+                </Box>
+              </>
+            )}
+
+            {/* Email Opens */}
+            {emailOpens && emailOpens.length > 0 && (
+              <>
+                <Divider />
+                <Box>
+                  <Text fontWeight="bold" fontSize="sm" color="neutral.muted" mb={2}>
+                    Email Opens ({emailOpens.length})
+                  </Text>
+                  <Table size="sm" variant="simple">
+                    <Thead>
+                      <Tr>
+                        <Th>Campaign</Th>
+                        <Th>Opened At</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {emailOpens.map((eo) => (
+                        <Tr key={eo.id}>
+                          <Td>
+                            <Badge colorScheme="blue" variant="subtle" fontSize="2xs">
+                              {eo.campaign.replace(/_/g, ' ')}
+                            </Badge>
+                          </Td>
+                          <Td fontSize="xs" color="gray.600">
+                            {new Date(eo.openedAt).toLocaleString()}
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
                 </Box>
               </>
             )}

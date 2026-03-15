@@ -47,5 +47,13 @@
       <input type="text" name="nonAlcoholic" />
       <textarea name="comments"></textarea>
     </form>
+
+    <!-- Netlify Forms detection for email open tracking -->
+    <form name="email-opens" method="POST" data-netlify="true" hidden>
+      <input type="hidden" name="form-name" value="email-opens" />
+      <input type="email" name="recipientEmail" />
+      <input type="text" name="campaign" />
+      <input type="text" name="openedAt" />
+    </form>
   </body>
 </html>

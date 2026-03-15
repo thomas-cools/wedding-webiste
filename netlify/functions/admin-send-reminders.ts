@@ -254,6 +254,7 @@ function wrapInEmailTemplate(subject: string, bodyHtml: string): string {
 interface Recipient {
   email: string
   name: string
+  locale?: string
 }
 
 type ReminderType = 'rsvp_reminder' | 'event_reminder' | 'custom'
@@ -305,14 +306,14 @@ export const handler: Handler = async (event) => {
     return adminJson(400, { ok: false, error: 'recipients array is required' })
   }
 
-  const locale = normalizeLocale(body.locale)
+  const globalLocale = normalizeLocale(body.locale)
   const siteUrl =
     process.env.URL || process.env.DEPLOY_PRIME_URL || ''
 
-  // Resolve template or custom content
-  let subject: string
-  let getHtml: (name: string) => string
-  let getText: (name: string) => string
+  // For custom type: resolve once (no locale-dependent templates)
+  let customSubject: string | undefined
+  let customGetHtml: ((name: string) => string) | undefined
+  let customGetText: ((name: string) => string) | undefined
 
   if (type === 'custom') {
     if (!body.subject || !htmlBody) {
@@ -321,18 +322,9 @@ export const handler: Handler = async (event) => {
         error: 'subject and htmlBody required for custom type',
       })
     }
-    subject = body.subject
-    getHtml = () => htmlBody
-    getText = () => textBody || ''
-  } else {
-    const templates =
-      type === 'rsvp_reminder'
-        ? RSVP_REMINDER_TEMPLATES
-        : EVENT_REMINDER_TEMPLATES
-    const template = templates[locale]
-    subject = template.subject
-    getHtml = (name) => template.html(name, siteUrl)
-    getText = (name) => template.text(name, siteUrl)
+    customSubject = body.subject
+    customGetHtml = () => htmlBody
+    customGetText = () => textBody || ''
   }
 
   const RESEND_API_KEY = process.env.RESEND_API_KEY
@@ -352,9 +344,41 @@ export const handler: Handler = async (event) => {
       continue
     }
 
+    // Per-recipient locale: use recipient's locale, fall back to global
+    const recipientLocale = normalizeLocale(recipient.locale || body.locale)
+
+    let subject: string
+    let getHtml: (name: string) => string
+    let getText: (name: string) => string
+
+    if (type === 'custom') {
+      subject = customSubject!
+      getHtml = customGetHtml!
+      getText = customGetText!
+    } else {
+      const templates =
+        type === 'rsvp_reminder'
+          ? RSVP_REMINDER_TEMPLATES
+          : EVENT_REMINDER_TEMPLATES
+      const template = templates[recipientLocale]
+      subject = template.subject
+      getHtml = (name) => template.html(name, siteUrl)
+      getText = (name) => template.text(name, siteUrl)
+    }
+
     const bodyHtml = getHtml(recipient.name || 'Guest')
     const bodyText = getText(recipient.name || 'Guest')
-    const wrappedHtml = wrapInEmailTemplate(subject, bodyHtml)
+    let wrappedHtml = wrapInEmailTemplate(subject, bodyHtml)
+
+    // Inject tracking pixel per recipient
+    if (siteUrl) {
+      const campaign = type === 'custom' ? 'custom_reminder' : type
+      const pixelUrl = `${siteUrl}/.netlify/functions/track-email-open?e=${encodeURIComponent(recipient.email)}&c=${encodeURIComponent(campaign)}`
+      wrappedHtml = wrappedHtml.replace(
+        '</body>',
+        `<img src="${pixelUrl}" width="1" height="1" alt="" style="display:none" /></body>`
+      )
+    }
 
     try {
       const response = await fetch('https://api.resend.com/emails', {

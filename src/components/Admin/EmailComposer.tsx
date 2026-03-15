@@ -29,7 +29,7 @@ import Link from '@tiptap/extension-link'
 import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
 import { getAdminAuthHeaders } from '../../utils/adminAuth'
-import { useAdminRsvps, type AdminRsvp } from './useAdminRsvps'
+import { type AdminRsvp, type UseAdminRsvpsReturn } from './useAdminRsvps'
 
 function EditorToolbar({ editor }: { editor: ReturnType<typeof useEditor> }) {
   if (!editor) return null
@@ -133,12 +133,12 @@ function EditorToolbar({ editor }: { editor: ReturnType<typeof useEditor> }) {
   )
 }
 
-export function EmailComposer() {
+export function EmailComposer({ adminData }: { adminData: UseAdminRsvpsReturn }) {
   const [subject, setSubject] = useState('')
   const [textBody, setTextBody] = useState('')
   const [sending, setSending] = useState(false)
   const [result, setResult] = useState<{ sent: number; failed: number } | null>(null)
-  const { filteredRsvps, isLoading } = useAdminRsvps()
+  const { filteredRsvps, selectedIds, isLoading } = adminData
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
@@ -152,9 +152,11 @@ export function EmailComposer() {
     content: '<p>Dear guests,</p><p></p><p>With love,<br>Carolina & Thomas</p>',
   })
 
-  const confirmedRecipients = filteredRsvps.filter(
-    (r) => r.likelihood === 'definitely' || r.likelihood === 'highly_likely'
-  )
+  const confirmedRecipients = selectedIds.size > 0
+    ? filteredRsvps.filter((r) => selectedIds.has(r.id))
+    : filteredRsvps.filter(
+        (r) => r.likelihood === 'definitely' || r.likelihood === 'highly_likely'
+      )
 
   const handleSend = async () => {
     if (!editor || !subject) return
@@ -289,6 +291,8 @@ export function EmailComposer() {
           <Text fontSize="sm" color="gray.500">
             {isLoading
               ? 'Loading recipients...'
+              : selectedIds.size > 0
+              ? `${confirmedRecipients.length} selected recipients`
               : `${confirmedRecipients.length} confirmed recipients`}
           </Text>
           <Button
@@ -312,9 +316,24 @@ export function EmailComposer() {
           <ModalBody>
             <Text>
               Send <strong>"{subject}"</strong> to{' '}
-              <strong>{confirmedRecipients.length}</strong> confirmed
+              <strong>{confirmedRecipients.length}</strong>{' '}
+              {selectedIds.size > 0 ? 'selected' : 'confirmed'}{' '}
               guest{confirmedRecipients.length !== 1 ? 's' : ''}?
             </Text>
+            <Box
+              mt={3}
+              maxH="200px"
+              overflowY="auto"
+              bg="gray.50"
+              rounded="md"
+              p={2}
+            >
+              {confirmedRecipients.map((r) => (
+                <Text key={r.id} fontSize="xs" color="gray.600" lineHeight="tall">
+                  {r.firstName} &lt;{r.email}&gt;
+                </Text>
+              ))}
+            </Box>
           </ModalBody>
           <ModalFooter>
             <Button variant="ghost" mr={3} onClick={onClose}>

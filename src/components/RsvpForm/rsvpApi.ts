@@ -99,7 +99,7 @@ export async function sendConfirmationEmail(
 /**
  * Submit RSVP to Netlify Forms
  */
-export async function submitToNetlifyForms(entry: Rsvp): Promise<void> {
+export async function submitToNetlifyForms(entry: Rsvp, locale?: string): Promise<void> {
   const formBody = new URLSearchParams()
   formBody.set('form-name', 'rsvp')
   formBody.set('firstName', entry.firstName)
@@ -114,6 +114,7 @@ export async function submitToNetlifyForms(entry: Rsvp): Promise<void> {
   formBody.set('dietary', entry.dietary || '')
   formBody.set('franceTips', String(entry.franceTips || false))
   formBody.set('additionalNotes', entry.additionalNotes || '')
+  formBody.set('locale', locale || 'en')
 
   await fetch('/', {
     method: 'POST',

@@ -12,6 +12,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { adminLogout } from '../../utils/adminAuth'
+import { useAdminRsvps } from './useAdminRsvps'
 import { RsvpDashboard } from './RsvpDashboard'
 import { EmailComposer } from './EmailComposer'
 import { DrinkInvitationsPanel } from './DrinkInvitationsPanel'
@@ -23,6 +24,7 @@ interface AdminLayoutProps {
 
 export function AdminLayout({ onLogout }: AdminLayoutProps) {
   const [tabIndex, setTabIndex] = useState(0)
+  const adminData = useAdminRsvps()
 
   const handleLogout = useCallback(() => {
     adminLogout()
@@ -114,16 +116,16 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
 
           <TabPanels>
             <TabPanel p={0}>
-              <RsvpDashboard />
+              <RsvpDashboard adminData={adminData} />
             </TabPanel>
             <TabPanel p={0}>
-              <EmailComposer />
+              <EmailComposer adminData={adminData} />
             </TabPanel>
             <TabPanel p={0}>
-              <DrinkInvitationsPanel />
+              <DrinkInvitationsPanel adminData={adminData} />
             </TabPanel>
             <TabPanel p={0}>
-              <RemindersPanel />
+              <RemindersPanel adminData={adminData} />
             </TabPanel>
           </TabPanels>
         </Tabs>

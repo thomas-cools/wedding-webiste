@@ -28,7 +28,7 @@ import {
   Skeleton,
 } from '@chakra-ui/react'
 import { getAdminAuthHeaders } from '../../utils/adminAuth'
-import { useAdminRsvps } from './useAdminRsvps'
+import { type UseAdminRsvpsReturn } from './useAdminRsvps'
 
 interface SendResult {
   sent: number
@@ -36,8 +36,8 @@ interface SendResult {
   total: number
 }
 
-export function DrinkInvitationsPanel() {
-  const { filteredRsvps, isLoading } = useAdminRsvps()
+export function DrinkInvitationsPanel({ adminData }: { adminData: UseAdminRsvpsReturn }) {
+  const { filteredRsvps, selectedIds, isLoading, getEffectiveLocale } = adminData
   const [locale, setLocale] = useState('en')
   const [dryRunResult, setDryRunResult] = useState<{
     totalCount: number
@@ -53,9 +53,11 @@ export function DrinkInvitationsPanel() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
-  const confirmedGuests = filteredRsvps.filter(
-    (r) => r.likelihood === 'definitely' || r.likelihood === 'highly_likely'
-  )
+  const confirmedGuests = selectedIds.size > 0
+    ? filteredRsvps.filter((r) => selectedIds.has(r.id))
+    : filteredRsvps.filter(
+        (r) => r.likelihood === 'definitely' || r.likelihood === 'highly_likely'
+      )
 
   const handleDryRun = async () => {
     setLoading(true)
@@ -67,7 +69,17 @@ export function DrinkInvitationsPanel() {
           'Content-Type': 'application/json',
           ...getAdminAuthHeaders(),
         },
-        body: JSON.stringify({ dryRun: true, locale }),
+        body: JSON.stringify({
+          dryRun: true,
+          locale,
+          guests: confirmedGuests.map((r) => ({
+            name: r.firstName,
+            email: r.email,
+            locale: getEffectiveLocale(r),
+            partySize: 1 + r.guests.length,
+            partyNames: r.guests.map((g) => g.name),
+          })),
+        }),
       })
 
       const data = await res.json()
@@ -102,7 +114,17 @@ export function DrinkInvitationsPanel() {
           'Content-Type': 'application/json',
           ...getAdminAuthHeaders(),
         },
-        body: JSON.stringify({ dryRun: false, locale }),
+        body: JSON.stringify({
+          dryRun: false,
+          locale,
+          guests: confirmedGuests.map((r) => ({
+            name: r.firstName,
+            email: r.email,
+            locale: getEffectiveLocale(r),
+            partySize: 1 + r.guests.length,
+            partyNames: r.guests.map((g) => g.name),
+          })),
+        }),
       })
 
       const data = await res.json()
@@ -181,6 +203,8 @@ export function DrinkInvitationsPanel() {
           <Text fontSize="sm" color="gray.500">
             {isLoading
               ? 'Loading...'
+              : selectedIds.size > 0
+              ? `${confirmedGuests.length} selected guests will receive invitations`
               : `${confirmedGuests.length} confirmed guests will receive invitations`}
           </Text>
         </Box>
@@ -263,6 +287,7 @@ export function DrinkInvitationsPanel() {
                   <Th>Name</Th>
                   <Th>Email</Th>
                   <Th>Likelihood</Th>
+                  <Th>Locale</Th>
                   <Th isNumeric>Party Size</Th>
                 </Tr>
               </Thead>
@@ -286,6 +311,11 @@ export function DrinkInvitationsPanel() {
                           : 'Highly Likely'}
                       </Badge>
                     </Td>
+                    <Td>
+                      <Badge variant="outline" fontSize="xs">
+                        {getEffectiveLocale(r).toUpperCase()}
+                      </Badge>
+                    </Td>
                     <Td isNumeric>{1 + r.guests.length}</Td>
                   </Tr>
                 ))}
@@ -304,14 +334,28 @@ export function DrinkInvitationsPanel() {
           <ModalBody>
             <Text>
               Send drink preference invitations to{' '}
-              <strong>{confirmedGuests.length}</strong> confirmed guest
-              {confirmedGuests.length !== 1 ? 's' : ''} in{' '}
-              <strong>{locale === 'en' ? 'English' : locale === 'es' ? 'Spanish' : 'Dutch'}</strong>?
+              <strong>{confirmedGuests.length}</strong>{' '}
+              {selectedIds.size > 0 ? 'selected' : 'confirmed'} guest
+              {confirmedGuests.length !== 1 ? 's' : ''} with per-guest language settings?
             </Text>
             <Text fontSize="sm" color="gray.500" mt={2}>
               Each guest will receive a personalized email with a link to the
               drink preferences page.
             </Text>
+            <Box
+              mt={3}
+              maxH="200px"
+              overflowY="auto"
+              bg="gray.50"
+              rounded="md"
+              p={2}
+            >
+              {confirmedGuests.map((r) => (
+                <Text key={r.id} fontSize="xs" color="gray.600" lineHeight="tall">
+                  {r.firstName} &lt;{r.email}&gt;
+                </Text>
+              ))}
+            </Box>
           </ModalBody>
           <ModalFooter>
             <Button variant="ghost" mr={3} onClick={onClose}>

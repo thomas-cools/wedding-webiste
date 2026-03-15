@@ -208,7 +208,7 @@ async function handleEnrollMfa(body: string | null, ip: string) {
       ok: true,
       enrollment: true,
       secret,
-      uri,
+      totpUri: uri,
       message: 'Scan the QR code with your authenticator app, then submit the code to verify.',
     }, rateLimitHeaders(rl))
   }

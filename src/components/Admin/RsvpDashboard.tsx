@@ -10,6 +10,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Select,
   SimpleGrid,
   Skeleton,
   Stat,
@@ -32,7 +33,7 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react'
-import { useAdminRsvps, type AdminRsvp } from './useAdminRsvps'
+import { type AdminRsvp, type UseAdminRsvpsReturn, type SortColumn } from './useAdminRsvps'
 import { RsvpDetailModal } from './RsvpDetailModal'
 
 const likelihoodColors: Record<string, string> = {
@@ -56,7 +57,7 @@ const FILTER_OPTIONS = [
   { value: 'no', label: 'Declined' },
 ]
 
-export function RsvpDashboard() {
+export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn }) {
   const {
     stats,
     isLoading,
@@ -64,14 +65,37 @@ export function RsvpDashboard() {
     refetch,
     search,
     setSearch,
-    likelihoodFilter,
-    setLikelihoodFilter,
+    likelihoodFilters,
+    toggleLikelihoodFilter,
+    clearLikelihoodFilters,
     filteredRsvps,
+    sortColumn,
+    sortDirection,
+    setSort,
     selectedIds,
     toggleSelected,
     selectAll,
     clearSelection,
-  } = useAdminRsvps()
+    setGuestLocale,
+    getEffectiveLocale,
+    drinkPrefsMap,
+    emailOpensMap,
+  } = adminData
+
+  const selectedRsvps = filteredRsvps.filter((r) => selectedIds.has(r.id))
+
+  const SortIndicator = ({ column }: { column: SortColumn }) => (
+    <Text as="span" ml={1} fontSize="xs" color={sortColumn === column ? 'blue.500' : 'gray.400'}>
+      {sortColumn === column ? (sortDirection === 'asc' ? '▲' : '▼') : '⇅'}
+    </Text>
+  )
+
+  const sortableThProps = (column: SortColumn) => ({
+    cursor: 'pointer' as const,
+    onClick: () => setSort(column),
+    _hover: { color: 'blue.600' },
+    userSelect: 'none' as const,
+  })
 
   const [selectedRsvp, setSelectedRsvp] = useState<AdminRsvp | null>(null)
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -171,27 +195,37 @@ export function RsvpDashboard() {
             <WrapItem key={opt.value}>
               <Tag
                 size="md"
-                variant={likelihoodFilter === opt.value ? 'solid' : 'outline'}
+                variant={likelihoodFilters.has(opt.value) ? 'solid' : 'outline'}
                 colorScheme={likelihoodColors[opt.value]}
                 cursor="pointer"
-                onClick={() =>
-                  setLikelihoodFilter(
-                    likelihoodFilter === opt.value ? '' : opt.value
-                  )
-                }
+                onClick={() => toggleLikelihoodFilter(opt.value)}
               >
                 <TagLabel>{opt.label}</TagLabel>
-                {likelihoodFilter === opt.value && (
+                {likelihoodFilters.has(opt.value) && (
                   <TagCloseButton
                     onClick={(e) => {
                       e.stopPropagation()
-                      setLikelihoodFilter('')
+                      toggleLikelihoodFilter(opt.value)
                     }}
                   />
                 )}
               </Tag>
             </WrapItem>
           ))}
+          {likelihoodFilters.size > 1 && (
+            <WrapItem>
+              <Tag
+                size="md"
+                variant="ghost"
+                cursor="pointer"
+                onClick={clearLikelihoodFilters}
+                color="gray.500"
+                _hover={{ color: 'gray.700' }}
+              >
+                <TagLabel>Clear all</TagLabel>
+              </Tag>
+            </WrapItem>
+          )}
         </Wrap>
 
         <HStack ml="auto">
@@ -210,19 +244,17 @@ export function RsvpDashboard() {
 
       {/* Selection Bar */}
       {selectedIds.size > 0 && (
-        <Flex
+        <Box
           bg="secondary.navy"
           color="white"
           rounded="xl"
           p={3}
           mb={4}
-          align="center"
-          justify="space-between"
         >
-          <Text fontSize="sm">
-            {selectedIds.size} selected
-          </Text>
-          <HStack>
+          <Flex align="center" justify="space-between" mb={selectedRsvps.length > 0 ? 2 : 0}>
+            <Text fontSize="sm" fontWeight="medium">
+              {selectedIds.size} selected
+            </Text>
             <Button
               size="sm"
               variant="outline"
@@ -233,8 +265,21 @@ export function RsvpDashboard() {
             >
               Clear
             </Button>
-          </HStack>
-        </Flex>
+          </Flex>
+          {selectedRsvps.length > 0 && (
+            <Box maxH="80px" overflowY="auto" px={1}>
+              <Wrap spacing={1}>
+                {selectedRsvps.map((r) => (
+                  <WrapItem key={r.id}>
+                    <Tag size="sm" colorScheme="whiteAlpha" variant="subtle">
+                      <TagLabel fontSize="xs">{r.firstName} &lt;{r.email}&gt;</TagLabel>
+                    </Tag>
+                  </WrapItem>
+                ))}
+              </Wrap>
+            </Box>
+          )}
+        </Box>
       )}
 
       {/* RSVP Table */}
@@ -255,7 +300,7 @@ export function RsvpDashboard() {
         ) : filteredRsvps.length === 0 ? (
           <Box p={8} textAlign="center">
             <Text color="gray.500">
-              {search || likelihoodFilter
+              {search || likelihoodFilters.size > 0
                 ? 'No RSVPs match your filters'
                 : 'No RSVPs yet'}
             </Text>
@@ -279,12 +324,15 @@ export function RsvpDashboard() {
                     }
                   />
                 </Th>
-                <Th>Name</Th>
-                <Th>Email</Th>
-                <Th>Likelihood</Th>
-                <Th isNumeric>Party Size</Th>
+                <Th {...sortableThProps('name')}>Name<SortIndicator column="name" /></Th>
+                <Th {...sortableThProps('email')}>Email<SortIndicator column="email" /></Th>
+                <Th {...sortableThProps('likelihood')}>Likelihood<SortIndicator column="likelihood" /></Th>
+                <Th isNumeric {...sortableThProps('partySize')}>Party Size<SortIndicator column="partySize" /></Th>
                 <Th>Events</Th>
-                <Th>Date</Th>
+                <Th>Drinks</Th>
+                <Th>Opens</Th>
+                <Th>Locale</Th>
+                <Th {...sortableThProps('date')}>Date<SortIndicator column="date" /></Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -334,6 +382,40 @@ export function RsvpDashboard() {
                       )}
                     </HStack>
                   </Td>
+                  <Td>
+                    {drinkPrefsMap.has(rsvp.email) ? (
+                      <Badge colorScheme="purple" variant="subtle" fontSize="2xs">
+                        ✓
+                      </Badge>
+                    ) : (
+                      <Text fontSize="xs" color="gray.400">—</Text>
+                    )}
+                  </Td>
+                  <Td>
+                    {(() => {
+                      const opens = emailOpensMap.get(rsvp.email)
+                      if (!opens || opens.length === 0) {
+                        return <Text fontSize="xs" color="gray.400">—</Text>
+                      }
+                      return (
+                        <Badge colorScheme="blue" variant="subtle" fontSize="2xs">
+                          {opens.length}
+                        </Badge>
+                      )
+                    })()}
+                  </Td>
+                  <Td onClick={(e) => e.stopPropagation()}>
+                    <Select
+                      size="xs"
+                      w="80px"
+                      value={getEffectiveLocale(rsvp)}
+                      onChange={(e) => setGuestLocale(rsvp.id, e.target.value)}
+                    >
+                      <option value="en">EN</option>
+                      <option value="es">ES</option>
+                      <option value="nl">NL</option>
+                    </Select>
+                  </Td>
                   <Td fontSize="xs" color="gray.500">
                     {new Date(rsvp.submittedAt).toLocaleDateString()}
                   </Td>
@@ -344,7 +426,13 @@ export function RsvpDashboard() {
         )}
       </Box>
 
-      <RsvpDetailModal rsvp={selectedRsvp} isOpen={isOpen} onClose={onClose} />
+      <RsvpDetailModal
+        rsvp={selectedRsvp}
+        isOpen={isOpen}
+        onClose={onClose}
+        drinkPrefs={selectedRsvp ? drinkPrefsMap.get(selectedRsvp.email) : undefined}
+        emailOpens={selectedRsvp ? emailOpensMap.get(selectedRsvp.email) : undefined}
+      />
     </Box>
   )
 }

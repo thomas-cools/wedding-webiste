@@ -29,7 +29,7 @@ import {
   Stack,
 } from '@chakra-ui/react'
 import { getAdminAuthHeaders } from '../../utils/adminAuth'
-import { useAdminRsvps } from './useAdminRsvps'
+import { type UseAdminRsvpsReturn } from './useAdminRsvps'
 
 type ReminderType = 'rsvp_reminder' | 'event_reminder' | 'custom'
 
@@ -51,7 +51,7 @@ const REMINDER_TYPES = [
   },
 ]
 
-export function RemindersPanel() {
+export function RemindersPanel({ adminData }: { adminData: UseAdminRsvpsReturn }) {
   const [type, setType] = useState<ReminderType>('rsvp_reminder')
   const [locale, setLocale] = useState('en')
   const [customSubject, setCustomSubject] = useState('')
@@ -62,11 +62,15 @@ export function RemindersPanel() {
   const [result, setResult] = useState<{ sent: number; failed: number } | null>(
     null
   )
-  const { filteredRsvps, isLoading } = useAdminRsvps()
+  const { filteredRsvps, selectedIds, isLoading, getEffectiveLocale } = adminData
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
   const getRecipients = () => {
+    // If dashboard selection is active, use those guests
+    if (selectedIds.size > 0) {
+      return filteredRsvps.filter((r) => selectedIds.has(r.id))
+    }
     switch (recipientFilter) {
       case 'all_confirmed':
         return filteredRsvps.filter(
@@ -94,6 +98,7 @@ export function RemindersPanel() {
       recipients: recipients.map((r) => ({
         email: r.email,
         name: r.firstName,
+        locale: getEffectiveLocale(r),
       })),
     }
 
@@ -310,17 +315,24 @@ export function RemindersPanel() {
                   ? 'event reminder'
                   : `"${customSubject}"`}
               </strong>{' '}
-              to <strong>{recipients.length}</strong> recipient
-              {recipients.length !== 1 ? 's' : ''} in{' '}
-              <strong>
-                {locale === 'en'
-                  ? 'English'
-                  : locale === 'es'
-                  ? 'Spanish'
-                  : 'Dutch'}
-              </strong>
-              ?
+              to <strong>{recipients.length}</strong>{' '}
+              {selectedIds.size > 0 ? 'selected' : ''} recipient
+              {recipients.length !== 1 ? 's' : ''} with per-guest language settings?
             </Text>
+            <Box
+              mt={3}
+              maxH="200px"
+              overflowY="auto"
+              bg="gray.50"
+              rounded="md"
+              p={2}
+            >
+              {recipients.map((r) => (
+                <Text key={r.id} fontSize="xs" color="gray.600" lineHeight="tall">
+                  {r.firstName} &lt;{r.email}&gt;
+                </Text>
+              ))}
+            </Box>
           </ModalBody>
           <ModalFooter>
             <Button variant="ghost" mr={3} onClick={onClose}>

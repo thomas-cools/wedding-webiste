@@ -45,6 +45,7 @@ export interface AdminRsvp {
   franceTips: boolean
   additionalNotes: string
   submittedAt: string
+  locale: string
 }
 
 function parseJsonField<T>(value: string | undefined, fallback: T): T {
@@ -72,6 +73,7 @@ function normalizeSubmission(sub: NetlifyFormSubmission): AdminRsvp {
     franceTips: d.franceTips === 'true' || d.france_tips === 'true',
     additionalNotes: (d.additionalNotes || d.additional_notes || '').trim(),
     submittedAt: sub.created_at,
+    locale: (d.locale || 'en').trim().toLowerCase().split('-')[0],
   }
 }
 
