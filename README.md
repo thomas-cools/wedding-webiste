@@ -34,7 +34,7 @@ A modern, elegant wedding website built with React, TypeScript, and Chakra UI. F
 
 - 🔐 **Server-side password protection** with JWT authentication
 - 📝 **RSVP form** with Netlify Forms + email confirmations via Resend
-- 🌍 **Multi-language support** (English, French, Spanish, Dutch)
+- 🌍 **Multi-language support** (English, Spanish, Dutch)
 - 📱 **Fully responsive** design with mobile-first approach
 - ⚡ **Optimized performance** with lazy loading and bundle splitting
 - ♿ **Accessible** components following WCAG guidelines
@@ -70,16 +70,14 @@ The application uses Rollup's manual chunks for optimal loading:
 
 | Chunk | Contents | Purpose |
 |-------|----------|---------|
-| `react-vendor` | React, React DOM | Core framework (cached long-term) |
-| `chakra-vendor` | Chakra UI, Emotion | UI components |
-| `motion-vendor` | Framer Motion | Animations |
-| `i18n-vendor` | i18next, react-i18next | Internationalization |
+| `vendor` | React, React DOM, Framer Motion, Chakra UI, Emotion | Core UI framework (cached long-term) |
+| `i18n-vendor` | i18next | Internationalization |
 
 ### Lazy-Loaded Components
 
 Heavy components are lazy-loaded to reduce initial bundle size:
 
-- `PhotoGallery` - Image gallery with lightbox
+- `GalleryPage` - Image gallery with lightbox
 - `Timeline` - Story/timeline section
 - `StorySection` - Couple's story
 - `AccommodationSection` - Venue/hotel info
@@ -181,7 +179,6 @@ wedding-website/
     │   ├── PasswordGate.tsx    # Server-side password protection
     │   ├── RsvpForm.tsx        # RSVP form with validation
     │   ├── Hero.tsx            # Hero section with optimized background
-    │   ├── PhotoGallery.tsx    # Lazy-loaded image gallery
     │   ├── Timeline.tsx        # Lazy-loaded timeline
     │   ├── Countdown.tsx       # Wedding countdown timer
     │   ├── LanguageSwitcher.tsx # i18n language selector
@@ -200,7 +197,7 @@ wedding-website/
     │   └── ...                 # Other UI components
     ├── i18n/
     │   ├── index.ts        # i18next configuration
-    │   └── locales/        # Translation files (en, fr, es, nl)
+    │   └── locales/        # Translation files (en, es, nl)
     └── __tests__/          # Unit/component tests
 ```
 

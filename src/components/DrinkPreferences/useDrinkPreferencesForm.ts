@@ -116,13 +116,15 @@ export function useDrinkPreferencesForm(
   const [status, setStatus] = useState<FormStatus>('idle')
 
   // Helpers to get/set active guest fields
-  const activeGuest = guestStates[activeGuestIndex] ?? guestStates[0]
+  const activeGuest = guestStates[activeGuestIndex] ?? guestStates[0] ?? createEmptyGuestState('')
 
   const updateActiveGuest = useCallback(
     (updater: (state: GuestFormState) => GuestFormState) => {
       setGuestStates((prev) => {
         const next = [...prev]
-        next[activeGuestIndex] = updater(next[activeGuestIndex])
+        const current = next[activeGuestIndex]
+        if (!current) return prev
+        next[activeGuestIndex] = updater(current)
         return next
       })
     },
@@ -197,6 +199,7 @@ export function useDrinkPreferencesForm(
           }
           case 'drinks': {
             const g = guestStates[activeGuestIndex]
+            if (!g) break
             if (g.wine.length === 0 && g.beer.length === 0 && g.cocktail.length === 0 && g.nonAlcoholic.length === 0) {
               next.drinks = t('drinkPreferences.validation.atLeastOneDrink')
             } else {
@@ -293,6 +296,7 @@ export function useDrinkPreferencesForm(
       // concurrent POSTs and to stay within notification rate limits
       for (let i = 0; i < submissions.length; i++) {
         const entry = submissions[i]
+        if (!entry) continue
         try {
           await submitDrinkPreferencesToNetlify(entry)
         } catch { /* best-effort */ }
