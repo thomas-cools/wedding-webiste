@@ -437,7 +437,7 @@ const handler: Handler = async (event: HandlerEvent) => {
   if (dryRun) {
     const sampleLocale = normalizeLocale(guests[0].locale || localeOverride)
     const sampleToken = encodeDrinkToken({ name: guests[0].name, email: guests[0].email, partyNames: guests[0].partyNames })
-    const sampleDrinksUrl = `${baseDrinksUrl}?t=${sampleToken}`
+    const sampleDrinksUrl = `${baseDrinksUrl}?t=${sampleToken}&lang=${sampleLocale}`
     return {
       statusCode: 200,
       body: JSON.stringify({
@@ -460,7 +460,7 @@ const handler: Handler = async (event: HandlerEvent) => {
     const guestLocale = normalizeLocale(guest.locale || localeOverride)
     // Build per-recipient token URL with pre-populated guest data
     const guestToken = encodeDrinkToken({ name: guest.name, email: guest.email, partyNames: guest.partyNames })
-    const drinksUrl = `${baseDrinksUrl}?t=${guestToken}`
+    const drinksUrl = `${baseDrinksUrl}?t=${guestToken}&lang=${guestLocale}`
     // Build per-recipient tracking pixel URL
     const pixelUrl = SITE_URL
       ? `${SITE_URL}/.netlify/functions/track-email-open?e=${encodeURIComponent(guest.email)}&c=drink_invitation`

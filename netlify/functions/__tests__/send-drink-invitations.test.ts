@@ -158,6 +158,7 @@ describe('send-drink-invitations handler', () => {
     ])
     expect(body.sampleHtml).toContain('Alice')
     expect(body.drinksUrl).toContain('https://our-wedding.netlify.app/drinks?t=')
+    expect(body.drinksUrl).toContain('&lang=en')
   })
 
   it('deduplicates guests by email', async () => {
@@ -255,5 +256,6 @@ describe('send-drink-invitations handler', () => {
     const body = JSON.parse(result.body!)
     expect(body.locale).toBe('es')
     expect(body.sampleHtml).toContain('¡Hola Ana!')
+    expect(body.drinksUrl).toContain('&lang=es')
   })
 })

@@ -48,14 +48,14 @@ function escapeHtml(str: string): string {
 
 interface ReminderTemplate {
   subject: string
-  html: (name: string, siteUrl: string) => string
-  text: (name: string, siteUrl: string) => string
+  html: (name: string, siteUrl: string, locale: string) => string
+  text: (name: string, siteUrl: string, locale: string) => string
 }
 
 const RSVP_REMINDER_TEMPLATES: Record<EmailLocale, ReminderTemplate> = {
   en: {
     subject: `RSVP Reminder — ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}'s Wedding`,
-    html: (name, siteUrl) => `
+    html: (name, siteUrl, locale) => `
       <h2 style="margin: 0 0 20px; font-size: 22px; font-weight: normal; color: #0B1937;">
         Hi ${escapeHtml(name)},
       </h2>
@@ -68,7 +68,7 @@ const RSVP_REMINDER_TEMPLATES: Record<EmailLocale, ReminderTemplate> = {
       <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
           <td align="center" style="padding: 10px 0 30px;">
-            <a href="${siteUrl}/rsvp" style="display: inline-block; background-color: #300F0C; color: #E3DFCE; padding: 16px 40px; border-radius: 999px; text-decoration: none; font-size: 16px; font-family: 'Montserrat', Helvetica, sans-serif; letter-spacing: 1px;">
+            <a href="${siteUrl}/rsvp?lang=${locale}" style="display: inline-block; background-color: #300F0C; color: #E3DFCE; padding: 16px 40px; border-radius: 999px; text-decoration: none; font-size: 16px; font-family: 'Montserrat', Helvetica, sans-serif; letter-spacing: 1px;">
               RSVP Now
             </a>
           </td>
@@ -81,12 +81,12 @@ const RSVP_REMINDER_TEMPLATES: Record<EmailLocale, ReminderTemplate> = {
         With love,<br>
         ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}
       </p>`,
-    text: (name, siteUrl) =>
-      `Hi ${name},\n\nWe noticed you haven't RSVPed yet for our wedding. We'd love to know if you can make it!\n\nPlease visit: ${siteUrl}/rsvp\n\nWith love,\n${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
+    text: (name, siteUrl, locale) =>
+      `Hi ${name},\n\nWe noticed you haven't RSVPed yet for our wedding. We'd love to know if you can make it!\n\nPlease visit: ${siteUrl}/rsvp?lang=${locale}\n\nWith love,\n${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
   },
   es: {
     subject: `Recordatorio RSVP — Boda de ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
-    html: (name, siteUrl) => `
+    html: (name, siteUrl, locale) => `
       <h2 style="margin: 0 0 20px; font-size: 22px; font-weight: normal; color: #0B1937;">
         Hola ${escapeHtml(name)},
       </h2>
@@ -99,7 +99,7 @@ const RSVP_REMINDER_TEMPLATES: Record<EmailLocale, ReminderTemplate> = {
       <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
           <td align="center" style="padding: 10px 0 30px;">
-            <a href="${siteUrl}/rsvp" style="display: inline-block; background-color: #300F0C; color: #E3DFCE; padding: 16px 40px; border-radius: 999px; text-decoration: none; font-size: 16px; font-family: 'Montserrat', Helvetica, sans-serif; letter-spacing: 1px;">
+            <a href="${siteUrl}/rsvp?lang=${locale}" style="display: inline-block; background-color: #300F0C; color: #E3DFCE; padding: 16px 40px; border-radius: 999px; text-decoration: none; font-size: 16px; font-family: 'Montserrat', Helvetica, sans-serif; letter-spacing: 1px;">
               Confirmar Ahora
             </a>
           </td>
@@ -112,12 +112,12 @@ const RSVP_REMINDER_TEMPLATES: Record<EmailLocale, ReminderTemplate> = {
         Con cariño,<br>
         ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}
       </p>`,
-    text: (name, siteUrl) =>
-      `Hola ${name},\n\nHemos notado que aún no has confirmado tu asistencia. ¡Nos encantaría saber si puedes venir!\n\nVisita: ${siteUrl}/rsvp\n\nCon cariño,\n${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
+    text: (name, siteUrl, locale) =>
+      `Hola ${name},\n\nHemos notado que aún no has confirmado tu asistencia. ¡Nos encantaría saber si puedes venir!\n\nVisita: ${siteUrl}/rsvp?lang=${locale}\n\nCon cariño,\n${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
   },
   nl: {
     subject: `RSVP Herinnering — Bruiloft van ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
-    html: (name, siteUrl) => `
+    html: (name, siteUrl, locale) => `
       <h2 style="margin: 0 0 20px; font-size: 22px; font-weight: normal; color: #0B1937;">
         Hoi ${escapeHtml(name)},
       </h2>
@@ -130,7 +130,7 @@ const RSVP_REMINDER_TEMPLATES: Record<EmailLocale, ReminderTemplate> = {
       <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
           <td align="center" style="padding: 10px 0 30px;">
-            <a href="${siteUrl}/rsvp" style="display: inline-block; background-color: #300F0C; color: #E3DFCE; padding: 16px 40px; border-radius: 999px; text-decoration: none; font-size: 16px; font-family: 'Montserrat', Helvetica, sans-serif; letter-spacing: 1px;">
+            <a href="${siteUrl}/rsvp?lang=${locale}" style="display: inline-block; background-color: #300F0C; color: #E3DFCE; padding: 16px 40px; border-radius: 999px; text-decoration: none; font-size: 16px; font-family: 'Montserrat', Helvetica, sans-serif; letter-spacing: 1px;">
               RSVP Nu
             </a>
           </td>
@@ -143,15 +143,15 @@ const RSVP_REMINDER_TEMPLATES: Record<EmailLocale, ReminderTemplate> = {
         Liefs,<br>
         ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}
       </p>`,
-    text: (name, siteUrl) =>
-      `Hoi ${name},\n\nWe hebben gemerkt dat je nog niet hebt gereageerd. We horen graag of je erbij kunt zijn!\n\nBezoek: ${siteUrl}/rsvp\n\nLiefs,\n${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
+    text: (name, siteUrl, locale) =>
+      `Hoi ${name},\n\nWe hebben gemerkt dat je nog niet hebt gereageerd. We horen graag of je erbij kunt zijn!\n\nBezoek: ${siteUrl}/rsvp?lang=${locale}\n\nLiefs,\n${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
   },
 }
 
 const EVENT_REMINDER_TEMPLATES: Record<EmailLocale, ReminderTemplate> = {
   en: {
     subject: `Event Reminder — ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}'s Wedding`,
-    html: (name, _siteUrl) => `
+    html: (name, _siteUrl, _locale) => `
       <h2 style="margin: 0 0 20px; font-size: 22px; font-weight: normal; color: #0B1937;">
         Hi ${escapeHtml(name)},
       </h2>
@@ -165,12 +165,12 @@ const EVENT_REMINDER_TEMPLATES: Record<EmailLocale, ReminderTemplate> = {
         With love,<br>
         ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}
       </p>`,
-    text: (name) =>
+    text: (name, _siteUrl, _locale) =>
       `Hi ${name},\n\nThe big day is approaching! We wanted to send you a quick reminder about our upcoming wedding celebrations.\n\nWe can't wait to celebrate with you!\n\nWith love,\n${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
   },
   es: {
     subject: `Recordatorio del Evento — Boda de ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
-    html: (name, _siteUrl) => `
+    html: (name, _siteUrl, _locale) => `
       <h2 style="margin: 0 0 20px; font-size: 22px; font-weight: normal; color: #0B1937;">
         Hola ${escapeHtml(name)},
       </h2>
@@ -184,12 +184,12 @@ const EVENT_REMINDER_TEMPLATES: Record<EmailLocale, ReminderTemplate> = {
         Con cariño,<br>
         ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}
       </p>`,
-    text: (name) =>
+    text: (name, _siteUrl, _locale) =>
       `Hola ${name},\n\n¡El gran día se acerca! Queríamos enviarte un recordatorio sobre nuestra boda.\n\n¡No podemos esperar para celebrar contigo!\n\nCon cariño,\n${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
   },
   nl: {
     subject: `Herinnering — Bruiloft van ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
-    html: (name, _siteUrl) => `
+    html: (name, _siteUrl, _locale) => `
       <h2 style="margin: 0 0 20px; font-size: 22px; font-weight: normal; color: #0B1937;">
         Hoi ${escapeHtml(name)},
       </h2>
@@ -203,7 +203,7 @@ const EVENT_REMINDER_TEMPLATES: Record<EmailLocale, ReminderTemplate> = {
         Liefs,<br>
         ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}
       </p>`,
-    text: (name) =>
+    text: (name, _siteUrl, _locale) =>
       `Hoi ${name},\n\nDe grote dag nadert! We wilden je een herinnering sturen.\n\nWe kunnen niet wachten om met je te vieren!\n\nLiefs,\n${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`,
   },
 }
@@ -362,8 +362,8 @@ export const handler: Handler = async (event) => {
           : EVENT_REMINDER_TEMPLATES
       const template = templates[recipientLocale]
       subject = template.subject
-      getHtml = (name) => template.html(name, siteUrl)
-      getText = (name) => template.text(name, siteUrl)
+      getHtml = (name) => template.html(name, siteUrl, recipientLocale)
+      getText = (name) => template.text(name, siteUrl, recipientLocale)
     }
 
     const bodyHtml = getHtml(recipient.name || 'Guest')

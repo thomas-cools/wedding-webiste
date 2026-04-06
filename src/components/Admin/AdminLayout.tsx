@@ -17,6 +17,7 @@ import { RsvpDashboard } from './RsvpDashboard'
 import { EmailComposer } from './EmailComposer'
 import { DrinkInvitationsPanel } from './DrinkInvitationsPanel'
 import { RemindersPanel } from './RemindersPanel'
+import { DrinkPreferencesDashboard } from './DrinkPreferencesDashboard'
 
 interface AdminLayoutProps {
   onLogout: () => void
@@ -112,6 +113,13 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
             >
               Reminders
             </Tab>
+            <Tab
+              fontSize="sm"
+              fontWeight="medium"
+              _selected={{ bg: 'secondary.navy', color: 'white' }}
+            >
+              Drink Preferences
+            </Tab>
           </TabList>
 
           <TabPanels>
@@ -126,6 +134,9 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
             </TabPanel>
             <TabPanel p={0}>
               <RemindersPanel adminData={adminData} />
+            </TabPanel>
+            <TabPanel p={0}>
+              <DrinkPreferencesDashboard adminData={adminData} />
             </TabPanel>
           </TabPanels>
         </Tabs>
