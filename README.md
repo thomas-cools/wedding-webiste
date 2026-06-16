@@ -19,8 +19,16 @@ A modern, elegant wedding website built with React, TypeScript, and Chakra UI. F
   - [Authentication Flow](#authentication-flow)
   - [Setup](#setup)
   - [Admin Features](#admin-features)
+    - [RSVP Dashboard](#rsvp-dashboard)
+    - [Email Composer](#email-composer)
+    - [Drink Invitations](#drink-invitations)
+    - [Reminders](#reminders)
+    - [Final RSVP Dashboard](#final-rsvp-dashboard)
+    - [Send Final RSVP Invitations](#send-final-rsvp-invitations)
 - [Form Submissions](#form-submissions)
   - [RSVP Confirmation Emails (Resend + Netlify Function)](#rsvp-confirmation-emails-resend--netlify-function)
+  - [Final RSVP Invitations](#final-rsvp-invitations)
+  - [Drink Preference Invitations](#drink-preference-invitations)
 - [Performance Optimizations](#performance-optimizations)
 - [Deployment](#deployment)
   - [Netlify (Recommended)](#netlify-recommended)
@@ -40,7 +48,8 @@ A modern, elegant wedding website built with React, TypeScript, and Chakra UI. F
 - ♿ **Accessible** components following WCAG guidelines
 - 🎨 **Elegant animations** powered by Framer Motion
 - 🛡️ **Admin panel** with TOTP MFA, RSVP dashboard, and bulk email actions
-- 🧪 **Comprehensive testing** (438 unit tests + E2E tests)
+- 📋 **Final RSVP system** — tokenized invite emails + per-person menu selections + CSV export
+- 🧪 **Comprehensive testing** (450 unit tests + E2E tests)
 
 ---
 
@@ -97,6 +106,9 @@ Heavy components are lazy-loaded to reduce initial bundle size:
 | `admin-send-reminders` | `/.netlify/functions/admin-send-reminders` | Send pre-built or custom reminder emails (RSVP, event, custom) |
 | `places-autocomplete` | `/.netlify/functions/places-autocomplete` | Google Places autocomplete proxy |
 | `validate-address` | `/.netlify/functions/validate-address` | Google Address Validation API proxy |
+| `send-final-rsvp-invitations` | `/.netlify/functions/send-final-rsvp-invitations` | Admin-protected: bulk-send tokenized final RSVP invite emails |
+| `send-final-rsvp-confirmation` | `/.netlify/functions/send-final-rsvp-confirmation` | Public: send confirmation after a final RSVP form submission |
+| `admin-final-rsvps` | `/.netlify/functions/admin-final-rsvps` | Admin: fetch & aggregate all final RSVP submissions |
 
 ### Edge Functions
 
@@ -526,6 +538,139 @@ Send pre-built or custom reminder emails:
 - **Locale support** — English, Dutch, and Spanish templates
 - **Recipient filter** — Target guests by likelihood (all, definitely, highly likely, etc.)
 
+#### Final RSVP Dashboard
+
+A dedicated stats view and data table for all final RSVP submissions (`/final-rsvp` form):
+
+- **Stats strip** — Total submissions, per-day attendance counts (Welcome Dinner / Ceremony / Brunch), children's meal count
+- **Menu breakdown** — Progress bars showing the split between Ceviche vs Gazpacho (starter) and Sea Bass vs Tournedos (main)
+- **Photography consent** — Consent rate progress bar
+- **Table** — Guest name, email, day badges, party size, song request, accommodation badge, arrival date
+- **Detail modal** — Click any row to view per-guest menu selections with Children's Meal badge where applicable
+- **Export CSV** — Downloads a multi-row CSV (one row per party member) with 16 columns: primary name, email, welcome/ceremony/brunch attendance, guest name, age group, appetizer, main course, song request, staying at venue, accommodation address, arrival/departure dates, photography consent, submission date
+- **Refresh** — Reload data from the Netlify Forms API
+
+#### Send Final RSVP Invitations
+
+Bulk-send tokenized invite emails to confirmed guests to fill in their final RSVP:
+
+- **Locale selector** — English, Dutch, or Spanish
+- **Dry run preview** — See the full confirmed-guest list and a sample email before sending
+- **Confirmation modal** — Requires an extra click to execute the real send
+- **Smart filtering** — Only guests with likelihood "definitely" or "highly_likely" are included, deduplicated by email
+- **Personalized tokens** — Each email contains a signed URL (`/final-rsvp?t=TOKEN`) that pre-fills the recipient's name, email, and party members
+
+---
+
+### Final RSVP Invitations
+
+Once the initial RSVP window has closed, send all confirmed guests (likelihood = "definitely" or "highly_likely") a tokenized invite email linking them to the final RSVP form at `/final-rsvp`. Each link is personalized with the guest's name, email, and party members pre-filled.
+
+> **Tip:** The [Admin Panel](#admin-panel) at `/admin` provides a full UI for this (the **Send Final RSVP** tab) — no curl required. The instructions below document the direct API approach as an alternative.
+
+#### How It Works
+
+```
+┌───────────┐  POST + admin JWT    ┌──────────────────────────────┐
+│  You      │ ──────────────────►  │ send-final-rsvp-invitations  │
+│ (curl or  │                      │   Netlify Function           │
+│ admin UI) │                      └─────────────┬────────────────┘
+└───────────┘                                    │
+                                     ┌───────────▼────────────────┐
+                                     │ Netlify Forms API          │
+                                     │ GET /forms → submissions   │
+                                     └───────────┬────────────────┘
+                                                 │
+                                     ┌───────────▼────────────────┐
+                                     │ Filter: "definitely" or    │
+                                     │ "highly_likely" only       │
+                                     │ Dedupe by email            │
+                                     └───────────┬────────────────┘
+                                                 │
+                                     ┌───────────▼────────────────┐
+                                     │ Encode token per guest     │
+                                     │ (name + email + party)     │
+                                     └───────────┬────────────────┘
+                                                 │
+                                     ┌───────────▼────────────────┐
+                                     │ Resend API                 │
+                                     │ Personalized email with    │
+                                     │ link to /final-rsvp?t=TOKEN│
+                                     └────────────────────────────┘
+```
+
+#### Step 1: Set Environment Variables
+
+The following variables must be set in the Netlify dashboard (all are already required for the existing RSVP / drink invitation features):
+
+| Variable | Description |
+|----------|-------------|
+| `NETLIFY_API_TOKEN` | [Netlify Personal Access Token](https://app.netlify.com/user/applications#personal-access-tokens) |
+| `SITE_ID` | Your Netlify site ID (Site settings → General) |
+| `RESEND_API_KEY` | Your Resend API key |
+| `FROM_EMAIL` | Sender email address |
+| `SITE_URL` | Full URL of your site, e.g. `https://your-site.netlify.app` (used to build the `/final-rsvp?t=TOKEN` link) |
+
+#### Step 2: Dry Run (Preview)
+
+First, preview the confirmed guest list and a sample email without sending anything:
+
+```bash
+curl -s -X POST 'https://YOUR-SITE/.netlify/functions/send-final-rsvp-invitations' \
+  -H 'Authorization: Bearer YOUR_ADMIN_JWT' \
+  -H 'Content-Type: application/json' \
+  -d '{"dryRun": true}' | python3 -m json.tool
+```
+
+The dry-run response includes `confirmedGuests` (list with name, email, partySize), `totalCount`, `sampleHtml`, and `sampleText`.
+
+#### Step 3: Send for Real
+
+```bash
+curl -s -X POST 'https://YOUR-SITE/.netlify/functions/send-final-rsvp-invitations' \
+  -H 'Authorization: Bearer YOUR_ADMIN_JWT' \
+  -H 'Content-Type: application/json' \
+  -d '{"dryRun": false}' | python3 -m json.tool
+```
+
+Override the locale for all emails (default is the per-guest locale from their RSVP):
+
+```bash
+curl -s -X POST '...' \
+  -d '{"dryRun": false, "locale": "nl"}' | python3 -m json.tool
+```
+
+Supported locales: `en` (default), `nl`, `es`.
+
+#### Response
+
+```json
+{
+  "message": "Sent 12 emails, 0 failed",
+  "sent": 12,
+  "failed": 0,
+  "total": 12,
+  "results": [
+    { "email": "guest@example.com", "success": true },
+    ...
+  ]
+}
+```
+
+#### How the Token Link Works
+
+Each email contains a unique URL like:
+
+```
+https://your-site.netlify.app/final-rsvp?t=eyJuYW1lIjoiQWxpY2UiLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwicGFydHlOYW1lcyI6WyJCb2IiXX0&lang=en
+```
+
+The `t` parameter is a base64url-encoded JSON object containing `{ name, email, partyNames }`. When the guest opens the link:
+1. The page decodes the token client-side
+2. The form pre-fills their first name, email, and party members
+3. They can toggle each party member as adult or child (under 12)
+4. They fill in per-day attendance, per-person menu choices, accommodation, travel dates, and photography consent
+
 ---
 
 ### Drink Preference Invitations
@@ -690,13 +835,14 @@ The preview response includes `subject`, `html`, and `text`, plus `localeRequest
 
 All Netlify Functions include rate limiting to prevent abuse:
 
-| Function | Limit | Window |
-|----------|-------|--------|
-| `auth` | 10 requests | 10 minutes |
-| `send-rsvp-confirmation` | 5 requests | 1 minute |
-| `send-drink-notification` | 5 requests | 15 minutes |
-| `places-autocomplete` | 100 requests | 1 minute |
-| `validate-address` | 50 requests | 1 minute |
+| Function | Limit | Window | Override Env Vars |
+|----------|-------|--------|-------------------|
+| `auth` | 10 requests | 10 minutes | — |
+| `send-rsvp-confirmation` | 5 requests | 1 minute | — |
+| `send-drink-notification` | 5 requests | 15 minutes | — |
+| `send-final-rsvp-confirmation` | 5 requests | 15 minutes | `RATE_LIMIT_FINAL_RSVP_MAX`, `RATE_LIMIT_FINAL_RSVP_WINDOW_SECONDS` |
+| `places-autocomplete` | 100 requests | 1 minute | — |
+| `validate-address` | 50 requests | 1 minute | — |
 
 ### Viewing Submissions
 
@@ -967,6 +1113,9 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 | `ADMIN_TOTP_SECRET` | Base32-encoded TOTP secret for admin MFA (generated during enrollment) |
 | `NETLIFY_API_TOKEN` | Netlify personal access token for Forms API access |
 | `SITE_ID` | Netlify site ID for Forms API queries |
+| `SITE_URL` | Full public URL of the site, e.g. `https://your-site.netlify.app` (required for final RSVP token links) |
+| `RATE_LIMIT_FINAL_RSVP_MAX` | Max final RSVP confirmation emails per rate-limit window (default: `5`) |
+| `RATE_LIMIT_FINAL_RSVP_WINDOW_SECONDS` | Rate limit window in seconds for final RSVP confirmations (default: `900`) |
 
 ### Environment Variable Reference
 
@@ -985,6 +1134,9 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 | `ADMIN_TOTP_SECRET` | Server | Base32 TOTP secret for admin MFA |
 | `NETLIFY_API_TOKEN` | Server | Netlify personal access token for Forms API |
 | `SITE_ID` | Server | Netlify site ID for Forms API queries |
+| `SITE_URL` | Server | Full public URL of the site (used to build final RSVP token links) |
+| `RATE_LIMIT_FINAL_RSVP_MAX` | Server | Max final RSVP confirmation emails per window (default: `5`) |
+| `RATE_LIMIT_FINAL_RSVP_WINDOW_SECONDS` | Server | Rate limit window in seconds (default: `900`) |
 | `NODE_VERSION` | Build | Node.js version for Netlify builds |
 
 ---
