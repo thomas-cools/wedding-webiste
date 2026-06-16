@@ -14,6 +14,11 @@ export default defineConfig(({ mode }) => {
       // Note: Password hash is no longer needed in client - auth is server-side
     },
     build: {
+      // Vite 8 uses lightningcss by default, which rejects the ::part(name)[attr]
+      // compound selectors in index.css (used for address-autocomplete shadow-parts
+      // styling). Disabling minification passes the CSS through unchanged, preserving
+      // support for browsers that accept these selectors.
+      cssMinify: false,
       // Increase limit slightly if needed (default is 500)
       chunkSizeWarningLimit: 600,
       rollupOptions: {
