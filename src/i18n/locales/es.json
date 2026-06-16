@@ -190,6 +190,77 @@
     "title": "Enlaces Rápidos",
     "stay": "Estancia"
   },
+  "finalRsvp": {
+    "title": "RSVP Final",
+    "description": "¡Gracias por confirmar que te unirás a nosotros! Por favor tómate unos minutos para finalizar los detalles a continuación — tus elecciones de menú, asistencia por día e información de alojamiento nos ayudarán a que todo sea perfecto.",
+    "party": "grupo",
+    "form": {
+      "attendanceTitle": "Asistencia por día",
+      "attendanceDescription": "Por favor indícanos a qué días tú y tu grupo asistirán.",
+      "event": {
+        "welcome": "Cena de Bienvenida · Martes, 25 de agosto",
+        "ceremony": "Ceremonia y Recepción · Miércoles, 26 de agosto",
+        "brunch": "Brunch de Despedida · Jueves, 27 de agosto"
+      },
+      "selectAttendance": "Por favor selecciona",
+      "attending": "Asistiré",
+      "arrivingLate": "Llegaré tarde",
+      "notAttending": "No asistiré",
+      "accommodationTitle": "Alojamiento",
+      "stayingAtVenue": "Nos hospedamos en el lugar (Chateau)",
+      "notStayingAtVenue": "Nos hospedamos en otro lugar (hotel, Airbnb, etc.)",
+      "accommodationAddress": "Dirección de tu alojamiento",
+      "accommodationAddressPlaceholder": "Nombre del hotel, calle, ciudad…",
+      "accommodationAddressHint": "Esto nos ayuda a coordinar el transporte hacia y desde el lugar.",
+      "menuTitle": "Elecciones de menú",
+      "menuDescription": "Por favor selecciona las opciones para cada persona en tu grupo. Los niños menores de 12 años recibirán un menú infantil.",
+      "guest": "Invitado {{number}}",
+      "isChild": "Niño/a (menor de 12)",
+      "childrensMeal": "Menú infantil",
+      "childrensMealNote": "Se proporcionará un menú especial para niños.",
+      "appetizer": "Entrante",
+      "mainCourse": "Plato principal",
+      "songRequest": "Canción solicitada",
+      "songRequestPlaceholder": "¿Qué canción te hará salir a la pista de baile?",
+      "songRequestHint": "¡Haremos todo lo posible!",
+      "travelTitle": "Llegada y Salida",
+      "travelDescription": "Cuéntanos tus fechas de viaje para ayudar a coordinar el transporte si es necesario.",
+      "arrivalDate": "Fecha de llegada",
+      "departureDate": "Fecha de salida",
+      "photographyTitle": "Fotografía y Video",
+      "photographyDescription": "Nuestro fotógrafo y videógrafo capturarán recuerdos durante toda la celebración. ¿Consientes en ser fotografiado/a y/o filmado/a?",
+      "photographyYes": "Sí, consiento ser fotografiado/a y filmado/a",
+      "photographyNo": "No, por favor no me fotografíen ni filmen",
+      "additionalNotes": "Notas adicionales",
+      "notesPlaceholder": "¿Hay algo más que debamos saber?",
+      "submit": "Enviar RSVP Final",
+      "submitting": "Enviando…"
+    },
+    "menu": {
+      "appetizer": {
+        "ceviche": "Ceviche de Bar français, citron vert et piment d'Espelette",
+        "gaspacho": "Gaspacho fumé aux tomates jaunes et éclats de légumes rouges (V)"
+      },
+      "main": {
+        "bar": "Filet de Bar grillé, tartelette de légumes méditerranéens, purée de petits pois et olives noires",
+        "tournedos": "Tournedos de filet de boeuf français, purée d'échalotes confites au vin rouge, compression de pommes de terre, jus aux morilles et vin doux"
+      }
+    },
+    "validation": {
+      "eventsRequired": "Por favor selecciona tu asistencia para al menos un día.",
+      "accommodationRequired": "Por favor indícanos tu preferencia de alojamiento.",
+      "accommodationAddressRequired": "Por favor ingresa la dirección de tu alojamiento.",
+      "appetizerRequired": "Por favor selecciona un entrante.",
+      "mainRequired": "Por favor selecciona un plato principal.",
+      "addressIncompleteTitle": "La dirección puede estar incompleta",
+      "addressIncompleteMessage": "Por favor verifica la dirección de tu alojamiento. Aún aceptaremos tu respuesta.",
+      "autocompleteUnavailable": "Autocompletado temporalmente no disponible. Por favor escribe tu dirección."
+    },
+    "success": {
+      "title": "¡RSVP final enviado!",
+      "message": "¡Gracias! Hemos recibido todos tus detalles y te enviamos un correo de confirmación."
+    }
+  },
   "timeline": {
     "label": "El Programa",
     "title": "Programa de la Boda",

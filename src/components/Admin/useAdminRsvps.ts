@@ -1,6 +1,43 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { getAdminAuthHeaders } from '../../utils/adminAuth'
 
+export interface AdminFinalRsvpGuest {
+  name: string
+  isChild: boolean
+  appetizer?: string
+  main?: string
+}
+
+export interface AdminFinalRsvp {
+  id: string
+  firstName: string
+  email: string
+  events: { welcome: string; ceremony: string; brunch: string }
+  guests: AdminFinalRsvpGuest[]
+  stayingAtVenue: boolean | null
+  accommodationAddress: string
+  songRequest: string
+  arrivalDate: string
+  departureDate: string
+  photographyConsent: boolean | null
+  additionalNotes: string
+  submittedAt: string
+  locale: string
+}
+
+export interface FinalRsvpStats {
+  total: number
+  attendingWelcome: number
+  attendingCeremony: number
+  attendingBrunch: number
+  ceviche: number
+  gaspacho: number
+  barFillet: number
+  tournedos: number
+  childrenMeals: number
+  photographyConsented: number
+}
+
 export interface AdminRsvp {
   id: string
   firstName: string
@@ -84,6 +121,13 @@ export interface UseAdminRsvpsReturn {
   // Drink preferences & email opens
   drinkPrefsMap: Map<string, AdminDrinkPrefs[]>
   emailOpensMap: Map<string, EmailOpen[]>
+  // Final RSVPs
+  finalRsvps: AdminFinalRsvp[]
+  finalRsvpStats: FinalRsvpStats | null
+  finalRsvpsLoading: boolean
+  finalRsvpsError: string | null
+  fetchFinalRsvps: () => void
+  exportFinalRsvpsCsv: () => void
 }
 
 const EMPTY_STATS: RsvpStats = {
@@ -108,6 +152,10 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
   const [localeOverrides, setLocaleOverrides] = useState<Map<string, string>>(new Map())
   const [drinkPrefsMap, setDrinkPrefsMap] = useState<Map<string, AdminDrinkPrefs[]>>(new Map())
   const [emailOpensMap, setEmailOpensMap] = useState<Map<string, EmailOpen[]>>(new Map())
+  const [finalRsvps, setFinalRsvps] = useState<AdminFinalRsvp[]>([])
+  const [finalRsvpStats, setFinalRsvpStats] = useState<FinalRsvpStats | null>(null)
+  const [finalRsvpsLoading, setFinalRsvpsLoading] = useState(false)
+  const [finalRsvpsError, setFinalRsvpsError] = useState<string | null>(null)
 
   const fetchRsvps = useCallback(async () => {
     setIsLoading(true)
@@ -281,6 +329,95 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
     [localeOverrides]
   )
 
+  const fetchFinalRsvps = useCallback(async () => {
+    setFinalRsvpsLoading(true)
+    setFinalRsvpsError(null)
+    try {
+      const res = await fetch('/api/admin-final-rsvps', { headers: getAdminAuthHeaders() })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setFinalRsvpsError(data.error || `Failed to fetch final RSVPs (${res.status})`)
+        return
+      }
+      const data = await res.json()
+      setFinalRsvps(data.finalRsvps || [])
+      setFinalRsvpStats(data.stats || null)
+    } catch {
+      setFinalRsvpsError('Network error. Please check your connection.')
+    } finally {
+      setFinalRsvpsLoading(false)
+    }
+  }, [])
+
+  const APPETIZER_LABELS: Record<string, string> = {
+    ceviche: 'Ceviche de Bar',
+    gaspacho: 'Gaspacho fumé (V)',
+  }
+  const MAIN_LABELS: Record<string, string> = {
+    bar: 'Filet de Bar',
+    tournedos: 'Tournedos de boeuf',
+  }
+
+  const exportFinalRsvpsCsv = useCallback(() => {
+    const rows: string[][] = []
+    // Header
+    rows.push([
+      'Primary Name', 'Email', 'Welcome Dinner', 'Ceremony & Reception', 'Farewell Brunch',
+      'Guest Name', 'Age Group', 'Appetizer', 'Main Course',
+      'Song Request', 'Staying at Venue', 'Accommodation Address',
+      'Arrival Date', 'Departure Date', 'Photography Consent', 'Submitted At',
+    ])
+
+    for (const r of finalRsvps) {
+      if (r.guests.length === 0) {
+        rows.push([
+          r.firstName, r.email,
+          r.events.welcome, r.events.ceremony, r.events.brunch,
+          '', '', '', '',
+          r.songRequest, r.stayingAtVenue === true ? 'Yes' : r.stayingAtVenue === false ? 'No' : '',
+          r.accommodationAddress, r.arrivalDate, r.departureDate,
+          r.photographyConsent === true ? 'Yes' : r.photographyConsent === false ? 'No' : '',
+          r.submittedAt,
+        ])
+      } else {
+        r.guests.forEach((g, i) => {
+          rows.push([
+            i === 0 ? r.firstName : '',
+            i === 0 ? r.email : '',
+            i === 0 ? r.events.welcome : '',
+            i === 0 ? r.events.ceremony : '',
+            i === 0 ? r.events.brunch : '',
+            g.name,
+            g.isChild ? 'Child (<12)' : 'Adult',
+            g.isChild ? "Children's Meal" : APPETIZER_LABELS[g.appetizer || ''] || g.appetizer || '',
+            g.isChild ? "Children's Meal" : MAIN_LABELS[g.main || ''] || g.main || '',
+            i === 0 ? r.songRequest : '',
+            i === 0 ? (r.stayingAtVenue === true ? 'Yes' : r.stayingAtVenue === false ? 'No' : '') : '',
+            i === 0 ? r.accommodationAddress : '',
+            i === 0 ? r.arrivalDate : '',
+            i === 0 ? r.departureDate : '',
+            i === 0 ? (r.photographyConsent === true ? 'Yes' : r.photographyConsent === false ? 'No' : '') : '',
+            i === 0 ? r.submittedAt : '',
+          ])
+        })
+      }
+    }
+
+    const csvContent = rows
+      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `final-rsvps-${new Date().toISOString().slice(0, 10)}.csv`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }, [finalRsvps])
+
   return {
     rsvps,
     stats,
@@ -305,5 +442,11 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
     getEffectiveLocale,
     drinkPrefsMap,
     emailOpensMap,
+    finalRsvps,
+    finalRsvpStats,
+    finalRsvpsLoading,
+    finalRsvpsError,
+    fetchFinalRsvps,
+    exportFinalRsvpsCsv,
   }
 }

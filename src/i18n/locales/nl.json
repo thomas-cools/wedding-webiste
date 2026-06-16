@@ -191,6 +191,77 @@
     "title": "Snelle Links",
     "stay": "Verblijf"
   },
+  "finalRsvp": {
+    "title": "Definitieve RSVP",
+    "description": "Bedankt dat je bevestigt dat je erbij zult zijn! Neem even een paar minuten om de onderstaande details te finaliseren — je menukeuzes, aanwezigheid per dag en verblijfsinformatie helpen ons alles perfect te maken.",
+    "party": "gezelschap",
+    "form": {
+      "attendanceTitle": "Aanwezigheid per dag",
+      "attendanceDescription": "Laat ons weten welke dagen jij en je gezelschap aanwezig zijn.",
+      "event": {
+        "welcome": "Welkomstdiner · Dinsdag 25 augustus",
+        "ceremony": "Ceremonie & Receptie · Woensdag 26 augustus",
+        "brunch": "Afscheidsbrunch · Donderdag 27 augustus"
+      },
+      "selectAttendance": "Maak een keuze",
+      "attending": "Aanwezig",
+      "arrivingLate": "Later aanwezig",
+      "notAttending": "Niet aanwezig",
+      "accommodationTitle": "Accommodatie",
+      "stayingAtVenue": "We verblijven op de locatie (Chateau)",
+      "notStayingAtVenue": "We verblijven elders (hotel, Airbnb, etc.)",
+      "accommodationAddress": "Jouw verblijfsadres",
+      "accommodationAddressPlaceholder": "Hotelnaam, straat, stad…",
+      "accommodationAddressHint": "Dit helpt ons het transport naar en van de locatie te coördineren.",
+      "menuTitle": "Menukeuzes",
+      "menuDescription": "Selecteer alsjeblieft de keuzes voor elke persoon in je gezelschap. Kinderen onder de 12 jaar krijgen een kindermenu.",
+      "guest": "Gast {{number}}",
+      "isChild": "Kind (onder 12)",
+      "childrensMeal": "Kindermenu",
+      "childrensMealNote": "Er wordt een speciaal kindermenu voorzien.",
+      "appetizer": "Voorgerecht",
+      "mainCourse": "Hoofdgerecht",
+      "songRequest": "Muziekverzoek",
+      "songRequestPlaceholder": "Welk nummer brengt jou op de dansvloer?",
+      "songRequestHint": "We doen ons best!",
+      "travelTitle": "Aankomst & Vertrek",
+      "travelDescription": "Laat ons je reisdata weten zodat we indien nodig het transport kunnen coördineren.",
+      "arrivalDate": "Aankomstdatum",
+      "departureDate": "Vertrekdatum",
+      "photographyTitle": "Fotografie & Video",
+      "photographyDescription": "Onze fotograaf en videograaf leggen herinneringen vast tijdens de hele viering. Stem je in met gefotografeerd en/of gefilmd worden?",
+      "photographyYes": "Ja, ik stem in met gefotografeerd en gefilmd worden",
+      "photographyNo": "Nee, fotografeer of film mij alsjeblieft niet",
+      "additionalNotes": "Extra opmerkingen",
+      "notesPlaceholder": "Is er iets anders wat we moeten weten?",
+      "submit": "Definitieve RSVP Indienen",
+      "submitting": "Indienen…"
+    },
+    "menu": {
+      "appetizer": {
+        "ceviche": "Ceviche de Bar français, citron vert et piment d'Espelette",
+        "gaspacho": "Gaspacho fumé aux tomates jaunes et éclats de légumes rouges (V)"
+      },
+      "main": {
+        "bar": "Filet de Bar grillé, tartelette de légumes méditerranéens, purée de petits pois et olives noires",
+        "tournedos": "Tournedos de filet de boeuf français, purée d'échalotes confites au vin rouge, compression de pommes de terre, jus aux morilles et vin doux"
+      }
+    },
+    "validation": {
+      "eventsRequired": "Selecteer alsjeblieft je aanwezigheid voor minimaal één dag.",
+      "accommodationRequired": "Laat ons alsjeblieft je accommodatievoorkeur weten.",
+      "accommodationAddressRequired": "Vul alsjeblieft je verblijfsadres in.",
+      "appetizerRequired": "Selecteer alsjeblieft een voorgerecht.",
+      "mainRequired": "Selecteer alsjeblieft een hoofdgerecht.",
+      "addressIncompleteTitle": "Adres kan onvolledig zijn",
+      "addressIncompleteMessage": "Controleer alsjeblieft je verblijfsadres. We accepteren je antwoord nog steeds.",
+      "autocompleteUnavailable": "Automatisch aanvullen is tijdelijk niet beschikbaar. Typ alsjeblieft je adres."
+    },
+    "success": {
+      "title": "Definitieve RSVP ingediend!",
+      "message": "Bedankt! We hebben al je gegevens ontvangen en een bevestigingsmail gestuurd."
+    }
+  },
   "timeline": {
     "label": "Het Programma",
     "title": "Bruiloft Programma",

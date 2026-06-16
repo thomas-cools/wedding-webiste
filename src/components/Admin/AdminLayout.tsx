@@ -18,6 +18,8 @@ import { EmailComposer } from './EmailComposer'
 import { DrinkInvitationsPanel } from './DrinkInvitationsPanel'
 import { RemindersPanel } from './RemindersPanel'
 import { DrinkPreferencesDashboard } from './DrinkPreferencesDashboard'
+import { FinalRsvpDashboard } from './FinalRsvpDashboard'
+import { FinalRsvpInvitationsPanel } from './FinalRsvpInvitationsPanel'
 
 interface AdminLayoutProps {
   onLogout: () => void
@@ -120,6 +122,20 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
             >
               Drink Preferences
             </Tab>
+            <Tab
+              fontSize="sm"
+              fontWeight="medium"
+              _selected={{ bg: 'secondary.navy', color: 'white' }}
+            >
+              Final RSVP
+            </Tab>
+            <Tab
+              fontSize="sm"
+              fontWeight="medium"
+              _selected={{ bg: 'secondary.navy', color: 'white' }}
+            >
+              Send Final RSVP
+            </Tab>
           </TabList>
 
           <TabPanels>
@@ -137,6 +153,12 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
             </TabPanel>
             <TabPanel p={0}>
               <DrinkPreferencesDashboard adminData={adminData} />
+            </TabPanel>
+            <TabPanel p={0}>
+              <FinalRsvpDashboard adminData={adminData} />
+            </TabPanel>
+            <TabPanel p={0}>
+              <FinalRsvpInvitationsPanel adminData={adminData} />
             </TabPanel>
           </TabPanels>
         </Tabs>

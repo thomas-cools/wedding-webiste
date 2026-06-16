@@ -191,6 +191,77 @@
     "title": "Quick Links",
     "stay": "Stay"
   },
+  "finalRsvp": {
+    "title": "Final RSVP",
+    "description": "Thank you for confirming you'll be joining us! Please take a few minutes to finalize the details below — your menu choices, attendance for each day, and accommodation info will help us make everything perfect.",
+    "party": "party",
+    "form": {
+      "attendanceTitle": "Day-by-Day Attendance",
+      "attendanceDescription": "Please let us know which days you and your party will be attending.",
+      "event": {
+        "welcome": "Welcome Dinner · Tuesday, August 25",
+        "ceremony": "Ceremony & Reception · Wednesday, August 26",
+        "brunch": "Farewell Brunch · Thursday, August 27"
+      },
+      "selectAttendance": "Please select",
+      "attending": "Attending",
+      "arrivingLate": "Arriving Late",
+      "notAttending": "Not Attending",
+      "accommodationTitle": "Accommodation",
+      "stayingAtVenue": "We are staying at the venue (Chateau)",
+      "notStayingAtVenue": "We are staying elsewhere (hotel, Airbnb, etc.)",
+      "accommodationAddress": "Your Accommodation Address",
+      "accommodationAddressPlaceholder": "Hotel name, street, city…",
+      "accommodationAddressHint": "This helps us coordinate transportation to and from the venue.",
+      "menuTitle": "Menu Choices",
+      "menuDescription": "Please select your choices for each person in your party. Children under 12 will receive a children's meal.",
+      "guest": "Guest {{number}}",
+      "isChild": "Child (under 12)",
+      "childrensMeal": "Children's Meal",
+      "childrensMealNote": "A special children's menu will be provided.",
+      "appetizer": "Appetizer",
+      "mainCourse": "Main Course",
+      "songRequest": "Song Request",
+      "songRequestPlaceholder": "What song will get you on the dance floor?",
+      "songRequestHint": "We'll do our best to make it happen!",
+      "travelTitle": "Arrival & Departure",
+      "travelDescription": "Let us know your travel dates so we can help coordinate transportation if needed.",
+      "arrivalDate": "Arrival Date",
+      "departureDate": "Departure Date",
+      "photographyTitle": "Photography & Video",
+      "photographyDescription": "Our photographer and videographer will be capturing memories throughout the celebration. Do you consent to being photographed and/or filmed?",
+      "photographyYes": "Yes, I consent to being photographed and filmed",
+      "photographyNo": "No, please do not photograph or film me",
+      "additionalNotes": "Additional Notes",
+      "notesPlaceholder": "Anything else we should know?",
+      "submit": "Submit Final RSVP",
+      "submitting": "Submitting…"
+    },
+    "menu": {
+      "appetizer": {
+        "ceviche": "Ceviche de Bar français, citron vert et piment d'Espelette",
+        "gaspacho": "Gaspacho fumé aux tomates jaunes et éclats de légumes rouges (V)"
+      },
+      "main": {
+        "bar": "Filet de Bar grillé, tartelette de légumes méditerranéens, purée de petits pois et olives noires",
+        "tournedos": "Tournedos de filet de boeuf français, purée d'échalotes confites au vin rouge, compression de pommes de terre, jus aux morilles et vin doux"
+      }
+    },
+    "validation": {
+      "eventsRequired": "Please select your attendance for at least one day.",
+      "accommodationRequired": "Please let us know your accommodation preference.",
+      "accommodationAddressRequired": "Please enter your accommodation address.",
+      "appetizerRequired": "Please select an appetizer.",
+      "mainRequired": "Please select a main course.",
+      "addressIncompleteTitle": "Address may be incomplete",
+      "addressIncompleteMessage": "Please double-check your accommodation address. We will still accept your response.",
+      "autocompleteUnavailable": "Autocomplete is temporarily unavailable. Please type your address."
+    },
+    "success": {
+      "title": "Final RSVP submitted!",
+      "message": "Thank you! We've received all your details and sent you a confirmation email."
+    }
+  },
   "timeline": {
     "label": "The Schedule",
     "title": "Wedding Timeline",

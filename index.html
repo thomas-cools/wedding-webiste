@@ -57,5 +57,23 @@
       <input type="text" name="campaign" />
       <input type="text" name="openedAt" />
     </form>
+
+    <!-- Netlify Forms detection for final RSVP -->
+    <form name="final-rsvp" method="POST" data-netlify="true" hidden>
+      <input type="hidden" name="form-name" value="final-rsvp" />
+      <input type="text" name="firstName" />
+      <input type="email" name="email" />
+      <input type="text" name="events" />
+      <input type="text" name="guests" />
+      <input type="text" name="stayingAtVenue" />
+      <input type="text" name="accommodationAddress" />
+      <input type="text" name="accommodationAddressPlaceId" />
+      <input type="text" name="songRequest" />
+      <input type="text" name="arrivalDate" />
+      <input type="text" name="departureDate" />
+      <input type="text" name="photographyConsent" />
+      <textarea name="additionalNotes"></textarea>
+      <input type="text" name="locale" />
+    </form>
   </body>
 </html>
