@@ -266,6 +266,7 @@ interface SendReminderBody {
   htmlBody?: string
   textBody?: string
   locale?: string
+  dryRun?: boolean
 }
 
 export const handler: Handler = async (event) => {
@@ -326,6 +327,47 @@ export const handler: Handler = async (event) => {
     customGetHtml = () => htmlBody
     customGetText = () => textBody || ''
   }
+
+  // ── Dry run: return recipient list + sample email, do not call Resend ─────
+  if (body.dryRun) {
+    const first = recipients[0]
+    const sampleLocale = normalizeLocale(first.locale || body.locale)
+
+    let sampleSubject: string
+    let sampleHtml: string
+    let sampleText: string
+
+    if (type === 'custom') {
+      sampleSubject = customSubject!
+      sampleHtml = wrapInEmailTemplate(customSubject!, customGetHtml!(first.name || 'Guest'))
+      sampleText = customGetText!(first.name || 'Guest')
+    } else {
+      const templates =
+        type === 'rsvp_reminder' ? RSVP_REMINDER_TEMPLATES : EVENT_REMINDER_TEMPLATES
+      const template = templates[sampleLocale]
+      sampleSubject = template.subject
+      sampleHtml = wrapInEmailTemplate(
+        template.subject,
+        template.html(first.name || 'Guest', siteUrl, sampleLocale)
+      )
+      sampleText = template.text(first.name || 'Guest', siteUrl, sampleLocale)
+    }
+
+    return adminJson(200, {
+      ok: true,
+      dryRun: true,
+      totalCount: recipients.length,
+      recipients: recipients.map((r) => ({
+        email: r.email,
+        name: r.name,
+        locale: normalizeLocale(r.locale || body.locale),
+      })),
+      sampleSubject,
+      sampleHtml,
+      sampleText,
+    })
+  }
+  // ─────────────────────────────────────────────────────────────────────────
 
   const RESEND_API_KEY = process.env.RESEND_API_KEY
   if (!RESEND_API_KEY) {
