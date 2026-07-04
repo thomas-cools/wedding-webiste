@@ -151,7 +151,7 @@ export default function FinalRsvpPage() {
   const { features } = useFeatureFlags()
 
   if (features.requirePassword) {
-    return <PasswordGate bg="#300F0C"><FinalRsvpPageContent /></PasswordGate>
+    return <PasswordGate bg="#300F0C" scheme="dark"><FinalRsvpPageContent /></PasswordGate>
   }
 
   return <FinalRsvpPageContent />

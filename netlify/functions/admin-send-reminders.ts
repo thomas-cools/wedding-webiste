@@ -312,9 +312,12 @@ export const handler: Handler = async (event) => {
     process.env.URL || process.env.DEPLOY_PRIME_URL || ''
 
   // For custom type: resolve once (no locale-dependent templates)
+  // Also accept optional subject/htmlBody overrides for rsvp_reminder / event_reminder
   let customSubject: string | undefined
   let customGetHtml: ((name: string) => string) | undefined
   let customGetText: ((name: string) => string) | undefined
+
+  const hasOverride = type !== 'custom' && !!body.subject && !!htmlBody
 
   if (type === 'custom') {
     if (!body.subject || !htmlBody) {
@@ -325,6 +328,10 @@ export const handler: Handler = async (event) => {
     }
     customSubject = body.subject
     customGetHtml = () => htmlBody
+    customGetText = () => textBody || ''
+  } else if (hasOverride) {
+    customSubject = body.subject
+    customGetHtml = () => htmlBody!
     customGetText = () => textBody || ''
   }
 
@@ -337,7 +344,7 @@ export const handler: Handler = async (event) => {
     let sampleHtml: string
     let sampleText: string
 
-    if (type === 'custom') {
+    if (type === 'custom' || hasOverride) {
       sampleSubject = customSubject!
       sampleHtml = wrapInEmailTemplate(customSubject!, customGetHtml!(first.name || 'Guest'))
       sampleText = customGetText!(first.name || 'Guest')
@@ -393,7 +400,7 @@ export const handler: Handler = async (event) => {
     let getHtml: (name: string) => string
     let getText: (name: string) => string
 
-    if (type === 'custom') {
+    if (type === 'custom' || hasOverride) {
       subject = customSubject!
       getHtml = customGetHtml!
       getText = customGetText!

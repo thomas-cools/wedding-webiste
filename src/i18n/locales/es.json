@@ -238,12 +238,12 @@
     },
     "menu": {
       "appetizer": {
-        "ceviche": "Ceviche de Bar français, citron vert et piment d'Espelette",
-        "gaspacho": "Gaspacho fumé aux tomates jaunes et éclats de légumes rouges (V)"
+        "ceviche": "Ceviche de lubina francesa con lima y pimiento de Espelette",
+        "gaspacho": "Gazpacho ahumado de tomate amarillo con verduras rojas (V)"
       },
       "main": {
-        "bar": "Filet de Bar grillé, tartelette de légumes méditerranéens, purée de petits pois et olives noires",
-        "tournedos": "Tournedos de filet de boeuf français, purée d'échalotes confites au vin rouge, compression de pommes de terre, jus aux morilles et vin doux"
+        "bar": "Filete de lubina a la plancha, tartaleta de verduras mediterráneas, crema de guisantes y aceitunas negras",
+        "tournedos": "Tournedos de ternera francesa, puré de chalotas confitadas en vino tinto, compresión de patatas, jugo de morillas y vino dulce"
       }
     },
     "validation": {

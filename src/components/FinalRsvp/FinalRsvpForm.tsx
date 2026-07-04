@@ -197,6 +197,19 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
               <RadioGroup
                 value={form.stayingAtVenue === null ? '' : String(form.stayingAtVenue)}
                 onChange={(v) => form.setStayingAtVenue(v === 'true')}
+                sx={{
+                  '.chakra-radio__control': {
+                    borderColor: 'rgba(48,15,12,0.35)',
+                    borderWidth: '1.5px',
+                  },
+                  '.chakra-radio__control[data-checked]': {
+                    bg: '#300F0C',
+                    borderColor: '#300F0C',
+                  },
+                  '.chakra-radio__control[data-focus-visible]': {
+                    boxShadow: '0 0 0 2px rgba(48,15,12,0.3)',
+                  },
+                }}
               >
                 <Stack spacing={3}>
                   <Radio value="true">

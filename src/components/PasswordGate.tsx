@@ -55,9 +55,11 @@ interface PasswordGateProps {
   children: React.ReactNode
   /** Custom background color for loading and gate screens */
   bg?: string
+  /** 'dark' flips text/border colours for use on a dark background */
+  scheme?: 'light' | 'dark'
 }
 
-export default function PasswordGate({ children, bg = 'neutral.light' }: PasswordGateProps) {
+export default function PasswordGate({ children, bg = 'neutral.light', scheme = 'light' }: PasswordGateProps) {
   const { t } = useTranslation()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
@@ -154,6 +156,29 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
   const isDisabled = isLockedOut || isVerifying
   const lockoutRemainingMs = isLockedOut ? lockoutUntil - nowMs : 0
 
+  const isDark = scheme === 'dark'
+  const palette = {
+    heading:          isDark ? '#E3DFCE'                   : 'neutral.dark',
+    preheading:       isDark ? 'rgba(227,223,206,0.65)'    : 'primary.muted',
+    body:             isDark ? '#E3DFCE'                   : 'neutral.dark',
+    divider:          isDark ? 'rgba(227,223,206,0.35)'    : 'primary.soft',
+    decorLine:        isDark ? 'rgba(227,223,206,0.35)'    : 'primary.soft',
+    inputBorder:      isDark ? 'rgba(227,223,206,0.35)'    : 'primary.soft',
+    inputBorderHover: isDark ? 'rgba(227,223,206,0.65)'    : 'primary.deep',
+    inputBorderFocus: isDark ? '#E3DFCE'                   : 'primary.deep',
+    inputColor:       isDark ? '#E3DFCE'                   : undefined as string | undefined,
+    inputBg:          isDark ? 'rgba(255,255,255,0.06)'    : undefined as string | undefined,
+    inputPlaceholder: isDark ? 'rgba(227,223,206,0.4)'     : undefined as string | undefined,
+    iconColor:        isDark ? '#E3DFCE'                   : 'neutral.dark',
+    btnBorder:        isDark ? '#E3DFCE'                   : 'neutral.dark',
+    btnColor:         isDark ? '#E3DFCE'                   : 'neutral.dark',
+    btnHoverBg:       isDark ? '#E3DFCE'                   : 'neutral.dark',
+    btnHoverColor:    isDark ? '#300F0C'                   : 'neutral.light',
+    langColor:        isDark ? 'neutral.cream'             : 'neutral.dark',
+    langHoverBg:      isDark ? 'whiteAlpha.200'            : 'blackAlpha.50',
+    langActiveBg:     isDark ? 'whiteAlpha.300'            : 'blackAlpha.100',
+  }
+
   // Show nothing while checking auth status
   if (isLoading) {
     return (
@@ -178,7 +203,7 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
     >
       {/* Language Switcher in corner */}
       <Box position="absolute" top={4} right={4} zIndex={10}>
-        <LanguageSwitcher color="neutral.dark" hoverBg="blackAlpha.50" activeBg="blackAlpha.100" />
+        <LanguageSwitcher color={palette.langColor} hoverBg={palette.langHoverBg} activeBg={palette.langActiveBg} />
       </Box>
 
       {/* Decorative elements */}
@@ -189,7 +214,7 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
         transform="translateX(-50%)"
         w="1px"
         h="60px"
-        bg="primary.soft"
+        bg={palette.decorLine}
         opacity={0.5}
       />
 
@@ -207,7 +232,7 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
               fontWeight="500"
               letterSpacing="0.3em"
               textTransform="uppercase"
-              color="primary.muted"
+              color={palette.preheading}
             >
               {t('password.label')}
             </Text>
@@ -220,18 +245,18 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
                 fontSize={['3xl', '4xl', '5xl']}
                 fontWeight="300"
                 letterSpacing="0.08em"
-                color="neutral.dark"
+                color={palette.heading}
               >
                 {t('password.title')}
               </Heading>
-              <Divider borderColor="primary.soft" w="80px" />
+              <Divider borderColor={palette.divider} w="80px" />
             </VStack>
 
             {/* Description */}
             <Text
               fontFamily="body"
               fontSize={['sm', 'md']}
-              color="neutral.dark"
+              color={palette.body}
               opacity={0.8}
               maxW="400px"
               lineHeight="1.8"
@@ -257,10 +282,13 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
                       fontFamily="body"
                       fontSize="md"
                       letterSpacing="0.05em"
-                      borderColor="primary.soft"
-                      _hover={{ borderColor: 'primary.deep' }}
+                      borderColor={palette.inputBorder}
+                      color={palette.inputColor}
+                      bg={palette.inputBg}
+                      _placeholder={palette.inputPlaceholder ? { color: palette.inputPlaceholder } : undefined}
+                      _hover={{ borderColor: palette.inputBorderHover }}
                       _focusVisible={{
-                        borderColor: 'primary.deep',
+                        borderColor: palette.inputBorderFocus,
                         boxShadow: 'none',
                       }}
                       h="50px"
@@ -274,7 +302,7 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
                         variant="ghost"
                         size="sm"
                         onClick={() => setShowPassword(!showPassword)}
-                        color="neutral.dark"
+                        color={palette.iconColor}
                         opacity={0.6}
                         _hover={{ opacity: 1 }}
                       />
@@ -291,7 +319,7 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
                   <Text
                     fontFamily="body"
                     fontSize="sm"
-                    color="neutral.dark"
+                    color={palette.body}
                     opacity={0.8}
                     textAlign="center"
                     data-testid="password-cooldown"
@@ -310,11 +338,11 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
                   fontWeight="500"
                   letterSpacing="0.2em"
                   textTransform="uppercase"
-                  borderColor="neutral.dark"
-                  color="neutral.dark"
+                  borderColor={palette.btnBorder}
+                  color={palette.btnColor}
                   _hover={{
-                    bg: 'neutral.dark',
-                    color: 'neutral.light',
+                    bg: palette.btnHoverBg,
+                    color: palette.btnHoverColor,
                   }}
                   h="50px"
                   isDisabled={isDisabled}
@@ -330,7 +358,7 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
             <Text
               fontFamily="body"
               fontSize="xs"
-              color="neutral.dark"
+              color={palette.body}
               opacity={0.5}
               fontStyle="italic"
             >
@@ -348,7 +376,7 @@ export default function PasswordGate({ children, bg = 'neutral.light' }: Passwor
         transform="translateX(-50%)"
         w="1px"
         h="60px"
-        bg="primary.soft"
+        bg={palette.decorLine}
         opacity={0.5}
       />
     </Box>

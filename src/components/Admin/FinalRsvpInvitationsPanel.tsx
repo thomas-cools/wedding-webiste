@@ -42,6 +42,8 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
   const [dryRunResult, setDryRunResult] = useState<{
     totalCount: number
     confirmedGuests: Array<{ name: string; email: string; partySize: number; partyNames: string[] }>
+    sampleHtml: string
+    finalRsvpUrl: string
   } | null>(null)
   const [sendResult, setSendResult] = useState<SendResult | null>(null)
   const [loading, setLoading] = useState(false)
@@ -76,7 +78,7 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
         toast({ title: 'Dry run failed', description: data.error, status: 'error', duration: 5000 })
         return
       }
-      setDryRunResult({ totalCount: data.totalCount, confirmedGuests: data.confirmedGuests })
+      setDryRunResult({ totalCount: data.totalCount, confirmedGuests: data.confirmedGuests, sampleHtml: data.sampleHtml || '', finalRsvpUrl: data.finalRsvpUrl || '' })
     } catch {
       toast({ title: 'Network error', status: 'error', duration: 5000 })
     } finally {
@@ -172,28 +174,63 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
             {isLoading ? (
               <VStack spacing={2}>{[...Array(3)].map((_, i) => <Skeleton key={i} h="40px" />)}</VStack>
             ) : (
-              <Box overflowX="auto" maxH="320px" overflowY="auto">
-                <Table size="sm">
-                  <Thead position="sticky" top={0} bg="gray.50">
-                    <Tr>
-                      <Th>Name</Th>
-                      <Th>Email</Th>
-                      <Th>Party Size</Th>
-                      <Th>Additional Guests</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {dryRunResult.confirmedGuests.map((g) => (
-                      <Tr key={g.email}>
-                        <Td>{g.name}</Td>
-                        <Td fontSize="xs">{g.email}</Td>
-                        <Td>{g.partySize}</Td>
-                        <Td fontSize="xs" color="gray.500">{g.partyNames.join(', ') || '—'}</Td>
+              <>
+                <Box overflowX="auto" maxH="280px" overflowY="auto">
+                  <Table size="sm">
+                    <Thead position="sticky" top={0} bg="gray.50">
+                      <Tr>
+                        <Th>Name</Th>
+                        <Th>Email</Th>
+                        <Th>Party Size</Th>
+                        <Th>Additional Guests</Th>
                       </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
-              </Box>
+                    </Thead>
+                    <Tbody>
+                      {dryRunResult.confirmedGuests.map((g) => (
+                        <Tr key={g.email}>
+                          <Td>{g.name}</Td>
+                          <Td fontSize="xs">{g.email}</Td>
+                          <Td>{g.partySize}</Td>
+                          <Td fontSize="xs" color="gray.500">{g.partyNames.join(', ') || '—'}</Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </Box>
+                {dryRunResult.sampleHtml && (
+                  <Box mt={4}>
+                    <HStack mb={2} justify="space-between" align="center">
+                      <Text fontSize="xs" fontWeight="medium" color="gray.500" textTransform="uppercase" letterSpacing="wider">
+                        Email Preview — sample for {dryRunResult.confirmedGuests[0]?.name}
+                      </Text>
+                      {dryRunResult.finalRsvpUrl && (
+                        <Button
+                          as="a"
+                          href={dryRunResult.finalRsvpUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          size="xs"
+                          variant="outline"
+                          colorScheme="blue"
+                          rightIcon={<Text as="span" fontSize="xs">↗</Text>}
+                        >
+                          Preview RSVP form
+                        </Button>
+                      )}
+                    </HStack>
+                    <Box
+                      as="iframe"
+                      srcDoc={dryRunResult.sampleHtml}
+                      sandbox="allow-same-origin"
+                      width="100%"
+                      height="520px"
+                      border="1px solid"
+                      borderColor="gray.200"
+                      rounded="md"
+                    />
+                  </Box>
+                )}
+              </>
             )}
           </Box>
         )}

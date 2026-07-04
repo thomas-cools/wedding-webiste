@@ -239,12 +239,12 @@
     },
     "menu": {
       "appetizer": {
-        "ceviche": "Ceviche de Bar français, citron vert et piment d'Espelette",
-        "gaspacho": "Gaspacho fumé aux tomates jaunes et éclats de légumes rouges (V)"
+        "ceviche": "Franse zeebaars ceviche met limoen en Espelette peper",
+        "gaspacho": "Gerookte gele tomatengazpacho met rode groenten (V)"
       },
       "main": {
-        "bar": "Filet de Bar grillé, tartelette de légumes méditerranéens, purée de petits pois et olives noires",
-        "tournedos": "Tournedos de filet de boeuf français, purée d'échalotes confites au vin rouge, compression de pommes de terre, jus aux morilles et vin doux"
+        "bar": "Gegrilde zeebaarsfilet, Mediterraans groentetaartje, erwtencrème en zwarte olijven",
+        "tournedos": "Franse rundfilet tournedos, geconfijte sjalottencrème met rode wijn, aardappelcompressie, morieljesjus en dessertwijnsaus"
       }
     },
     "validation": {

@@ -239,12 +239,12 @@
     },
     "menu": {
       "appetizer": {
-        "ceviche": "Ceviche de Bar français, citron vert et piment d'Espelette",
-        "gaspacho": "Gaspacho fumé aux tomates jaunes et éclats de légumes rouges (V)"
+        "ceviche": "French sea bass ceviche, lime & Espelette chilli",
+        "gaspacho": "Smoked yellow tomato gazpacho with red vegetables (V)"
       },
       "main": {
-        "bar": "Filet de Bar grillé, tartelette de légumes méditerranéens, purée de petits pois et olives noires",
-        "tournedos": "Tournedos de filet de boeuf français, purée d'échalotes confites au vin rouge, compression de pommes de terre, jus aux morilles et vin doux"
+        "bar": "Grilled sea bass fillet, Mediterranean vegetable tartlet, pea purée & black olives",
+        "tournedos": "French beef fillet tournedos, confit shallot & red wine purée, potato compression, morel & sweet wine jus"
       }
     },
     "validation": {
