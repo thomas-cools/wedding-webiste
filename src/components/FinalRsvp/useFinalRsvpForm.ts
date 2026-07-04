@@ -8,6 +8,7 @@ import type {
   Appetizer,
   MainCourse,
   AddressSuggestion,
+  AccommodationType,
 } from './types'
 import { submitToNetlifyForms, sendConfirmationEmail, fetchAddressSuggestions } from './finalRsvpApi'
 
@@ -25,8 +26,8 @@ export interface UseFinalRsvpFormReturn {
   setEventAnswer: (event: keyof FinalRsvpEvents, answer: FinalRsvpEventAnswer) => void
   guests: FinalRsvpGuest[]
   updateGuest: (index: number, fields: Partial<FinalRsvpGuest>) => void
-  stayingAtVenue: boolean | null
-  setStayingAtVenue: (value: boolean | null) => void
+  accommodationType: AccommodationType
+  setAccommodationType: (value: AccommodationType) => void
   accommodationAddress: string
   setAccommodationAddress: (value: string) => void
   accommodationAddressPlaceId: string
@@ -36,6 +37,8 @@ export interface UseFinalRsvpFormReturn {
   setAccommodationSuggestionsOpen: (value: boolean) => void
   accommodationAutocompleteLimited: boolean
   selectAccommodationSuggestion: (s: AddressSuggestion) => void
+  hotelName: string
+  setHotelName: (value: string) => void
   songRequest: string
   setSongRequest: (value: string) => void
   arrivalDate: string
@@ -70,12 +73,13 @@ export function useFinalRsvpForm({
   )
 
   const [events, setEvents] = useState<FinalRsvpEvents>({ welcome: '', ceremony: '', brunch: '' })
-  const [stayingAtVenue, setStayingAtVenue] = useState<boolean | null>(null)
+  const [accommodationType, setAccommodationType] = useState<AccommodationType>('')
   const [accommodationAddress, setAccommodationAddress] = useState('')
   const [accommodationAddressPlaceId, setAccommodationAddressPlaceId] = useState('')
   const [accommodationSuggestions, setAccommodationSuggestions] = useState<AddressSuggestion[]>([])
   const [accommodationSuggestionsOpen, setAccommodationSuggestionsOpen] = useState(false)
   const [accommodationAutocompleteLimited, setAccommodationAutocompleteLimited] = useState(false)
+  const [hotelName, setHotelName] = useState('')
   const [songRequest, setSongRequest] = useState('')
   const [arrivalDate, setArrivalDate] = useState('')
   const [departureDate, setDepartureDate] = useState('')
@@ -149,12 +153,16 @@ export function useFinalRsvpForm({
       errs.events = t('finalRsvp.validation.eventsRequired')
     }
 
-    if (stayingAtVenue === null) {
-      errs.stayingAtVenue = t('finalRsvp.validation.accommodationRequired')
+    if (accommodationType === '') {
+      errs.accommodationType = t('finalRsvp.validation.accommodationRequired')
     }
 
-    if (stayingAtVenue === false && !accommodationAddress.trim()) {
+    if (accommodationType === 'airbnb' && !accommodationAddress.trim()) {
       errs.accommodationAddress = t('finalRsvp.validation.accommodationAddressRequired')
+    }
+
+    if (accommodationType === 'hotel' && !hotelName.trim()) {
+      errs.hotelName = t('finalRsvp.validation.hotelNameRequired')
     }
 
     // Validate menu choices for adults
@@ -167,22 +175,30 @@ export function useFinalRsvpForm({
 
     setErrors(errs)
     return errs
-  }, [events, stayingAtVenue, accommodationAddress, guests, t])
+  }, [events, accommodationType, accommodationAddress, hotelName, guests, t])
 
   const validateField = useCallback((field: string, value?: unknown) => {
     setErrors((prev) => {
       const copy = { ...prev }
       if (field === 'accommodationAddress') {
         const val = value !== undefined ? String(value) : accommodationAddress
-        if (stayingAtVenue === false && !val.trim()) {
+        if (accommodationType === 'airbnb' && !val.trim()) {
           copy.accommodationAddress = t('finalRsvp.validation.accommodationAddressRequired')
         } else {
           delete copy.accommodationAddress
         }
       }
+      if (field === 'hotelName') {
+        const val = value !== undefined ? String(value) : hotelName
+        if (accommodationType === 'hotel' && !val.trim()) {
+          copy.hotelName = t('finalRsvp.validation.hotelNameRequired')
+        } else {
+          delete copy.hotelName
+        }
+      }
       return copy
     })
-  }, [accommodationAddress, stayingAtVenue, t])
+  }, [accommodationAddress, hotelName, accommodationType, t])
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
@@ -192,7 +208,7 @@ export function useFinalRsvpForm({
     if (Object.keys(errs).length > 0) return
 
     // Warn if accommodation address might be incomplete
-    if (stayingAtVenue === false && accommodationAddress.trim() && !accommodationAddressPlaceId) {
+    if (accommodationType === 'airbnb' && accommodationAddress.trim() && !accommodationAddressPlaceId) {
       onAddressWarning?.()
     }
 
@@ -209,9 +225,10 @@ export function useFinalRsvpForm({
         email,
         events,
         guests,
-        stayingAtVenue,
-        accommodationAddress: accommodationAddress.trim() || undefined,
-        accommodationAddressPlaceId: accommodationAddressPlaceId || undefined,
+        accommodationType,
+        accommodationAddress: accommodationType === 'airbnb' ? (accommodationAddress.trim() || undefined) : undefined,
+        accommodationAddressPlaceId: accommodationType === 'airbnb' ? (accommodationAddressPlaceId || undefined) : undefined,
+        hotelName: accommodationType === 'hotel' ? (hotelName.trim() || undefined) : undefined,
         songRequest: songRequest.trim() || undefined,
         arrivalDate: arrivalDate.trim() || undefined,
         departureDate: departureDate.trim() || undefined,
@@ -229,7 +246,7 @@ export function useFinalRsvpForm({
       setIsSubmitting(false)
     }
   }, [
-    validate, stayingAtVenue, accommodationAddress, accommodationAddressPlaceId,
+    validate, accommodationType, accommodationAddress, accommodationAddressPlaceId, hotelName,
     onAddressWarning, firstName, email, events, guests, songRequest,
     arrivalDate, departureDate, photographyConsent, additionalNotes,
     i18n.language, onSuccess,
@@ -242,8 +259,8 @@ export function useFinalRsvpForm({
     setEventAnswer,
     guests,
     updateGuest,
-    stayingAtVenue,
-    setStayingAtVenue,
+    accommodationType,
+    setAccommodationType,
     accommodationAddress,
     setAccommodationAddress,
     accommodationAddressPlaceId,
@@ -253,6 +270,8 @@ export function useFinalRsvpForm({
     setAccommodationSuggestionsOpen,
     accommodationAutocompleteLimited,
     selectAccommodationSuggestion,
+    hotelName,
+    setHotelName,
     songRequest,
     setSongRequest,
     arrivalDate,

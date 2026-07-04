@@ -41,8 +41,9 @@ export interface AdminFinalRsvp {
     brunch: string
   }
   guests: AdminFinalRsvpGuest[]
-  stayingAtVenue: boolean | null
+  accommodationType: string
   accommodationAddress: string
+  hotelName: string
   songRequest: string
   arrivalDate: string
   departureDate: string
@@ -75,8 +76,9 @@ function normalizeSubmission(sub: NetlifyFormSubmission): AdminFinalRsvp {
     email: (d.email || '').trim().toLowerCase(),
     events: parseJsonField(d.events, { welcome: '', ceremony: '', brunch: '' }),
     guests: parseJsonField(d.guests, []),
-    stayingAtVenue: parseBooleanField(d.stayingAtVenue),
+    accommodationType: (d.accommodationType || '').trim(),
     accommodationAddress: (d.accommodationAddress || '').trim(),
+    hotelName: (d.hotelName || '').trim(),
     songRequest: (d.songRequest || '').trim(),
     arrivalDate: (d.arrivalDate || '').trim(),
     departureDate: (d.departureDate || '').trim(),

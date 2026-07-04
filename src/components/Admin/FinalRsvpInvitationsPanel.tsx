@@ -41,7 +41,7 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
   const [locale, setLocale] = useState('en')
   const [dryRunResult, setDryRunResult] = useState<{
     totalCount: number
-    confirmedGuests: Array<{ name: string; email: string; partySize: number; partyNames: string[] }>
+    confirmedGuests: Array<{ name: string; email: string; partySize: number; partyNames: string[]; locale?: string; previewUrl?: string }>
     sampleHtml: string
     finalRsvpUrl: string
   } | null>(null)
@@ -183,6 +183,8 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
                         <Th>Email</Th>
                         <Th>Party Size</Th>
                         <Th>Additional Guests</Th>
+                        <Th>Locale</Th>
+                        <Th>Preview</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
@@ -192,6 +194,27 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
                           <Td fontSize="xs">{g.email}</Td>
                           <Td>{g.partySize}</Td>
                           <Td fontSize="xs" color="gray.500">{g.partyNames.join(', ') || '—'}</Td>
+                          <Td>
+                            <Badge fontSize="10px" colorScheme={g.locale ? 'blue' : 'gray'}>
+                              {(g.locale || locale || 'en').toUpperCase()}
+                            </Badge>
+                          </Td>
+                          <Td>
+                            {g.previewUrl && (
+                              <Button
+                                as="a"
+                                href={g.previewUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                size="xs"
+                                variant="outline"
+                                colorScheme="blue"
+                                rightIcon={<Text as="span" fontSize="xs">↗</Text>}
+                              >
+                                Preview form
+                              </Button>
+                            )}
+                          </Td>
                         </Tr>
                       ))}
                     </Tbody>
@@ -203,20 +226,6 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
                       <Text fontSize="xs" fontWeight="medium" color="gray.500" textTransform="uppercase" letterSpacing="wider">
                         Email Preview — sample for {dryRunResult.confirmedGuests[0]?.name}
                       </Text>
-                      {dryRunResult.finalRsvpUrl && (
-                        <Button
-                          as="a"
-                          href={dryRunResult.finalRsvpUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          size="xs"
-                          variant="outline"
-                          colorScheme="blue"
-                          rightIcon={<Text as="span" fontSize="xs">↗</Text>}
-                        >
-                          Preview RSVP form
-                        </Button>
-                      )}
                     </HStack>
                     <Box
                       as="iframe"

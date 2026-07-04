@@ -59,6 +59,26 @@ const MAIN_LABELS: Record<string, string> = {
   tournedos: 'Tournedos de boeuf',
 }
 
+const ACCOMMODATION_TYPE_LABELS: Record<string, string> = {
+  chateau: 'Chateau',
+  airbnb: 'Airbnb',
+  hotel: 'Hotel',
+  '': '—',
+}
+
+const ACCOMMODATION_TYPE_COLORS: Record<string, string> = {
+  chateau: 'green',
+  airbnb: 'blue',
+  hotel: 'purple',
+  '': 'gray',
+}
+
+function accommodationDetail(rsvp: AdminFinalRsvp): string {
+  if (rsvp.accommodationType === 'airbnb') return rsvp.accommodationAddress
+  if (rsvp.accommodationType === 'hotel') return rsvp.hotelName
+  return ''
+}
+
 function StatCard({ label, value, color = 'secondary.navy' }: { label: string; value: number | string; color?: string }) {
   return (
     <Stat
@@ -124,8 +144,10 @@ function GuestDetailModal({ rsvp, isOpen, onClose }: { rsvp: AdminFinalRsvp | nu
             {/* Accommodation */}
             <Box>
               <Text fontWeight="semibold" mb={1} fontSize="sm" color="gray.500" textTransform="uppercase">Accommodation</Text>
-              <Text fontSize="sm">{rsvp.stayingAtVenue === true ? 'Staying at venue' : rsvp.stayingAtVenue === false ? 'Off-site' : '—'}</Text>
-              {rsvp.accommodationAddress && <Text fontSize="sm" color="gray.600">{rsvp.accommodationAddress}</Text>}
+              <Badge colorScheme={ACCOMMODATION_TYPE_COLORS[rsvp.accommodationType] || 'gray'}>
+                {ACCOMMODATION_TYPE_LABELS[rsvp.accommodationType] || '—'}
+              </Badge>
+              {accommodationDetail(rsvp) && <Text fontSize="sm" color="gray.600" mt={1}>{accommodationDetail(rsvp)}</Text>}
             </Box>
 
             {/* Menu choices */}
@@ -341,11 +363,11 @@ export function FinalRsvpDashboard({ adminData }: { adminData: UseAdminRsvpsRetu
                     </Tooltip>
                   </Td>
                   <Td fontSize="xs">
-                    {r.stayingAtVenue === true ? (
-                      <Badge colorScheme="green" fontSize="10px">Venue</Badge>
-                    ) : r.stayingAtVenue === false ? (
-                      <Tooltip label={r.accommodationAddress} isDisabled={!r.accommodationAddress}>
-                        <Badge colorScheme="blue" fontSize="10px">Off-site</Badge>
+                    {r.accommodationType ? (
+                      <Tooltip label={accommodationDetail(r)} isDisabled={!accommodationDetail(r)}>
+                        <Badge colorScheme={ACCOMMODATION_TYPE_COLORS[r.accommodationType] || 'gray'} fontSize="10px">
+                          {ACCOMMODATION_TYPE_LABELS[r.accommodationType] || r.accommodationType}
+                        </Badge>
                       </Tooltip>
                     ) : '—'}
                   </Td>

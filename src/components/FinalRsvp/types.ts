@@ -1,6 +1,7 @@
 export type Appetizer = 'ceviche' | 'gaspacho' | ''
 export type MainCourse = 'bar' | 'tournedos' | ''
 export type FinalRsvpEventAnswer = 'yes' | 'no' | 'arriving_late' | ''
+export type AccommodationType = 'chateau' | 'airbnb' | 'hotel' | ''
 
 export type FinalRsvpEvents = {
   welcome: FinalRsvpEventAnswer
@@ -28,9 +29,12 @@ export type FinalRsvp = {
   events: FinalRsvpEvents
   /** Index 0 is always the primary guest. Subsequent entries are additional party members. */
   guests: FinalRsvpGuest[]
-  stayingAtVenue: boolean | null
+  accommodationType: AccommodationType
+  /** Only used when accommodationType === 'airbnb' */
   accommodationAddress?: string
   accommodationAddressPlaceId?: string
+  /** Only used when accommodationType === 'hotel' */
+  hotelName?: string
   songRequest?: string
   arrivalDate?: string
   departureDate?: string

@@ -151,9 +151,10 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
         <input type="hidden" name="email" />
         <input type="hidden" name="events" />
         <input type="hidden" name="guests" />
-        <input type="hidden" name="stayingAtVenue" />
+        <input type="hidden" name="accommodationType" />
         <input type="hidden" name="accommodationAddress" />
         <input type="hidden" name="accommodationAddressPlaceId" />
+        <input type="hidden" name="hotelName" />
         <input type="hidden" name="songRequest" />
         <input type="hidden" name="arrivalDate" />
         <input type="hidden" name="departureDate" />
@@ -193,10 +194,10 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
           {/* ── Accommodation ── */}
           <Box>
             <Heading {...sectionHeadingProps}>{t('finalRsvp.form.accommodationTitle')}</Heading>
-            <FormControl isInvalid={!!form.errors.stayingAtVenue && form.hasAttemptedSubmit} mb={4}>
+            <FormControl isInvalid={!!form.errors.accommodationType && form.hasAttemptedSubmit} mb={4}>
               <RadioGroup
-                value={form.stayingAtVenue === null ? '' : String(form.stayingAtVenue)}
-                onChange={(v) => form.setStayingAtVenue(v === 'true')}
+                value={form.accommodationType}
+                onChange={(v) => form.setAccommodationType(v as typeof form.accommodationType)}
                 sx={{
                   '.chakra-radio__control': {
                     borderColor: 'rgba(48,15,12,0.35)',
@@ -212,20 +213,23 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                 }}
               >
                 <Stack spacing={3}>
-                  <Radio value="true">
-                    <Text fontSize="sm">{t('finalRsvp.form.stayingAtVenue')}</Text>
+                  <Radio value="chateau">
+                    <Text fontSize="sm">{t('finalRsvp.form.accommodationChateau')}</Text>
                   </Radio>
-                  <Radio value="false">
-                    <Text fontSize="sm">{t('finalRsvp.form.notStayingAtVenue')}</Text>
+                  <Radio value="airbnb">
+                    <Text fontSize="sm">{t('finalRsvp.form.accommodationAirbnb')}</Text>
+                  </Radio>
+                  <Radio value="hotel">
+                    <Text fontSize="sm">{t('finalRsvp.form.accommodationHotel')}</Text>
                   </Radio>
                 </Stack>
               </RadioGroup>
-              {form.errors.stayingAtVenue && form.hasAttemptedSubmit && (
-                <FormErrorMessage>{form.errors.stayingAtVenue}</FormErrorMessage>
+              {form.errors.accommodationType && form.hasAttemptedSubmit && (
+                <FormErrorMessage>{form.errors.accommodationType}</FormErrorMessage>
               )}
             </FormControl>
 
-            {form.stayingAtVenue === false && (
+            {form.accommodationType === 'airbnb' && (
               <FormControl isInvalid={!!form.errors.accommodationAddress}>
                 <FormLabel>{t('finalRsvp.form.accommodationAddress')}</FormLabel>
                 <Box position="relative">
@@ -282,6 +286,19 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                 )}
                 <FormErrorMessage>{form.errors.accommodationAddress}</FormErrorMessage>
                 <FormHelperText>{t('finalRsvp.form.accommodationAddressHint')}</FormHelperText>
+              </FormControl>
+            )}
+
+            {form.accommodationType === 'hotel' && (
+              <FormControl isInvalid={!!form.errors.hotelName}>
+                <FormLabel>{t('finalRsvp.form.hotelName')}</FormLabel>
+                <Input
+                  value={form.hotelName}
+                  onChange={(e) => form.setHotelName(e.target.value)}
+                  onBlur={() => form.validateField('hotelName')}
+                  placeholder={t('finalRsvp.form.hotelNamePlaceholder')}
+                />
+                <FormErrorMessage>{form.errors.hotelName}</FormErrorMessage>
               </FormControl>
             )}
           </Box>

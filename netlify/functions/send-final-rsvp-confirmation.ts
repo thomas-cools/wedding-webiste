@@ -19,8 +19,9 @@ interface FinalRsvpData {
   email: string
   events: FinalRsvpEvents
   guests: FinalRsvpGuest[]
-  stayingAtVenue: boolean | null
+  accommodationType: string
   accommodationAddress?: string
+  hotelName?: string
   songRequest?: string
   arrivalDate?: string
   departureDate?: string
@@ -42,9 +43,11 @@ type EmailStrings = {
   ceremony: string
   brunch: string
   accommodation: string
-  stayingAtVenue: string
-  notStayingAtVenue: string
+  accommodationChateau: string
+  accommodationAirbnb: string
+  accommodationHotel: string
   accommodationAddress: string
+  hotelName: string
   menuChoices: string
   yourParty: string
   childrensMeal: string
@@ -84,9 +87,11 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
     ceremony: 'Ceremony & Reception (Wed, Aug 26)',
     brunch: 'Farewell Brunch (Thu, Aug 27)',
     accommodation: 'Accommodation',
-    stayingAtVenue: 'Staying at the venue',
-    notStayingAtVenue: 'Staying off-site',
+    accommodationChateau: 'Staying at the venue (Chateau)',
+    accommodationAirbnb: 'Staying at an Airbnb',
+    accommodationHotel: 'Staying at a hotel',
     accommodationAddress: 'Accommodation Address',
+    hotelName: 'Hotel Name',
     menuChoices: 'Menu Choices',
     yourParty: 'Your Party',
     childrensMeal: "Children's Meal",
@@ -131,9 +136,11 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
     ceremony: 'Ceremonia y recepción (mié, 26 ago)',
     brunch: 'Brunch de despedida (jue, 27 ago)',
     accommodation: 'Alojamiento',
-    stayingAtVenue: 'Se hospeda en el lugar',
-    notStayingAtVenue: 'Se hospeda fuera del lugar',
+    accommodationChateau: 'Se hospeda en el lugar (Chateau)',
+    accommodationAirbnb: 'Se hospeda en un Airbnb',
+    accommodationHotel: 'Se hospeda en un hotel',
     accommodationAddress: 'Dirección de alojamiento',
+    hotelName: 'Nombre del hotel',
     menuChoices: 'Elecciones de menú',
     yourParty: 'Tu grupo',
     childrensMeal: 'Menú infantil',
@@ -178,9 +185,11 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
     ceremony: 'Ceremonie & receptie (wo, 26 aug)',
     brunch: 'Afscheidsbrunch (do, 27 aug)',
     accommodation: 'Accommodatie',
-    stayingAtVenue: 'Verblijft op de locatie',
-    notStayingAtVenue: 'Verblijft buiten de locatie',
+    accommodationChateau: 'Verblijft op de locatie (Chateau)',
+    accommodationAirbnb: 'Verblijft in een Airbnb',
+    accommodationHotel: 'Verblijft in een hotel',
     accommodationAddress: 'Accommodatieadres',
+    hotelName: 'Hotelnaam',
     menuChoices: 'Menukeuzes',
     yourParty: 'Jouw Gezelschap',
     childrensMeal: 'Kindermenu',
@@ -234,7 +243,7 @@ function escapeHtml(value: string): string {
 
 function generateEmailHtml(data: FinalRsvpData): string {
   const s = EMAIL_STRINGS[normalizeLocale(data.locale)]
-  const { firstName, events, guests, stayingAtVenue, accommodationAddress, songRequest, arrivalDate, departureDate, photographyConsent, additionalNotes } = data
+  const { firstName, events, guests, accommodationType, accommodationAddress, hotelName, songRequest, arrivalDate, departureDate, photographyConsent, additionalNotes } = data
 
   const renderEventRow = (label: string, answer: string) =>
     `<tr>
@@ -299,8 +308,14 @@ function generateEmailHtml(data: FinalRsvpData): string {
               <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #F6F1EB; border: 1px solid #E3DFCE; margin-bottom: 24px;">
                 <tr><td style="padding: 20px;">
                   <h3 style="margin: 0 0 12px; font-size: 14px; color: #648EC0; text-transform: uppercase; letter-spacing: 1px;">${s.accommodation}</h3>
-                  <p style="margin: 0 0 8px; font-size: 14px;">${stayingAtVenue ? s.stayingAtVenue : s.notStayingAtVenue}</p>
-                  ${!stayingAtVenue && accommodationAddress ? `<p style="margin: 0; font-size: 14px; color: #666;">${s.accommodationAddress}: ${escapeHtml(accommodationAddress)}</p>` : ''}
+                  <p style="margin: 0 0 8px; font-size: 14px;">${
+                    accommodationType === 'chateau' ? s.accommodationChateau
+                    : accommodationType === 'airbnb' ? s.accommodationAirbnb
+                    : accommodationType === 'hotel' ? s.accommodationHotel
+                    : s.notSpecified
+                  }</p>
+                  ${accommodationType === 'airbnb' && accommodationAddress ? `<p style="margin: 0; font-size: 14px; color: #666;">${s.accommodationAddress}: ${escapeHtml(accommodationAddress)}</p>` : ''}
+                  ${accommodationType === 'hotel' && hotelName ? `<p style="margin: 0; font-size: 14px; color: #666;">${s.hotelName}: ${escapeHtml(hotelName)}</p>` : ''}
                 </td></tr>
               </table>
 
@@ -344,7 +359,7 @@ function generateEmailHtml(data: FinalRsvpData): string {
 
 function generatePlainText(data: FinalRsvpData): string {
   const s = EMAIL_STRINGS[normalizeLocale(data.locale)]
-  const { firstName, events, guests, stayingAtVenue, accommodationAddress, songRequest, arrivalDate, departureDate, photographyConsent, additionalNotes } = data
+  const { firstName, events, guests, accommodationType, accommodationAddress, hotelName, songRequest, arrivalDate, departureDate, photographyConsent, additionalNotes } = data
 
   let text = `${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}\n${weddingConfig.date.display}\n\n`
   text += `${s.thanks(firstName)}\n\n${s.intro}\n\n`
@@ -353,8 +368,14 @@ function generatePlainText(data: FinalRsvpData): string {
   text += `• ${s.ceremony}: ${s.eventAnswer[events?.ceremony || ''] || s.notSpecified}\n`
   text += `• ${s.brunch}: ${s.eventAnswer[events?.brunch || ''] || s.notSpecified}\n\n`
   text += `${s.accommodation.toUpperCase()}\n─────────────\n`
-  text += `${stayingAtVenue ? s.stayingAtVenue : s.notStayingAtVenue}\n`
-  if (!stayingAtVenue && accommodationAddress) text += `${s.accommodationAddress}: ${accommodationAddress}\n`
+  text += `${
+    accommodationType === 'chateau' ? s.accommodationChateau
+    : accommodationType === 'airbnb' ? s.accommodationAirbnb
+    : accommodationType === 'hotel' ? s.accommodationHotel
+    : s.notSpecified
+  }\n`
+  if (accommodationType === 'airbnb' && accommodationAddress) text += `${s.accommodationAddress}: ${accommodationAddress}\n`
+  if (accommodationType === 'hotel' && hotelName) text += `${s.hotelName}: ${hotelName}\n`
   text += `\n${s.menuChoices.toUpperCase()}\n─────────────\n`
   for (const g of guests) {
     if (g.isChild) {

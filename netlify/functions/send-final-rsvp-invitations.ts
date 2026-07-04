@@ -287,6 +287,7 @@ interface ConfirmedGuest {
   partySize: number
   partyNames: string[]
   locale?: string
+  previewUrl?: string
 }
 
 function parseGuestsField(raw?: string): Array<{ name: string }> {
@@ -396,13 +397,20 @@ const handler: Handler = async (event: HandlerEvent) => {
     const sampleLocale = normalizeLocale(guests[0].locale || localeOverride)
     const sampleToken = encodeFinalRsvpToken({ name: guests[0].name, email: guests[0].email, partyNames: guests[0].partyNames })
     const sampleUrl = `${baseFinalRsvpUrl}?t=${sampleToken}&lang=${sampleLocale}`
+
+    const confirmedGuestsWithPreview: ConfirmedGuest[] = guests.map((guest) => {
+      const guestLocale = normalizeLocale(guest.locale || localeOverride)
+      const guestToken = encodeFinalRsvpToken({ name: guest.name, email: guest.email, partyNames: guest.partyNames })
+      return { ...guest, previewUrl: `${baseFinalRsvpUrl}?t=${guestToken}&lang=${guestLocale}` }
+    })
+
     return {
       statusCode: 200,
       body: JSON.stringify({
         dryRun: true,
         locale: localeOverride || 'en',
         finalRsvpUrl: sampleUrl,
-        confirmedGuests: guests,
+        confirmedGuests: confirmedGuestsWithPreview,
         totalCount: guests.length,
         sampleHtml: generateInvitationHtml(guests[0].name, sampleUrl, sampleLocale, guests[0].partySize, guests[0].partyNames),
         sampleText: generateInvitationText(guests[0].name, sampleUrl, sampleLocale, guests[0].partySize, guests[0].partyNames),

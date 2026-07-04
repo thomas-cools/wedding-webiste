@@ -14,8 +14,9 @@ export interface AdminFinalRsvp {
   email: string
   events: { welcome: string; ceremony: string; brunch: string }
   guests: AdminFinalRsvpGuest[]
-  stayingAtVenue: boolean | null
+  accommodationType: string
   accommodationAddress: string
+  hotelName: string
   songRequest: string
   arrivalDate: string
   departureDate: string
@@ -359,12 +360,21 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
   }
 
   const exportFinalRsvpsCsv = useCallback(() => {
+    const ACCOMMODATION_TYPE_LABELS: Record<string, string> = {
+      chateau: 'Chateau',
+      airbnb: 'Airbnb',
+      hotel: 'Hotel',
+    }
+    const accommodationTypeLabel = (r: AdminFinalRsvp) => ACCOMMODATION_TYPE_LABELS[r.accommodationType] || ''
+    const accommodationDetail = (r: AdminFinalRsvp) =>
+      r.accommodationType === 'airbnb' ? r.accommodationAddress : r.accommodationType === 'hotel' ? r.hotelName : ''
+
     const rows: string[][] = []
     // Header
     rows.push([
       'Primary Name', 'Email', 'Welcome Dinner', 'Ceremony & Reception', 'Farewell Brunch',
       'Guest Name', 'Age Group', 'Appetizer', 'Main Course',
-      'Song Request', 'Staying at Venue', 'Accommodation Address',
+      'Song Request', 'Accommodation Type', 'Accommodation Detail',
       'Arrival Date', 'Departure Date', 'Photography Consent', 'Submitted At',
     ])
 
@@ -374,8 +384,8 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
           r.firstName, r.email,
           r.events.welcome, r.events.ceremony, r.events.brunch,
           '', '', '', '',
-          r.songRequest, r.stayingAtVenue === true ? 'Yes' : r.stayingAtVenue === false ? 'No' : '',
-          r.accommodationAddress, r.arrivalDate, r.departureDate,
+          r.songRequest, accommodationTypeLabel(r),
+          accommodationDetail(r), r.arrivalDate, r.departureDate,
           r.photographyConsent === true ? 'Yes' : r.photographyConsent === false ? 'No' : '',
           r.submittedAt,
         ])
@@ -392,8 +402,8 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
             g.isChild ? "Children's Meal" : APPETIZER_LABELS[g.appetizer || ''] || g.appetizer || '',
             g.isChild ? "Children's Meal" : MAIN_LABELS[g.main || ''] || g.main || '',
             i === 0 ? r.songRequest : '',
-            i === 0 ? (r.stayingAtVenue === true ? 'Yes' : r.stayingAtVenue === false ? 'No' : '') : '',
-            i === 0 ? r.accommodationAddress : '',
+            i === 0 ? accommodationTypeLabel(r) : '',
+            i === 0 ? accommodationDetail(r) : '',
             i === 0 ? r.arrivalDate : '',
             i === 0 ? r.departureDate : '',
             i === 0 ? (r.photographyConsent === true ? 'Yes' : r.photographyConsent === false ? 'No' : '') : '',
