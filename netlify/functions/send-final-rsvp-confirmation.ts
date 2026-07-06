@@ -1,30 +1,30 @@
 import type { Handler, HandlerEvent } from '@netlify/functions'
 import { consumeRateLimit, getClientIp, rateLimitHeaders, rateLimitKey } from './utils/rate-limiter'
 
-interface FinalRsvpGuest {
-  name: string
-  isChild: boolean
-  appetizer?: string
-  main?: string
-}
-
 interface FinalRsvpEvents {
   welcome: string
   ceremony: string
   brunch: string
 }
 
+interface FinalRsvpGuest {
+  name: string
+  events: FinalRsvpEvents
+  isChild: boolean
+  appetizer?: string
+  main?: string
+  allergies?: string
+}
+
 interface FinalRsvpData {
   firstName: string
   email: string
-  events: FinalRsvpEvents
   guests: FinalRsvpGuest[]
   accommodationType: string
   accommodationAddress?: string
   hotelName?: string
+  transportationPreference?: string
   songRequest?: string
-  arrivalDate?: string
-  departureDate?: string
   photographyConsent?: boolean
   additionalNotes?: string
   locale?: string
@@ -48,14 +48,16 @@ type EmailStrings = {
   accommodationHotel: string
   accommodationAddress: string
   hotelName: string
+  transportationLabel: string
+  transportationTaxi: string
+  transportationOwn: string
   menuChoices: string
   yourParty: string
   childrensMeal: string
   appetizer: string
   mainCourse: string
+  allergiesLabel: string
   songRequest: string
-  arrival: string
-  departure: string
   photographyConsent: string
   yes: string
   no: string
@@ -92,14 +94,16 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
     accommodationHotel: 'Staying at a hotel',
     accommodationAddress: 'Accommodation Address',
     hotelName: 'Hotel Name',
+    transportationLabel: 'Transportation',
+    transportationTaxi: 'Interested in taxi transportation to/from the venue',
+    transportationOwn: 'Arranging own transportation',
     menuChoices: 'Menu Choices',
     yourParty: 'Your Party',
     childrensMeal: "Children's Meal",
     appetizer: 'Appetizer',
     mainCourse: 'Main Course',
+    allergiesLabel: 'Allergies & Precautions',
     songRequest: 'Song Request',
-    arrival: 'Arrival Date',
-    departure: 'Departure Date',
     photographyConsent: 'Photography / Video Consent',
     yes: 'Yes',
     no: 'No',
@@ -116,12 +120,13 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
     },
     appetizerValue: {
       ceviche: 'Ceviche de Bar français, citron vert et piment d\'Espelette',
-      gaspacho: 'Gaspacho fumé aux tomates jaunes et éclats de légumes rouges (V)',
+      gaspacho: 'Gaspacho fumé aux tomates jaunes et éclats de légumes rouges',
       '': 'Not specified',
     },
     mainCourseValue: {
       bar: 'Filet de Bar grillé, tartelette de légumes méditerranéens, purée de petits pois et olives noires',
       tournedos: 'Tournedos de filet de boeuf français, purée d\'échalotes confites au vin rouge, compression de pommes de terre, jus aux morilles et vin doux',
+      vegan: 'Seasonal vegetable tartlet, root vegetable purée & red wine jus',
       '': 'Not specified',
     },
   },
@@ -141,14 +146,16 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
     accommodationHotel: 'Se hospeda en un hotel',
     accommodationAddress: 'Dirección de alojamiento',
     hotelName: 'Nombre del hotel',
+    transportationLabel: 'Transporte',
+    transportationTaxi: 'Interesado/a en transporte en taxi hacia y desde el lugar',
+    transportationOwn: 'Organizará su propio transporte',
     menuChoices: 'Elecciones de menú',
     yourParty: 'Tu grupo',
     childrensMeal: 'Menú infantil',
     appetizer: 'Entrante',
     mainCourse: 'Plato principal',
+    allergiesLabel: 'Alergias y Precauciones',
     songRequest: 'Canción solicitada',
-    arrival: 'Fecha de llegada',
-    departure: 'Fecha de salida',
     photographyConsent: 'Consentimiento de fotografía / video',
     yes: 'Sí',
     no: 'No',
@@ -165,12 +172,13 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
     },
     appetizerValue: {
       ceviche: 'Ceviche de Bar français, citron vert et piment d\'Espelette',
-      gaspacho: 'Gaspacho fumé aux tomates jaunes et éclats de légumes rouges (V)',
+      gaspacho: 'Gaspacho fumé aux tomates jaunes et éclats de légumes rouges',
       '': 'No especificado',
     },
     mainCourseValue: {
       bar: 'Filet de Bar grillé, tartelette de légumes méditerranéens, purée de petits pois et olives noires',
       tournedos: 'Tournedos de filet de boeuf français, purée d\'échalotes confites au vin rouge, compression de pommes de terre, jus aux morilles et vin doux',
+      vegan: 'Tartaleta de verduras de temporada, puré de raíces y jus de vino tinto',
       '': 'No especificado',
     },
   },
@@ -190,14 +198,16 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
     accommodationHotel: 'Verblijft in een hotel',
     accommodationAddress: 'Accommodatieadres',
     hotelName: 'Hotelnaam',
+    transportationLabel: 'Vervoer',
+    transportationTaxi: 'Geïnteresseerd in taxivervoer van en naar de locatie',
+    transportationOwn: 'Regelt eigen vervoer',
     menuChoices: 'Menukeuzes',
     yourParty: 'Jouw Gezelschap',
     childrensMeal: 'Kindermenu',
     appetizer: 'Voorgerecht',
     mainCourse: 'Hoofdgerecht',
+    allergiesLabel: 'Allergieën & Voorzorgsmaatregelen',
     songRequest: 'Muziekverzoek',
-    arrival: 'Aankomstdatum',
-    departure: 'Vertrekdatum',
     photographyConsent: 'Toestemming foto / video',
     yes: 'Ja',
     no: 'Nee',
@@ -214,12 +224,13 @@ const EMAIL_STRINGS: Record<EmailLocale, EmailStrings> = {
     },
     appetizerValue: {
       ceviche: 'Ceviche de Bar français, citron vert et piment d\'Espelette',
-      gaspacho: 'Gaspacho fumé aux tomates jaunes et éclats de légumes rouges (V)',
+      gaspacho: 'Gaspacho fumé aux tomates jaunes et éclats de légumes rouges',
       '': 'Niet opgegeven',
     },
     mainCourseValue: {
       bar: 'Filet de Bar grillé, tartelette de légumes méditerranéens, purée de petits pois et olives noires',
       tournedos: 'Tournedos de filet de boeuf français, purée d\'échalotes confites au vin rouge, compression de pommes de terre, jus aux morilles et vin doux',
+      vegan: 'Groentetaartje van het seizoen, wortelpuree en rodewijnjus',
       '': 'Niet opgegeven',
     },
   },
@@ -243,7 +254,7 @@ function escapeHtml(value: string): string {
 
 function generateEmailHtml(data: FinalRsvpData): string {
   const s = EMAIL_STRINGS[normalizeLocale(data.locale)]
-  const { firstName, events, guests, accommodationType, accommodationAddress, hotelName, songRequest, arrivalDate, departureDate, photographyConsent, additionalNotes } = data
+  const { firstName, guests, accommodationType, accommodationAddress, hotelName, transportationPreference, songRequest, photographyConsent, additionalNotes } = data
 
   const renderEventRow = (label: string, answer: string) =>
     `<tr>
@@ -251,12 +262,22 @@ function generateEmailHtml(data: FinalRsvpData): string {
       <td style="text-align: right; padding: 6px 0;">${escapeHtml(s.eventAnswer[answer] || answer || s.eventAnswer[''])}</td>
     </tr>`
 
+  const guestEventRows = guests.map((g) => `<tr>
+      <td colspan="2" style="padding: 10px 0 4px; border-top: 1px solid #E3DFCE;">
+        <strong>${escapeHtml(g.name)}</strong>
+      </td>
+    </tr>
+    ${renderEventRow(s.welcomeDinner, g.events?.welcome || '')}
+    ${renderEventRow(s.ceremony, g.events?.ceremony || '')}
+    ${renderEventRow(s.brunch, g.events?.brunch || '')}`).join('')
+
   const guestMenuRows = guests.map((g) => {
     if (g.isChild) {
       return `<tr>
         <td colspan="2" style="padding: 10px 0; border-top: 1px solid #E3DFCE;">
           <strong>${escapeHtml(g.name)}</strong> &nbsp;
           <span style="background: #E3DFCE; border-radius: 4px; padding: 2px 8px; font-size: 12px;">${s.childrensMeal}</span>
+          ${g.allergies ? `<br><span style="font-size: 13px; color: #666;">${s.allergiesLabel}: </span><span style="font-size: 13px;">${escapeHtml(g.allergies)}</span>` : ''}
         </td>
       </tr>`
     }
@@ -267,6 +288,7 @@ function generateEmailHtml(data: FinalRsvpData): string {
         <span style="font-size: 13px;">${escapeHtml(s.appetizerValue[g.appetizer || ''] || s.notSpecified)}</span><br>
         <span style="font-size: 13px; color: #666;">${s.mainCourse}: </span>
         <span style="font-size: 13px;">${escapeHtml(s.mainCourseValue[g.main || ''] || s.notSpecified)}</span>
+        ${g.allergies ? `<br><span style="font-size: 13px; color: #666;">${s.allergiesLabel}: </span><span style="font-size: 13px;">${escapeHtml(g.allergies)}</span>` : ''}
       </td>
     </tr>`
   }).join('')
@@ -298,9 +320,7 @@ function generateEmailHtml(data: FinalRsvpData): string {
                 <tr><td style="padding: 20px;">
                   <h3 style="margin: 0 0 12px; font-size: 14px; color: #648EC0; text-transform: uppercase; letter-spacing: 1px;">${s.events}</h3>
                   <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 14px;">
-                    ${renderEventRow(s.welcomeDinner, events?.welcome || '')}
-                    ${renderEventRow(s.ceremony, events?.ceremony || '')}
-                    ${renderEventRow(s.brunch, events?.brunch || '')}
+                    ${guestEventRows}
                   </table>
                 </td></tr>
               </table>
@@ -316,6 +336,7 @@ function generateEmailHtml(data: FinalRsvpData): string {
                   }</p>
                   ${accommodationType === 'airbnb' && accommodationAddress ? `<p style="margin: 0; font-size: 14px; color: #666;">${s.accommodationAddress}: ${escapeHtml(accommodationAddress)}</p>` : ''}
                   ${accommodationType === 'hotel' && hotelName ? `<p style="margin: 0; font-size: 14px; color: #666;">${s.hotelName}: ${escapeHtml(hotelName)}</p>` : ''}
+                  ${accommodationType !== 'chateau' && accommodationType ? `<p style="margin: 8px 0 0; font-size: 14px; color: #666;">${s.transportationLabel}: ${transportationPreference === 'taxi' ? s.transportationTaxi : transportationPreference === 'own' ? s.transportationOwn : s.notSpecified}</p>` : ''}
                 </td></tr>
               </table>
 
@@ -331,8 +352,6 @@ function generateEmailHtml(data: FinalRsvpData): string {
               <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #F6F1EB; border: 1px solid #E3DFCE; margin-bottom: 24px;">
                 <tr><td style="padding: 20px; font-size: 14px;">
                   ${songRequest ? `<p style="margin: 0 0 8px;"><strong style="color: #648EC0;">${s.songRequest}:</strong> ${escapeHtml(songRequest)}</p>` : ''}
-                  ${arrivalDate ? `<p style="margin: 0 0 8px;"><strong style="color: #648EC0;">${s.arrival}:</strong> ${escapeHtml(arrivalDate)}</p>` : ''}
-                  ${departureDate ? `<p style="margin: 0 0 8px;"><strong style="color: #648EC0;">${s.departure}:</strong> ${escapeHtml(departureDate)}</p>` : ''}
                   <p style="margin: 0;"><strong style="color: #648EC0;">${s.photographyConsent}:</strong> ${photographyConsent === true ? s.yes : photographyConsent === false ? s.no : s.notSpecified}</p>
                   ${additionalNotes ? `<p style="margin: 8px 0 0;"><strong style="color: #648EC0;">${s.additionalNotes}:</strong><br>${escapeHtml(additionalNotes)}</p>` : ''}
                 </td></tr>
@@ -359,15 +378,18 @@ function generateEmailHtml(data: FinalRsvpData): string {
 
 function generatePlainText(data: FinalRsvpData): string {
   const s = EMAIL_STRINGS[normalizeLocale(data.locale)]
-  const { firstName, events, guests, accommodationType, accommodationAddress, hotelName, songRequest, arrivalDate, departureDate, photographyConsent, additionalNotes } = data
+  const { firstName, guests, accommodationType, accommodationAddress, hotelName, transportationPreference, songRequest, photographyConsent, additionalNotes } = data
 
   let text = `${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}\n${weddingConfig.date.display}\n\n`
   text += `${s.thanks(firstName)}\n\n${s.intro}\n\n`
   text += `${s.events.toUpperCase()}\n─────────\n`
-  text += `• ${s.welcomeDinner}: ${s.eventAnswer[events?.welcome || ''] || s.notSpecified}\n`
-  text += `• ${s.ceremony}: ${s.eventAnswer[events?.ceremony || ''] || s.notSpecified}\n`
-  text += `• ${s.brunch}: ${s.eventAnswer[events?.brunch || ''] || s.notSpecified}\n\n`
-  text += `${s.accommodation.toUpperCase()}\n─────────────\n`
+  for (const g of guests) {
+    text += `${g.name}:\n`
+    text += `  • ${s.welcomeDinner}: ${s.eventAnswer[g.events?.welcome || ''] || s.notSpecified}\n`
+    text += `  • ${s.ceremony}: ${s.eventAnswer[g.events?.ceremony || ''] || s.notSpecified}\n`
+    text += `  • ${s.brunch}: ${s.eventAnswer[g.events?.brunch || ''] || s.notSpecified}\n`
+  }
+  text += `\n${s.accommodation.toUpperCase()}\n─────────────\n`
   text += `${
     accommodationType === 'chateau' ? s.accommodationChateau
     : accommodationType === 'airbnb' ? s.accommodationAirbnb
@@ -376,6 +398,9 @@ function generatePlainText(data: FinalRsvpData): string {
   }\n`
   if (accommodationType === 'airbnb' && accommodationAddress) text += `${s.accommodationAddress}: ${accommodationAddress}\n`
   if (accommodationType === 'hotel' && hotelName) text += `${s.hotelName}: ${hotelName}\n`
+  if (accommodationType && accommodationType !== 'chateau') {
+    text += `${s.transportationLabel}: ${transportationPreference === 'taxi' ? s.transportationTaxi : transportationPreference === 'own' ? s.transportationOwn : s.notSpecified}\n`
+  }
   text += `\n${s.menuChoices.toUpperCase()}\n─────────────\n`
   for (const g of guests) {
     if (g.isChild) {
@@ -385,10 +410,9 @@ function generatePlainText(data: FinalRsvpData): string {
       text += `  ${s.appetizer}: ${s.appetizerValue[g.appetizer || ''] || s.notSpecified}\n`
       text += `  ${s.mainCourse}: ${s.mainCourseValue[g.main || ''] || s.notSpecified}\n`
     }
+    if (g.allergies) text += `  ${s.allergiesLabel}: ${g.allergies}\n`
   }
   if (songRequest) text += `\n${s.songRequest}: ${songRequest}`
-  if (arrivalDate) text += `\n${s.arrival}: ${arrivalDate}`
-  if (departureDate) text += `\n${s.departure}: ${departureDate}`
   text += `\n${s.photographyConsent}: ${photographyConsent === true ? s.yes : photographyConsent === false ? s.no : s.notSpecified}`
   if (additionalNotes) text += `\n\n${s.additionalNotes}:\n${additionalNotes}`
   text += `\n\n${'─'.repeat(40)}\n${s.updateNote}\n\n${s.questions} ${weddingConfig.contactEmail}\n${s.withLove}, ${weddingConfig.couple.person1} & ${weddingConfig.couple.person2}`

@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Alert,
   AlertIcon,
   Badge,
   Box,
   Button,
+  Checkbox,
   Heading,
   HStack,
   Modal,
@@ -22,6 +23,7 @@ import {
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
   useDisclosure,
   useToast,
@@ -37,7 +39,7 @@ interface SendResult {
 }
 
 export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRsvpsReturn }) {
-  const { filteredRsvps, selectedIds, isLoading, getEffectiveLocale } = adminData
+  const { filteredRsvps, selectedIds, isLoading, getEffectiveLocale, emailOpensMap } = adminData
   const [locale, setLocale] = useState('en')
   const [dryRunResult, setDryRunResult] = useState<{
     totalCount: number
@@ -47,12 +49,39 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
   } | null>(null)
   const [sendResult, setSendResult] = useState<SendResult | null>(null)
   const [loading, setLoading] = useState(false)
+  const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set())
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
   const confirmedGuests = selectedIds.size > 0
     ? filteredRsvps.filter((r) => selectedIds.has(r.id))
     : filteredRsvps.filter((r) => r.likelihood === 'definitely' || r.likelihood === 'highly_likely')
+
+  // Reset the checked set to "all checked" whenever the candidate list itself
+  // changes (dashboard selection toggled, filters changed, data refetched
+  // with a different set of ids). Does not reset on every refetch if the
+  // underlying ids are unchanged, so manual unchecks persist across reloads.
+  const candidateIdsKey = useMemo(
+    () => confirmedGuests.map((r) => r.id).sort().join(','),
+    [confirmedGuests]
+  )
+  useEffect(() => {
+    setCheckedIds(new Set(candidateIdsKey ? candidateIdsKey.split(',') : []))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [candidateIdsKey])
+
+  const toggleChecked = (id: string) => {
+    setCheckedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+  const checkAll = () => setCheckedIds(new Set(confirmedGuests.map((r) => r.id)))
+  const checkNone = () => setCheckedIds(new Set())
+
+  const recipients = confirmedGuests.filter((r) => checkedIds.has(r.id))
 
   const handleDryRun = async () => {
     setLoading(true)
@@ -64,7 +93,7 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
         body: JSON.stringify({
           dryRun: true,
           locale,
-          guests: confirmedGuests.map((r) => ({
+          guests: recipients.map((r) => ({
             name: r.firstName,
             email: r.email,
             locale: getEffectiveLocale(r),
@@ -96,7 +125,7 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
         body: JSON.stringify({
           dryRun: false,
           locale,
-          guests: confirmedGuests.map((r) => ({
+          guests: recipients.map((r) => ({
             name: r.firstName,
             email: r.email,
             locale: getEffectiveLocale(r),
@@ -134,7 +163,7 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
       <VStack spacing={4} align="stretch">
         <Box bg="white" rounded="xl" p={5} shadow="sm" border="1px solid" borderColor="gray.100">
           <Text fontSize="sm" color="gray.500" mb={4}>
-            Sends a personalized email to each confirmed guest (Definitely + Highly Likely) with a magic link to complete their final RSVP — including day-by-day attendance, menu choices, and accommodation details.
+            Sends a personalized email to each checked guest below with a magic link to complete their final RSVP — including day-by-day attendance, menu choices, and accommodation details.
             {selectedIds.size > 0 && ` (${selectedIds.size} selected from dashboard)`}
           </Text>
 
@@ -148,7 +177,7 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
               </Select>
             </Box>
             <Box flex={1} />
-            <Button variant="outline" colorScheme="blue" size="sm" onClick={handleDryRun} isLoading={loading}>
+            <Button variant="outline" colorScheme="blue" size="sm" onClick={handleDryRun} isLoading={loading} isDisabled={recipients.length === 0}>
               Preview (Dry Run)
             </Button>
             <Button
@@ -157,11 +186,90 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
               _hover={{ bg: 'secondary.maroon' }}
               size="sm"
               onClick={onOpen}
-              isDisabled={confirmedGuests.length === 0}
+              isDisabled={recipients.length === 0}
             >
-              Send Invitations
+              Send Invitations ({recipients.length})
             </Button>
           </HStack>
+        </Box>
+
+        {/* Recipient selection */}
+        <Box bg="white" rounded="xl" p={5} shadow="sm" border="1px solid" borderColor="gray.100">
+          <HStack mb={3} justify="space-between" flexWrap="wrap">
+            <HStack>
+              <Text fontWeight="semibold">Recipients</Text>
+              <Badge colorScheme="blue">{recipients.length} of {confirmedGuests.length} selected</Badge>
+            </HStack>
+            <HStack>
+              <Button size="xs" variant="outline" onClick={checkAll} isDisabled={confirmedGuests.length === 0}>
+                Select All
+              </Button>
+              <Button size="xs" variant="outline" onClick={checkNone} isDisabled={confirmedGuests.length === 0}>
+                Select None
+              </Button>
+            </HStack>
+          </HStack>
+
+          {isLoading ? (
+            <VStack spacing={2}>{[...Array(3)].map((_, i) => <Skeleton key={i} h="40px" />)}</VStack>
+          ) : confirmedGuests.length === 0 ? (
+            <Text color="gray.500" fontSize="sm">No confirmed guests found.</Text>
+          ) : (
+            <Box overflowX="auto" maxH="320px" overflowY="auto">
+              <Table size="sm">
+                <Thead position="sticky" top={0} bg="gray.50">
+                  <Tr>
+                    <Th w="40px">
+                      <Checkbox
+                        isChecked={confirmedGuests.length > 0 && confirmedGuests.every((r) => checkedIds.has(r.id))}
+                        isIndeterminate={checkedIds.size > 0 && !confirmedGuests.every((r) => checkedIds.has(r.id))}
+                        onChange={(e) => (e.target.checked ? checkAll() : checkNone())}
+                      />
+                    </Th>
+                    <Th>Name</Th>
+                    <Th>Email</Th>
+                    <Th>Party Size</Th>
+                    <Th>Additional Guests</Th>
+                    <Th>Locale</Th>
+                    <Th>Invite Opened</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {confirmedGuests.map((r) => {
+                    const opens = (emailOpensMap.get(r.email.toLowerCase()) || []).filter(
+                      (eo) => eo.campaign === 'final_rsvp_invitation'
+                    )
+                    const lastOpen = opens[opens.length - 1]
+                    return (
+                      <Tr key={r.id}>
+                        <Td>
+                          <Checkbox isChecked={checkedIds.has(r.id)} onChange={() => toggleChecked(r.id)} />
+                        </Td>
+                        <Td fontWeight="medium">{r.firstName}</Td>
+                        <Td fontSize="xs" color="gray.600">{r.email}</Td>
+                        <Td>{1 + r.guests.length}</Td>
+                        <Td fontSize="xs" color="gray.500">{r.guests.map((g) => g.name).join(', ') || '—'}</Td>
+                        <Td>
+                          <Badge fontSize="10px" colorScheme="blue">
+                            {getEffectiveLocale(r).toUpperCase()}
+                          </Badge>
+                        </Td>
+                        <Td>
+                          {opens.length > 0 ? (
+                            <Tooltip label={lastOpen ? `Last opened ${new Date(lastOpen.openedAt).toLocaleString()}` : undefined}>
+                              <Badge colorScheme="green" variant="subtle" fontSize="2xs">Opened</Badge>
+                            </Tooltip>
+                          ) : (
+                            <Text fontSize="xs" color="gray.400">—</Text>
+                          )}
+                        </Td>
+                      </Tr>
+                    )
+                  })}
+                </Tbody>
+              </Table>
+            </Box>
+          )}
         </Box>
 
         {/* Dry run results */}
@@ -263,7 +371,7 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
           <ModalBody>
             <Text>
               This will send final RSVP invitation emails to{' '}
-              <strong>{confirmedGuests.length} confirmed guest{confirmedGuests.length !== 1 ? 's' : ''}</strong>.
+              <strong>{recipients.length} checked guest{recipients.length !== 1 ? 's' : ''}</strong>.
               Each email contains a personalized link for them to confirm attendance, choose their menu, and provide accommodation details.
             </Text>
             <Text mt={3} fontSize="sm" color="gray.500">
@@ -273,7 +381,7 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
           <ModalFooter>
             <Button variant="ghost" mr={3} onClick={onClose}>Cancel</Button>
             <Button colorScheme="blue" onClick={handleSend} isLoading={loading}>
-              Send {confirmedGuests.length} Emails
+              Send {recipients.length} Emails
             </Button>
           </ModalFooter>
         </ModalContent>

@@ -32,8 +32,8 @@ import {
   VStack,
   Tooltip,
 } from '@chakra-ui/react'
-import { DownloadIcon, ViewIcon } from '@chakra-ui/icons'
-import type { UseAdminRsvpsReturn, AdminFinalRsvp } from './useAdminRsvps'
+import { DownloadIcon, ViewIcon, WarningIcon } from '@chakra-ui/icons'
+import type { UseAdminRsvpsReturn, AdminFinalRsvp, AdminFinalRsvpGuest } from './useAdminRsvps'
 
 const EVENT_LABELS: Record<string, string> = {
   yes: 'Attending',
@@ -49,6 +49,27 @@ const EVENT_COLORS: Record<string, string> = {
   '': 'gray',
 }
 
+const DAY_LABELS: Record<'welcome' | 'ceremony' | 'brunch', string> = {
+  welcome: 'Welcome Dinner',
+  ceremony: 'Ceremony',
+  brunch: 'Brunch',
+}
+
+/** Summarizes a party's per-guest attendance for one day: a single badge if everyone
+ *  agrees, or a "Mixed" badge (with tooltip breakdown) if guests differ. */
+function dayAttendanceSummary(guests: AdminFinalRsvpGuest[], day: keyof typeof DAY_LABELS) {
+  if (guests.length === 0) {
+    return { label: EVENT_LABELS[''], color: EVENT_COLORS[''], tooltip: undefined as string | undefined }
+  }
+  const first = guests[0]?.events?.[day] || ''
+  const allSame = guests.every((g) => (g.events?.[day] || '') === first)
+  if (allSame) {
+    return { label: EVENT_LABELS[first] || first, color: EVENT_COLORS[first] || 'gray', tooltip: undefined as string | undefined }
+  }
+  const tooltip = guests.map((g) => `${g.name}: ${EVENT_LABELS[g.events?.[day] || '']}`).join(', ')
+  return { label: 'Mixed', color: 'purple', tooltip }
+}
+
 const APPETIZER_LABELS: Record<string, string> = {
   ceviche: 'Ceviche de Bar',
   gaspacho: 'Gaspacho fumé (V)',
@@ -57,6 +78,7 @@ const APPETIZER_LABELS: Record<string, string> = {
 const MAIN_LABELS: Record<string, string> = {
   bar: 'Filet de Bar',
   tournedos: 'Tournedos de boeuf',
+  vegan: 'Vegetable Tartlet',
 }
 
 const ACCOMMODATION_TYPE_LABELS: Record<string, string> = {
@@ -71,6 +93,12 @@ const ACCOMMODATION_TYPE_COLORS: Record<string, string> = {
   airbnb: 'blue',
   hotel: 'purple',
   '': 'gray',
+}
+
+const TRANSPORTATION_LABELS: Record<string, string> = {
+  taxi: 'Taxi requested',
+  own: 'Own arrangement',
+  '': '—',
 }
 
 function accommodationDetail(rsvp: AdminFinalRsvp): string {
@@ -125,20 +153,22 @@ function GuestDetailModal({ rsvp, isOpen, onClose }: { rsvp: AdminFinalRsvp | nu
             {/* Attendance */}
             <Box>
               <Text fontWeight="semibold" mb={2} fontSize="sm" color="gray.500" textTransform="uppercase">Attendance</Text>
-              <SimpleGrid columns={3} gap={2}>
-                {[
-                  { key: 'welcome', label: 'Welcome Dinner' },
-                  { key: 'ceremony', label: 'Ceremony' },
-                  { key: 'brunch', label: 'Brunch' },
-                ].map(({ key, label }) => (
-                  <Box key={key} textAlign="center">
-                    <Text fontSize="xs" color="gray.500">{label}</Text>
-                    <Badge colorScheme={EVENT_COLORS[rsvp.events[key as keyof typeof rsvp.events] || '']}>
-                      {EVENT_LABELS[rsvp.events[key as keyof typeof rsvp.events] || '']}
-                    </Badge>
-                  </Box>
+              <VStack align="stretch" spacing={2}>
+                {rsvp.guests.map((g, i) => (
+                  <Flex key={i} justify="space-between" align="center" py={1} borderBottom="1px solid" borderColor="gray.100">
+                    <Text fontSize="sm" fontWeight="medium">{g.name}</Text>
+                    <HStack spacing={1}>
+                      {(['welcome', 'ceremony', 'brunch'] as const).map((day) => (
+                        <Tooltip key={day} label={DAY_LABELS[day]}>
+                          <Badge colorScheme={EVENT_COLORS[g.events?.[day] || '']} fontSize="10px">
+                            {EVENT_LABELS[g.events?.[day] || '']}
+                          </Badge>
+                        </Tooltip>
+                      ))}
+                    </HStack>
+                  </Flex>
                 ))}
-              </SimpleGrid>
+              </VStack>
             </Box>
 
             {/* Accommodation */}
@@ -148,6 +178,9 @@ function GuestDetailModal({ rsvp, isOpen, onClose }: { rsvp: AdminFinalRsvp | nu
                 {ACCOMMODATION_TYPE_LABELS[rsvp.accommodationType] || '—'}
               </Badge>
               {accommodationDetail(rsvp) && <Text fontSize="sm" color="gray.600" mt={1}>{accommodationDetail(rsvp)}</Text>}
+              {rsvp.accommodationType && rsvp.accommodationType !== 'chateau' && (
+                <Text fontSize="sm" color="gray.600" mt={1}>{TRANSPORTATION_LABELS[rsvp.transportationPreference] || TRANSPORTATION_LABELS['']}</Text>
+              )}
             </Box>
 
             {/* Menu choices */}
@@ -165,6 +198,9 @@ function GuestDetailModal({ rsvp, isOpen, onClose }: { rsvp: AdminFinalRsvp | nu
                           {APPETIZER_LABELS[g.appetizer || ''] || '—'} &nbsp;/&nbsp; {MAIN_LABELS[g.main || ''] || '—'}
                         </Text>
                       )}
+                      {g.allergies && (
+                        <Text fontSize="xs" color="red.600" mt={1}>⚠ {g.allergies}</Text>
+                      )}
                     </Box>
                     <Badge colorScheme={g.isChild ? 'orange' : 'blue'} fontSize="10px">
                       {g.isChild ? 'Child' : 'Adult'}
@@ -180,18 +216,6 @@ function GuestDetailModal({ rsvp, isOpen, onClose }: { rsvp: AdminFinalRsvp | nu
                 <Box>
                   <Text fontSize="xs" color="gray.500" textTransform="uppercase">Song Request</Text>
                   <Text fontSize="sm">{rsvp.songRequest}</Text>
-                </Box>
-              )}
-              {rsvp.arrivalDate && (
-                <Box>
-                  <Text fontSize="xs" color="gray.500" textTransform="uppercase">Arrival</Text>
-                  <Text fontSize="sm">{rsvp.arrivalDate}</Text>
-                </Box>
-              )}
-              {rsvp.departureDate && (
-                <Box>
-                  <Text fontSize="xs" color="gray.500" textTransform="uppercase">Departure</Text>
-                  <Text fontSize="sm">{rsvp.departureDate}</Text>
                 </Box>
               )}
               <Box>
@@ -272,6 +296,7 @@ export function FinalRsvpDashboard({ adminData }: { adminData: UseAdminRsvpsRetu
           <StatCard label="Ceremony" value={finalRsvpStats.attendingCeremony} color="green.600" />
           <StatCard label="Brunch" value={finalRsvpStats.attendingBrunch} color="green.600" />
           <StatCard label="Children's Meals" value={finalRsvpStats.childrenMeals} color="orange.500" />
+          <StatCard label="Taxi Requests" value={finalRsvpStats.interestedInTaxi} color="blue.500" />
         </SimpleGrid>
       ) : null}
 
@@ -287,6 +312,7 @@ export function FinalRsvpDashboard({ adminData }: { adminData: UseAdminRsvpsRetu
             <Text fontWeight="semibold" mb={3} fontSize="sm" color="gray.600" textTransform="uppercase">Main Courses ({totalAdults} adults)</Text>
             <MenuBar label="Filet de Bar grillé" count={finalRsvpStats.barFillet} total={totalAdults} />
             <MenuBar label="Tournedos de boeuf" count={finalRsvpStats.tournedos} total={totalAdults} />
+            <MenuBar label="Vegetable Tartlet" count={finalRsvpStats.veganMain} total={totalAdults} />
           </Box>
         </SimpleGrid>
       )}
@@ -330,7 +356,7 @@ export function FinalRsvpDashboard({ adminData }: { adminData: UseAdminRsvpsRetu
                 <Th>Party</Th>
                 <Th>Song</Th>
                 <Th>Accommodation</Th>
-                <Th>Arrival</Th>
+                <Th>Allergies</Th>
                 <Th></Th>
               </Tr>
             </Thead>
@@ -340,19 +366,34 @@ export function FinalRsvpDashboard({ adminData }: { adminData: UseAdminRsvpsRetu
                   <Td fontWeight="medium">{r.firstName}</Td>
                   <Td fontSize="xs" color="gray.600">{r.email}</Td>
                   <Td>
-                    <Badge colorScheme={EVENT_COLORS[r.events.welcome || '']} fontSize="10px">
-                      {EVENT_LABELS[r.events.welcome || '']}
-                    </Badge>
+                    {(() => {
+                      const s = dayAttendanceSummary(r.guests, 'welcome')
+                      return (
+                        <Tooltip label={s.tooltip} isDisabled={!s.tooltip}>
+                          <Badge colorScheme={s.color} fontSize="10px">{s.label}</Badge>
+                        </Tooltip>
+                      )
+                    })()}
                   </Td>
                   <Td>
-                    <Badge colorScheme={EVENT_COLORS[r.events.ceremony || '']} fontSize="10px">
-                      {EVENT_LABELS[r.events.ceremony || '']}
-                    </Badge>
+                    {(() => {
+                      const s = dayAttendanceSummary(r.guests, 'ceremony')
+                      return (
+                        <Tooltip label={s.tooltip} isDisabled={!s.tooltip}>
+                          <Badge colorScheme={s.color} fontSize="10px">{s.label}</Badge>
+                        </Tooltip>
+                      )
+                    })()}
                   </Td>
                   <Td>
-                    <Badge colorScheme={EVENT_COLORS[r.events.brunch || '']} fontSize="10px">
-                      {EVENT_LABELS[r.events.brunch || '']}
-                    </Badge>
+                    {(() => {
+                      const s = dayAttendanceSummary(r.guests, 'brunch')
+                      return (
+                        <Tooltip label={s.tooltip} isDisabled={!s.tooltip}>
+                          <Badge colorScheme={s.color} fontSize="10px">{s.label}</Badge>
+                        </Tooltip>
+                      )
+                    })()}
                   </Td>
                   <Td fontSize="xs">
                     {r.guests.length} ({r.guests.filter((g) => g.isChild).length} child)
@@ -371,7 +412,20 @@ export function FinalRsvpDashboard({ adminData }: { adminData: UseAdminRsvpsRetu
                       </Tooltip>
                     ) : '—'}
                   </Td>
-                  <Td fontSize="xs">{r.arrivalDate || '—'}</Td>
+                  <Td fontSize="xs">
+                    {(() => {
+                      const guestsWithAllergies = r.guests.filter((g) => g.allergies)
+                      if (guestsWithAllergies.length === 0) return '—'
+                      const tooltip = guestsWithAllergies.map((g) => `${g.name}: ${g.allergies}`).join(', ')
+                      return (
+                        <Tooltip label={tooltip}>
+                          <Badge colorScheme="red" fontSize="10px" display="inline-flex" alignItems="center" gap={1}>
+                            <WarningIcon boxSize="10px" /> {guestsWithAllergies.length}
+                          </Badge>
+                        </Tooltip>
+                      )
+                    })()}
+                  </Td>
                   <Td>
                     <IconButton
                       aria-label="View details"

@@ -9,6 +9,7 @@ import FaqPage from './pages/FaqPage'
 import GalleryPage from './pages/GalleryPage'
 import DrinkPreferencesPage from './pages/DrinkPreferencesPage'
 import FinalRsvpPage from './pages/FinalRsvpPage'
+import RegistryPage from './pages/RegistryPage'
 import theme from './theme'
 import { FeatureFlagsProvider } from './contexts/FeatureFlagsContext'
 import ScrollToTop from './components/ScrollToTop'
@@ -34,6 +35,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/drinks" element={<DrinkPreferencesPage />} />
             <Route path="/final-rsvp" element={<FinalRsvpPage />} />
+            <Route path="/registry" element={<RegistryPage />} />
             <Route
               path="/admin"
               element={

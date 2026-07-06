@@ -10,6 +10,7 @@ jest.mock('react-i18next', () => ({
         'header.rsvp': 'RSVP',
         'header.faq': 'FAQ',
         'quickLinks.stay': 'STAY',
+        'quickLinks.registry': 'REGISTRY',
       }
       return translations[key] || fallback || key
     },
@@ -21,6 +22,7 @@ jest.mock('react-i18next', () => ({
 jest.mock('../assets/love_birds.svg', () => 'love-birds-icon.svg')
 jest.mock('../assets/Luchador_icon.svg', () => 'luchador-icon.svg')
 jest.mock('../assets/rest_icon.svg', () => 'rest-icon.svg')
+jest.mock('../assets/gift_icon.svg', () => 'gift-icon.svg')
 
 describe('QuickLinks Component', () => {
   it('renders the section title', () => {
@@ -29,12 +31,13 @@ describe('QuickLinks Component', () => {
     expect(screen.getByRole('heading', { name: 'Links' })).toBeInTheDocument()
   })
 
-  it('renders all three quick link labels', () => {
+  it('renders all quick link labels', () => {
     render(<QuickLinks />)
     
     expect(screen.getByText('RSVP')).toBeInTheDocument()
     expect(screen.getByText('FAQ')).toBeInTheDocument()
     expect(screen.getByText('STAY')).toBeInTheDocument()
+    expect(screen.getByText('REGISTRY')).toBeInTheDocument()
   })
 
   it('renders links to correct routes', () => {
@@ -43,10 +46,12 @@ describe('QuickLinks Component', () => {
     const rsvpLink = screen.getByRole('link', { name: /rsvp/i })
     const faqLink = screen.getByRole('link', { name: /faq/i })
     const stayLink = screen.getByRole('link', { name: /stay/i })
+    const registryLink = screen.getByRole('link', { name: /registry/i })
     
     expect(rsvpLink).toHaveAttribute('href', '/rsvp#page-top')
     expect(faqLink).toHaveAttribute('href', '/faq#page-top')
     expect(stayLink).toHaveAttribute('href', '/accommodations#page-top')
+    expect(registryLink).toHaveAttribute('href', '/registry#page-top')
   })
 
   it('renders icons for each quick link', () => {
@@ -55,10 +60,12 @@ describe('QuickLinks Component', () => {
     const rsvpIcon = screen.getByAltText('RSVP')
     const faqIcon = screen.getByAltText('FAQ')
     const stayIcon = screen.getByAltText('Stay')
+    const registryIcon = screen.getByAltText('Registry')
     
     expect(rsvpIcon).toBeInTheDocument()
     expect(faqIcon).toBeInTheDocument()
     expect(stayIcon).toBeInTheDocument()
+    expect(registryIcon).toBeInTheDocument()
   })
 
   it('has proper heading hierarchy', () => {
@@ -76,11 +83,11 @@ describe('QuickLinks Component', () => {
     expect(section).toBeInTheDocument()
   })
 
-  it('renders three icon images', () => {
+  it('renders four icon images', () => {
     const { container } = render(<QuickLinks />)
     
     const images = container.querySelectorAll('img')
-    expect(images).toHaveLength(3)
+    expect(images).toHaveLength(4)
   })
 
   it('applies correct styling to labels', () => {

@@ -29,6 +29,7 @@ import {
   CountdownSkeleton,
   StorySkeleton,
   TimelineSkeleton,
+  SectionSkeleton,
 } from './components/SectionSkeletons'
 import { useFeatureFlags } from './contexts/FeatureFlagsContext'
 
@@ -57,6 +58,7 @@ const Countdown = React.lazy(() => import('./components/Countdown'))
 const StorySection = React.lazy(() => import('./components/StorySection'))
 const Timeline = React.lazy(() => import('./components/Timeline'))
 const QuickLinks = React.lazy(() => import('./components/QuickLinks'))
+const RegistrySection = React.lazy(() => import('./components/RegistrySection'))
 
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
@@ -130,6 +132,7 @@ function AppContent() {
     { href: '/faq', label: t('header.faq'), enabled: true, isExternal: true },
     { href: '/rsvp', label: t('header.rsvp'), enabled: true, isExternal: true },
     { href: '/drinks', label: t('header.drinks'), enabled: true, isExternal: true },
+    { href: '/registry', label: t('header.registry'), enabled: true, isExternal: true },
   ].filter((link) => link.enabled)
 
   const content = (
@@ -329,6 +332,13 @@ function AppContent() {
             </Suspense>
           </ErrorBoundary>
         )}
+
+        {/* Registry Teaser Section - links out to external registry */}
+        <ErrorBoundary sectionName="registry" silent>
+          <Suspense fallback={<SectionSkeleton />}>
+            <RegistrySection />
+          </Suspense>
+        </ErrorBoundary>
 
         {/* Quick Links Section */}
         <Suspense fallback={null}>

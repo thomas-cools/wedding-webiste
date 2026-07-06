@@ -61,3 +61,22 @@ export const weddingConfig = {
   /** Contact email for wedding inquiries (also used in confirmation emails) */
   contactEmail: 'carolinaandthomaswedding@gmail.com',
 }
+
+export interface RegistryLinkConfig {
+  /** Stable identifier, matches index in the `registry.links` i18n array */
+  id: string
+  /** External registry URL (Zola, WithJoy, Honeyfund, a specific store, etc.) */
+  url: string
+}
+
+/**
+ * External wedding registry links.
+ *
+ * TODO: Replace the placeholder `url` values below with your real registry
+ * links once available. The display name/description for each entry lives in
+ * `registry.links` in `src/i18n/locales/*.json` (matched by array index).
+ */
+export const registryLinks: RegistryLinkConfig[] = [
+  { id: 'primary', url: 'https://www.zola.com/registry/REPLACE_WITH_YOUR_REGISTRY' },
+  { id: 'honeymoon', url: 'https://www.honeyfund.com/REPLACE_WITH_YOUR_FUND' },
+]

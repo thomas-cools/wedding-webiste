@@ -17,8 +17,10 @@ import {
   RadioGroup,
   Badge,
   Divider,
+  Collapse,
   useToast,
 } from '@chakra-ui/react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FinalRsvpGuestData } from './useFinalRsvpToken'
 import { useFinalRsvpForm } from './useFinalRsvpForm'
@@ -75,6 +77,18 @@ export interface FinalRsvpFormProps {
 export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormProps) {
   const { t } = useTranslation()
   const toast = useToast()
+  const formRef = useRef<HTMLDivElement>(null)
+
+  const scrollToFirstError = () => {
+    requestAnimationFrame(() => {
+      const firstError = formRef.current?.querySelector('.chakra-form__error-message, [data-invalid-message]')
+      if (firstError) {
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      } else {
+        formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    })
+  }
 
   const form = useFinalRsvpForm({
     initialPartyMembers: guestData?.partyMembers || [],
@@ -101,6 +115,18 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
         variant: 'solid',
         position: 'top',
       })
+    },
+    onValidationError: () => {
+      toast({
+        title: t('finalRsvp.validation.formIncompleteTitle'),
+        description: t('finalRsvp.validation.formIncompleteMessage'),
+        status: 'error',
+        duration: 6000,
+        isClosable: true,
+        variant: 'solid',
+        position: 'top',
+      })
+      scrollToFirstError()
     },
   })
 
@@ -134,6 +160,7 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
 
       {/* Form */}
       <Box
+        ref={formRef}
         as="form"
         name="final-rsvp"
         method="POST"
@@ -149,15 +176,13 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
         <input type="hidden" name="form-name" value="final-rsvp" />
         <input type="hidden" name="firstName" />
         <input type="hidden" name="email" />
-        <input type="hidden" name="events" />
         <input type="hidden" name="guests" />
         <input type="hidden" name="accommodationType" />
         <input type="hidden" name="accommodationAddress" />
         <input type="hidden" name="accommodationAddressPlaceId" />
         <input type="hidden" name="hotelName" />
+        <input type="hidden" name="transportationPreference" />
         <input type="hidden" name="songRequest" />
-        <input type="hidden" name="arrivalDate" />
-        <input type="hidden" name="departureDate" />
         <input type="hidden" name="photographyConsent" />
         <input type="hidden" name="additionalNotes" />
 
@@ -165,27 +190,43 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
           {/* ── Day Attendance ── */}
           <Box>
             <Heading {...sectionHeadingProps}>{t('finalRsvp.form.attendanceTitle')}</Heading>
-            <Text fontSize="sm" color="rgba(48,15,12,0.6)" mb={4}>
+            <Text fontSize="sm" color="rgba(48,15,12,0.6)" mb={5}>
               {t('finalRsvp.form.attendanceDescription')}
             </Text>
-            <Stack spacing={4}>
-              {(['welcome', 'ceremony', 'brunch'] as const).map((day) => (
-                <FormControl key={day} isInvalid={!!form.errors.events && form.hasAttemptedSubmit}>
-                  <FormLabel fontSize="sm" mb={1}>{t(`finalRsvp.form.event.${day}`)}</FormLabel>
-                  <Select
-                    value={form.events[day]}
-                    onChange={(e) => form.setEventAnswer(day, e.target.value as never)}
-                    placeholder={t('finalRsvp.form.selectAttendance')}
-                  >
-                    <option value="yes">{t('finalRsvp.form.attending')}</option>
-                    <option value="arriving_late">{t('finalRsvp.form.arrivingLate')}</option>
-                    <option value="no">{t('finalRsvp.form.notAttending')}</option>
-                  </Select>
-                </FormControl>
+            <Stack spacing={6}>
+              {form.guests.map((guest, index) => (
+                <Box
+                  key={index}
+                  p={5}
+                  bg="white"
+                  borderRadius="lg"
+                  border="1px solid"
+                  borderColor="rgba(48,15,12,0.1)"
+                >
+                  <Text fontWeight="600" color="#300F0C" fontSize="md" mb={4}>
+                    {guest.name || t('finalRsvp.form.guest', { number: index + 1 })}
+                  </Text>
+                  <Stack spacing={4}>
+                    {(['welcome', 'ceremony', 'brunch'] as const).map((day) => (
+                      <FormControl key={day} isInvalid={!!form.errors[`guest_${index}_events`] && form.hasAttemptedSubmit}>
+                        <FormLabel fontSize="sm" mb={1}>{t(`finalRsvp.form.event.${day}`)}</FormLabel>
+                        <Select
+                          value={guest.events[day]}
+                          onChange={(e) => form.setGuestEventAnswer(index, day, e.target.value as never)}
+                          placeholder={t('finalRsvp.form.selectAttendance')}
+                        >
+                          <option value="yes">{t('finalRsvp.form.attending')}</option>
+                          <option value="arriving_late">{t('finalRsvp.form.arrivingLate')}</option>
+                          <option value="no">{t('finalRsvp.form.notAttending')}</option>
+                        </Select>
+                      </FormControl>
+                    ))}
+                  </Stack>
+                  {form.errors[`guest_${index}_events`] && form.hasAttemptedSubmit && (
+                    <Text data-invalid-message color="#4C050C" fontSize="sm" mt={2}>{form.errors[`guest_${index}_events`]}</Text>
+                  )}
+                </Box>
               ))}
-              {form.errors.events && form.hasAttemptedSubmit && (
-                <Text color="#4C050C" fontSize="sm">{form.errors.events}</Text>
-              )}
             </Stack>
           </Box>
 
@@ -301,11 +342,44 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                 <FormErrorMessage>{form.errors.hotelName}</FormErrorMessage>
               </FormControl>
             )}
+
+            {(form.accommodationType === 'airbnb' || form.accommodationType === 'hotel') && (
+              <FormControl isInvalid={!!form.errors.transportationPreference && form.hasAttemptedSubmit} mt={4}>
+                <FormLabel fontSize="sm">{t('finalRsvp.form.transportationQuestion')}</FormLabel>
+                <RadioGroup
+                  value={form.transportationPreference}
+                  onChange={(v) => form.setTransportationPreference(v as typeof form.transportationPreference)}
+                  sx={{
+                    '.chakra-radio__control': {
+                      borderColor: 'rgba(48,15,12,0.35)',
+                      borderWidth: '1.5px',
+                    },
+                    '.chakra-radio__control[data-checked]': {
+                      bg: '#300F0C',
+                      borderColor: '#300F0C',
+                    },
+                    '.chakra-radio__control[data-focus-visible]': {
+                      boxShadow: '0 0 0 2px rgba(48,15,12,0.3)',
+                    },
+                  }}
+                >
+                  <Stack spacing={3}>
+                    <Radio value="taxi">
+                      <Text fontSize="sm">{t('finalRsvp.form.transportationTaxi')}</Text>
+                    </Radio>
+                    <Radio value="own">
+                      <Text fontSize="sm">{t('finalRsvp.form.transportationOwn')}</Text>
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+                {form.errors.transportationPreference && form.hasAttemptedSubmit && (
+                  <FormErrorMessage>{form.errors.transportationPreference}</FormErrorMessage>
+                )}
+              </FormControl>
+            )}
           </Box>
 
           <SectionDivider />
-
-          {/* ── Menu Choices (per guest) ── */}
           <Box>
             <Heading {...sectionHeadingProps}>{t('finalRsvp.form.menuTitle')}</Heading>
             <Text fontSize="sm" color="rgba(48,15,12,0.6)" mb={5}>
@@ -343,7 +417,7 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                     )}
                   </Flex>
 
-                  {guest.isChild ? (
+                  <Collapse in={!!guest.isChild} animateOpacity unmountOnExit>
                     <Flex align="center" gap={2}>
                       <Badge colorScheme="orange" borderRadius="full" px={3} py={1}>
                         {t('finalRsvp.form.childrensMeal')}
@@ -352,7 +426,8 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                         {t('finalRsvp.form.childrensMealNote')}
                       </Text>
                     </Flex>
-                  ) : (
+                  </Collapse>
+                  <Collapse in={!guest.isChild} animateOpacity unmountOnExit>
                     <Stack spacing={4}>
                       {/* Appetizer */}
                       <FormControl isInvalid={!!form.errors[`guest_${index}_appetizer`]}>
@@ -402,7 +477,7 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                       <FormControl isInvalid={!!form.errors[`guest_${index}_main`]}>
                         <FormLabel fontSize="sm">{t('finalRsvp.form.mainCourse')}</FormLabel>
                         <Stack spacing={2}>
-                          {(['bar', 'tournedos'] as const).map((opt) => (
+                          {(['bar', 'tournedos', 'vegan'] as const).map((opt) => (
                             <Box
                               key={opt}
                               as="label"
@@ -426,16 +501,33 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                                 onChange={() => form.updateGuest(index, { main: opt })}
                                 style={{ marginTop: 3, flexShrink: 0 }}
                               />
-                              <Text fontSize="sm" color="#300F0C" fontStyle="italic">
-                                {t(`finalRsvp.menu.main.${opt}`)}
-                              </Text>
+                              <Box>
+                                <Text fontSize="sm" color="#300F0C" fontStyle="italic">
+                                  {t(`finalRsvp.menu.main.${opt}`)}
+                                </Text>
+                                {opt === 'vegan' && (
+                                  <Badge colorScheme="green" fontSize="10px" mt={1}>V</Badge>
+                                )}
+                              </Box>
                             </Box>
                           ))}
                         </Stack>
                         <FormErrorMessage>{form.errors[`guest_${index}_main`]}</FormErrorMessage>
                       </FormControl>
                     </Stack>
-                  )}
+                  </Collapse>
+
+                  {/* Allergies — shown for every guest, including children */}
+                  <FormControl mt={4}>
+                    <FormLabel fontSize="sm">{t('finalRsvp.form.allergies')}</FormLabel>
+                    <Textarea
+                      value={guest.allergies || ''}
+                      onChange={(e) => form.updateGuest(index, { allergies: e.target.value })}
+                      placeholder={t('finalRsvp.form.allergiesPlaceholder')}
+                      rows={2}
+                    />
+                    <FormHelperText>{t('finalRsvp.form.allergiesHint')}</FormHelperText>
+                  </FormControl>
                 </Box>
               ))}
             </Stack>
@@ -453,34 +545,6 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
             />
             <FormHelperText>{t('finalRsvp.form.songRequestHint')}</FormHelperText>
           </FormControl>
-
-          <SectionDivider />
-
-          {/* ── Arrival & Departure ── */}
-          <Box>
-            <Heading {...sectionHeadingProps}>{t('finalRsvp.form.travelTitle')}</Heading>
-            <Text fontSize="sm" color="rgba(48,15,12,0.6)" mb={4}>
-              {t('finalRsvp.form.travelDescription')}
-            </Text>
-            <Stack spacing={4}>
-              <FormControl>
-                <FormLabel>{t('finalRsvp.form.arrivalDate')}</FormLabel>
-                <Input
-                  type="date"
-                  value={form.arrivalDate}
-                  onChange={(e) => form.setArrivalDate(e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>{t('finalRsvp.form.departureDate')}</FormLabel>
-                <Input
-                  type="date"
-                  value={form.departureDate}
-                  onChange={(e) => form.setDepartureDate(e.target.value)}
-                />
-              </FormControl>
-            </Stack>
-          </Box>
 
           <SectionDivider />
 

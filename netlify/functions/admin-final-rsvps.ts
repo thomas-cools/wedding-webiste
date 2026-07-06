@@ -26,27 +26,27 @@ interface NetlifyFormSubmission {
 
 export interface AdminFinalRsvpGuest {
   name: string
+  events: {
+    welcome: string
+    ceremony: string
+    brunch: string
+  }
   isChild: boolean
   appetizer?: string
   main?: string
+  allergies?: string
 }
 
 export interface AdminFinalRsvp {
   id: string
   firstName: string
   email: string
-  events: {
-    welcome: string
-    ceremony: string
-    brunch: string
-  }
   guests: AdminFinalRsvpGuest[]
   accommodationType: string
   accommodationAddress: string
   hotelName: string
+  transportationPreference: string
   songRequest: string
-  arrivalDate: string
-  departureDate: string
   photographyConsent: boolean | null
   additionalNotes: string
   submittedAt: string
@@ -70,18 +70,24 @@ function parseBooleanField(value: string | undefined): boolean | null {
 
 function normalizeSubmission(sub: NetlifyFormSubmission): AdminFinalRsvp {
   const d = sub.data
+  // Legacy submissions (before per-guest attendance) stored a single party-level
+  // `events` field. Fall back to it for any guest missing their own `events`.
+  const legacyEvents = parseJsonField<{ welcome: string; ceremony: string; brunch: string } | undefined>(d.events, undefined)
+  const rawGuests = parseJsonField<AdminFinalRsvpGuest[]>(d.guests, [])
+  const guests = rawGuests.map((g) => ({
+    ...g,
+    events: g.events || legacyEvents || { welcome: '', ceremony: '', brunch: '' },
+  }))
   return {
     id: sub.id,
     firstName: (d.firstName || '').trim(),
     email: (d.email || '').trim().toLowerCase(),
-    events: parseJsonField(d.events, { welcome: '', ceremony: '', brunch: '' }),
-    guests: parseJsonField(d.guests, []),
+    guests,
     accommodationType: (d.accommodationType || '').trim(),
     accommodationAddress: (d.accommodationAddress || '').trim(),
     hotelName: (d.hotelName || '').trim(),
+    transportationPreference: (d.transportationPreference || '').trim(),
     songRequest: (d.songRequest || '').trim(),
-    arrivalDate: (d.arrivalDate || '').trim(),
-    departureDate: (d.departureDate || '').trim(),
     photographyConsent: parseBooleanField(d.photographyConsent),
     additionalNotes: (d.additionalNotes || '').trim(),
     submittedAt: sub.created_at,
@@ -160,15 +166,17 @@ export const handler: Handler = async (event) => {
 
     const stats = {
       total: finalRsvps.length,
-      attendingWelcome: finalRsvps.filter((r) => r.events.welcome === 'yes' || r.events.welcome === 'arriving_late').length,
-      attendingCeremony: finalRsvps.filter((r) => r.events.ceremony === 'yes' || r.events.ceremony === 'arriving_late').length,
-      attendingBrunch: finalRsvps.filter((r) => r.events.brunch === 'yes' || r.events.brunch === 'arriving_late').length,
+      attendingWelcome: allGuests.filter((g) => g.events.welcome === 'yes' || g.events.welcome === 'arriving_late').length,
+      attendingCeremony: allGuests.filter((g) => g.events.ceremony === 'yes' || g.events.ceremony === 'arriving_late').length,
+      attendingBrunch: allGuests.filter((g) => g.events.brunch === 'yes' || g.events.brunch === 'arriving_late').length,
       ceviche: adultGuests.filter((g) => g.appetizer === 'ceviche').length,
       gaspacho: adultGuests.filter((g) => g.appetizer === 'gaspacho').length,
       barFillet: adultGuests.filter((g) => g.main === 'bar').length,
       tournedos: adultGuests.filter((g) => g.main === 'tournedos').length,
+      veganMain: adultGuests.filter((g) => g.main === 'vegan').length,
       childrenMeals: allGuests.filter((g) => g.isChild).length,
       photographyConsented: finalRsvps.filter((r) => r.photographyConsent === true).length,
+      interestedInTaxi: finalRsvps.filter((r) => r.accommodationType !== 'chateau' && r.transportationPreference === 'taxi').length,
     }
 
     return adminJson(200, { ok: true, finalRsvps, stats })

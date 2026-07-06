@@ -15,6 +15,7 @@ import { ScrollReveal, StaggerContainer, StaggerItem } from './animations'
 import loveBirdsIcon from '../assets/love_birds.svg'
 import luchadorIcon from '../assets/Luchador_icon.svg'
 import restIcon from '../assets/rest_icon.svg'
+import giftIcon from '../assets/gift_icon.svg'
 
 interface QuickLinkItem {
   to: string
@@ -91,6 +92,12 @@ export function QuickLinks() {
       icon: restIcon,
       label: t('quickLinks.stay', 'STAY'),
       alt: 'Stay',
+    },
+    {
+      to: '/registry#page-top',
+      icon: giftIcon,
+      label: t('quickLinks.registry', 'REGISTRY'),
+      alt: 'Registry',
     },
   ]
 

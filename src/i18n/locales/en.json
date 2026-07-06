@@ -7,7 +7,8 @@
     "travel": "Stay",
     "faq": "FAQ",
     "rsvp": "RSVP",
-    "drinks": "Drinks"
+    "drinks": "Drinks",
+    "registry": "Registry"
   },
   "hero": {
     "invited": "You're invited",
@@ -189,7 +190,29 @@
   "quickLinks": {
     "label": "Explore",
     "title": "Quick Links",
-    "stay": "Stay"
+    "stay": "Stay",
+    "registry": "Registry"
+  },
+  "registry": {
+    "label": "Gifts & Registry",
+    "title": "Wedding Registry",
+    "teaserDescription": "Your presence at our wedding is the greatest gift of all. If you'd like to give something more, we've put together a small registry.",
+    "viewButton": "View Our Registry",
+    "backToHome": "Back",
+    "pageTitle": "Our Registry",
+    "pageIntro": "We feel so lucky to be surrounded by family and friends as we start this next chapter. If you'd like to contribute to our future together, here are a few places to do so.",
+    "links": [
+      {
+        "name": "Our Gift Registry",
+        "description": "Browse our curated list of gifts on our registry.",
+        "buttonLabel": "View Registry"
+      },
+      {
+        "name": "Honeymoon Fund",
+        "description": "Help us celebrate with a contribution toward our honeymoon adventures.",
+        "buttonLabel": "Contribute"
+      }
+    ]
   },
   "finalRsvp": {
     "title": "Final RSVP",
@@ -197,7 +220,7 @@
     "party": "party",
     "form": {
       "attendanceTitle": "Day-by-Day Attendance",
-      "attendanceDescription": "Please let us know which days you and your party will be attending.",
+      "attendanceDescription": "Please let us know which days each person in your party will be attending — answers can differ per person.",
       "event": {
         "welcome": "Welcome Dinner · Tuesday, August 25",
         "ceremony": "Ceremony & Reception · Wednesday, August 26",
@@ -216,6 +239,9 @@
       "accommodationAddressHint": "This helps us coordinate transportation to and from the venue.",
       "hotelName": "Hotel Name",
       "hotelNamePlaceholder": "Name of the hotel you're staying at",
+      "transportationQuestion": "Would you like us to arrange taxi transportation to and from the venue?",
+      "transportationTaxi": "Yes, I'm interested in taxi transportation",
+      "transportationOwn": "No, I will arrange my own transportation",
       "menuTitle": "Menu Choices",
       "menuDescription": "Please select your choices for each person in your party. Children under 12 will receive a children's meal.",
       "guest": "Guest {{number}}",
@@ -227,10 +253,9 @@
       "songRequest": "Song Request",
       "songRequestPlaceholder": "What song will get you on the dance floor?",
       "songRequestHint": "We'll do our best to make it happen!",
-      "travelTitle": "Arrival & Departure",
-      "travelDescription": "Let us know your travel dates so we can help coordinate transportation if needed.",
-      "arrivalDate": "Arrival Date",
-      "departureDate": "Departure Date",
+      "allergies": "Allergies & Other Precautions",
+      "allergiesPlaceholder": "e.g. peanut allergy, gluten intolerance, pet dander…",
+      "allergiesHint": "Let us know about any food allergies or other precautions we should take.",
       "photographyTitle": "Photography & Video",
       "photographyDescription": "Our photographer and videographer will be capturing memories throughout the celebration. Do you consent to being photographed and/or filmed?",
       "photographyYes": "Yes, I consent to being photographed and filmed",
@@ -243,23 +268,27 @@
     "menu": {
       "appetizer": {
         "ceviche": "French sea bass ceviche, lime & Espelette chilli",
-        "gaspacho": "Smoked yellow tomato gazpacho with red vegetables (V)"
+        "gaspacho": "Smoked yellow tomato gazpacho with red vegetables"
       },
       "main": {
         "bar": "Grilled sea bass fillet, Mediterranean vegetable tartlet, pea purée & black olives",
-        "tournedos": "French beef fillet tournedos, confit shallot & red wine purée, potato compression, morel & sweet wine jus"
+        "tournedos": "French beef fillet tournedos, confit shallot & red wine purée, potato compression, morel & sweet wine jus",
+        "vegan": "Seasonal vegetable tartlet, root vegetable purée & red wine jus"
       }
     },
     "validation": {
-      "eventsRequired": "Please select your attendance for at least one day.",
+      "guestEventsRequired": "Please select {{name}}'s attendance for each day.",
       "accommodationRequired": "Please let us know your accommodation preference.",
       "accommodationAddressRequired": "Please enter your accommodation address.",
       "hotelNameRequired": "Please enter your hotel name.",
+      "transportationRequired": "Please let us know your transportation preference.",
       "appetizerRequired": "Please select an appetizer.",
       "mainRequired": "Please select a main course.",
       "addressIncompleteTitle": "Address may be incomplete",
       "addressIncompleteMessage": "Please double-check your accommodation address. We will still accept your response.",
-      "autocompleteUnavailable": "Autocomplete is temporarily unavailable. Please type your address."
+      "autocompleteUnavailable": "Autocomplete is temporarily unavailable. Please type your address.",
+      "formIncompleteTitle": "Some fields need your attention",
+      "formIncompleteMessage": "Please review the highlighted fields below and try again."
     },
     "success": {
       "title": "Final RSVP submitted!",

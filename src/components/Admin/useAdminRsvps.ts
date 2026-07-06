@@ -3,23 +3,23 @@ import { getAdminAuthHeaders } from '../../utils/adminAuth'
 
 export interface AdminFinalRsvpGuest {
   name: string
+  events: { welcome: string; ceremony: string; brunch: string }
   isChild: boolean
   appetizer?: string
   main?: string
+  allergies?: string
 }
 
 export interface AdminFinalRsvp {
   id: string
   firstName: string
   email: string
-  events: { welcome: string; ceremony: string; brunch: string }
   guests: AdminFinalRsvpGuest[]
   accommodationType: string
   accommodationAddress: string
   hotelName: string
+  transportationPreference: string
   songRequest: string
-  arrivalDate: string
-  departureDate: string
   photographyConsent: boolean | null
   additionalNotes: string
   submittedAt: string
@@ -35,8 +35,10 @@ export interface FinalRsvpStats {
   gaspacho: number
   barFillet: number
   tournedos: number
+  veganMain: number
   childrenMeals: number
   photographyConsented: number
+  interestedInTaxi: number
 }
 
 export interface AdminRsvp {
@@ -357,6 +359,7 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
   const MAIN_LABELS: Record<string, string> = {
     bar: 'Filet de Bar',
     tournedos: 'Tournedos de boeuf',
+    vegan: 'Vegetable Tartlet',
   }
 
   const exportFinalRsvpsCsv = useCallback(() => {
@@ -368,24 +371,30 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
     const accommodationTypeLabel = (r: AdminFinalRsvp) => ACCOMMODATION_TYPE_LABELS[r.accommodationType] || ''
     const accommodationDetail = (r: AdminFinalRsvp) =>
       r.accommodationType === 'airbnb' ? r.accommodationAddress : r.accommodationType === 'hotel' ? r.hotelName : ''
+    const TRANSPORTATION_LABELS: Record<string, string> = {
+      taxi: 'Taxi',
+      own: 'Own Arrangement',
+    }
+    const transportationLabel = (r: AdminFinalRsvp) =>
+      r.accommodationType !== 'chateau' ? (TRANSPORTATION_LABELS[r.transportationPreference] || '') : ''
 
     const rows: string[][] = []
     // Header
     rows.push([
       'Primary Name', 'Email', 'Welcome Dinner', 'Ceremony & Reception', 'Farewell Brunch',
-      'Guest Name', 'Age Group', 'Appetizer', 'Main Course',
-      'Song Request', 'Accommodation Type', 'Accommodation Detail',
-      'Arrival Date', 'Departure Date', 'Photography Consent', 'Submitted At',
+      'Guest Name', 'Age Group', 'Appetizer', 'Main Course', 'Allergies',
+      'Song Request', 'Accommodation Type', 'Accommodation Detail', 'Transportation Preference',
+      'Photography Consent', 'Submitted At',
     ])
 
     for (const r of finalRsvps) {
       if (r.guests.length === 0) {
         rows.push([
           r.firstName, r.email,
-          r.events.welcome, r.events.ceremony, r.events.brunch,
-          '', '', '', '',
+          '', '', '',
+          '', '', '', '', '',
           r.songRequest, accommodationTypeLabel(r),
-          accommodationDetail(r), r.arrivalDate, r.departureDate,
+          accommodationDetail(r), transportationLabel(r),
           r.photographyConsent === true ? 'Yes' : r.photographyConsent === false ? 'No' : '',
           r.submittedAt,
         ])
@@ -394,18 +403,16 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
           rows.push([
             i === 0 ? r.firstName : '',
             i === 0 ? r.email : '',
-            i === 0 ? r.events.welcome : '',
-            i === 0 ? r.events.ceremony : '',
-            i === 0 ? r.events.brunch : '',
+            g.events.welcome, g.events.ceremony, g.events.brunch,
             g.name,
             g.isChild ? 'Child (<12)' : 'Adult',
             g.isChild ? "Children's Meal" : APPETIZER_LABELS[g.appetizer || ''] || g.appetizer || '',
             g.isChild ? "Children's Meal" : MAIN_LABELS[g.main || ''] || g.main || '',
+            g.allergies || '',
             i === 0 ? r.songRequest : '',
             i === 0 ? accommodationTypeLabel(r) : '',
             i === 0 ? accommodationDetail(r) : '',
-            i === 0 ? r.arrivalDate : '',
-            i === 0 ? r.departureDate : '',
+            i === 0 ? transportationLabel(r) : '',
             i === 0 ? (r.photographyConsent === true ? 'Yes' : r.photographyConsent === false ? 'No' : '') : '',
             i === 0 ? r.submittedAt : '',
           ])

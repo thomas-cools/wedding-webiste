@@ -7,7 +7,8 @@
     "travel": "Estancia",
     "faq": "Preguntas",
     "rsvp": "Confirmar",
-    "drinks": "Bebidas"
+    "drinks": "Bebidas",
+    "registry": "Regalos"
   },
   "hero": {
     "invited": "Estás invitado/a",
@@ -188,7 +189,29 @@
   "quickLinks": {
     "label": "Explorar",
     "title": "Enlaces Rápidos",
-    "stay": "Estancia"
+    "stay": "Estancia",
+    "registry": "Regalos"
+  },
+  "registry": {
+    "label": "Regalos y Lista de Bodas",
+    "title": "Lista de Bodas",
+    "teaserDescription": "Su presencia en nuestra boda es el mejor regalo de todos. Si desean darnos algo más, hemos preparado una pequeña lista de regalos.",
+    "viewButton": "Ver Nuestra Lista",
+    "backToHome": "Volver",
+    "pageTitle": "Nuestra Lista de Bodas",
+    "pageIntro": "Nos sentimos muy afortunados de estar rodeados de familia y amigos al comenzar este nuevo capítulo. Si desean contribuir a nuestro futuro juntos, aquí hay algunos lugares para hacerlo.",
+    "links": [
+      {
+        "name": "Nuestra Lista de Regalos",
+        "description": "Explora nuestra lista de regalos seleccionada.",
+        "buttonLabel": "Ver Lista"
+      },
+      {
+        "name": "Fondo de Luna de Miel",
+        "description": "Ayúdanos a celebrar con una contribución para nuestra luna de miel.",
+        "buttonLabel": "Contribuir"
+      }
+    ]
   },
   "finalRsvp": {
     "title": "RSVP Final",
@@ -196,7 +219,7 @@
     "party": "grupo",
     "form": {
       "attendanceTitle": "Asistencia por día",
-      "attendanceDescription": "Por favor indícanos a qué días tú y tu grupo asistirán.",
+      "attendanceDescription": "Por favor indícanos a qué días asistirá cada persona de tu grupo — las respuestas pueden variar por persona.",
       "event": {
         "welcome": "Cena de Bienvenida · Martes, 25 de agosto",
         "ceremony": "Ceremonia y Recepción · Miércoles, 26 de agosto",
@@ -215,6 +238,9 @@
       "accommodationAddressHint": "Esto nos ayuda a coordinar el transporte hacia y desde el lugar.",
       "hotelName": "Nombre del hotel",
       "hotelNamePlaceholder": "Nombre del hotel donde te hospedas",
+      "transportationQuestion": "¿Te gustaría que organizáramos transporte en taxi hacia y desde el lugar?",
+      "transportationTaxi": "Sí, me interesa el transporte en taxi",
+      "transportationOwn": "No, organizaré mi propio transporte",
       "menuTitle": "Elecciones de menú",
       "menuDescription": "Por favor selecciona las opciones para cada persona en tu grupo. Los niños menores de 12 años recibirán un menú infantil.",
       "guest": "Invitado {{number}}",
@@ -226,10 +252,9 @@
       "songRequest": "Canción solicitada",
       "songRequestPlaceholder": "¿Qué canción te hará salir a la pista de baile?",
       "songRequestHint": "¡Haremos todo lo posible!",
-      "travelTitle": "Llegada y Salida",
-      "travelDescription": "Cuéntanos tus fechas de viaje para ayudar a coordinar el transporte si es necesario.",
-      "arrivalDate": "Fecha de llegada",
-      "departureDate": "Fecha de salida",
+      "allergies": "Alergias y Otras Precauciones",
+      "allergiesPlaceholder": "ej. alergia al maní, intolerancia al gluten, pelo de mascotas…",
+      "allergiesHint": "Cuéntanos sobre cualquier alergia alimentaria u otra precaución que debamos tomar.",
       "photographyTitle": "Fotografía y Video",
       "photographyDescription": "Nuestro fotógrafo y videógrafo capturarán recuerdos durante toda la celebración. ¿Consientes en ser fotografiado/a y/o filmado/a?",
       "photographyYes": "Sí, consiento ser fotografiado/a y filmado/a",
@@ -242,23 +267,27 @@
     "menu": {
       "appetizer": {
         "ceviche": "Ceviche de lubina francesa con lima y pimiento de Espelette",
-        "gaspacho": "Gazpacho ahumado de tomate amarillo con verduras rojas (V)"
+        "gaspacho": "Gazpacho ahumado de tomate amarillo con verduras rojas"
       },
       "main": {
         "bar": "Filete de lubina a la plancha, tartaleta de verduras mediterráneas, crema de guisantes y aceitunas negras",
-        "tournedos": "Tournedos de ternera francesa, puré de chalotas confitadas en vino tinto, compresión de patatas, jugo de morillas y vino dulce"
+        "tournedos": "Tournedos de ternera francesa, puré de chalotas confitadas en vino tinto, compresión de patatas, jugo de morillas y vino dulce",
+        "vegan": "Tartaleta de verduras de temporada, puré de raíces y jugo de vino tinto"
       }
     },
     "validation": {
-      "eventsRequired": "Por favor selecciona tu asistencia para al menos un día.",
+      "guestEventsRequired": "Por favor selecciona la asistencia de {{name}} para cada día.",
       "accommodationRequired": "Por favor indícanos tu preferencia de alojamiento.",
       "accommodationAddressRequired": "Por favor ingresa la dirección de tu alojamiento.",
       "hotelNameRequired": "Por favor ingresa el nombre de tu hotel.",
+      "transportationRequired": "Por favor indícanos tu preferencia de transporte.",
       "appetizerRequired": "Por favor selecciona un entrante.",
       "mainRequired": "Por favor selecciona un plato principal.",
       "addressIncompleteTitle": "La dirección puede estar incompleta",
       "addressIncompleteMessage": "Por favor verifica la dirección de tu alojamiento. Aún aceptaremos tu respuesta.",
-      "autocompleteUnavailable": "Autocompletado temporalmente no disponible. Por favor escribe tu dirección."
+      "autocompleteUnavailable": "Autocompletado temporalmente no disponible. Por favor escribe tu dirección.",
+      "formIncompleteTitle": "Algunos campos necesitan tu atención",
+      "formIncompleteMessage": "Por favor revisa los campos resaltados abajo e intenta de nuevo."
     },
     "success": {
       "title": "¡RSVP final enviado!",
