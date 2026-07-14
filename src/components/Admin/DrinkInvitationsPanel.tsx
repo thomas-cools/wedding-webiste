@@ -30,10 +30,17 @@ import {
 import { getAdminAuthHeaders } from '../../utils/adminAuth'
 import { type UseAdminRsvpsReturn } from './useAdminRsvps'
 
+interface SendResultDetail {
+  email: string
+  success: boolean
+  error?: string
+}
+
 interface SendResult {
   sent: number
   failed: number
   total: number
+  results?: SendResultDetail[]
 }
 
 export function DrinkInvitationsPanel({ adminData }: { adminData: UseAdminRsvpsReturn }) {
@@ -138,7 +145,7 @@ export function DrinkInvitationsPanel({ adminData }: { adminData: UseAdminRsvpsR
         return
       }
 
-      setSendResult({ sent: data.sent, failed: data.failed, total: data.total })
+      setSendResult({ sent: data.sent, failed: data.failed, total: data.total, results: data.results })
       toast({
         title: `Sent ${data.sent} drink invitations`,
         description: data.failed > 0 ? `${data.failed} failed` : undefined,
@@ -262,14 +269,28 @@ export function DrinkInvitationsPanel({ adminData }: { adminData: UseAdminRsvpsR
 
         {/* Send Results */}
         {sendResult && (
-          <Alert
-            status={sendResult.failed > 0 ? 'warning' : 'success'}
-            rounded="xl"
-          >
-            <AlertIcon />
-            Sent {sendResult.sent} of {sendResult.total} invitations
-            {sendResult.failed > 0 && ` (${sendResult.failed} failed)`}
-          </Alert>
+          <Box>
+            <Alert
+              status={sendResult.failed > 0 ? 'warning' : 'success'}
+              rounded="xl"
+            >
+              <AlertIcon />
+              Sent {sendResult.sent} of {sendResult.total} invitations
+              {sendResult.failed > 0 && ` (${sendResult.failed} failed)`}
+            </Alert>
+            {sendResult.failed > 0 && (sendResult.results?.filter((r) => !r.success).length ?? 0) > 0 && (
+              <Box bg="red.50" border="1px solid" borderColor="red.200" rounded="lg" p={3} mt={2} maxH="200px" overflowY="auto">
+                <Text fontSize="xs" fontWeight="semibold" color="red.700" mb={1}>Failed recipients:</Text>
+                <VStack align="stretch" spacing={1}>
+                  {sendResult.results!.filter((r) => !r.success).map((r) => (
+                    <Text key={r.email} fontSize="xs" color="red.700" wordBreak="break-word">
+                      <strong>{r.email}</strong>{r.error ? ` — ${r.error}` : ''}
+                    </Text>
+                  ))}
+                </VStack>
+              </Box>
+            )}
+          </Box>
         )}
 
         {/* Guest List */}

@@ -286,12 +286,13 @@ export function FinalRsvpDashboard({ adminData }: { adminData: UseAdminRsvpsRetu
 
       {/* Stats */}
       {finalRsvpsLoading ? (
-        <SimpleGrid columns={[2, 3, 5]} gap={4} mb={6}>
-          {[...Array(5)].map((_, i) => <Skeleton key={i} h="80px" borderRadius="lg" />)}
+        <SimpleGrid columns={[2, 3, 6]} gap={4} mb={6}>
+          {[...Array(6)].map((_, i) => <Skeleton key={i} h="80px" borderRadius="lg" />)}
         </SimpleGrid>
       ) : finalRsvpStats ? (
-        <SimpleGrid columns={[2, 3, 5]} gap={4} mb={6}>
+        <SimpleGrid columns={[2, 3, 6]} gap={4} mb={6}>
           <StatCard label="Total Responses" value={finalRsvpStats.total} />
+          <StatCard label="Total Guests" value={totalAdults + totalChildren} color="blue.600" />
           <StatCard label="Welcome Dinner" value={finalRsvpStats.attendingWelcome} color="green.600" />
           <StatCard label="Ceremony" value={finalRsvpStats.attendingCeremony} color="green.600" />
           <StatCard label="Brunch" value={finalRsvpStats.attendingBrunch} color="green.600" />

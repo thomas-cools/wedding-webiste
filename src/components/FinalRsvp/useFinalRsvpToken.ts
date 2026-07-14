@@ -10,7 +10,9 @@ export interface FinalRsvpGuestData {
 function base64urlDecode(str: string): string {
   const base64 = str.replace(/-/g, '+').replace(/_/g, '/')
   const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4)
-  return atob(padded)
+  const binary = atob(padded)
+  const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0))
+  return new TextDecoder().decode(bytes)
 }
 
 export function useFinalRsvpToken(): FinalRsvpGuestData | null {

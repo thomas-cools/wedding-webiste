@@ -32,14 +32,21 @@ import {
 import { getAdminAuthHeaders } from '../../utils/adminAuth'
 import type { UseAdminRsvpsReturn } from './useAdminRsvps'
 
+interface SendResultDetail {
+  email: string
+  success: boolean
+  error?: string
+}
+
 interface SendResult {
   sent: number
   failed: number
   total: number
+  results?: SendResultDetail[]
 }
 
 export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRsvpsReturn }) {
-  const { filteredRsvps, selectedIds, isLoading, getEffectiveLocale, emailOpensMap } = adminData
+  const { filteredRsvps, selectedIds, isLoading, getEffectiveLocale, setGuestLocale, emailOpensMap } = adminData
   const [locale, setLocale] = useState('en')
   const [dryRunResult, setDryRunResult] = useState<{
     totalCount: number
@@ -139,7 +146,7 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
         toast({ title: 'Send failed', description: data.error, status: 'error', duration: 5000 })
         return
       }
-      setSendResult({ sent: data.sent, failed: data.failed, total: data.total })
+      setSendResult({ sent: data.sent, failed: data.failed, total: data.total, results: data.results })
       toast({
         title: `Sent ${data.sent} final RSVP invitations`,
         description: data.failed > 0 ? `${data.failed} failed` : undefined,
@@ -250,9 +257,16 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
                         <Td>{1 + r.guests.length}</Td>
                         <Td fontSize="xs" color="gray.500">{r.guests.map((g) => g.name).join(', ') || '—'}</Td>
                         <Td>
-                          <Badge fontSize="10px" colorScheme="blue">
-                            {getEffectiveLocale(r).toUpperCase()}
-                          </Badge>
+                          <Select
+                            size="xs"
+                            w="70px"
+                            value={getEffectiveLocale(r)}
+                            onChange={(e) => setGuestLocale(r.id, e.target.value)}
+                          >
+                            <option value="en">EN</option>
+                            <option value="es">ES</option>
+                            <option value="nl">NL</option>
+                          </Select>
                         </Td>
                         <Td>
                           {opens.length > 0 ? (
@@ -354,11 +368,25 @@ export function FinalRsvpInvitationsPanel({ adminData }: { adminData: UseAdminRs
 
         {/* Send results */}
         {sendResult && (
-          <Alert status={sendResult.failed > 0 ? 'warning' : 'success'} borderRadius="lg">
-            <AlertIcon />
-            Sent {sendResult.sent} of {sendResult.total} emails
-            {sendResult.failed > 0 && ` — ${sendResult.failed} failed`}
-          </Alert>
+          <Box>
+            <Alert status={sendResult.failed > 0 ? 'warning' : 'success'} borderRadius="lg">
+              <AlertIcon />
+              Sent {sendResult.sent} of {sendResult.total} emails
+              {sendResult.failed > 0 && ` — ${sendResult.failed} failed`}
+            </Alert>
+            {sendResult.failed > 0 && (sendResult.results?.filter((r) => !r.success).length ?? 0) > 0 && (
+              <Box bg="red.50" border="1px solid" borderColor="red.200" rounded="lg" p={3} mt={2} maxH="200px" overflowY="auto">
+                <Text fontSize="xs" fontWeight="semibold" color="red.700" mb={1}>Failed recipients:</Text>
+                <VStack align="stretch" spacing={1}>
+                  {sendResult.results!.filter((r) => !r.success).map((r) => (
+                    <Text key={r.email} fontSize="xs" color="red.700" wordBreak="break-word">
+                      <strong>{r.email}</strong>{r.error ? ` — ${r.error}` : ''}
+                    </Text>
+                  ))}
+                </VStack>
+              </Box>
+            )}
+          </Box>
         )}
       </VStack>
 

@@ -216,7 +216,11 @@ export function RemindersPanel({ adminData }: { adminData: UseAdminRsvpsReturn }
   const [recipientFilter, setRecipientFilter] = useState(DEFAULT_FILTER['rsvp_reminder'])
   const [sending, setSending] = useState(false)
   const [previewing, setPreviewing] = useState(false)
-  const [result, setResult] = useState<{ sent: number; failed: number } | null>(null)
+  const [result, setResult] = useState<{
+    sent: number
+    failed: number
+    results?: Array<{ email: string; success: boolean; error?: string }>
+  } | null>(null)
   const [dryRunData, setDryRunData] = useState<DryRunData | null>(null)
   const { filteredRsvps, selectedIds, isLoading, getEffectiveLocale } = adminData
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -330,7 +334,7 @@ export function RemindersPanel({ adminData }: { adminData: UseAdminRsvpsReturn }
         return
       }
 
-      setResult({ sent: data.sent, failed: data.failed })
+      setResult({ sent: data.sent, failed: data.failed, results: data.results })
       toast({
         title: `Sent ${data.sent} reminders`,
         description: data.failed > 0 ? `${data.failed} failed` : undefined,
@@ -501,14 +505,28 @@ export function RemindersPanel({ adminData }: { adminData: UseAdminRsvpsReturn }
 
         {/* Result */}
         {result && (
-          <Alert
-            status={result.failed > 0 ? 'warning' : 'success'}
-            rounded="xl"
-          >
-            <AlertIcon />
-            Sent {result.sent} reminders
-            {result.failed > 0 && `, ${result.failed} failed`}
-          </Alert>
+          <Box>
+            <Alert
+              status={result.failed > 0 ? 'warning' : 'success'}
+              rounded="xl"
+            >
+              <AlertIcon />
+              Sent {result.sent} reminders
+              {result.failed > 0 && `, ${result.failed} failed`}
+            </Alert>
+            {result.failed > 0 && (result.results?.filter((r) => !r.success).length ?? 0) > 0 && (
+              <Box bg="red.50" border="1px solid" borderColor="red.200" rounded="lg" p={3} mt={2} maxH="200px" overflowY="auto">
+                <Text fontSize="xs" fontWeight="semibold" color="red.700" mb={1}>Failed recipients:</Text>
+                <VStack align="stretch" spacing={1}>
+                  {result.results!.filter((r) => !r.success).map((r) => (
+                    <Text key={r.email} fontSize="xs" color="red.700" wordBreak="break-word">
+                      <strong>{r.email}</strong>{r.error ? ` — ${r.error}` : ''}
+                    </Text>
+                  ))}
+                </VStack>
+              </Box>
+            )}
+          </Box>
         )}
 
         {/* Action Bar */}

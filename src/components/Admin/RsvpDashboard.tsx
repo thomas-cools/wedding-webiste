@@ -24,6 +24,7 @@ import {
   Td,
   Badge,
   Text,
+  Tooltip,
   useDisclosure,
   Alert,
   AlertIcon,
@@ -33,6 +34,7 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react'
+import { WarningIcon } from '@chakra-ui/icons'
 import { type AdminRsvp, type UseAdminRsvpsReturn, type SortColumn } from './useAdminRsvps'
 import { RsvpDetailModal } from './RsvpDetailModal'
 
@@ -123,7 +125,7 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
   return (
     <Box>
       {/* Stats Cards */}
-      <SimpleGrid columns={{ base: 2, md: 3, lg: 6 }} spacing={4} mb={6}>
+      <SimpleGrid columns={{ base: 2, md: 3, lg: 6 }} spacing={4} mb={4}>
         {isLoading ? (
           Array.from({ length: 6 }).map((_, i) => (
             <Skeleton key={i} h="80px" rounded="xl" />
@@ -160,6 +162,42 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
               value={stats?.totalAttendees ?? 0}
               bg="blue.50"
               color="blue.700"
+            />
+          </>
+        )}
+      </SimpleGrid>
+
+      {/* Per-event headcounts & duplicate warnings */}
+      <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} mb={6}>
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} h="80px" rounded="xl" />
+          ))
+        ) : (
+          <>
+            <StatCard
+              label="Attending Tue Welcome Dinner"
+              value={stats?.attendingWelcome ?? 0}
+              bg="purple.50"
+              color="purple.700"
+            />
+            <StatCard
+              label="Attending Wed Ceremony"
+              value={stats?.attendingCeremony ?? 0}
+              bg="blue.50"
+              color="blue.700"
+            />
+            <StatCard
+              label="Attending Thu Brunch"
+              value={stats?.attendingBrunch ?? 0}
+              bg="orange.50"
+              color="orange.700"
+            />
+            <StatCard
+              label="Possible Duplicates"
+              value={stats?.possibleDuplicates ?? 0}
+              bg={(stats?.possibleDuplicates ?? 0) > 0 ? 'red.50' : 'gray.50'}
+              color={(stats?.possibleDuplicates ?? 0) > 0 ? 'red.700' : 'gray.500'}
             />
           </>
         )}
@@ -362,22 +400,40 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
                       {likelihoodLabels[rsvp.likelihood] || rsvp.likelihood}
                     </Badge>
                   </Td>
-                  <Td isNumeric>{1 + rsvp.guests.length}</Td>
+                  <Td isNumeric>
+                    <HStack spacing={1} justify="flex-end">
+                      <Text>{1 + rsvp.guests.filter((g) => !g.isDuplicate).length}</Text>
+                      {(rsvp.guests.some((g) => g.isDuplicate) || (rsvp.matchedAsGuestIn?.length ?? 0) > 0) && (
+                        <Tooltip
+                          label={
+                            rsvp.guests.some((g) => g.isDuplicate)
+                              ? `Possible duplicate: ${rsvp.guests
+                                  .filter((g) => g.isDuplicate)
+                                  .map((g) => `${g.name} (${g.duplicateOfEmail})`)
+                                  .join(', ')} may have submitted their own RSVP separately`
+                              : `${rsvp.firstName} may already be listed as a guest in another RSVP`
+                          }
+                        >
+                          <WarningIcon color="red.500" boxSize={3} />
+                        </Tooltip>
+                      )}
+                    </HStack>
+                  </Td>
                   <Td>
                     <HStack spacing={1}>
                       {rsvp.events?.welcome === 'yes' && (
                         <Badge colorScheme="purple" variant="outline" fontSize="2xs">
-                          Fri
+                          Tue
                         </Badge>
                       )}
                       {rsvp.events?.ceremony === 'yes' && (
                         <Badge colorScheme="blue" variant="outline" fontSize="2xs">
-                          Sat
+                          Wed
                         </Badge>
                       )}
                       {rsvp.events?.brunch === 'yes' && (
                         <Badge colorScheme="orange" variant="outline" fontSize="2xs">
-                          Sun
+                          Thu
                         </Badge>
                       )}
                     </HStack>

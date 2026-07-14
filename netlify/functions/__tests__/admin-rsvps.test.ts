@@ -287,4 +287,143 @@ describe('admin-rsvps handler', () => {
     expect(mallory.events).toEqual({ welcome: '', ceremony: '', brunch: '' })
     expect(mallory.guests).toEqual([])
   })
+
+  describe('duplicate person detection', () => {
+    function mockDuplicateScenario(
+      submissions: Array<{ id: string; created_at: string; data: Record<string, string> }>
+    ) {
+      mockFetch.mockImplementation((url: string) => {
+        if (url.includes('/submissions')) {
+          return Promise.resolve({ ok: true, json: () => Promise.resolve(submissions) })
+        }
+        if (url.includes('/forms')) {
+          return Promise.resolve({ ok: true, json: () => Promise.resolve(MOCK_FORMS) })
+        }
+        return Promise.resolve({ ok: false, status: 404, text: () => Promise.resolve('Not found') })
+      })
+    }
+
+    it('flags a guest who also submitted their own RSVP separately, and excludes them from headcount', async () => {
+      mockDuplicateScenario([
+        {
+          id: 'sub-alice',
+          created_at: '2024-06-01T12:00:00Z',
+          data: {
+            firstName: 'Alice Dupont',
+            email: 'alice@example.com',
+            likelihood: 'definitely',
+            events: JSON.stringify({ welcome: 'yes', ceremony: 'yes', brunch: 'yes' }),
+            guests: JSON.stringify([{ name: 'Bob Smith' }]),
+          },
+        },
+        {
+          id: 'sub-bob',
+          created_at: '2024-06-02T12:00:00Z',
+          data: {
+            firstName: 'Bob Smith',
+            email: 'bob@example.com',
+            likelihood: 'definitely',
+            events: JSON.stringify({ welcome: 'yes', ceremony: 'yes', brunch: 'no' }),
+            guests: '[]',
+          },
+        },
+      ])
+
+      const token = makeAdminToken()
+      const event = createEvent({ headers: { authorization: `Bearer ${token}` } })
+      const result = assertResponse(await handler(event, mockContext))
+      const body = JSON.parse(result.body!)
+
+      expect(body.rsvps).toHaveLength(2)
+
+      const alice = body.rsvps.find((r: { firstName: string }) => r.firstName === 'Alice Dupont')
+      const bob = body.rsvps.find((r: { firstName: string }) => r.firstName === 'Bob Smith')
+
+      expect(alice.guests[0].isDuplicate).toBe(true)
+      expect(alice.guests[0].duplicateOfEmail).toBe('bob@example.com')
+      expect(bob.matchedAsGuestIn).toEqual(['sub-alice'])
+
+      // Alice (1, since Bob-as-guest is excluded) + Bob (1) = 2, not 3
+      expect(body.stats.totalAttendees).toBe(2)
+      expect(body.stats.possibleDuplicates).toBe(2)
+    })
+
+    it('fuzzy-matches names with minor typos', async () => {
+      mockDuplicateScenario([
+        {
+          id: 'sub-carol',
+          created_at: '2024-06-01T12:00:00Z',
+          data: {
+            firstName: 'Carol',
+            email: 'carol@example.com',
+            likelihood: 'definitely',
+            events: JSON.stringify({ welcome: 'yes', ceremony: 'yes', brunch: 'yes' }),
+            // Typo: "Smyth" vs "Smith" (edit distance 1)
+            guests: JSON.stringify([{ name: 'Dave Smyth' }]),
+          },
+        },
+        {
+          id: 'sub-dave',
+          created_at: '2024-06-02T12:00:00Z',
+          data: {
+            firstName: 'Dave Smith',
+            email: 'dave@example.com',
+            likelihood: 'definitely',
+            events: JSON.stringify({ welcome: 'yes', ceremony: 'yes', brunch: 'yes' }),
+            guests: '[]',
+          },
+        },
+      ])
+
+      const token = makeAdminToken()
+      const event = createEvent({ headers: { authorization: `Bearer ${token}` } })
+      const result = assertResponse(await handler(event, mockContext))
+      const body = JSON.parse(result.body!)
+
+      const carol = body.rsvps.find((r: { firstName: string }) => r.firstName === 'Carol')
+      expect(carol.guests[0].isDuplicate).toBe(true)
+      expect(carol.guests[0].duplicateOfEmail).toBe('dave@example.com')
+    })
+
+    it('does not flag unrelated guests, and computes per-event headcounts', async () => {
+      mockDuplicateScenario([
+        {
+          id: 'sub-erin',
+          created_at: '2024-06-01T12:00:00Z',
+          data: {
+            firstName: 'Erin',
+            email: 'erin@example.com',
+            likelihood: 'definitely',
+            events: JSON.stringify({ welcome: 'yes', ceremony: 'yes', brunch: 'no' }),
+            guests: JSON.stringify([{ name: 'Frank' }]),
+          },
+        },
+        {
+          id: 'sub-grace',
+          created_at: '2024-06-02T12:00:00Z',
+          data: {
+            firstName: 'Grace',
+            email: 'grace@example.com',
+            likelihood: 'maybe',
+            events: JSON.stringify({ welcome: 'no', ceremony: 'yes', brunch: 'yes' }),
+            guests: '[]',
+          },
+        },
+      ])
+
+      const token = makeAdminToken()
+      const event = createEvent({ headers: { authorization: `Bearer ${token}` } })
+      const result = assertResponse(await handler(event, mockContext))
+      const body = JSON.parse(result.body!)
+
+      const erin = body.rsvps.find((r: { firstName: string }) => r.firstName === 'Erin')
+      expect(erin.guests[0].isDuplicate).toBeFalsy()
+      expect(body.stats.possibleDuplicates).toBe(0)
+
+      // Erin's party (2 people) attends welcome + ceremony; Grace (1 person) attends ceremony + brunch
+      expect(body.stats.attendingWelcome).toBe(2)
+      expect(body.stats.attendingCeremony).toBe(3)
+      expect(body.stats.attendingBrunch).toBe(1)
+    })
+  })
 })

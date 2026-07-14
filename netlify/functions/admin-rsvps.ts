@@ -40,12 +40,22 @@ export interface AdminRsvp {
   }
   accommodation: string
   travelPlan: string
-  guests: Array<{ name: string; age?: string; dietary?: string }>
+  guests: Array<{
+    name: string
+    age?: string
+    dietary?: string
+    /** True if this guest appears to be someone who also submitted their own RSVP separately. */
+    isDuplicate?: boolean
+    /** Email of the separate RSVP this guest matches, when isDuplicate is true. */
+    duplicateOfEmail?: string
+  }>
   dietary: string
   franceTips: boolean
   additionalNotes: string
   submittedAt: string
   locale: string
+  /** IDs of other RSVPs that listed this person as one of their guests. */
+  matchedAsGuestIn?: string[]
 }
 
 function parseJsonField<T>(value: string | undefined, fallback: T): T {
@@ -55,6 +65,44 @@ function parseJsonField<T>(value: string | undefined, fallback: T): T {
   } catch {
     return fallback
   }
+}
+
+/** Lowercases, strips accents, and collapses whitespace for name comparison. */
+function normalizeName(name: string): string {
+  return name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, ' ')
+}
+
+/** Standard Levenshtein edit distance between two strings. */
+function levenshtein(a: string, b: string): number {
+  if (a === b) return 0
+  if (a.length === 0) return b.length
+  if (b.length === 0) return a.length
+
+  const prev = Array.from({ length: b.length + 1 }, (_, i) => i)
+  for (let i = 1; i <= a.length; i++) {
+    const curr = [i]
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1
+      curr[j] = Math.min(curr[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost)
+    }
+    prev.splice(0, prev.length, ...curr)
+  }
+  return prev[b.length]
+}
+
+/** Exact match after normalization, or Levenshtein distance <= 1 for names of length >= 3 (catches typos/accents). */
+function isNameMatch(a: string, b: string): boolean {
+  const normA = normalizeName(a)
+  const normB = normalizeName(b)
+  if (!normA || !normB) return false
+  if (normA === normB) return true
+  if (normA.length < 3 || normB.length < 3) return false
+  return levenshtein(normA, normB) <= 1
 }
 
 function normalizeSubmission(sub: NetlifyFormSubmission): AdminRsvp {
@@ -172,16 +220,52 @@ export const handler: Handler = async (event) => {
 
     const rsvps = Array.from(byEmail.values())
 
+    // Second pass: detect people who submitted their own RSVP separately after
+    // already being listed as someone else's guest (e.g. a partner or plus-one).
+    // Matches are flagged (not removed) so admins can manually verify, and are
+    // excluded from headcount stats to avoid double counting.
+    const byNormalizedName = new Map<string, AdminRsvp>()
+    for (const rsvp of rsvps) {
+      const key = normalizeName(rsvp.firstName)
+      if (key) byNormalizedName.set(key, rsvp)
+    }
+
+    for (const rsvp of rsvps) {
+      for (const guest of rsvp.guests) {
+        for (const other of rsvps) {
+          if (other.email === rsvp.email) continue
+          if (isNameMatch(guest.name, other.firstName)) {
+            guest.isDuplicate = true
+            guest.duplicateOfEmail = other.email
+            other.matchedAsGuestIn = [...(other.matchedAsGuestIn ?? []), rsvp.id]
+            break
+          }
+        }
+      }
+    }
+
     // Compute summary stats
+    const partySize = (r: AdminRsvp) => 1 + r.guests.filter((g) => !g.isDuplicate).length
+    const attending = rsvps.filter((r) => r.likelihood !== 'no')
     const stats = {
       total: rsvps.length,
       definitely: rsvps.filter((r) => r.likelihood === 'definitely').length,
       highlyLikely: rsvps.filter((r) => r.likelihood === 'highly_likely').length,
       maybe: rsvps.filter((r) => r.likelihood === 'maybe').length,
       declined: rsvps.filter((r) => r.likelihood === 'no').length,
-      totalAttendees: rsvps
-        .filter((r) => r.likelihood !== 'no')
-        .reduce((sum, r) => sum + 1 + r.guests.length, 0),
+      totalAttendees: attending.reduce((sum, r) => sum + partySize(r), 0),
+      attendingWelcome: attending
+        .filter((r) => r.events?.welcome === 'yes')
+        .reduce((sum, r) => sum + partySize(r), 0),
+      attendingCeremony: attending
+        .filter((r) => r.events?.ceremony === 'yes')
+        .reduce((sum, r) => sum + partySize(r), 0),
+      attendingBrunch: attending
+        .filter((r) => r.events?.brunch === 'yes')
+        .reduce((sum, r) => sum + partySize(r), 0),
+      possibleDuplicates: rsvps.filter(
+        (r) => r.guests.some((g) => g.isDuplicate) || (r.matchedAsGuestIn?.length ?? 0) > 0
+      ).length,
     }
 
     return adminJson(200, { ok: true, rsvps, stats })

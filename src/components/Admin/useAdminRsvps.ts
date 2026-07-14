@@ -54,12 +54,22 @@ export interface AdminRsvp {
   }
   accommodation: string
   travelPlan: string
-  guests: Array<{ name: string; age?: string; dietary?: string }>
+  guests: Array<{
+    name: string
+    age?: string
+    dietary?: string
+    /** True if this guest appears to be someone who also submitted their own RSVP separately. */
+    isDuplicate?: boolean
+    /** Email of the separate RSVP this guest matches, when isDuplicate is true. */
+    duplicateOfEmail?: string
+  }>
   dietary: string
   franceTips: boolean
   additionalNotes: string
   submittedAt: string
   locale: string
+  /** IDs of other RSVPs that listed this person as one of their guests. */
+  matchedAsGuestIn?: string[]
 }
 
 export interface AdminDrinkPrefs {
@@ -90,6 +100,10 @@ export interface RsvpStats {
   maybe: number
   declined: number
   totalAttendees: number
+  attendingWelcome: number
+  attendingCeremony: number
+  attendingBrunch: number
+  possibleDuplicates: number
 }
 
 export type SortColumn = 'name' | 'email' | 'likelihood' | 'partySize' | 'date' | ''
@@ -140,6 +154,10 @@ const EMPTY_STATS: RsvpStats = {
   maybe: 0,
   declined: 0,
   totalAttendees: 0,
+  attendingWelcome: 0,
+  attendingCeremony: 0,
+  attendingBrunch: 0,
+  possibleDuplicates: 0,
 }
 
 export function useAdminRsvps(): UseAdminRsvpsReturn {

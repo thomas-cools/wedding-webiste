@@ -21,7 +21,11 @@ import {
   Wrap,
   WrapItem,
   Tag,
+  Tooltip,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react'
+import { WarningIcon } from '@chakra-ui/icons'
 import type { AdminRsvp, AdminDrinkPrefs, EmailOpen } from './useAdminRsvps'
 
 interface RsvpDetailModalProps {
@@ -47,9 +51,9 @@ const likelihoodLabels: Record<string, string> = {
 }
 
 const eventLabels: Record<string, string> = {
-  welcome: 'Friday Welcome Dinner',
-  ceremony: 'Saturday Ceremony & Reception',
-  brunch: 'Sunday Brunch',
+  welcome: 'Tuesday Welcome Dinner',
+  ceremony: 'Wednesday Ceremony & Reception',
+  brunch: 'Thursday Brunch',
 }
 
 const eventAnswerLabels: Record<string, string> = {
@@ -79,6 +83,12 @@ export function RsvpDetailModal({ rsvp, isOpen, onClose, drinkPrefs, emailOpens 
         <ModalCloseButton />
         <ModalBody pb={6}>
           <VStack align="stretch" spacing={5}>
+            {(rsvp.matchedAsGuestIn?.length ?? 0) > 0 && (
+              <Alert status="warning" rounded="md" fontSize="sm">
+                <AlertIcon />
+                {rsvp.firstName} may already be counted as a guest in another RSVP submission.
+              </Alert>
+            )}
             {/* Contact Info */}
             <Box>
               <Text fontWeight="bold" fontSize="sm" color="neutral.muted" mb={1}>
@@ -144,7 +154,18 @@ export function RsvpDetailModal({ rsvp, isOpen, onClose, drinkPrefs, emailOpens 
                     </Tr>
                     {rsvp.guests.map((g, i) => (
                       <Tr key={i}>
-                        <Td>{g.name}</Td>
+                        <Td>
+                          <HStack spacing={1}>
+                            <Text>{g.name}</Text>
+                            {g.isDuplicate && (
+                              <Tooltip
+                                label={`May be double-counted \u2014 also RSVP'd separately (${g.duplicateOfEmail})`}
+                              >
+                                <WarningIcon color="red.500" boxSize={3} />
+                              </Tooltip>
+                            )}
+                          </HStack>
+                        </Td>
                         <Td>{g.age || '-'}</Td>
                         <Td>{g.dietary || '-'}</Td>
                       </Tr>
