@@ -7,6 +7,16 @@ import type { HandlerEvent, HandlerContext, HandlerResponse } from '@netlify/fun
 const mockFetch = jest.fn()
 global.fetch = mockFetch
 
+const mockGetAllGuestOverrides = jest.fn()
+jest.mock('../utils/rsvp-guest-overrides', () => ({
+  getAllGuestOverrides: () => mockGetAllGuestOverrides(),
+}))
+
+const mockGetAllEmailOverrides = jest.fn()
+jest.mock('../utils/rsvp-email-overrides', () => ({
+  getAllEmailOverrides: () => mockGetAllEmailOverrides(),
+}))
+
 function assertResponse(result: void | HandlerResponse): HandlerResponse {
   expect(result).toBeDefined()
   return result as HandlerResponse
@@ -118,6 +128,10 @@ describe('admin-rsvps handler', () => {
   beforeEach(async () => {
     jest.resetModules()
     mockFetch.mockReset()
+    mockGetAllGuestOverrides.mockReset()
+    mockGetAllGuestOverrides.mockResolvedValue(new Map())
+    mockGetAllEmailOverrides.mockReset()
+    mockGetAllEmailOverrides.mockResolvedValue(new Map())
 
     process.env.JWT_SECRET = 'test-jwt-secret'
     process.env.NETLIFY_API_TOKEN = 'test-netlify-token'
@@ -424,6 +438,108 @@ describe('admin-rsvps handler', () => {
       expect(body.stats.attendingWelcome).toBe(2)
       expect(body.stats.attendingCeremony).toBe(3)
       expect(body.stats.attendingBrunch).toBe(1)
+    })
+  })
+
+  describe('guest overrides merge', () => {
+    it('fully replaces guests and stamps guestsManuallyEditedAt when an override exists', async () => {
+      mockNetlifyApi()
+      mockGetAllGuestOverrides.mockResolvedValue(
+        new Map([
+          [
+            'alice@example.com',
+            {
+              guests: [{ name: 'Newly Added 1' }, { name: 'Newly Added 2' }],
+              updatedAt: '2026-02-01T00:00:00.000Z',
+              history: [],
+            },
+          ],
+        ])
+      )
+
+      const token = makeAdminToken()
+      const event = createEvent({ headers: { authorization: `Bearer ${token}` } })
+      const result = assertResponse(await handler(event, mockContext))
+      const body = JSON.parse(result.body!)
+
+      const alice = body.rsvps.find((r: { firstName: string }) => r.firstName === 'Alice')
+      expect(alice.guests).toEqual([{ name: 'Newly Added 1' }, { name: 'Newly Added 2' }])
+      expect(alice.guestsManuallyEditedAt).toBe('2026-02-01T00:00:00.000Z')
+
+      // Party size stats reflect the overridden guest list (1 primary + 2 added = 3)
+      expect(body.stats.totalAttendees).toBe(3 + 1) // Alice's 3 + Charlie's 1
+
+      // Parties without an override are untouched
+      const charlie = body.rsvps.find((r: { firstName: string }) => r.firstName === 'Charlie')
+      expect(charlie.guestsManuallyEditedAt).toBeUndefined()
+    })
+
+    it('runs duplicate-detection against the post-override guest list', async () => {
+      mockNetlifyApi()
+      // Override Alice's guests to include a name matching Charlie's first name,
+      // which should now be flagged as a possible duplicate.
+      mockGetAllGuestOverrides.mockResolvedValue(
+        new Map([
+          [
+            'alice@example.com',
+            {
+              guests: [{ name: 'Charlie' }],
+              updatedAt: '2026-02-01T00:00:00.000Z',
+              history: [],
+            },
+          ],
+        ])
+      )
+
+      const token = makeAdminToken()
+      const event = createEvent({ headers: { authorization: `Bearer ${token}` } })
+      const result = assertResponse(await handler(event, mockContext))
+      const body = JSON.parse(result.body!)
+
+      const alice = body.rsvps.find((r: { firstName: string }) => r.firstName === 'Alice')
+      expect(alice.guests[0].isDuplicate).toBe(true)
+      expect(alice.guests[0].duplicateOfEmail).toBe('charlie@example.com')
+    })
+  })
+
+  describe('email overrides merge', () => {
+    it('applies an email correction before dedup, keyed by the stable submission id', async () => {
+      mockNetlifyApi()
+      mockGetAllEmailOverrides.mockResolvedValue(
+        new Map([
+          ['sub-3', { email: 'alice-fixed@example.com', updatedAt: '2026-03-01T00:00:00.000Z', history: [] }],
+        ])
+      )
+
+      const token = makeAdminToken()
+      const event = createEvent({ headers: { authorization: `Bearer ${token}` } })
+      const result = assertResponse(await handler(event, mockContext))
+      const body = JSON.parse(result.body!)
+
+      const corrected = body.rsvps.find((r: { email: string }) => r.email === 'alice-fixed@example.com')
+      expect(corrected).toBeDefined()
+      expect(corrected.firstName).toBe('Alice')
+      expect(corrected.emailCorrectedAt).toBe('2026-03-01T00:00:00.000Z')
+
+      // sub-1 (the other, un-corrected Alice submission) still dedupes under
+      // the original email since only sub-3 was corrected.
+      const original = body.rsvps.find((r: { email: string }) => r.email === 'alice@example.com')
+      expect(original).toBeDefined()
+      expect(original.firstName).toBe('Alice')
+      expect(original.emailCorrectedAt).toBeUndefined()
+    })
+
+    it('continues without email overrides if the Blobs lookup fails', async () => {
+      mockNetlifyApi()
+      mockGetAllEmailOverrides.mockRejectedValue(new Error('blob store unavailable'))
+
+      const token = makeAdminToken()
+      const event = createEvent({ headers: { authorization: `Bearer ${token}` } })
+      const result = assertResponse(await handler(event, mockContext))
+
+      expect(result.statusCode).toBe(200)
+      const body = JSON.parse(result.body!)
+      expect(body.rsvps.length).toBeGreaterThan(0)
     })
   })
 })

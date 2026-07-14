@@ -65,6 +65,7 @@ const FILTER_OPTIONS = [
 
 export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn }) {
   const {
+    rsvps,
     stats,
     isLoading,
     error,
@@ -88,6 +89,8 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
     emailOpensMap,
     exportRsvpsCsv,
     exportRsvpsMarkdown,
+    updateRsvpGuests,
+    updateRsvpEmail,
   } = adminData
 
   const selectedRsvps = filteredRsvps.filter((r) => selectedIds.has(r.id))
@@ -105,11 +108,14 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
     userSelect: 'none' as const,
   })
 
-  const [selectedRsvp, setSelectedRsvp] = useState<AdminRsvp | null>(null)
+  const [selectedRsvpId, setSelectedRsvpId] = useState<string | null>(null)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  // Re-derived from the live `rsvps` list (not a snapshot) so edits made in
+  // the detail modal are reflected immediately after the post-save refetch.
+  const selectedRsvp = rsvps.find((r) => r.id === selectedRsvpId) ?? null
 
   const handleRowClick = (rsvp: AdminRsvp) => {
-    setSelectedRsvp(rsvp)
+    setSelectedRsvpId(rsvp.id)
     onOpen()
   }
 
@@ -411,7 +417,14 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
                   </Td>
                   <Td fontWeight="medium">{rsvp.firstName}</Td>
                   <Td fontSize="xs" color="gray.600">
-                    {rsvp.email}
+                    <HStack spacing={1}>
+                      <Text fontSize="xs">{rsvp.email}</Text>
+                      {rsvp.emailCorrectedAt && (
+                        <Tooltip label={`Corrected ${new Date(rsvp.emailCorrectedAt).toLocaleString()}`}>
+                          <Badge colorScheme="purple" fontSize="2xs">Corrected</Badge>
+                        </Tooltip>
+                      )}
+                    </HStack>
                   </Td>
                   <Td>
                     <Badge
@@ -425,6 +438,11 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
                   <Td isNumeric>
                     <HStack spacing={1} justify="flex-end">
                       <Text>{1 + rsvp.guests.filter((g) => !g.isDuplicate).length}</Text>
+                      {rsvp.guestsManuallyEditedAt && (
+                        <Tooltip label={`Manually edited ${new Date(rsvp.guestsManuallyEditedAt).toLocaleString()}`}>
+                          <Badge colorScheme="purple" fontSize="2xs">Edited</Badge>
+                        </Tooltip>
+                      )}
                       {(rsvp.guests.some((g) => g.isDuplicate) || (rsvp.matchedAsGuestIn?.length ?? 0) > 0) && (
                         <Tooltip
                           label={
@@ -510,6 +528,8 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
         onClose={onClose}
         drinkPrefs={selectedRsvp ? drinkPrefsMap.get(selectedRsvp.email.toLowerCase()) : undefined}
         emailOpens={selectedRsvp ? emailOpensMap.get(selectedRsvp.email) : undefined}
+        onGuestsUpdated={updateRsvpGuests}
+        onEmailUpdated={updateRsvpEmail}
       />
     </Box>
   )

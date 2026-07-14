@@ -7,8 +7,7 @@
     "travel": "Verblijf",
     "faq": "FAQ",
     "rsvp": "RSVP",
-    "drinks": "Dranken",
-    "registry": "Cadeaus"
+    "drinks": "Dranken"
   },
   "hero": {
     "invited": "Je bent uitgenodigd",
@@ -190,29 +189,7 @@
   "quickLinks": {
     "label": "Verkennen",
     "title": "Snelle Links",
-    "stay": "Verblijf",
-    "registry": "Cadeaus"
-  },
-  "registry": {
-    "label": "Cadeaus & Verlanglijst",
-    "title": "Verlanglijst",
-    "teaserDescription": "Jullie aanwezigheid op onze bruiloft is het mooiste cadeau. Als jullie toch iets willen geven, hebben we een kleine verlanglijst samengesteld.",
-    "viewButton": "Bekijk Onze Verlanglijst",
-    "backToHome": "Terug",
-    "pageTitle": "Onze Verlanglijst",
-    "pageIntro": "We voelen ons zo gelukkig omringd door familie en vrienden nu we aan dit nieuwe hoofdstuk beginnen. Als jullie willen bijdragen aan onze toekomst samen, hier zijn een paar plekken om dat te doen.",
-    "links": [
-      {
-        "name": "Onze Cadeaulijst",
-        "description": "Bekijk onze zorgvuldig samengestelde cadeaulijst.",
-        "buttonLabel": "Bekijk Lijst"
-      },
-      {
-        "name": "Huwelijksreis Fonds",
-        "description": "Help ons vieren met een bijdrage aan onze huwelijksreis.",
-        "buttonLabel": "Bijdragen"
-      }
-    ]
+    "stay": "Verblijf"
   },
   "finalRsvp": {
     "title": "Definitieve RSVP",
@@ -220,7 +197,7 @@
     "party": "gezelschap",
     "form": {
       "attendanceTitle": "Aanwezigheid per dag",
-      "attendanceDescription": "Laat ons weten op welke dagen elke persoon in je gezelschap aanwezig is — antwoorden kunnen per persoon verschillen.",
+      "attendanceDescription": "Laat ons weten welke dagen jij en je gezelschap aanwezig zijn.",
       "event": {
         "welcome": "Welkomstdiner · Dinsdag 25 augustus",
         "ceremony": "Ceremonie & Receptie · Woensdag 26 augustus",
@@ -232,16 +209,17 @@
       "notAttending": "Niet aanwezig",
       "accommodationTitle": "Accommodatie",
       "accommodationChateau": "We verblijven op de locatie (Chateau)",
-      "accommodationAirbnb": "We verblijven in een Airbnb",
+      "accommodationAirbnb": "We verblijven in een Airbnb / privéverhuur",
       "accommodationHotel": "We verblijven in een hotel",
       "accommodationAddress": "Jouw verblijfsadres",
       "accommodationAddressPlaceholder": "Straat, stad…",
       "accommodationAddressHint": "Dit helpt ons het transport naar en van de locatie te coördineren.",
       "hotelName": "Hotelnaam",
-      "hotelNamePlaceholder": "Naam van het hotel waar je verblijft",
-      "transportationQuestion": "Wil je dat we taxivervoer van en naar de locatie regelen?",
-      "transportationTaxi": "Ja, ik ben geïnteresseerd in taxivervoer",
-      "transportationOwn": "Nee, ik regel mijn eigen vervoer",
+      "hotelNamePlaceholder": "bijv. Hôtel & Spa Le Pavillon",
+      "transportationTitle": "Vervoer",
+      "transportationDescription": "Omdat je niet op de locatie verblijft, laat ons weten of je een taxi geregeld wilt hebben of dat je zelf komt.",
+      "transportationTaxi": "Regel alsjeblieft een taxi voor ons",
+      "transportationOwn": "We regelen zelf ons vervoer",
       "menuTitle": "Menukeuzes",
       "menuDescription": "Selecteer alsjeblieft de keuzes voor elke persoon in je gezelschap. Kinderen onder de 12 jaar krijgen een kindermenu.",
       "guest": "Gast {{number}}",
@@ -250,12 +228,11 @@
       "childrensMealNote": "Er wordt een speciaal kindermenu voorzien.",
       "appetizer": "Voorgerecht",
       "mainCourse": "Hoofdgerecht",
+      "allergiesLabel": "Allergieën / dieetwensen",
+      "allergiesPlaceholder": "Allergieën of dieetbeperkingen?",
       "songRequest": "Muziekverzoek",
       "songRequestPlaceholder": "Welk nummer brengt jou op de dansvloer?",
       "songRequestHint": "We doen ons best!",
-      "allergies": "Allergieën & Andere Voorzorgsmaatregelen",
-      "allergiesPlaceholder": "bijv. pinda-allergie, glutenintolerantie, huisdierhaar…",
-      "allergiesHint": "Laat ons weten over eventuele voedselallergieën of andere voorzorgsmaatregelen die we moeten nemen.",
       "photographyTitle": "Fotografie & Video",
       "photographyDescription": "Onze fotograaf en videograaf leggen herinneringen vast tijdens de hele viering. Stem je in met gefotografeerd en/of gefilmd worden?",
       "photographyYes": "Ja, ik stem in met gefotografeerd en gefilmd worden",
@@ -268,16 +245,17 @@
     "menu": {
       "appetizer": {
         "ceviche": "Franse zeebaars ceviche met limoen en Espelette peper",
-        "gaspacho": "Gerookte gele tomatengazpacho met rode groenten"
+        "gaspacho": "Gerookte gele tomatengazpacho met rode groenten (V)"
       },
       "main": {
         "bar": "Gegrilde zeebaarsfilet, Mediterraans groentetaartje, erwtencrème en zwarte olijven",
         "tournedos": "Franse rundfilet tournedos, geconfijte sjalottencrème met rode wijn, aardappelcompressie, morieljesjus en dessertwijnsaus",
-        "vegan": "Groentetaartje van het seizoen, wortelpuree en rodewijnjus"
+        "vegan": "Geroosterd groentetaartje met seizoensgroenten (VG)"
       }
     },
     "validation": {
-      "guestEventsRequired": "Selecteer alsjeblieft de aanwezigheid van {{name}} voor elke dag.",
+      "eventsRequired": "Selecteer alsjeblieft je aanwezigheid voor minimaal één dag.",
+      "guestEventsRequired": "{{name}} moet voor elke dag aanwezigheid opgeven.",
       "accommodationRequired": "Laat ons alsjeblieft je accommodatievoorkeur weten.",
       "accommodationAddressRequired": "Vul alsjeblieft je verblijfsadres in.",
       "hotelNameRequired": "Vul alsjeblieft je hotelnaam in.",
@@ -286,9 +264,7 @@
       "mainRequired": "Selecteer alsjeblieft een hoofdgerecht.",
       "addressIncompleteTitle": "Adres kan onvolledig zijn",
       "addressIncompleteMessage": "Controleer alsjeblieft je verblijfsadres. We accepteren je antwoord nog steeds.",
-      "autocompleteUnavailable": "Automatisch aanvullen is tijdelijk niet beschikbaar. Typ alsjeblieft je adres.",
-      "formIncompleteTitle": "Sommige velden hebben je aandacht nodig",
-      "formIncompleteMessage": "Controleer alsjeblieft de gemarkeerde velden hieronder en probeer opnieuw."
+      "autocompleteUnavailable": "Automatisch aanvullen is tijdelijk niet beschikbaar. Typ alsjeblieft je adres."
     },
     "success": {
       "title": "Definitieve RSVP ingediend!",

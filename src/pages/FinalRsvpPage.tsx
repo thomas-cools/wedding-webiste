@@ -51,16 +51,14 @@ function FinalRsvpPageContent() {
   const guestData = useFinalRsvpToken()
   const [searchParams] = useSearchParams()
 
-  // Apply the locale chosen by the admin when sending the invitation (?lang=),
-  // so the guest lands on the page in the correct language regardless of any
-  // previously cached/detected language. Runs once on mount only.
   useEffect(() => {
     const lang = searchParams.get('lang')
-    if (lang && languages.some((l) => l.code === lang) && i18n.language !== lang) {
+    if (!lang) return
+    const isSupported = languages.some((l) => l.code === lang)
+    if (isSupported && lang !== i18n.language) {
       i18n.changeLanguage(lang)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [searchParams, i18n])
 
   const handleSuccess = () => {
     navigate('/')

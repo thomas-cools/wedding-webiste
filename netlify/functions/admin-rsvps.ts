@@ -5,6 +5,8 @@ import {
   adminUnauthorized,
   adminCorsResponse,
 } from './utils/admin-auth'
+import { getAllGuestOverrides } from './utils/rsvp-guest-overrides'
+import { getAllEmailOverrides } from './utils/rsvp-email-overrides'
 
 /**
  * Admin endpoint to fetch all RSVP submissions from Netlify Forms API.
@@ -56,6 +58,10 @@ export interface AdminRsvp {
   locale: string
   /** IDs of other RSVPs that listed this person as one of their guests. */
   matchedAsGuestIn?: string[]
+  /** Set when an admin has manually edited this party's guest list. */
+  guestsManuallyEditedAt?: string
+  /** Set when an admin has corrected this party's email address. */
+  emailCorrectedAt?: string
 }
 
 function parseJsonField<T>(value: string | undefined, fallback: T): T {
@@ -206,10 +212,26 @@ export const handler: Handler = async (event) => {
   try {
     const submissions = await fetchAllRsvpSubmissions(SITE_ID, NETLIFY_API_TOKEN)
 
+    // Load email corrections up front (keyed by the stable submission id) so
+    // dedup-by-email below groups submissions under the corrected address.
+    // Non-essential enhancement — a Blobs failure must not break the core
+    // RSVP dashboard, so log and continue without corrections instead.
+    let emailOverrides = new Map<string, { email: string; updatedAt: string }>()
+    try {
+      emailOverrides = await getAllEmailOverrides()
+    } catch (error) {
+      console.error('Failed to load email overrides, continuing without them:', error)
+    }
+
     // Normalize all submissions, deduplicate by email (keep latest)
     const byEmail = new Map<string, AdminRsvp>()
     for (const sub of submissions) {
       const rsvp = normalizeSubmission(sub)
+      const emailOverride = emailOverrides.get(sub.id)
+      if (emailOverride) {
+        rsvp.email = emailOverride.email
+        rsvp.emailCorrectedAt = emailOverride.updatedAt
+      }
       if (!rsvp.email) continue
 
       const existing = byEmail.get(rsvp.email)
@@ -219,6 +241,24 @@ export const handler: Handler = async (event) => {
     }
 
     const rsvps = Array.from(byEmail.values())
+
+    // Apply admin-made guest-list edits (Netlify Forms submissions are
+    // read-only, so edits are persisted separately in Netlify Blobs and
+    // merged in here, before duplicate-detection/stats run). Guest overrides
+    // are a non-essential enhancement, so a Blobs failure must not break the
+    // core RSVP dashboard — log and continue without overrides instead.
+    try {
+      const guestOverrides = await getAllGuestOverrides()
+      for (const rsvp of rsvps) {
+        const override = guestOverrides.get(rsvp.email)
+        if (override) {
+          rsvp.guests = override.guests
+          rsvp.guestsManuallyEditedAt = override.updatedAt
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load guest overrides, continuing without them:', error)
+    }
 
     // Second pass: detect people who submitted their own RSVP separately after
     // already being listed as someone else's guest (e.g. a partner or plus-one).

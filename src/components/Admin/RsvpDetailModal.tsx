@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Box,
   Modal,
@@ -24,9 +25,13 @@ import {
   Tooltip,
   Alert,
   AlertIcon,
+  Button,
+  IconButton,
+  Input,
+  useToast,
 } from '@chakra-ui/react'
-import { WarningIcon } from '@chakra-ui/icons'
-import type { AdminRsvp, AdminDrinkPrefs, EmailOpen } from './useAdminRsvps'
+import { WarningIcon, CloseIcon } from '@chakra-ui/icons'
+import type { AdminRsvp, AdminDrinkPrefs, EmailOpen, EditableGuest } from './useAdminRsvps'
 
 interface RsvpDetailModalProps {
   rsvp: AdminRsvp | null
@@ -34,6 +39,8 @@ interface RsvpDetailModalProps {
   onClose: () => void
   drinkPrefs?: AdminDrinkPrefs[]
   emailOpens?: EmailOpen[]
+  onGuestsUpdated?: (email: string, guests: EditableGuest[]) => Promise<boolean>
+  onEmailUpdated?: (id: string, oldEmail: string, newEmail: string) => Promise<boolean>
 }
 
 const likelihoodColors: Record<string, string> = {
@@ -63,8 +70,90 @@ const eventAnswerLabels: Record<string, string> = {
   '': 'Not specified',
 }
 
-export function RsvpDetailModal({ rsvp, isOpen, onClose, drinkPrefs, emailOpens }: RsvpDetailModalProps) {
+export function RsvpDetailModal({ rsvp, isOpen, onClose, drinkPrefs, emailOpens, onGuestsUpdated, onEmailUpdated }: RsvpDetailModalProps) {
+  const [isEditingGuests, setIsEditingGuests] = useState(false)
+  const [editedGuests, setEditedGuests] = useState<EditableGuest[]>([])
+  const [isSavingGuests, setIsSavingGuests] = useState(false)
+  const [isEditingEmail, setIsEditingEmail] = useState(false)
+  const [editedEmail, setEditedEmail] = useState('')
+  const [isSavingEmail, setIsSavingEmail] = useState(false)
+  const toast = useToast()
+
   if (!rsvp) return null
+
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+  const handleStartEditEmail = () => {
+    setEditedEmail(rsvp.email)
+    setIsEditingEmail(true)
+  }
+
+  const handleCancelEditEmail = () => {
+    setIsEditingEmail(false)
+  }
+
+  const handleSaveEmail = async () => {
+    if (!onEmailUpdated) return
+    const trimmed = editedEmail.trim().toLowerCase()
+    if (!EMAIL_REGEX.test(trimmed)) {
+      toast({ title: 'Enter a valid email address', status: 'error', duration: 4000 })
+      return
+    }
+
+    setIsSavingEmail(true)
+    const success = await onEmailUpdated(rsvp.id, rsvp.email, trimmed)
+    setIsSavingEmail(false)
+
+    if (success) {
+      toast({ title: 'Email updated', status: 'success', duration: 3000 })
+      setIsEditingEmail(false)
+    } else {
+      toast({ title: 'Failed to update email', status: 'error', duration: 4000 })
+    }
+  }
+
+  const handleStartEdit = () => {
+    setEditedGuests(rsvp.guests.map((g) => ({ name: g.name, age: g.age, dietary: g.dietary })))
+    setIsEditingGuests(true)
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditingGuests(false)
+  }
+
+  const handleGuestFieldChange = (index: number, field: keyof EditableGuest, value: string) => {
+    setEditedGuests((prev) => prev.map((g, i) => (i === index ? { ...g, [field]: value } : g)))
+  }
+
+  const handleAddGuestRow = () => {
+    setEditedGuests((prev) => [...prev, { name: '' }])
+  }
+
+  const handleRemoveGuestRow = (index: number) => {
+    setEditedGuests((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const handleSaveGuests = async () => {
+    if (!onGuestsUpdated) return
+    const sanitized = editedGuests
+      .map((g) => ({
+        name: g.name.trim(),
+        age: g.age?.trim() || undefined,
+        dietary: g.dietary?.trim() || undefined,
+      }))
+      .filter((g) => g.name)
+
+    setIsSavingGuests(true)
+    const success = await onGuestsUpdated(rsvp.email, sanitized)
+    setIsSavingGuests(false)
+
+    if (success) {
+      toast({ title: 'Guest list updated', status: 'success', duration: 3000 })
+      setIsEditingGuests(false)
+    } else {
+      toast({ title: 'Failed to update guest list', status: 'error', duration: 4000 })
+    }
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl" scrollBehavior="inside">
@@ -94,9 +183,38 @@ export function RsvpDetailModal({ rsvp, isOpen, onClose, drinkPrefs, emailOpens 
               <Text fontWeight="bold" fontSize="sm" color="neutral.muted" mb={1}>
                 Contact
               </Text>
-              <SimpleGrid columns={2} spacing={2} fontSize="sm">
+              <SimpleGrid columns={2} spacing={2} fontSize="sm" alignItems="center">
                 <Text color="gray.600">Email</Text>
-                <Text>{rsvp.email}</Text>
+                {isEditingEmail ? (
+                  <HStack spacing={1}>
+                    <Input
+                      size="xs"
+                      value={editedEmail}
+                      onChange={(e) => setEditedEmail(e.target.value)}
+                      autoFocus
+                    />
+                    <Button size="xs" colorScheme="blue" onClick={handleSaveEmail} isLoading={isSavingEmail}>
+                      Save
+                    </Button>
+                    <Button size="xs" variant="ghost" onClick={handleCancelEditEmail} isDisabled={isSavingEmail}>
+                      Cancel
+                    </Button>
+                  </HStack>
+                ) : (
+                  <HStack spacing={2}>
+                    <Text>{rsvp.email}</Text>
+                    {rsvp.emailCorrectedAt && (
+                      <Tooltip label={`Corrected ${new Date(rsvp.emailCorrectedAt).toLocaleString()}`}>
+                        <Badge colorScheme="purple" fontSize="2xs">Corrected</Badge>
+                      </Tooltip>
+                    )}
+                    {onEmailUpdated && (
+                      <Button size="xs" variant="link" onClick={handleStartEditEmail}>
+                        Edit
+                      </Button>
+                    )}
+                  </HStack>
+                )}
                 {rsvp.mailingAddress && (
                   <>
                     <Text color="gray.600">Address</Text>
@@ -134,10 +252,97 @@ export function RsvpDetailModal({ rsvp, isOpen, onClose, drinkPrefs, emailOpens 
 
             {/* Party */}
             <Box>
-              <Text fontWeight="bold" fontSize="sm" color="neutral.muted" mb={2}>
-                Party ({1 + rsvp.guests.length} {rsvp.guests.length === 0 ? 'person' : 'people'})
-              </Text>
-              {rsvp.guests.length > 0 ? (
+              <HStack justify="space-between" mb={2}>
+                <HStack spacing={2}>
+                  <Text fontWeight="bold" fontSize="sm" color="neutral.muted">
+                    Party ({1 + rsvp.guests.length} {rsvp.guests.length === 0 ? 'person' : 'people'})
+                  </Text>
+                  {rsvp.guestsManuallyEditedAt && (
+                    <Tooltip label={`Manually edited ${new Date(rsvp.guestsManuallyEditedAt).toLocaleString()}`}>
+                      <Badge colorScheme="purple" fontSize="2xs">Edited</Badge>
+                    </Tooltip>
+                  )}
+                </HStack>
+                {onGuestsUpdated && !isEditingGuests && (
+                  <Button size="xs" variant="outline" onClick={handleStartEdit}>
+                    Edit Guests
+                  </Button>
+                )}
+              </HStack>
+
+              {isEditingGuests ? (
+                <VStack align="stretch" spacing={2}>
+                  <Table size="sm" variant="simple">
+                    <Thead>
+                      <Tr>
+                        <Th>Name</Th>
+                        <Th>Age</Th>
+                        <Th>Dietary</Th>
+                        <Th w="1"></Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        <Td fontWeight="medium">{rsvp.firstName} (primary)</Td>
+                        <Td>-</Td>
+                        <Td>{rsvp.dietary || '-'}</Td>
+                        <Td></Td>
+                      </Tr>
+                      {editedGuests.map((g, i) => (
+                        <Tr key={i}>
+                          <Td>
+                            <Input
+                              size="sm"
+                              value={g.name}
+                              onChange={(e) => handleGuestFieldChange(i, 'name', e.target.value)}
+                              placeholder="Guest name"
+                            />
+                          </Td>
+                          <Td>
+                            <Input
+                              size="sm"
+                              w="70px"
+                              value={g.age || ''}
+                              onChange={(e) => handleGuestFieldChange(i, 'age', e.target.value)}
+                              placeholder="Age"
+                            />
+                          </Td>
+                          <Td>
+                            <Input
+                              size="sm"
+                              value={g.dietary || ''}
+                              onChange={(e) => handleGuestFieldChange(i, 'dietary', e.target.value)}
+                              placeholder="Dietary"
+                            />
+                          </Td>
+                          <Td>
+                            <IconButton
+                              aria-label="Remove guest"
+                              icon={<CloseIcon boxSize={2.5} />}
+                              size="xs"
+                              variant="ghost"
+                              onClick={() => handleRemoveGuestRow(i)}
+                            />
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                  <HStack>
+                    <Button size="xs" variant="outline" onClick={handleAddGuestRow}>
+                      + Add Guest
+                    </Button>
+                    <HStack ml="auto">
+                      <Button size="xs" variant="ghost" onClick={handleCancelEdit} isDisabled={isSavingGuests}>
+                        Cancel
+                      </Button>
+                      <Button size="xs" colorScheme="blue" onClick={handleSaveGuests} isLoading={isSavingGuests}>
+                        Save
+                      </Button>
+                    </HStack>
+                  </HStack>
+                </VStack>
+              ) : rsvp.guests.length > 0 ? (
                 <Table size="sm" variant="simple">
                   <Thead>
                     <Tr>

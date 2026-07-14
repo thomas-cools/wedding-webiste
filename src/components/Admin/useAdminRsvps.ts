@@ -71,6 +71,17 @@ export interface AdminRsvp {
   locale: string
   /** IDs of other RSVPs that listed this person as one of their guests. */
   matchedAsGuestIn?: string[]
+  /** Set when an admin has manually edited this party's guest list. */
+  guestsManuallyEditedAt?: string
+  /** Set when an admin has corrected this party's email address. */
+  emailCorrectedAt?: string
+}
+
+/** A guest (plus-one) entry as edited by an admin, before server-computed fields are added. */
+export interface EditableGuest {
+  name: string
+  age?: string
+  dietary?: string
 }
 
 export interface AdminDrinkPrefs {
@@ -149,6 +160,10 @@ export interface UseAdminRsvpsReturn {
   exportFinalRsvpsMarkdown: () => void
   exportRsvpsCsv: () => void
   exportRsvpsMarkdown: () => void
+  // Guest list edits
+  updateRsvpGuests: (email: string, guests: EditableGuest[]) => Promise<boolean>
+  // Email corrections
+  updateRsvpEmail: (id: string, oldEmail: string, newEmail: string) => Promise<boolean>
 }
 
 const EMPTY_STATS: RsvpStats = {
@@ -267,7 +282,7 @@ function buildRsvpRows(rsvps: AdminRsvp[]): string[][] {
     'Primary Name', 'Email', 'Likelihood', 'Welcome Dinner', 'Ceremony & Reception', 'Brunch',
     'Mailing Address', 'Accommodation', 'Travel Plan',
     'Guest Name', 'Guest Age', 'Guest Dietary',
-    'Primary Dietary', 'France Tips', 'Additional Notes', 'Submitted At', 'Locale',
+    'Primary Dietary', 'France Tips', 'Additional Notes', 'Submitted At', 'Locale', 'Manually Edited', 'Email Corrected',
   ])
 
   for (const r of rsvps) {
@@ -279,6 +294,7 @@ function buildRsvpRows(rsvps: AdminRsvp[]): string[][] {
         RSVP_TRAVEL_PLAN_LABELS[r.travelPlan] || r.travelPlan,
         '', '', '',
         r.dietary, r.franceTips ? 'Yes' : 'No', r.additionalNotes, r.submittedAt, r.locale,
+        r.guestsManuallyEditedAt || '', r.emailCorrectedAt || '',
       ])
     } else {
       r.guests.forEach((g, i) => {
@@ -298,6 +314,8 @@ function buildRsvpRows(rsvps: AdminRsvp[]): string[][] {
           i === 0 ? r.additionalNotes : '',
           i === 0 ? r.submittedAt : '',
           i === 0 ? r.locale : '',
+          i === 0 ? (r.guestsManuallyEditedAt || '') : '',
+          i === 0 ? (r.emailCorrectedAt || '') : '',
         ])
       })
     }
@@ -387,6 +405,48 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
   useEffect(() => {
     fetchRsvps()
   }, [fetchRsvps])
+
+  const updateRsvpGuests = useCallback(
+    async (email: string, guests: EditableGuest[]): Promise<boolean> => {
+      try {
+        const res = await fetch('/api/admin-update-rsvp-guests', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAdminAuthHeaders(),
+          },
+          body: JSON.stringify({ email, guests }),
+        })
+        if (!res.ok) return false
+        await fetchRsvps()
+        return true
+      } catch {
+        return false
+      }
+    },
+    [fetchRsvps]
+  )
+
+  const updateRsvpEmail = useCallback(
+    async (id: string, oldEmail: string, newEmail: string): Promise<boolean> => {
+      try {
+        const res = await fetch('/api/admin-update-rsvp-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAdminAuthHeaders(),
+          },
+          body: JSON.stringify({ id, oldEmail, newEmail }),
+        })
+        if (!res.ok) return false
+        await fetchRsvps()
+        return true
+      } catch {
+        return false
+      }
+    },
+    [fetchRsvps]
+  )
 
   const toggleLikelihoodFilter = useCallback((value: string) => {
     setLikelihoodFilters((prev) => {
@@ -587,5 +647,7 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
     exportFinalRsvpsMarkdown,
     exportRsvpsCsv,
     exportRsvpsMarkdown,
+    updateRsvpGuests,
+    updateRsvpEmail,
   }
 }

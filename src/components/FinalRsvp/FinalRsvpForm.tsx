@@ -17,10 +17,8 @@ import {
   RadioGroup,
   Badge,
   Divider,
-  Collapse,
   useToast,
 } from '@chakra-ui/react'
-import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FinalRsvpGuestData } from './useFinalRsvpToken'
 import { useFinalRsvpForm } from './useFinalRsvpForm'
@@ -77,18 +75,6 @@ export interface FinalRsvpFormProps {
 export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormProps) {
   const { t } = useTranslation()
   const toast = useToast()
-  const formRef = useRef<HTMLDivElement>(null)
-
-  const scrollToFirstError = () => {
-    requestAnimationFrame(() => {
-      const firstError = formRef.current?.querySelector('.chakra-form__error-message, [data-invalid-message]')
-      if (firstError) {
-        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      } else {
-        formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
-    })
-  }
 
   const form = useFinalRsvpForm({
     initialPartyMembers: guestData?.partyMembers || [],
@@ -115,18 +101,6 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
         variant: 'solid',
         position: 'top',
       })
-    },
-    onValidationError: () => {
-      toast({
-        title: t('finalRsvp.validation.formIncompleteTitle'),
-        description: t('finalRsvp.validation.formIncompleteMessage'),
-        status: 'error',
-        duration: 6000,
-        isClosable: true,
-        variant: 'solid',
-        position: 'top',
-      })
-      scrollToFirstError()
     },
   })
 
@@ -160,7 +134,6 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
 
       {/* Form */}
       <Box
-        ref={formRef}
         as="form"
         name="final-rsvp"
         method="POST"
@@ -185,15 +158,16 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
         <input type="hidden" name="songRequest" />
         <input type="hidden" name="photographyConsent" />
         <input type="hidden" name="additionalNotes" />
+        <input type="hidden" name="locale" />
 
         <Stack spacing={8}>
-          {/* ── Day Attendance ── */}
+          {/* ── Day Attendance (per guest) ── */}
           <Box>
             <Heading {...sectionHeadingProps}>{t('finalRsvp.form.attendanceTitle')}</Heading>
-            <Text fontSize="sm" color="rgba(48,15,12,0.6)" mb={5}>
+            <Text fontSize="sm" color="rgba(48,15,12,0.6)" mb={4}>
               {t('finalRsvp.form.attendanceDescription')}
             </Text>
-            <Stack spacing={6}>
+            <Stack spacing={5}>
               {form.guests.map((guest, index) => (
                 <Box
                   key={index}
@@ -203,7 +177,7 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                   border="1px solid"
                   borderColor="rgba(48,15,12,0.1)"
                 >
-                  <Text fontWeight="600" color="#300F0C" fontSize="md" mb={4}>
+                  <Text fontWeight="600" color="#300F0C" fontSize="md" mb={3}>
                     {guest.name || t('finalRsvp.form.guest', { number: index + 1 })}
                   </Text>
                   <Stack spacing={4}>
@@ -221,10 +195,10 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                         </Select>
                       </FormControl>
                     ))}
+                    {form.errors[`guest_${index}_events`] && form.hasAttemptedSubmit && (
+                      <Text color="#4C050C" fontSize="sm">{form.errors[`guest_${index}_events`]}</Text>
+                    )}
                   </Stack>
-                  {form.errors[`guest_${index}_events`] && form.hasAttemptedSubmit && (
-                    <Text data-invalid-message color="#4C050C" fontSize="sm" mt={2}>{form.errors[`guest_${index}_events`]}</Text>
-                  )}
                 </Box>
               ))}
             </Stack>
@@ -238,7 +212,7 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
             <FormControl isInvalid={!!form.errors.accommodationType && form.hasAttemptedSubmit} mb={4}>
               <RadioGroup
                 value={form.accommodationType}
-                onChange={(v) => form.setAccommodationType(v as typeof form.accommodationType)}
+                onChange={(v) => form.setAccommodationType(v as never)}
                 sx={{
                   '.chakra-radio__control': {
                     borderColor: 'rgba(48,15,12,0.35)',
@@ -271,7 +245,7 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
             </FormControl>
 
             {form.accommodationType === 'airbnb' && (
-              <FormControl isInvalid={!!form.errors.accommodationAddress}>
+              <FormControl isInvalid={!!form.errors.accommodationAddress} mb={4}>
                 <FormLabel>{t('finalRsvp.form.accommodationAddress')}</FormLabel>
                 <Box position="relative">
                   <Input
@@ -331,7 +305,7 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
             )}
 
             {form.accommodationType === 'hotel' && (
-              <FormControl isInvalid={!!form.errors.hotelName}>
+              <FormControl isInvalid={!!form.errors.hotelName} mb={4}>
                 <FormLabel>{t('finalRsvp.form.hotelName')}</FormLabel>
                 <Input
                   value={form.hotelName}
@@ -344,24 +318,14 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
             )}
 
             {(form.accommodationType === 'airbnb' || form.accommodationType === 'hotel') && (
-              <FormControl isInvalid={!!form.errors.transportationPreference && form.hasAttemptedSubmit} mt={4}>
-                <FormLabel fontSize="sm">{t('finalRsvp.form.transportationQuestion')}</FormLabel>
+              <FormControl isInvalid={!!form.errors.transportationPreference && form.hasAttemptedSubmit}>
+                <FormLabel>{t('finalRsvp.form.transportationTitle')}</FormLabel>
+                <Text fontSize="sm" color="rgba(48,15,12,0.6)" mb={2}>
+                  {t('finalRsvp.form.transportationDescription')}
+                </Text>
                 <RadioGroup
                   value={form.transportationPreference}
-                  onChange={(v) => form.setTransportationPreference(v as typeof form.transportationPreference)}
-                  sx={{
-                    '.chakra-radio__control': {
-                      borderColor: 'rgba(48,15,12,0.35)',
-                      borderWidth: '1.5px',
-                    },
-                    '.chakra-radio__control[data-checked]': {
-                      bg: '#300F0C',
-                      borderColor: '#300F0C',
-                    },
-                    '.chakra-radio__control[data-focus-visible]': {
-                      boxShadow: '0 0 0 2px rgba(48,15,12,0.3)',
-                    },
-                  }}
+                  onChange={(v) => form.setTransportationPreference(v as never)}
                 >
                   <Stack spacing={3}>
                     <Radio value="taxi">
@@ -380,6 +344,8 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
           </Box>
 
           <SectionDivider />
+
+          {/* ── Menu Choices (per guest) ── */}
           <Box>
             <Heading {...sectionHeadingProps}>{t('finalRsvp.form.menuTitle')}</Heading>
             <Text fontSize="sm" color="rgba(48,15,12,0.6)" mb={5}>
@@ -417,7 +383,7 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                     )}
                   </Flex>
 
-                  <Collapse in={!!guest.isChild} animateOpacity unmountOnExit>
+                  {guest.isChild ? (
                     <Flex align="center" gap={2}>
                       <Badge colorScheme="orange" borderRadius="full" px={3} py={1}>
                         {t('finalRsvp.form.childrensMeal')}
@@ -426,8 +392,7 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                         {t('finalRsvp.form.childrensMealNote')}
                       </Text>
                     </Flex>
-                  </Collapse>
-                  <Collapse in={!guest.isChild} animateOpacity unmountOnExit>
+                  ) : (
                     <Stack spacing={4}>
                       {/* Appetizer */}
                       <FormControl isInvalid={!!form.errors[`guest_${index}_appetizer`]}>
@@ -501,32 +466,25 @@ export default function FinalRsvpForm({ guestData, onSuccess }: FinalRsvpFormPro
                                 onChange={() => form.updateGuest(index, { main: opt })}
                                 style={{ marginTop: 3, flexShrink: 0 }}
                               />
-                              <Box>
-                                <Text fontSize="sm" color="#300F0C" fontStyle="italic">
-                                  {t(`finalRsvp.menu.main.${opt}`)}
-                                </Text>
-                                {opt === 'vegan' && (
-                                  <Badge colorScheme="green" fontSize="10px" mt={1}>V</Badge>
-                                )}
-                              </Box>
+                              <Text fontSize="sm" color="#300F0C" fontStyle="italic">
+                                {t(`finalRsvp.menu.main.${opt}`)}
+                              </Text>
                             </Box>
                           ))}
                         </Stack>
                         <FormErrorMessage>{form.errors[`guest_${index}_main`]}</FormErrorMessage>
                       </FormControl>
                     </Stack>
-                  </Collapse>
+                  )}
 
-                  {/* Allergies — shown for every guest, including children */}
                   <FormControl mt={4}>
-                    <FormLabel fontSize="sm">{t('finalRsvp.form.allergies')}</FormLabel>
+                    <FormLabel fontSize="sm">{t('finalRsvp.form.allergiesLabel')}</FormLabel>
                     <Textarea
                       value={guest.allergies || ''}
                       onChange={(e) => form.updateGuest(index, { allergies: e.target.value })}
                       placeholder={t('finalRsvp.form.allergiesPlaceholder')}
                       rows={2}
                     />
-                    <FormHelperText>{t('finalRsvp.form.allergiesHint')}</FormHelperText>
                   </FormControl>
                 </Box>
               ))}
