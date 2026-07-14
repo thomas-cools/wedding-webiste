@@ -33,8 +33,12 @@ import {
   TagCloseButton,
   Wrap,
   WrapItem,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react'
-import { WarningIcon } from '@chakra-ui/icons'
+import { WarningIcon, DownloadIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { type AdminRsvp, type UseAdminRsvpsReturn, type SortColumn } from './useAdminRsvps'
 import { RsvpDetailModal } from './RsvpDetailModal'
 
@@ -82,6 +86,8 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
     getEffectiveLocale,
     drinkPrefsMap,
     emailOpensMap,
+    exportRsvpsCsv,
+    exportRsvpsMarkdown,
   } = adminData
 
   const selectedRsvps = filteredRsvps.filter((r) => selectedIds.has(r.id))
@@ -270,6 +276,22 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
           <Text fontSize="sm" color="gray.500" whiteSpace="nowrap">
             {filteredRsvps.length} result{filteredRsvps.length !== 1 ? 's' : ''}
           </Text>
+          <Menu>
+            <MenuButton
+              as={Button}
+              size="sm"
+              leftIcon={<DownloadIcon />}
+              rightIcon={<ChevronDownIcon />}
+              colorScheme="blue"
+              isDisabled={filteredRsvps.length === 0}
+            >
+              Export
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={exportRsvpsCsv}>Export as CSV</MenuItem>
+              <MenuItem onClick={exportRsvpsMarkdown}>Export as Markdown</MenuItem>
+            </MenuList>
+          </Menu>
           <IconButton
             aria-label="Refresh"
             icon={<Text>↻</Text>}

@@ -9,6 +9,10 @@ import {
   Heading,
   HStack,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -32,7 +36,7 @@ import {
   VStack,
   Tooltip,
 } from '@chakra-ui/react'
-import { DownloadIcon, ViewIcon, WarningIcon } from '@chakra-ui/icons'
+import { DownloadIcon, ViewIcon, WarningIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import type { UseAdminRsvpsReturn, AdminFinalRsvp, AdminFinalRsvpGuest } from './useAdminRsvps'
 
 const EVENT_LABELS: Record<string, string> = {
@@ -240,7 +244,15 @@ function GuestDetailModal({ rsvp, isOpen, onClose }: { rsvp: AdminFinalRsvp | nu
 }
 
 export function FinalRsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn }) {
-  const { finalRsvps, finalRsvpStats, finalRsvpsLoading, finalRsvpsError, fetchFinalRsvps, exportFinalRsvpsCsv } = adminData
+  const {
+    finalRsvps,
+    finalRsvpStats,
+    finalRsvpsLoading,
+    finalRsvpsError,
+    fetchFinalRsvps,
+    exportFinalRsvpsCsv,
+    exportFinalRsvpsMarkdown,
+  } = adminData
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedRsvp, setSelectedRsvp] = useState<AdminFinalRsvp | null>(null)
 
@@ -265,15 +277,22 @@ export function FinalRsvpDashboard({ adminData }: { adminData: UseAdminRsvpsRetu
           >
             Refresh
           </Button>
-          <Button
-            size="sm"
-            leftIcon={<DownloadIcon />}
-            colorScheme="blue"
-            onClick={exportFinalRsvpsCsv}
-            isDisabled={finalRsvps.length === 0}
-          >
-            Export CSV
-          </Button>
+          <Menu>
+            <MenuButton
+              as={Button}
+              size="sm"
+              leftIcon={<DownloadIcon />}
+              rightIcon={<ChevronDownIcon />}
+              colorScheme="blue"
+              isDisabled={finalRsvps.length === 0}
+            >
+              Export
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={exportFinalRsvpsCsv}>Export as CSV</MenuItem>
+              <MenuItem onClick={exportFinalRsvpsMarkdown}>Export as Markdown</MenuItem>
+            </MenuList>
+          </Menu>
         </HStack>
       </Flex>
 

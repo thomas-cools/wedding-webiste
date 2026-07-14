@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { getAdminAuthHeaders } from '../../utils/adminAuth'
+import { triggerDownload, rowsToCsv, rowsToMarkdownTable } from './exportUtils'
 
 export interface AdminFinalRsvpGuest {
   name: string
@@ -145,6 +146,9 @@ export interface UseAdminRsvpsReturn {
   finalRsvpsError: string | null
   fetchFinalRsvps: () => void
   exportFinalRsvpsCsv: () => void
+  exportFinalRsvpsMarkdown: () => void
+  exportRsvpsCsv: () => void
+  exportRsvpsMarkdown: () => void
 }
 
 const EMPTY_STATS: RsvpStats = {
@@ -158,6 +162,148 @@ const EMPTY_STATS: RsvpStats = {
   attendingCeremony: 0,
   attendingBrunch: 0,
   possibleDuplicates: 0,
+}
+
+const FINAL_RSVP_APPETIZER_LABELS: Record<string, string> = {
+  ceviche: 'Ceviche de Bar',
+  gaspacho: 'Gaspacho fumé (V)',
+}
+const FINAL_RSVP_MAIN_LABELS: Record<string, string> = {
+  bar: 'Filet de Bar',
+  tournedos: 'Tournedos de boeuf',
+  vegan: 'Vegetable Tartlet',
+}
+const FINAL_RSVP_ACCOMMODATION_TYPE_LABELS: Record<string, string> = {
+  chateau: 'Chateau',
+  airbnb: 'Airbnb',
+  hotel: 'Hotel',
+}
+const FINAL_RSVP_TRANSPORTATION_LABELS: Record<string, string> = {
+  taxi: 'Taxi',
+  own: 'Own Arrangement',
+}
+
+/** Builds a header + per-guest data row matrix for final RSVP CSV/Markdown export. */
+function buildFinalRsvpRows(finalRsvps: AdminFinalRsvp[]): string[][] {
+  const accommodationTypeLabel = (r: AdminFinalRsvp) => FINAL_RSVP_ACCOMMODATION_TYPE_LABELS[r.accommodationType] || ''
+  const accommodationDetail = (r: AdminFinalRsvp) =>
+    r.accommodationType === 'airbnb' ? r.accommodationAddress : r.accommodationType === 'hotel' ? r.hotelName : ''
+  const transportationLabel = (r: AdminFinalRsvp) =>
+    r.accommodationType !== 'chateau' ? (FINAL_RSVP_TRANSPORTATION_LABELS[r.transportationPreference] || '') : ''
+
+  const rows: string[][] = []
+  rows.push([
+    'Primary Name', 'Email', 'Welcome Dinner', 'Ceremony & Reception', 'Farewell Brunch',
+    'Guest Name', 'Age Group', 'Appetizer', 'Main Course', 'Allergies',
+    'Song Request', 'Accommodation Type', 'Accommodation Detail', 'Transportation Preference',
+    'Photography Consent', 'Submitted At',
+  ])
+
+  for (const r of finalRsvps) {
+    if (r.guests.length === 0) {
+      rows.push([
+        r.firstName, r.email,
+        '', '', '',
+        '', '', '', '', '',
+        r.songRequest, accommodationTypeLabel(r),
+        accommodationDetail(r), transportationLabel(r),
+        r.photographyConsent === true ? 'Yes' : r.photographyConsent === false ? 'No' : '',
+        r.submittedAt,
+      ])
+    } else {
+      r.guests.forEach((g, i) => {
+        rows.push([
+          i === 0 ? r.firstName : '',
+          i === 0 ? r.email : '',
+          g.events.welcome, g.events.ceremony, g.events.brunch,
+          g.name,
+          g.isChild ? 'Child (<12)' : 'Adult',
+          g.isChild ? "Children's Meal" : FINAL_RSVP_APPETIZER_LABELS[g.appetizer || ''] || g.appetizer || '',
+          g.isChild ? "Children's Meal" : FINAL_RSVP_MAIN_LABELS[g.main || ''] || g.main || '',
+          g.allergies || '',
+          i === 0 ? r.songRequest : '',
+          i === 0 ? accommodationTypeLabel(r) : '',
+          i === 0 ? accommodationDetail(r) : '',
+          i === 0 ? transportationLabel(r) : '',
+          i === 0 ? (r.photographyConsent === true ? 'Yes' : r.photographyConsent === false ? 'No' : '') : '',
+          i === 0 ? r.submittedAt : '',
+        ])
+      })
+    }
+  }
+
+  return rows
+}
+
+const RSVP_LIKELIHOOD_LABELS: Record<string, string> = {
+  definitely: 'Definitely',
+  highly_likely: 'Highly Likely',
+  maybe: 'Maybe',
+  no: 'No',
+}
+const RSVP_EVENT_ANSWER_LABELS: Record<string, string> = {
+  yes: 'Yes',
+  no: 'No',
+  arriving_late: 'Arriving late',
+  '': 'Not specified',
+}
+const RSVP_ACCOMMODATION_LABELS: Record<string, string> = {
+  venue: 'Staying at venue',
+  own: 'Own accommodation',
+  recommend: 'Wants recommendations',
+}
+const RSVP_TRAVEL_PLAN_LABELS: Record<string, string> = {
+  rent_car: 'Renting a car',
+  need_shuttle: 'Needs shuttle',
+  no_plan: 'No plan yet',
+}
+
+/** Builds a header + per-guest data row matrix for initial RSVP CSV/Markdown export. */
+function buildRsvpRows(rsvps: AdminRsvp[]): string[][] {
+  const eventLabel = (value: string) => RSVP_EVENT_ANSWER_LABELS[value] ?? value
+
+  const rows: string[][] = []
+  rows.push([
+    'Primary Name', 'Email', 'Likelihood', 'Welcome Dinner', 'Ceremony & Reception', 'Brunch',
+    'Mailing Address', 'Accommodation', 'Travel Plan',
+    'Guest Name', 'Guest Age', 'Guest Dietary',
+    'Primary Dietary', 'France Tips', 'Additional Notes', 'Submitted At', 'Locale',
+  ])
+
+  for (const r of rsvps) {
+    if (r.guests.length === 0) {
+      rows.push([
+        r.firstName, r.email, RSVP_LIKELIHOOD_LABELS[r.likelihood] || r.likelihood,
+        eventLabel(r.events.welcome), eventLabel(r.events.ceremony), eventLabel(r.events.brunch),
+        r.mailingAddress, RSVP_ACCOMMODATION_LABELS[r.accommodation] || r.accommodation,
+        RSVP_TRAVEL_PLAN_LABELS[r.travelPlan] || r.travelPlan,
+        '', '', '',
+        r.dietary, r.franceTips ? 'Yes' : 'No', r.additionalNotes, r.submittedAt, r.locale,
+      ])
+    } else {
+      r.guests.forEach((g, i) => {
+        rows.push([
+          i === 0 ? r.firstName : '',
+          i === 0 ? r.email : '',
+          i === 0 ? (RSVP_LIKELIHOOD_LABELS[r.likelihood] || r.likelihood) : '',
+          i === 0 ? eventLabel(r.events.welcome) : '',
+          i === 0 ? eventLabel(r.events.ceremony) : '',
+          i === 0 ? eventLabel(r.events.brunch) : '',
+          i === 0 ? r.mailingAddress : '',
+          i === 0 ? (RSVP_ACCOMMODATION_LABELS[r.accommodation] || r.accommodation) : '',
+          i === 0 ? (RSVP_TRAVEL_PLAN_LABELS[r.travelPlan] || r.travelPlan) : '',
+          g.name, g.age || '', g.dietary || '',
+          i === 0 ? r.dietary : '',
+          i === 0 ? (r.franceTips ? 'Yes' : 'No') : '',
+          i === 0 ? r.additionalNotes : '',
+          i === 0 ? r.submittedAt : '',
+          i === 0 ? r.locale : '',
+        ])
+      })
+    }
+  }
+
+  return rows
 }
 
 export function useAdminRsvps(): UseAdminRsvpsReturn {
@@ -370,88 +516,43 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
     }
   }, [])
 
-  const APPETIZER_LABELS: Record<string, string> = {
-    ceviche: 'Ceviche de Bar',
-    gaspacho: 'Gaspacho fumé (V)',
-  }
-  const MAIN_LABELS: Record<string, string> = {
-    bar: 'Filet de Bar',
-    tournedos: 'Tournedos de boeuf',
-    vegan: 'Vegetable Tartlet',
-  }
-
   const exportFinalRsvpsCsv = useCallback(() => {
-    const ACCOMMODATION_TYPE_LABELS: Record<string, string> = {
-      chateau: 'Chateau',
-      airbnb: 'Airbnb',
-      hotel: 'Hotel',
-    }
-    const accommodationTypeLabel = (r: AdminFinalRsvp) => ACCOMMODATION_TYPE_LABELS[r.accommodationType] || ''
-    const accommodationDetail = (r: AdminFinalRsvp) =>
-      r.accommodationType === 'airbnb' ? r.accommodationAddress : r.accommodationType === 'hotel' ? r.hotelName : ''
-    const TRANSPORTATION_LABELS: Record<string, string> = {
-      taxi: 'Taxi',
-      own: 'Own Arrangement',
-    }
-    const transportationLabel = (r: AdminFinalRsvp) =>
-      r.accommodationType !== 'chateau' ? (TRANSPORTATION_LABELS[r.transportationPreference] || '') : ''
-
-    const rows: string[][] = []
-    // Header
-    rows.push([
-      'Primary Name', 'Email', 'Welcome Dinner', 'Ceremony & Reception', 'Farewell Brunch',
-      'Guest Name', 'Age Group', 'Appetizer', 'Main Course', 'Allergies',
-      'Song Request', 'Accommodation Type', 'Accommodation Detail', 'Transportation Preference',
-      'Photography Consent', 'Submitted At',
-    ])
-
-    for (const r of finalRsvps) {
-      if (r.guests.length === 0) {
-        rows.push([
-          r.firstName, r.email,
-          '', '', '',
-          '', '', '', '', '',
-          r.songRequest, accommodationTypeLabel(r),
-          accommodationDetail(r), transportationLabel(r),
-          r.photographyConsent === true ? 'Yes' : r.photographyConsent === false ? 'No' : '',
-          r.submittedAt,
-        ])
-      } else {
-        r.guests.forEach((g, i) => {
-          rows.push([
-            i === 0 ? r.firstName : '',
-            i === 0 ? r.email : '',
-            g.events.welcome, g.events.ceremony, g.events.brunch,
-            g.name,
-            g.isChild ? 'Child (<12)' : 'Adult',
-            g.isChild ? "Children's Meal" : APPETIZER_LABELS[g.appetizer || ''] || g.appetizer || '',
-            g.isChild ? "Children's Meal" : MAIN_LABELS[g.main || ''] || g.main || '',
-            g.allergies || '',
-            i === 0 ? r.songRequest : '',
-            i === 0 ? accommodationTypeLabel(r) : '',
-            i === 0 ? accommodationDetail(r) : '',
-            i === 0 ? transportationLabel(r) : '',
-            i === 0 ? (r.photographyConsent === true ? 'Yes' : r.photographyConsent === false ? 'No' : '') : '',
-            i === 0 ? r.submittedAt : '',
-          ])
-        })
-      }
-    }
-
-    const csvContent = rows
-      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-      .join('\n')
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `final-rsvps-${new Date().toISOString().slice(0, 10)}.csv`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
+    const rows = buildFinalRsvpRows(finalRsvps)
+    triggerDownload(
+      rowsToCsv(rows),
+      `final-rsvps-${new Date().toISOString().slice(0, 10)}.csv`,
+      'text/csv;charset=utf-8;'
+    )
   }, [finalRsvps])
+
+  const exportFinalRsvpsMarkdown = useCallback(() => {
+    const rows = buildFinalRsvpRows(finalRsvps)
+    triggerDownload(
+      rowsToMarkdownTable(rows),
+      `final-rsvps-${new Date().toISOString().slice(0, 10)}.md`,
+      'text/markdown;charset=utf-8;'
+    )
+  }, [finalRsvps])
+
+  const exportRsvpsCsv = useCallback(() => {
+    const exportSet = selectedIds.size > 0 ? filteredRsvps.filter((r) => selectedIds.has(r.id)) : filteredRsvps
+    const rows = buildRsvpRows(exportSet)
+    triggerDownload(
+      rowsToCsv(rows),
+      `rsvps-${new Date().toISOString().slice(0, 10)}.csv`,
+      'text/csv;charset=utf-8;'
+    )
+  }, [filteredRsvps, selectedIds])
+
+  const exportRsvpsMarkdown = useCallback(() => {
+    const exportSet = selectedIds.size > 0 ? filteredRsvps.filter((r) => selectedIds.has(r.id)) : filteredRsvps
+    const rows = buildRsvpRows(exportSet)
+    triggerDownload(
+      rowsToMarkdownTable(rows),
+      `rsvps-${new Date().toISOString().slice(0, 10)}.md`,
+      'text/markdown;charset=utf-8;'
+    )
+  }, [filteredRsvps, selectedIds])
 
   return {
     rsvps,
@@ -483,5 +584,8 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
     finalRsvpsError,
     fetchFinalRsvps,
     exportFinalRsvpsCsv,
+    exportFinalRsvpsMarkdown,
+    exportRsvpsCsv,
+    exportRsvpsMarkdown,
   }
 }

@@ -73,6 +73,9 @@ if (typeof window !== 'undefined') {
 
   // Mock scrollTo
   window.scrollTo = jest.fn()
+  // jsdom doesn't implement Element.scrollTo, which Chakra UI's Menu component
+  // calls internally when it opens/closes.
+  window.HTMLElement.prototype.scrollTo = jest.fn()
 }
 
 // Mock ResizeObserver
