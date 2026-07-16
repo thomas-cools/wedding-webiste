@@ -91,7 +91,7 @@ function normalizeSubmission(sub: NetlifyFormSubmission): AdminFinalRsvp {
     photographyConsent: parseBooleanField(d.photographyConsent),
     additionalNotes: (d.additionalNotes || '').trim(),
     submittedAt: sub.created_at,
-    locale: (d.locale || 'en').trim().toLowerCase().split('-')[0],
+    locale: (d.locale || 'en').trim().toLowerCase().split('-')[0] || 'en',
   }
 }
 

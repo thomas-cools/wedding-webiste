@@ -337,7 +337,8 @@ export const handler: Handler = async (event) => {
 
   // ── Dry run: return recipient list + sample email, do not call Resend ─────
   if (body.dryRun) {
-    const first = recipients[0]
+    // recipients is validated non-empty above, so index 0 always exists.
+    const first = recipients[0]!
     const sampleLocale = normalizeLocale(first.locale || body.locale)
 
     let sampleSubject: string

@@ -75,6 +75,8 @@ export interface AdminRsvp {
   guestsManuallyEditedAt?: string
   /** Set when an admin has corrected this party's email address. */
   emailCorrectedAt?: string
+  /** True when this row was added directly by an admin rather than submitted via the RSVP form. */
+  isManuallyAdded?: boolean
 }
 
 /** A guest (plus-one) entry as edited by an admin, before server-computed fields are added. */
@@ -164,6 +166,10 @@ export interface UseAdminRsvpsReturn {
   updateRsvpGuests: (email: string, guests: EditableGuest[]) => Promise<boolean>
   // Email corrections
   updateRsvpEmail: (id: string, oldEmail: string, newEmail: string) => Promise<boolean>
+  // Manually-added parties
+  addManualParty: (firstName: string, email: string, guestNames: string[]) => Promise<boolean>
+  updateManualParty: (id: string, firstName: string, email: string, guestNames: string[]) => Promise<boolean>
+  deleteManualPartyById: (id: string) => Promise<boolean>
 }
 
 const EMPTY_STATS: RsvpStats = {
@@ -448,6 +454,74 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
     [fetchRsvps]
   )
 
+  const addManualParty = useCallback(
+    async (firstName: string, email: string, guestNames: string[]): Promise<boolean> => {
+      try {
+        const res = await fetch('/api/admin-add-manual-party', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAdminAuthHeaders(),
+          },
+          body: JSON.stringify({ firstName, email, guests: guestNames.map((name) => ({ name })) }),
+        })
+        if (!res.ok) return false
+        await fetchRsvps()
+        return true
+      } catch {
+        return false
+      }
+    },
+    [fetchRsvps]
+  )
+
+  const updateManualParty = useCallback(
+    async (id: string, firstName: string, email: string, guestNames: string[]): Promise<boolean> => {
+      try {
+        const res = await fetch('/api/admin-update-manual-party', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAdminAuthHeaders(),
+          },
+          body: JSON.stringify({
+            id: id.replace(/^manual:/, ''),
+            firstName,
+            email,
+            guests: guestNames.map((name) => ({ name })),
+          }),
+        })
+        if (!res.ok) return false
+        await fetchRsvps()
+        return true
+      } catch {
+        return false
+      }
+    },
+    [fetchRsvps]
+  )
+
+  const deleteManualPartyById = useCallback(
+    async (id: string): Promise<boolean> => {
+      try {
+        const res = await fetch('/api/admin-delete-manual-party', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAdminAuthHeaders(),
+          },
+          body: JSON.stringify({ id: id.replace(/^manual:/, '') }),
+        })
+        if (!res.ok) return false
+        await fetchRsvps()
+        return true
+      } catch {
+        return false
+      }
+    },
+    [fetchRsvps]
+  )
+
   const toggleLikelihoodFilter = useCallback((value: string) => {
     setLikelihoodFilters((prev) => {
       const next = new Set(prev)
@@ -649,5 +723,8 @@ export function useAdminRsvps(): UseAdminRsvpsReturn {
     exportRsvpsMarkdown,
     updateRsvpGuests,
     updateRsvpEmail,
+    addManualParty,
+    updateManualParty,
+    deleteManualPartyById,
   }
 }

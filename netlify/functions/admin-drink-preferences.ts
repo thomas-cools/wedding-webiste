@@ -161,8 +161,8 @@ export const handler: Handler = async (event) => {
       const withSid = entries.filter((e) => e.submissionId)
       if (withSid.length > 0) {
         // Get the most recent submissionId by timestamp
-        let latestSid = withSid[0].submissionId
-        let latestTime = new Date(withSid[0].submittedAt).getTime()
+        let latestSid = withSid[0]!.submissionId
+        let latestTime = new Date(withSid[0]!.submittedAt).getTime()
         for (const e of withSid) {
           const t = new Date(e.submittedAt).getTime()
           if (t > latestTime) {

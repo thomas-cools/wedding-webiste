@@ -5,7 +5,7 @@
 const mockGet = jest.fn()
 const mockSetJSON = jest.fn()
 const mockList = jest.fn()
-const mockGetStore = jest.fn(() => ({
+const mockGetStore = jest.fn((...args: unknown[]) => ({
   get: mockGet,
   setJSON: mockSetJSON,
   list: mockList,

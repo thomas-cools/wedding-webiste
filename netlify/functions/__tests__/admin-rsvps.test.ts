@@ -17,6 +17,11 @@ jest.mock('../utils/rsvp-email-overrides', () => ({
   getAllEmailOverrides: () => mockGetAllEmailOverrides(),
 }))
 
+const mockGetAllManualParties = jest.fn()
+jest.mock('../utils/manual-rsvp-parties', () => ({
+  getAllManualParties: () => mockGetAllManualParties(),
+}))
+
 function assertResponse(result: void | HandlerResponse): HandlerResponse {
   expect(result).toBeDefined()
   return result as HandlerResponse
@@ -132,6 +137,8 @@ describe('admin-rsvps handler', () => {
     mockGetAllGuestOverrides.mockResolvedValue(new Map())
     mockGetAllEmailOverrides.mockReset()
     mockGetAllEmailOverrides.mockResolvedValue(new Map())
+    mockGetAllManualParties.mockReset()
+    mockGetAllManualParties.mockResolvedValue([])
 
     process.env.JWT_SECRET = 'test-jwt-secret'
     process.env.NETLIFY_API_TOKEN = 'test-netlify-token'
@@ -532,6 +539,75 @@ describe('admin-rsvps handler', () => {
     it('continues without email overrides if the Blobs lookup fails', async () => {
       mockNetlifyApi()
       mockGetAllEmailOverrides.mockRejectedValue(new Error('blob store unavailable'))
+
+      const token = makeAdminToken()
+      const event = createEvent({ headers: { authorization: `Bearer ${token}` } })
+      const result = assertResponse(await handler(event, mockContext))
+
+      expect(result.statusCode).toBe(200)
+      const body = JSON.parse(result.body!)
+      expect(body.rsvps.length).toBeGreaterThan(0)
+    })
+  })
+
+  describe('manual parties merge', () => {
+    it('surfaces a manually-added party as a confirmed ("definitely") row', async () => {
+      mockNetlifyApi()
+      mockGetAllManualParties.mockResolvedValue([
+        {
+          id: 'manual-id-1',
+          firstName: 'Dana',
+          email: 'dana@example.com',
+          guests: [{ name: 'Extra Guest' }],
+          createdAt: '2026-04-01T00:00:00.000Z',
+          updatedAt: '2026-04-01T00:00:00.000Z',
+        },
+      ])
+
+      const token = makeAdminToken()
+      const event = createEvent({ headers: { authorization: `Bearer ${token}` } })
+      const result = assertResponse(await handler(event, mockContext))
+      const body = JSON.parse(result.body!)
+
+      const dana = body.rsvps.find((r: { firstName: string }) => r.firstName === 'Dana')
+      expect(dana).toBeDefined()
+      expect(dana.id).toBe('manual:manual-id-1')
+      expect(dana.email).toBe('dana@example.com')
+      expect(dana.likelihood).toBe('definitely')
+      expect(dana.guests).toEqual([{ name: 'Extra Guest' }])
+      expect(dana.isManuallyAdded).toBe(true)
+
+      // Included in confirmed-guest stats
+      expect(body.stats.definitely).toBeGreaterThanOrEqual(1)
+    })
+
+    it('lets a real submission with the same email win over a manual stub', async () => {
+      mockNetlifyApi()
+      mockGetAllManualParties.mockResolvedValue([
+        {
+          id: 'manual-id-2',
+          firstName: 'Manual Alice',
+          email: 'alice@example.com', // collides with a real submission
+          guests: [],
+          createdAt: '2026-04-01T00:00:00.000Z',
+          updatedAt: '2026-04-01T00:00:00.000Z',
+        },
+      ])
+
+      const token = makeAdminToken()
+      const event = createEvent({ headers: { authorization: `Bearer ${token}` } })
+      const result = assertResponse(await handler(event, mockContext))
+      const body = JSON.parse(result.body!)
+
+      const alice = body.rsvps.find((r: { email: string }) => r.email === 'alice@example.com')
+      expect(alice.firstName).toBe('Alice') // real submission's name, not "Manual Alice"
+      expect(alice.isManuallyAdded).toBeUndefined()
+      expect(body.rsvps.filter((r: { email: string }) => r.email === 'alice@example.com')).toHaveLength(1)
+    })
+
+    it('continues without manual parties if the Blobs lookup fails', async () => {
+      mockNetlifyApi()
+      mockGetAllManualParties.mockRejectedValue(new Error('blob store unavailable'))
 
       const token = makeAdminToken()
       const event = createEvent({ headers: { authorization: `Bearer ${token}` } })

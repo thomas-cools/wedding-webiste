@@ -435,8 +435,10 @@ const handler: Handler = async (event: HandlerEvent) => {
 
   // Dry run: return guest list without sending
   if (dryRun) {
-    const sampleLocale = normalizeLocale(guests[0].locale || localeOverride)
-    const sampleToken = encodeDrinkToken({ name: guests[0].name, email: guests[0].email, partyNames: guests[0].partyNames })
+    // guests is validated non-empty above, so index 0 always exists.
+    const firstGuest = guests[0]!
+    const sampleLocale = normalizeLocale(firstGuest.locale || localeOverride)
+    const sampleToken = encodeDrinkToken({ name: firstGuest.name, email: firstGuest.email, partyNames: firstGuest.partyNames })
     const sampleDrinksUrl = `${baseDrinksUrl}?t=${sampleToken}&lang=${sampleLocale}`
     return {
       statusCode: 200,
@@ -446,8 +448,8 @@ const handler: Handler = async (event: HandlerEvent) => {
         drinksUrl: sampleDrinksUrl,
         confirmedGuests: guests,
         totalCount: guests.length,
-        sampleHtml: generateInvitationHtml(guests[0].name, sampleDrinksUrl, sampleLocale, guests[0].partySize, guests[0].partyNames, undefined),
-        sampleText: generateInvitationText(guests[0].name, sampleDrinksUrl, sampleLocale, guests[0].partySize, guests[0].partyNames),
+        sampleHtml: generateInvitationHtml(firstGuest.name, sampleDrinksUrl, sampleLocale, firstGuest.partySize, firstGuest.partyNames, undefined),
+        sampleText: generateInvitationText(firstGuest.name, sampleDrinksUrl, sampleLocale, firstGuest.partySize, firstGuest.partyNames),
       }),
     }
   }

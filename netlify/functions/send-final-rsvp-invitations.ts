@@ -394,8 +394,10 @@ const handler: Handler = async (event: HandlerEvent) => {
   const baseFinalRsvpUrl = `${SITE_URL}/final-rsvp`
 
   if (dryRun) {
-    const sampleLocale = normalizeLocale(guests[0].locale || localeOverride)
-    const sampleToken = encodeFinalRsvpToken({ name: guests[0].name, email: guests[0].email, partyNames: guests[0].partyNames })
+    // guests is validated non-empty above, so index 0 always exists.
+    const firstGuest = guests[0]!
+    const sampleLocale = normalizeLocale(firstGuest.locale || localeOverride)
+    const sampleToken = encodeFinalRsvpToken({ name: firstGuest.name, email: firstGuest.email, partyNames: firstGuest.partyNames })
     const sampleUrl = `${baseFinalRsvpUrl}?t=${sampleToken}&lang=${sampleLocale}`
 
     const confirmedGuestsWithPreview: ConfirmedGuest[] = guests.map((guest) => {
@@ -412,8 +414,8 @@ const handler: Handler = async (event: HandlerEvent) => {
         finalRsvpUrl: sampleUrl,
         confirmedGuests: confirmedGuestsWithPreview,
         totalCount: guests.length,
-        sampleHtml: generateInvitationHtml(guests[0].name, sampleUrl, sampleLocale, guests[0].partySize, guests[0].partyNames),
-        sampleText: generateInvitationText(guests[0].name, sampleUrl, sampleLocale, guests[0].partySize, guests[0].partyNames),
+        sampleHtml: generateInvitationHtml(firstGuest.name, sampleUrl, sampleLocale, firstGuest.partySize, firstGuest.partyNames),
+        sampleText: generateInvitationText(firstGuest.name, sampleUrl, sampleLocale, firstGuest.partySize, firstGuest.partyNames),
       }),
     }
   }

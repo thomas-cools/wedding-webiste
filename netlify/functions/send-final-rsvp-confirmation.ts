@@ -259,7 +259,7 @@ function generateEmailHtml(data: FinalRsvpData): string {
   const renderEventRow = (label: string, answer: string) =>
     `<tr>
       <td style="color: #666; padding: 6px 0;">${label}</td>
-      <td style="text-align: right; padding: 6px 0;">${escapeHtml(s.eventAnswer[answer] || answer || s.eventAnswer[''])}</td>
+      <td style="text-align: right; padding: 6px 0;">${escapeHtml(s.eventAnswer[answer] || answer || s.eventAnswer[''] || '')}</td>
     </tr>`
 
   const guestEventRows = guests.map((g) => `<tr>

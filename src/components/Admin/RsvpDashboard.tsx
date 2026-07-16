@@ -41,6 +41,7 @@ import {
 import { WarningIcon, DownloadIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { type AdminRsvp, type UseAdminRsvpsReturn, type SortColumn } from './useAdminRsvps'
 import { RsvpDetailModal } from './RsvpDetailModal'
+import { AddPartyModal } from './AddPartyModal'
 
 const likelihoodColors: Record<string, string> = {
   definitely: 'green',
@@ -91,6 +92,9 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
     exportRsvpsMarkdown,
     updateRsvpGuests,
     updateRsvpEmail,
+    addManualParty,
+    updateManualParty,
+    deleteManualPartyById,
   } = adminData
 
   const selectedRsvps = filteredRsvps.filter((r) => selectedIds.has(r.id))
@@ -114,9 +118,28 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
   // the detail modal are reflected immediately after the post-save refetch.
   const selectedRsvp = rsvps.find((r) => r.id === selectedRsvpId) ?? null
 
+  const [editingParty, setEditingParty] = useState<AdminRsvp | null>(null)
+  const { isOpen: isPartyModalOpen, onOpen: onPartyModalOpen, onClose: onPartyModalClose } = useDisclosure()
+
   const handleRowClick = (rsvp: AdminRsvp) => {
+    if (rsvp.isManuallyAdded) {
+      setEditingParty(rsvp)
+      onPartyModalOpen()
+      return
+    }
     setSelectedRsvpId(rsvp.id)
     onOpen()
+  }
+
+  const handleAddPartyClick = () => {
+    setEditingParty(null)
+    onPartyModalOpen()
+  }
+
+  const handleDeleteParty = async (e: React.MouseEvent, rsvp: AdminRsvp) => {
+    e.stopPropagation()
+    if (!window.confirm(`Remove ${rsvp.firstName} <${rsvp.email}>? This cannot be undone.`)) return
+    await deleteManualPartyById(rsvp.id)
   }
 
   if (error) {
@@ -282,6 +305,15 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
           <Text fontSize="sm" color="gray.500" whiteSpace="nowrap">
             {filteredRsvps.length} result{filteredRsvps.length !== 1 ? 's' : ''}
           </Text>
+          <Button
+            size="sm"
+            bg="secondary.navy"
+            color="neutral.cream"
+            _hover={{ bg: 'secondary.maroon' }}
+            onClick={handleAddPartyClick}
+          >
+            + Add Party
+          </Button>
           <Menu>
             <MenuButton
               as={Button}
@@ -399,6 +431,7 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
                 <Th>Opens</Th>
                 <Th>Locale</Th>
                 <Th {...sortableThProps('date')}>Date<SortIndicator column="date" /></Th>
+                <Th>Actions</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -415,7 +448,14 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
                       onChange={() => toggleSelected(rsvp.id)}
                     />
                   </Td>
-                  <Td fontWeight="medium">{rsvp.firstName}</Td>
+                  <Td fontWeight="medium">
+                    <HStack spacing={1}>
+                      <Text>{rsvp.firstName}</Text>
+                      {rsvp.isManuallyAdded && (
+                        <Badge colorScheme="purple" fontSize="2xs">Manual</Badge>
+                      )}
+                    </HStack>
+                  </Td>
                   <Td fontSize="xs" color="gray.600">
                     <HStack spacing={1}>
                       <Text fontSize="xs">{rsvp.email}</Text>
@@ -515,12 +555,32 @@ export function RsvpDashboard({ adminData }: { adminData: UseAdminRsvpsReturn })
                   <Td fontSize="xs" color="gray.500">
                     {new Date(rsvp.submittedAt).toLocaleDateString()}
                   </Td>
+                  <Td onClick={(e) => e.stopPropagation()}>
+                    {rsvp.isManuallyAdded && (
+                      <HStack spacing={1}>
+                        <Button size="xs" variant="outline" onClick={() => handleRowClick(rsvp)}>
+                          Edit
+                        </Button>
+                        <Button size="xs" variant="outline" colorScheme="red" onClick={(e) => handleDeleteParty(e, rsvp)}>
+                          Delete
+                        </Button>
+                      </HStack>
+                    )}
+                  </Td>
                 </Tr>
               ))}
             </Tbody>
           </Table>
         )}
       </Box>
+
+      <AddPartyModal
+        isOpen={isPartyModalOpen}
+        onClose={onPartyModalClose}
+        editingParty={editingParty}
+        onAdd={addManualParty}
+        onUpdate={updateManualParty}
+      />
 
       <RsvpDetailModal
         rsvp={selectedRsvp}

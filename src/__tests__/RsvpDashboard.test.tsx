@@ -74,6 +74,9 @@ function makeAdminData(overrides: Partial<UseAdminRsvpsReturn> = {}): UseAdminRs
     exportRsvpsMarkdown: jest.fn(),
     updateRsvpGuests: jest.fn(),
     updateRsvpEmail: jest.fn(),
+    addManualParty: jest.fn(),
+    updateManualParty: jest.fn(),
+    deleteManualPartyById: jest.fn(),
     ...overrides,
   }
 }
@@ -205,5 +208,104 @@ describe('RsvpDashboard — email editing', () => {
     render(<RsvpDashboard adminData={adminData} />)
 
     expect(screen.getByText('Corrected')).toBeInTheDocument()
+  })
+})
+
+describe('RsvpDashboard — manually added parties', () => {
+  it('opens the Add Party modal in add mode when "+ Add Party" is clicked', () => {
+    const adminData = makeAdminData()
+    render(<RsvpDashboard adminData={adminData} />)
+
+    fireEvent.click(screen.getByRole('button', { name: '+ Add Party' }))
+
+    expect(screen.getByText(/hasn.t submitted the RSVP form/i)).toBeInTheDocument()
+  })
+
+  it('adds a new party via addManualParty', async () => {
+    const addManualParty = jest.fn().mockResolvedValue(true)
+    const adminData = makeAdminData({ addManualParty })
+    render(<RsvpDashboard adminData={adminData} />)
+
+    fireEvent.click(screen.getByRole('button', { name: '+ Add Party' }))
+    fireEvent.change(screen.getByPlaceholderText('Jane'), { target: { value: 'Dana' } })
+    fireEvent.change(screen.getByPlaceholderText('jane@example.com'), { target: { value: 'dana@example.com' } })
+    fireEvent.click(screen.getByRole('button', { name: '+ Add Guest' }))
+    fireEvent.change(screen.getByPlaceholderText('Guest name'), { target: { value: 'Extra Guest' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Add Party' }))
+
+    await waitFor(() => {
+      expect(addManualParty).toHaveBeenCalledWith('Dana', 'dana@example.com', ['Extra Guest'])
+    })
+  })
+
+  it('shows a "Manual" badge for manually-added rows', () => {
+    const rsvp = makeRsvp({ id: 'manual:1', firstName: 'Dana', isManuallyAdded: true })
+    const adminData = makeAdminData({ rsvps: [rsvp], filteredRsvps: [rsvp] })
+    render(<RsvpDashboard adminData={adminData} />)
+
+    expect(screen.getByText('Manual')).toBeInTheDocument()
+  })
+
+  it('opens the Add Party modal (in edit mode) instead of the detail modal when a manual row is clicked', () => {
+    const rsvp = makeRsvp({ id: 'manual:1', firstName: 'Dana', isManuallyAdded: true })
+    const adminData = makeAdminData({ rsvps: [rsvp], filteredRsvps: [rsvp] })
+    render(<RsvpDashboard adminData={adminData} />)
+
+    fireEvent.click(screen.getByText('Dana'))
+
+    expect(screen.getByRole('button', { name: 'Save Changes' })).toBeInTheDocument()
+  })
+
+  it('saves edits to a manual party via updateManualParty', async () => {
+    const updateManualParty = jest.fn().mockResolvedValue(true)
+    const rsvp = makeRsvp({ id: 'manual:1', firstName: 'Dana', email: 'dana@example.com', isManuallyAdded: true })
+    const adminData = makeAdminData({ rsvps: [rsvp], filteredRsvps: [rsvp], updateManualParty })
+    render(<RsvpDashboard adminData={adminData} />)
+
+    fireEvent.click(screen.getAllByRole('button', { name: 'Edit' })[0]!)
+    fireEvent.change(screen.getByDisplayValue('Dana'), { target: { value: 'Dana Updated' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Save Changes' }))
+
+    await waitFor(() => {
+      expect(updateManualParty).toHaveBeenCalledWith('manual:1', 'Dana Updated', 'dana@example.com', [])
+    })
+  })
+
+  it('deletes a manual party via deleteManualPartyById after confirmation', async () => {
+    const deleteManualPartyById = jest.fn().mockResolvedValue(true)
+    const rsvp = makeRsvp({ id: 'manual:1', firstName: 'Dana', isManuallyAdded: true })
+    const adminData = makeAdminData({ rsvps: [rsvp], filteredRsvps: [rsvp], deleteManualPartyById })
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true)
+    render(<RsvpDashboard adminData={adminData} />)
+
+    fireEvent.click(screen.getAllByRole('button', { name: 'Delete' })[0]!)
+
+    await waitFor(() => {
+      expect(deleteManualPartyById).toHaveBeenCalledWith('manual:1')
+    })
+
+    confirmSpy.mockRestore()
+  })
+
+  it('does not delete when the confirmation is cancelled', () => {
+    const deleteManualPartyById = jest.fn().mockResolvedValue(true)
+    const rsvp = makeRsvp({ id: 'manual:1', firstName: 'Dana', isManuallyAdded: true })
+    const adminData = makeAdminData({ rsvps: [rsvp], filteredRsvps: [rsvp], deleteManualPartyById })
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false)
+    render(<RsvpDashboard adminData={adminData} />)
+
+    fireEvent.click(screen.getAllByRole('button', { name: 'Delete' })[0]!)
+
+    expect(deleteManualPartyById).not.toHaveBeenCalled()
+
+    confirmSpy.mockRestore()
+  })
+
+  it('does not show Edit/Delete row actions for real (non-manual) RSVPs', () => {
+    const adminData = makeAdminData()
+    render(<RsvpDashboard adminData={adminData} />)
+
+    expect(screen.queryByRole('button', { name: 'Edit' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
   })
 })

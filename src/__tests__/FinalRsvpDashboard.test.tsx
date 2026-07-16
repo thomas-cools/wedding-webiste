@@ -71,6 +71,9 @@ function makeAdminData(overrides: Partial<UseAdminRsvpsReturn> = {}): UseAdminRs
     exportRsvpsMarkdown: jest.fn(),
     updateRsvpGuests: jest.fn(),
     updateRsvpEmail: jest.fn(),
+    addManualParty: jest.fn(),
+    updateManualParty: jest.fn(),
+    deleteManualPartyById: jest.fn(),
     ...overrides,
   }
 }

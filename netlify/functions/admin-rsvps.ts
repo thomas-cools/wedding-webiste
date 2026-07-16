@@ -7,6 +7,7 @@ import {
 } from './utils/admin-auth'
 import { getAllGuestOverrides } from './utils/rsvp-guest-overrides'
 import { getAllEmailOverrides } from './utils/rsvp-email-overrides'
+import { getAllManualParties } from './utils/manual-rsvp-parties'
 
 /**
  * Admin endpoint to fetch all RSVP submissions from Netlify Forms API.
@@ -62,6 +63,8 @@ export interface AdminRsvp {
   guestsManuallyEditedAt?: string
   /** Set when an admin has corrected this party's email address. */
   emailCorrectedAt?: string
+  /** True when this row was added directly by an admin rather than submitted via the RSVP form. */
+  isManuallyAdded?: boolean
 }
 
 function parseJsonField<T>(value: string | undefined, fallback: T): T {
@@ -94,11 +97,11 @@ function levenshtein(a: string, b: string): number {
     const curr = [i]
     for (let j = 1; j <= b.length; j++) {
       const cost = a[i - 1] === b[j - 1] ? 0 : 1
-      curr[j] = Math.min(curr[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost)
+      curr[j] = Math.min(curr[j - 1]! + 1, prev[j]! + 1, prev[j - 1]! + cost)
     }
     prev.splice(0, prev.length, ...curr)
   }
-  return prev[b.length]
+  return prev[b.length]!
 }
 
 /** Exact match after normalization, or Levenshtein distance <= 1 for names of length >= 3 (catches typos/accents). */
@@ -127,7 +130,7 @@ function normalizeSubmission(sub: NetlifyFormSubmission): AdminRsvp {
     franceTips: d.franceTips === 'true' || d.france_tips === 'true',
     additionalNotes: (d.additionalNotes || d.additional_notes || '').trim(),
     submittedAt: sub.created_at,
-    locale: (d.locale || 'en').trim().toLowerCase().split('-')[0],
+    locale: (d.locale || 'en').trim().toLowerCase().split('-')[0] || 'en',
   }
 }
 
@@ -238,6 +241,39 @@ export const handler: Handler = async (event) => {
       if (!existing || new Date(rsvp.submittedAt) > new Date(existing.submittedAt)) {
         byEmail.set(rsvp.email, rsvp)
       }
+    }
+
+    // Merge in parties added directly by an admin (they never submitted the
+    // real RSVP form, e.g. a late addition who still needs a Final RSVP
+    // invitation). Modeled as confirmed ("definitely") rows so they surface
+    // everywhere real confirmed guests do. A real submission with the same
+    // email always wins — the manual stub is just superseded, not merged.
+    // Non-essential enhancement — a Blobs failure must not break the core
+    // RSVP dashboard, so log and continue without manual parties instead.
+    try {
+      const manualParties = await getAllManualParties()
+      for (const party of manualParties) {
+        if (byEmail.has(party.email)) continue
+        byEmail.set(party.email, {
+          id: `manual:${party.id}`,
+          firstName: party.firstName,
+          email: party.email,
+          mailingAddress: '',
+          likelihood: 'definitely',
+          events: { welcome: '', ceremony: '', brunch: '' },
+          accommodation: '',
+          travelPlan: '',
+          guests: party.guests.map((g) => ({ name: g.name })),
+          dietary: '',
+          franceTips: false,
+          additionalNotes: '',
+          submittedAt: party.createdAt,
+          locale: 'en',
+          isManuallyAdded: true,
+        })
+      }
+    } catch (error) {
+      console.error('Failed to load manual parties, continuing without them:', error)
     }
 
     const rsvps = Array.from(byEmail.values())
