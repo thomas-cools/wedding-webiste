@@ -72,10 +72,11 @@ export interface RegistryLinkConfig {
 /**
  * External wedding registry links.
  *
- * TODO: Replace the placeholder `url` values below with your real registry
- * links once available. The display name/description for each entry lives in
- * `registry.links` in `src/i18n/locales/*.json` (matched by array index).
+ * The display name/description for each entry lives in `registry.links` in
+ * `src/i18n/locales/*.json` (matched by array index). Note: the WithJoy
+ * registry below is password protected (code: 6rqr56) since it isn't tied
+ * to the site's own PasswordGate.
  */
 export const registryLinks: RegistryLinkConfig[] = [
-  { id: 'primary', url: 'https://www.zola.com/registry/thomasandcarolina2026' },
+  { id: 'primary', url: 'https://withjoy.com/carolinaandthomas-2026/registry' },
 ]
