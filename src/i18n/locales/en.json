@@ -7,7 +7,8 @@
     "travel": "Stay",
     "faq": "FAQ",
     "rsvp": "RSVP",
-    "drinks": "Drinks"
+    "drinks": "Drinks",
+    "registry": "Registry"
   },
   "hero": {
     "invited": "You're invited",
@@ -189,7 +190,24 @@
   "quickLinks": {
     "label": "Explore",
     "title": "Quick Links",
-    "stay": "Stay"
+    "stay": "Stay",
+    "registry": "Registry"
+  },
+  "registry": {
+    "label": "Gifts & Registry",
+    "title": "Wedding Registry",
+    "teaserDescription": "Your presence at our wedding is the greatest gift of all. If you'd like to give something more, we've put together a small registry.",
+    "viewButton": "View Our Registry",
+    "backToHome": "Back",
+    "pageTitle": "Our Registry",
+    "pageIntro": "We feel so lucky to be surrounded by family and friends as we start this next chapter. If you'd like to contribute to our future together, here are a few places to do so.",
+    "links": [
+      {
+        "name": "Our Gift Registry",
+        "description": "Browse our curated list of gifts on our registry.",
+        "buttonLabel": "View Registry"
+      }
+    ]
   },
   "finalRsvp": {
     "title": "Final RSVP",
@@ -209,17 +227,13 @@
       "notAttending": "Not Attending",
       "accommodationTitle": "Accommodation",
       "accommodationChateau": "We are staying at the venue (Chateau)",
-      "accommodationAirbnb": "We're staying at an Airbnb / private rental",
-      "accommodationHotel": "We're staying at a hotel",
+      "accommodationAirbnb": "We are staying at an Airbnb",
+      "accommodationHotel": "We are staying at a hotel",
       "accommodationAddress": "Your Accommodation Address",
       "accommodationAddressPlaceholder": "Street, city…",
       "accommodationAddressHint": "This helps us coordinate transportation to and from the venue.",
       "hotelName": "Hotel Name",
-      "hotelNamePlaceholder": "e.g. Hôtel & Spa Le Pavillon",
-      "transportationTitle": "Transportation",
-      "transportationDescription": "Since you won't be staying at the venue, let us know if you'd like us to arrange a taxi or if you're making your own way there.",
-      "transportationTaxi": "Please arrange a taxi for us",
-      "transportationOwn": "We'll make our own way there",
+      "hotelNamePlaceholder": "Name of the hotel you're staying at",
       "menuTitle": "Menu Choices",
       "menuDescription": "Please select your choices for each person in your party. Children under 12 will receive a children's meal.",
       "guest": "Guest {{number}}",
@@ -228,11 +242,13 @@
       "childrensMealNote": "A special children's menu will be provided.",
       "appetizer": "Appetizer",
       "mainCourse": "Main Course",
-      "allergiesLabel": "Allergies / Dietary Notes",
-      "allergiesPlaceholder": "Any allergies or dietary restrictions?",
       "songRequest": "Song Request",
       "songRequestPlaceholder": "What song will get you on the dance floor?",
       "songRequestHint": "We'll do our best to make it happen!",
+      "travelTitle": "Arrival & Departure",
+      "travelDescription": "Let us know your travel dates so we can help coordinate transportation if needed.",
+      "arrivalDate": "Arrival Date",
+      "departureDate": "Departure Date",
       "photographyTitle": "Photography & Video",
       "photographyDescription": "Our photographer and videographer will be capturing memories throughout the celebration. Do you consent to being photographed and/or filmed?",
       "photographyYes": "Yes, I consent to being photographed and filmed",
@@ -249,17 +265,14 @@
       },
       "main": {
         "bar": "Grilled sea bass fillet, Mediterranean vegetable tartlet, pea purée & black olives",
-        "tournedos": "French beef fillet tournedos, confit shallot & red wine purée, potato compression, morel & sweet wine jus",
-        "vegan": "Roasted vegetable tartlet with seasonal vegetables (VG)"
+        "tournedos": "French beef fillet tournedos, confit shallot & red wine purée, potato compression, morel & sweet wine jus"
       }
     },
     "validation": {
       "eventsRequired": "Please select your attendance for at least one day.",
-      "guestEventsRequired": "{{name}} needs to answer attendance for every day.",
       "accommodationRequired": "Please let us know your accommodation preference.",
       "accommodationAddressRequired": "Please enter your accommodation address.",
       "hotelNameRequired": "Please enter your hotel name.",
-      "transportationRequired": "Please let us know your transportation preference.",
       "appetizerRequired": "Please select an appetizer.",
       "mainRequired": "Please select a main course.",
       "addressIncompleteTitle": "Address may be incomplete",

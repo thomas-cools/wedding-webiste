@@ -77,6 +77,5 @@ export interface RegistryLinkConfig {
  * `registry.links` in `src/i18n/locales/*.json` (matched by array index).
  */
 export const registryLinks: RegistryLinkConfig[] = [
-  { id: 'primary', url: 'https://www.zola.com/registry/REPLACE_WITH_YOUR_REGISTRY' },
-  { id: 'honeymoon', url: 'https://www.honeyfund.com/REPLACE_WITH_YOUR_FUND' },
+  { id: 'primary', url: 'https://www.zola.com/registry/thomasandcarolina2026' },
 ]

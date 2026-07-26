@@ -386,17 +386,23 @@ export default function DrinkPreferencesForm({ onSuccess, guestData }: DrinkPref
                 </OptionPill>
               ))}
             </Wrap>
+          </FormControl>
+
+          {/* 3b. Go-to Drink */}
+          <FormControl>
+            <FormLabel fontWeight="600" fontSize={['md', 'lg']}>
+              🥃 {t('drinkPreferences.form.goToDrinkTitle')}
+            </FormLabel>
+            <Text color="rgba(48,15,12,0.65)" fontSize="sm" mb={3}>
+              {t('drinkPreferences.form.goToDrinkLabel')}
+            </Text>
             <Input
               name="favoriteCocktail"
               value={form.favoriteCocktail}
               onChange={(e) => form.setFavoriteCocktail(e.target.value)}
               placeholder={t('drinkPreferences.form.goToDrinkPlaceholder')}
-              mt={4}
               maxLength={120}
             />
-            <Text color="rgba(48,15,12,0.5)" fontSize="xs" mt={1.5}>
-              {t('drinkPreferences.form.goToDrinkLabel')}
-            </Text>
           </FormControl>
 
           {/* 4. Non-Alcoholic */}

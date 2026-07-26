@@ -7,7 +7,8 @@
     "travel": "Estancia",
     "faq": "Preguntas",
     "rsvp": "Confirmar",
-    "drinks": "Bebidas"
+    "drinks": "Bebidas",
+    "registry": "Regalos"
   },
   "hero": {
     "invited": "Estás invitado/a",
@@ -188,7 +189,24 @@
   "quickLinks": {
     "label": "Explorar",
     "title": "Enlaces Rápidos",
-    "stay": "Estancia"
+    "stay": "Estancia",
+    "registry": "Regalos"
+  },
+  "registry": {
+    "label": "Regalos y Lista de Bodas",
+    "title": "Lista de Bodas",
+    "teaserDescription": "Su presencia en nuestra boda es el mejor regalo de todos. Si desean darnos algo más, hemos preparado una pequeña lista de regalos.",
+    "viewButton": "Ver Nuestra Lista",
+    "backToHome": "Volver",
+    "pageTitle": "Nuestra Lista de Bodas",
+    "pageIntro": "Nos sentimos muy afortunados de estar rodeados de familia y amigos al comenzar este nuevo capítulo. Si desean contribuir a nuestro futuro juntos, aquí hay algunos lugares para hacerlo.",
+    "links": [
+      {
+        "name": "Nuestra Lista de Regalos",
+        "description": "Explora nuestra lista de regalos seleccionada.",
+        "buttonLabel": "Ver Lista"
+      }
+    ]
   },
   "finalRsvp": {
     "title": "RSVP Final",
@@ -208,17 +226,13 @@
       "notAttending": "No asistiré",
       "accommodationTitle": "Alojamiento",
       "accommodationChateau": "Nos hospedamos en el lugar (Chateau)",
-      "accommodationAirbnb": "Nos hospedamos en un Airbnb / alquiler privado",
+      "accommodationAirbnb": "Nos hospedamos en un Airbnb",
       "accommodationHotel": "Nos hospedamos en un hotel",
       "accommodationAddress": "Dirección de tu alojamiento",
       "accommodationAddressPlaceholder": "Calle, ciudad…",
       "accommodationAddressHint": "Esto nos ayuda a coordinar el transporte hacia y desde el lugar.",
       "hotelName": "Nombre del hotel",
-      "hotelNamePlaceholder": "ej. Hôtel & Spa Le Pavillon",
-      "transportationTitle": "Transporte",
-      "transportationDescription": "Como no te hospedarás en el lugar, indícanos si deseas que organicemos un taxi o si te desplazarás por tu cuenta.",
-      "transportationTaxi": "Por favor organicen un taxi para nosotros",
-      "transportationOwn": "Nos desplazaremos por nuestra cuenta",
+      "hotelNamePlaceholder": "Nombre del hotel donde te hospedas",
       "menuTitle": "Elecciones de menú",
       "menuDescription": "Por favor selecciona las opciones para cada persona en tu grupo. Los niños menores de 12 años recibirán un menú infantil.",
       "guest": "Invitado {{number}}",
@@ -227,11 +241,13 @@
       "childrensMealNote": "Se proporcionará un menú especial para niños.",
       "appetizer": "Entrante",
       "mainCourse": "Plato principal",
-      "allergiesLabel": "Alergias / Notas dietéticas",
-      "allergiesPlaceholder": "¿Alguna alergia o restricción alimentaria?",
       "songRequest": "Canción solicitada",
       "songRequestPlaceholder": "¿Qué canción te hará salir a la pista de baile?",
       "songRequestHint": "¡Haremos todo lo posible!",
+      "travelTitle": "Llegada y Salida",
+      "travelDescription": "Cuéntanos tus fechas de viaje para ayudar a coordinar el transporte si es necesario.",
+      "arrivalDate": "Fecha de llegada",
+      "departureDate": "Fecha de salida",
       "photographyTitle": "Fotografía y Video",
       "photographyDescription": "Nuestro fotógrafo y videógrafo capturarán recuerdos durante toda la celebración. ¿Consientes en ser fotografiado/a y/o filmado/a?",
       "photographyYes": "Sí, consiento ser fotografiado/a y filmado/a",
@@ -248,17 +264,14 @@
       },
       "main": {
         "bar": "Filete de lubina a la plancha, tartaleta de verduras mediterráneas, crema de guisantes y aceitunas negras",
-        "tournedos": "Tournedos de ternera francesa, puré de chalotas confitadas en vino tinto, compresión de patatas, jugo de morillas y vino dulce",
-        "vegan": "Tartaleta de verduras asadas de temporada (VG)"
+        "tournedos": "Tournedos de ternera francesa, puré de chalotas confitadas en vino tinto, compresión de patatas, jugo de morillas y vino dulce"
       }
     },
     "validation": {
       "eventsRequired": "Por favor selecciona tu asistencia para al menos un día.",
-      "guestEventsRequired": "{{name}} debe indicar su asistencia para cada día.",
       "accommodationRequired": "Por favor indícanos tu preferencia de alojamiento.",
       "accommodationAddressRequired": "Por favor ingresa la dirección de tu alojamiento.",
       "hotelNameRequired": "Por favor ingresa el nombre de tu hotel.",
-      "transportationRequired": "Por favor indícanos tu preferencia de transporte.",
       "appetizerRequired": "Por favor selecciona un entrante.",
       "mainRequired": "Por favor selecciona un plato principal.",
       "addressIncompleteTitle": "La dirección puede estar incompleta",
