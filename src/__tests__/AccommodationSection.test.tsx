@@ -1,133 +1,133 @@
-import { render, screen, fireEvent, waitFor } from '../test-utils'
+import { render, screen } from '../test-utils'
 import { AccommodationSection } from '../components/AccommodationSection/AccommodationSection'
 
 // Mock react-i18next
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => {
-      const translations: Record<string, string> = {
+    t: (key: string, options?: { returnObjects?: boolean }) => {
+      const translations: Record<string, unknown> = {
         'travel.label': 'Vallesvilles & Toulouse',
-        'travel.title': 'Travel & Stay',
-        'travel.subtitle': 'Vallesvilles is a rural village...',
-        'travel.transportNote': 'If you are not providing your own transportation...',
-        'travel.tabs.onsite': 'On-Site',
-        'travel.tabs.airbnb': 'Airbnb',
-        'travel.tabs.booking': 'Booking.com',
-        'travel.tabs.hotels': 'Hotels',
-        'travel.onsiteTitle': 'Stay at the Venue',
-        'travel.onsiteDescription': 'We offer limited on-site accommodation...',
-        'travel.onsiteDetails': 'Priority will be given to immediate family. Email <emailLink>carolinaandthomaswedding@gmail.com</emailLink>.',
-        'travel.airbnbTitle': 'Find Nearby Stays',
-        'travel.airbnbDescription': 'Discover charming vacation rentals...',
-        'travel.searchAirbnb': 'Search on Airbnb',
-        'travel.bookingTitle': 'Search Hotels & More',
-        'travel.bookingDescription': 'Find hotels, apartments...',
-        'travel.searchBookingButton': 'Search on Booking.com',
-        'travel.hotelsTitle': 'Nearby Hotels',
-        'travel.hotelsDescription': 'Traditional hotel accommodations...',
-        'travel.recommendedHotels': 'Recommended Hotels',
-        'travel.hotels.0.name': 'Hôtel & Spa Le Pavillon',
-        'travel.hotels.0.location': 'Toulouse (45 min drive)',
-        'travel.hotels.0.description': 'Elegant 4-star hotel...',
-        'travel.hotels.0.priceRange': '€€€',
-        'travel.hotels.1.name': 'Le Domaine des Music',
-        'travel.hotels.1.location': 'Montauban (30 min drive)',
-        'travel.hotels.1.description': 'Charming countryside hotel...',
-        'travel.hotels.1.priceRange': '€€',
-        'travel.hotels.2.name': 'Hôtel & Chambre d\'Hôtes de Luxe',
-        'travel.hotels.2.location': 'Vallesvilles (5 min drive)',
-        'travel.hotels.2.description': 'Boutique bed & breakfast...',
-        'travel.hotels.2.priceRange': '€€',
+        'travel.title': 'Stay',
+        'travel.subtitle': 'We are delighted you are staying with us at the chateau.',
+        'travel.layout.imageAlt': 'Chateau layout sketch',
+        'travel.layout.mainHouse.title': 'Main House',
+        'travel.layout.chambre.title': 'Chambre',
+        'travel.amenities.title': 'Amenities:',
+        'travel.amenities.imageAlt': 'Pool lounge illustration',
+        'travel.houseNote': 'Please clean up after yourself to ensure a pleasant experience for all families and friends.',
+        'travel.food.title': 'Food',
+        'travel.food.note': 'If you need anything while at the venue, here is the closest place to visit.',
+        'travel.food.iconAlt': 'Fries icon',
+        'travel.food.allergyNote': 'If you have any allergies, please carry the appropriate medication or an EpiPen with you.',
+        'travel.pharmacy.iconAlt': 'Pharmacy icon',
       }
-      return translations[key] || key
+
+      if (key === 'travel.introParagraphs' && options?.returnObjects) {
+        return [
+          'Our goal is to make your experience as comfortable as possible.',
+          'You can find your exact room name in your reservation email.',
+        ]
+      }
+
+      if (key === 'travel.layout.mainHouse.guests' && options?.returnObjects) {
+        return ['Newlyweds', 'Family Aldeco Cordoba', 'Friends [Verk, Garcia, Ainciburu & Delmas]']
+      }
+
+      if (key === 'travel.layout.chambre.guests' && options?.returnObjects) {
+        return ["Family Rueb's", 'Family Trejo']
+      }
+
+      if (key === 'travel.amenities.items' && options?.returnObjects) {
+        return ['1 Pool', '2 shared kitchens', 'Parking lot']
+      }
+
+      if (key === 'travel.food.schedule' && options?.returnObjects) {
+        return ['On Tuesday, dinner will be served at 18:00.', 'On Thursday, brunch will be served from 10:30 to 14:00.']
+      }
+
+      if (key === 'travel.food.store' && options?.returnObjects) {
+        return {
+          name: 'Carrefour City (7 min in car):',
+          address: "All. de l'Eglise, 31280 Dremil-Lafage, France",
+          hours: 'Open Monday to Friday from 7:00 AM to 9:30 PM',
+          url: 'https://www.carrefour.fr/',
+        }
+      }
+
+      if (key === 'travel.pharmacy.places' && options?.returnObjects) {
+        return [
+          {
+            name: 'Pharmacie de Lanta (8 min in car):',
+            address: '51 Avenue Grand Faubourg, 31590 Verfeil, France',
+            phone: 'Phone: +33 5 61 83 78 19',
+            hours: 'Open Monday to Friday from 9:00 AM to 12:30 PM and 2:15 PM to 7:30 PM',
+            url: 'https://example.com/pharmacie-lanta',
+          },
+          {
+            name: 'Pharmacie du Grand Faubourg (10 min in car)',
+            address: '20 Rte de Caraman, 31570 Lanta, France',
+            phone: 'Phone: +33 5 61 53 61 47',
+            hours: 'Open Monday to Friday from 8:30 AM to 12:30 PM and 2:00 PM to 7:30 PM',
+          },
+        ]
+      }
+
+      return (translations[key] as string) || key
     },
     i18n: { language: 'en' },
   }),
-  Trans: ({ i18nKey, components }: { i18nKey: string; components?: Record<string, React.ReactNode> }) => {
-    const text = 'Priority will be given to immediate family. Email carolinaandthomaswedding@gmail.com.'
-    if (components?.emailLink) {
-      return (
-        <>
-          Priority will be given to immediate family. Email{' '}
-          <a href="mailto:carolinaandthomaswedding@gmail.com">carolinaandthomaswedding@gmail.com</a>.
-        </>
-      )
-    }
-    return <>{text}</>
-  },
 }))
-
-// Mock image imports
-jest.mock('../assets/airbnb-tile.svg', () => 'airbnb-tile.svg')
-jest.mock('../assets/booking-tile.svg', () => 'booking-tile.svg')
 
 describe('AccommodationSection', () => {
   describe('enabled prop', () => {
     it('renders nothing when enabled is false', () => {
       render(<AccommodationSection enabled={false} />)
       // Component returns null, but Chakra adds environment span
-      expect(screen.queryByText('Travel & Stay')).not.toBeInTheDocument()
+      expect(screen.queryByText('Stay')).not.toBeInTheDocument()
       expect(screen.queryByRole('tablist')).not.toBeInTheDocument()
     })
 
     it('renders content when enabled is true', () => {
       render(<AccommodationSection enabled={true} />)
-      expect(screen.getByText('Travel & Stay')).toBeInTheDocument()
+      expect(screen.getByText('Stay')).toBeInTheDocument()
     })
   })
 
   describe('section header', () => {
-    it('renders the section label', () => {
-      render(<AccommodationSection enabled={true} />)
-      expect(screen.getByText('Vallesvilles & Toulouse')).toBeInTheDocument()
-    })
-
     it('renders the section title', () => {
       render(<AccommodationSection enabled={true} />)
-      expect(screen.getByRole('heading', { level: 2, name: 'Travel & Stay' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { level: 2, name: 'Stay' })).toBeInTheDocument()
     })
 
-    it('renders the transport note', () => {
+    it('renders the intro paragraph content', () => {
       render(<AccommodationSection enabled={true} />)
-      expect(screen.getByText(/If you are not providing your own transportation/)).toBeInTheDocument()
+      expect(screen.getByText(/Our goal is to make your experience as comfortable as possible/)).toBeInTheDocument()
     })
   })
 
-  describe('tabs', () => {
-    it('renders all three tabs', () => {
+  describe('layout', () => {
+    it('renders no tab navigation', () => {
       render(<AccommodationSection enabled={true} />)
-      
-      expect(screen.getByRole('tab', { name: 'On-Site' })).toBeInTheDocument()
-      expect(screen.getByRole('tab', { name: 'Airbnb' })).toBeInTheDocument()
-      expect(screen.getByRole('tab', { name: 'Booking.com' })).toBeInTheDocument()
-      expect(screen.queryByRole('tab', { name: 'Hotels' })).not.toBeInTheDocument()
+
+      expect(screen.queryByRole('tablist')).not.toBeInTheDocument()
     })
 
-    it('shows on-site tab content by default', () => {
+    it('renders the three required mockup icons', () => {
       render(<AccommodationSection enabled={true} />)
-      expect(screen.getByText('Stay at the Venue')).toBeInTheDocument()
+
+      expect(screen.getByAltText('Chateau layout sketch')).toBeInTheDocument()
+      expect(screen.getByAltText('Fries icon')).toBeInTheDocument()
+      expect(screen.getByAltText('Pharmacy icon')).toBeInTheDocument()
     })
 
-    it('switches to Airbnb tab when clicked', async () => {
+    it('renders external links when place urls are provided', () => {
       render(<AccommodationSection enabled={true} />)
-      
-      const airbnbTab = screen.getByRole('tab', { name: 'Airbnb' })
-      fireEvent.click(airbnbTab)
-      
-      await waitFor(() => {
-        expect(screen.getByText('Find Nearby Stays')).toBeInTheDocument()
-      })
-    })
 
-    it('switches to Booking.com tab when clicked', async () => {
-      render(<AccommodationSection enabled={true} />)
-      
-      const bookingTab = screen.getByRole('tab', { name: 'Booking.com' })
-      fireEvent.click(bookingTab)
-      
-      await waitFor(() => {
-        expect(screen.getByText('Search Hotels & More')).toBeInTheDocument()
-      })
+      const storeLink = screen.getByRole('link', { name: /Carrefour City/i })
+      const pharmacyLink = screen.getByRole('link', { name: /Pharmacie de Lanta/i })
+
+      expect(storeLink).toHaveAttribute('href', 'https://www.carrefour.fr/')
+      expect(pharmacyLink).toHaveAttribute('href', 'https://example.com/pharmacie-lanta')
     })
   })
 
@@ -136,7 +136,7 @@ describe('AccommodationSection', () => {
       render(<AccommodationSection enabled={true} />)
       
       const h2 = screen.getByRole('heading', { level: 2 })
-      expect(h2).toHaveTextContent('Travel & Stay')
+      expect(h2).toHaveTextContent('Stay')
     })
 
     it('has correct section id for navigation', () => {

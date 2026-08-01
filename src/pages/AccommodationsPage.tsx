@@ -21,7 +21,6 @@ import { useFeatureFlags } from '../contexts/FeatureFlagsContext'
 import weddingLogoSmall from '../assets/monogram_websiteT&C-small.webp'
 import weddingLogoMedium from '../assets/monogram_websiteT&C-medium.webp'
 import weddingLogo2x from '../assets/monogram_websiteT&C-2x.webp'
-import textureSvg from '../assets/texture.svg'
 
 const AccommodationSection = React.lazy(() =>
   import('../components/AccommodationSection/AccommodationSection').then((m) => ({ default: m.AccommodationSection }))
@@ -32,27 +31,6 @@ function AccommodationsPageContent() {
 
   return (
     <Box id="page-top" minH="100vh" bg="#E3DFCE" display="flex" flexDirection="column" position="relative" overflow="hidden">
-      {/* Texture Background Decoration - Right Side */}
-      <Box
-        position="fixed"
-        right={0}
-        top={0}
-        bottom={0}
-        w={["200px", "300px", "450px", "550px"]}
-        backgroundImage={`url(${textureSvg})`}
-        backgroundRepeat="no-repeat"
-        backgroundPosition="right center"
-        backgroundSize="cover"
-        pointerEvents="none"
-        zIndex={0}
-        transform="scaleX(-1)"
-        sx={{
-          opacity: 0.4,
-          mixBlendMode: 'overlay',
-          filter: 'drop-shadow(1px 1px 0px rgba(255,255,255,0.5)) drop-shadow(-1px -1px 0px rgba(0,0,0,0.2))',
-        }}
-      />
-      
       {/* Minimal Header */}
       <Box 
         as="header"

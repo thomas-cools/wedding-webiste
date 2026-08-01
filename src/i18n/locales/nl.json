@@ -401,130 +401,88 @@
     "hint": "Controleer uw uitnodiging voor het wachtwoord"
   },
   "travel": {
-    "label": "Vallesvilles en Toulouse",
-    "title": "Reis en Verblijf",
+    "label": "Verblijf",
+    "title": "Verblijf",
     "backToHome": "Terug",
-    "subtitle": "Vallesvilles is een landelijk dorp op het platteland van Toulouse met ongeveer 500 inwoners. Dit charmante dorp biedt een vredige en authentieke omgeving, typisch voor de Lauragais-regio, met zijn heuvels, open velden en mooie bakstenen huizen. De sfeer is zacht en gastvrij, ideaal voor een bruiloft omgeven door de natuur, ver van de drukte, maar toch gemakkelijk bereikbaar vanuit Toulouse (35 minuten met de auto).",
-    "transportNote": "Als je niet in je eigen vervoer van en naar de locatie voorziet, raden we je sterk aan om in Toulouse te verblijven, op slechts 35 minuten rijden, zodat we je kunnen helpen met het organiseren van vervoer.",
-    "tabs": {
-      "onsite": "Op Locatie",
-      "airbnb": "Airbnb",
-      "booking": "Booking.com",
-      "hotels": "Hotels"
-    },
-    "onsiteTitle": "Verblijf op de Locatie",
-    "onsiteDescription": "We bieden graag beperkte accommodatie op locatie aan voor onze gasten. Voorrang wordt gegeven aan familieleden.",
-    "onsiteDetails": "Als je geïnteresseerd bent in verblijf op locatie, geef dit dan aan in je RSVP of stuur een e-mail naar <emailLink>carolinaandthomaswedding@gmail.com</emailLink>. We nemen contact met je op over beschikbaarheid en details.",
-    "onsiteDisclaimer": "Houd er rekening mee dat dit niet de definitieve prijzen zijn; deze worden later bevestigd en kunnen variëren afhankelijk van de kamer. Dit is slechts om u een idee te geven. Als u geïnteresseerd bent, zullen we de prijs bevestigen zodra u contact met ons opneemt.",
-    "roomDetails": "Kamerdetails",
-    "capacity": "Capaciteit",
-    "price": "Prijs",
-    "person": "persoon",
-    "people": "personen",
-    "bed": "bed",
-    "beds": "bedden",
-    "perNight": "/ nacht",
-    "perPersonPerNight": "per persoon per nacht",
-    "mainBuilding": {
-      "title": "Hoofdgebouw",
-      "description": "1 keuken, 6 slaapkamers, 6 badkamers (20 personen)",
-      "rooms": {
-        "india": {
-          "name": "Slaapkamer India",
-          "subtitle": "(2 personen / 1e verdieping)",
-          "beds": ["1 tweepersoonsbed (180x200)", "OF 2 eenpersoonsbedden (90x200)"],
-          "amenities": "*Privé badkamer, douche, wastafel, WC"
-        },
-        "pyrenees": {
-          "name": "Pyreneeën Slaapkamer",
-          "subtitle": "(4 personen (2 in de kamer, 2 in de voorkamer))",
-          "beds": ["1 tweepersoonsbed (180x200)", "Voorkamer EN 2 eenpersoonsbedden (90x200)"],
-          "amenities": "*Privé badkamer, douche, wastafel, WC"
-        },
-        "provence": {
-          "name": "Slaapkamer Provence",
-          "subtitle": "(2 personen / 1e verdieping)",
-          "beds": ["1 tweepersoonsbed (180x200)", "OF 2 eenpersoonsbedden (90x200)"],
-          "amenities": "*Privé badkamer, douche, wastafel, WC"
-        },
-        "occitanie": {
-          "name": "Slaapkamer Occitanie",
-          "subtitle": "(2 personen / 1e verdieping)",
-          "beds": ["1 tweepersoonsbed (160x200)"],
-          "amenities": "Privé badkamer, douche, wastafel, WC"
-        },
-        "lauragais": {
-          "name": "Lauragais Slaapzaal",
-          "subtitle": "(8 personen / 1e verdieping)",
-          "beds": ["4 bedden (160x200) in dezelfde slaapkamer", "(gescheiden door gordijnen)"],
-          "amenities": "*2 Gedeelde badkamers, douche, wastafel, WC (te bevestigen)"
-        }
-      }
-    },
-    "annex": {
-      "title": "Bijgebouw",
-      "description": "1 keuken, 4 slaapkamers, 4 badkamers (14 personen)",
-      "rooms": {
-        "room1": {
-          "name": "Begane Grond (Kamer 1)",
-          "subtitle": "1e verdieping",
-          "beds": ["2 bedden (160 cm)"]
-        },
-        "room2": {
-          "name": "Begane Grond (Kamer 2 - familie)",
-          "subtitle": "1e verdieping",
-          "beds": ["1 bed (160 cm) + mezzanine 1 bed (160 cm)"]
-        },
-        "room3": {
-          "name": "1e Verdieping (Kamer 3)",
-          "subtitle": "2e verdieping",
-          "beds": ["2 bedden (160 cm)"]
-        },
-        "room4": {
-          "name": "1e Verdieping (Kamer 4)",
-          "subtitle": "1e verdieping",
-          "beds": ["1 bed (160 cm)"]
-        }
-      }
-    },
-    "viewFloorplan": "Kamerindeling",
-    "clickToEnlarge": "Klik op de afbeelding om te vergroten",
-    "airbnbTitle": "Vind Verblijf in de Buurt",
-    "airbnbDescription": "Ontdek charmante vakantiewoningen en unieke accommodaties in de buurt van de locatie op Airbnb.",
-    "searchAirbnb": "Zoeken op Airbnb",
-    "bookingTitle": "Zoek Hotels en Meer",
-    "bookingDescription": "Vind hotels, appartementen en vakantiehuizen in de buurt van de locatie op Booking.com.",
-    "searchBookingButton": "Zoeken op Booking.com",
-    "hotelsTitle": "Hotels in de Buurt",
-    "hotelsDescription": "Traditionele hotelaccommodaties in de omgeving, van boetiekhotels tot grotere ketens.",
-    "recommendedHotels": "Aanbevolen Hotels",
-    "searchMore": "Meer Hotels Zoeken",
-    "searchBooking": "Zoeken op Booking.com",
-    "searchExpedia": "Zoeken op Expedia",
-    "hotels": [
-      {
-        "name": "Hôtel & Spa Le Pavillon",
-        "location": "Toulouse (45 min rijden)",
-        "description": "Elegant 4-sterrenhotel met spa en fijne keuken.",
-        "priceRange": "€€€"
-      },
-      {
-        "name": "Le Domaine des Music",
-        "location": "Montauban (30 min rijden)",
-        "description": "Charmant plattelandshotel in een gerestaureerd landhuis.",
-        "priceRange": "€€"
-      },
-      {
-        "name": "Hôtel & Chambre d'Hôtes de Luxe",
-        "location": "Vallesvilles (5 min rijden)",
-        "description": "Boetiek bed & breakfast met persoonlijke service.",
-        "priceRange": "€€"
-      }
+    "subtitle": "We zijn blij dat je bij ons in het chateau verblijft.",
+    "introParagraphs": [
+      "Ons doel is om je verblijf zo comfortabel mogelijk te maken. Hier vind je praktische informatie voor je verblijf.",
+      "Het chateau bestaat uit twee delen: het hoofdgebouw en de chambre eronder. De exacte naam van je kamer vind je in je reserveringsmail."
     ],
-    "venueName": "Vallesvilles",
-    "venueAddress": "Vallesvilles, Frankrijk",
-    "tip": "We raden aan vroeg te boeken omdat augustus hoogseizoen is in Frankrijk.",
-    "nearbyTowns": "Nabijgelegen steden met accommodatiemogelijkheden zijn onder andere Vallesvilles, Toulouse en Montauban."
+    "layout": {
+      "imageAlt": "Schets van de chateau-indeling",
+      "mainHouse": {
+        "title": "Hoofdgebouw",
+        "guests": [
+          "Pasgetrouwd stel",
+          "Familie Aldeco Cordoba",
+          "Familie Lafitte",
+          "Familie DesBrisay",
+          "Familie Mangnoesing",
+          "Vrienden [Verk, Garcia, Ainciburu & Delmas]"
+        ]
+      },
+      "chambre": {
+        "title": "Chambre",
+        "guests": [
+          "Familie Rueb",
+          "Familie Trejo",
+          "Familie Cordoba",
+          "Familie Ibarra",
+          "Familie Trevino"
+        ]
+      }
+    },
+    "amenities": {
+      "title": "Voorzieningen:",
+      "imageAlt": "Illustratie van zwembadgedeelte",
+      "items": [
+        "1 zwembad",
+        "2 gedeelde keukens",
+        "2 gedeelde koelkasten",
+        "2 stoomkokers",
+        "1 wasmachine en droger",
+        "Koffiezetapparaat",
+        "Parking"
+      ]
+    },
+    "houseNote": "Het chateau wordt als Airbnb uitgebaat, dus er is geen schoonmaakservice tijdens je verblijf. Laat alles netjes achter zodat iedereen prettig kan verblijven. Omdat het een oud gebouw is, vragen we extra zorg om schade te voorkomen en deze historische plek te behouden.",
+    "food": {
+      "title": "Eten",
+      "schedule": [
+        "Dinsdag wordt het diner geserveerd om 18:00.",
+        "Woensdag is er een klein ontbijt (gebak en koffie), cocktailuur om 17:15 (canapes) en diner om 19:30.",
+        "Donderdag wordt de brunch geserveerd van 10:30 tot 14:00."
+      ],
+      "note": "Als je snacks, lunch, specifieke voeding nodig hebt of met kinderen komt, raden we aan om in Toulouse te winkelen voor je aankomst. Als je toch iets nodig hebt op locatie, is dit de dichtstbijzijnde plek.",
+      "iconAlt": "Frietjes-icoon",
+      "store": {
+        "name": "Carrefour City (7 min met de auto):",
+        "address": "All. de l'Eglise, 31280 Dremil-Lafage, Frankrijk",
+        "hours": "Open van maandag tot vrijdag van 7:00 tot 21:30",
+        "url": "https://www.carrefour.fr/magasin/city-dremil-lafage"
+      },
+      "allergyNote": "Als je allergieen hebt, neem dan de juiste medicatie of een EpiPen mee."
+    },
+    "pharmacy": {
+      "iconAlt": "Apotheek-icoon",
+      "places": [
+        {
+          "name": "Pharmacie de Lanta (8 min met de auto):",
+          "address": "51 Avenue Grand Faubourg, 31590 Verfeil, Frankrijk",
+          "phone": "Telefoon: +33 5 61 83 78 19",
+          "hours": "Open van maandag tot vrijdag van 9:00 tot 12:30 en van 14:15 tot 19:30",
+          "url": "https://www.pharmacie-lanta.fr"
+        },
+        {
+          "name": "Pharmacie du Grand Faubourg (10 min met de auto)",
+          "address": "20 Rte de Caraman, 31570 Lanta, Frankrijk",
+          "phone": "Telefoon: +33 5 61 53 61 47",
+          "hours": "Open van maandag tot vrijdag van 8:30 tot 12:30 en van 14:00 tot 19:30",
+          "url": "https://www.pharmaciedugrandfaubourg.fr"
+        }
+      ]
+    }
   },
   "drinkPreferences": {
     "label": "Drankvoorkeuren",

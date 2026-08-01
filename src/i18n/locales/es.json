@@ -400,130 +400,88 @@
     "hint": "Revisa tu invitación para la contraseña"
   },
   "travel": {
-    "label": "Vallesvilles y Toulouse",
-    "title": "Viaje y Alojamiento",
+    "label": "Alojamiento",
+    "title": "Alojamiento",
     "backToHome": "Volver",
-    "subtitle": "Vallesvilles es un pueblo rural en la campiña de Toulouse con aproximadamente 500 habitantes. Este encantador pueblo ofrece un entorno tranquilo y auténtico, típico de la región de Lauragais, con sus colinas, campos abiertos y bonitas casas de ladrillo. El ambiente es suave y acogedor, ideal para celebrar una boda rodeada de naturaleza, lejos del bullicio, pero fácilmente accesible desde Toulouse (35 minutos en coche).",
-    "transportNote": "Si no vas a proporcionar tu propio transporte hacia y desde el lugar, te recomendamos encarecidamente alojarte en Toulouse, a solo 35 minutos en coche, para que podamos ayudarte a organizar el transporte.",
-    "tabs": {
-      "onsite": "En el Lugar",
-      "airbnb": "Airbnb",
-      "booking": "Booking.com",
-      "hotels": "Hoteles"
-    },
-    "onsiteTitle": "Alójate en el Lugar",
-    "onsiteDescription": "Nos complace ofrecer alojamiento limitado en el lugar para nuestros invitados. Se dará prioridad a los familiares.",
-    "onsiteDetails": "Si estás interesado en alojarte en el lugar, indícalo en tu RSVP o envía un email a <emailLink>carolinaandthomaswedding@gmail.com</emailLink>. Te contactaremos con la disponibilidad y los detalles.",
-    "onsiteDisclaimer": "Tenga en cuenta que estos no son los precios finales, los cuales serán confirmados más adelante y pueden variar según la habitación. Esto es solo para darles una idea. Si están interesados, una vez que nos contacten, confirmaremos el precio.",
-    "roomDetails": "Detalles de Habitación",
-    "capacity": "Capacidad",
-    "price": "Precio",
-    "person": "persona",
-    "people": "personas",
-    "bed": "cama",
-    "beds": "camas",
-    "perNight": "/ noche",
-    "perPersonPerNight": "por persona por noche",
-    "mainBuilding": {
-      "title": "Edificio Principal",
-      "description": "1 cocina, 6 habitaciones, 6 baños (20 personas)",
-      "rooms": {
-        "india": {
-          "name": "Habitación India",
-          "subtitle": "(2 personas / 1er piso)",
-          "beds": ["1 cama doble (180x200)", "O 2 camas individuales (90x200)"],
-          "amenities": "*Baño privado, ducha, lavabo, WC"
-        },
-        "pyrenees": {
-          "name": "Habitación Pirineos",
-          "subtitle": "(4 personas (2 en la habitación, 2 en la antecámara))",
-          "beds": ["1 cama doble (180x200)", "Antecámara Y 2 camas individuales (90x200)"],
-          "amenities": "*Baño privado, ducha, lavabo, WC"
-        },
-        "provence": {
-          "name": "Habitación Provenza",
-          "subtitle": "(2 personas / 1er piso)",
-          "beds": ["1 cama doble (180x200)", "O 2 camas individuales (90x200)"],
-          "amenities": "*Baño privado, ducha, lavabo, WC"
-        },
-        "occitanie": {
-          "name": "Habitación Occitania",
-          "subtitle": "(2 personas / 1er piso)",
-          "beds": ["1 cama doble (160x200)"],
-          "amenities": "Baño privado, ducha, lavabo, WC"
-        },
-        "lauragais": {
-          "name": "Dormitorio Lauragais",
-          "subtitle": "(8 personas / 1er piso)",
-          "beds": ["4 camas (160x200) en la misma habitación", "(separadas por cortinas)"],
-          "amenities": "*2 Baños compartidos, ducha, lavabo, WC (por confirmar)"
-        }
-      }
-    },
-    "annex": {
-      "title": "Anexo",
-      "description": "1 cocina, 4 habitaciones, 4 baños (14 personas)",
-      "rooms": {
-        "room1": {
-          "name": "Planta Baja (Habitación 1)",
-          "subtitle": "1er piso",
-          "beds": ["2 camas (160 cm)"]
-        },
-        "room2": {
-          "name": "Planta Baja (Habitación 2 - familiar)",
-          "subtitle": "1er piso",
-          "beds": ["1 cama (160 cm) + entresuelo 1 cama (160 cm)"]
-        },
-        "room3": {
-          "name": "1er Piso (Habitación 3)",
-          "subtitle": "2do piso",
-          "beds": ["2 camas (160 cm)"]
-        },
-        "room4": {
-          "name": "1er Piso (Habitación 4)",
-          "subtitle": "1er piso",
-          "beds": ["1 cama (160 cm)"]
-        }
-      }
-    },
-    "viewFloorplan": "Plano de Habitaciones",
-    "clickToEnlarge": "Haz clic en la imagen para ampliar",
-    "airbnbTitle": "Encuentra Alojamiento Cercano",
-    "airbnbDescription": "Descubre encantadores alquileres vacacionales y alojamientos únicos cerca del lugar en Airbnb.",
-    "searchAirbnb": "Buscar en Airbnb",
-    "bookingTitle": "Buscar Hoteles y Más",
-    "bookingDescription": "Encuentra hoteles, apartamentos y casas de vacaciones cerca del lugar en Booking.com.",
-    "searchBookingButton": "Buscar en Booking.com",
-    "hotelsTitle": "Hoteles Cercanos",
-    "hotelsDescription": "Alojamientos de hotel tradicionales en la zona, desde hoteles boutique hasta grandes cadenas.",
-    "recommendedHotels": "Hoteles Recomendados",
-    "searchMore": "Buscar Más Hoteles",
-    "searchBooking": "Buscar en Booking.com",
-    "searchExpedia": "Buscar en Expedia",
-    "hotels": [
-      {
-        "name": "Hôtel & Spa Le Pavillon",
-        "location": "Toulouse (45 min en coche)",
-        "description": "Elegante hotel de 4 estrellas con spa y alta cocina.",
-        "priceRange": "€€€"
-      },
-      {
-        "name": "Le Domaine des Music",
-        "location": "Montauban (30 min en coche)",
-        "description": "Encantador hotel campestre en una casa señorial restaurada.",
-        "priceRange": "€€"
-      },
-      {
-        "name": "Hôtel & Chambre d'Hôtes de Luxe",
-        "location": "Vallesvilles (5 min en coche)",
-        "description": "Bed & breakfast boutique con servicio personalizado.",
-        "priceRange": "€€"
-      }
+    "subtitle": "Nos encanta que te quedes con nosotros en el chateau.",
+    "introParagraphs": [
+      "Nuestro objetivo es que tu estancia sea lo más cómoda posible. Aquí tienes información útil para esos días.",
+      "El chateau tiene dos zonas: la casa principal y la chambre de abajo. Puedes encontrar el nombre exacto de tu habitación en tu correo de reserva."
     ],
-    "venueName": "Vallesvilles",
-    "venueAddress": "Vallesvilles, Francia",
-    "tip": "Recomendamos reservar con anticipación ya que agosto es temporada alta en Francia.",
-    "nearbyTowns": "Los pueblos cercanos con opciones de alojamiento incluyen Vallesvilles, Toulouse y Montauban."
+    "layout": {
+      "imageAlt": "Boceto de distribución del chateau",
+      "mainHouse": {
+        "title": "Casa Principal",
+        "guests": [
+          "Recién casados",
+          "Familia Aldeco Cordoba",
+          "Familia Lafitte",
+          "Familia DesBrisay",
+          "Familia Mangnoesing",
+          "Amigos [Verk, Garcia, Ainciburu y Delmas]"
+        ]
+      },
+      "chambre": {
+        "title": "Chambre",
+        "guests": [
+          "Familia Rueb",
+          "Familia Trejo",
+          "Familia Cordoba",
+          "Familia Ibarra",
+          "Familia Trevino"
+        ]
+      }
+    },
+    "amenities": {
+      "title": "Servicios:",
+      "imageAlt": "Ilustración de zona de piscina",
+      "items": [
+        "1 piscina",
+        "2 cocinas compartidas",
+        "2 frigoríficos compartidos",
+        "2 vaporeras",
+        "1 lavadora y secadora",
+        "Cafetera",
+        "Parking"
+      ]
+    },
+    "houseNote": "El chateau funciona como Airbnb, por lo que no hay servicio de limpieza durante la estancia. Por favor, limpia después de usar los espacios para que todos disfrutemos. Al ser un edificio antiguo, te pedimos cuidado para evitar daños y conservar este lugar histórico.",
+    "food": {
+      "title": "Comida",
+      "schedule": [
+        "El martes, la cena se servirá a las 18:00.",
+        "El miércoles habrá un pequeño desayuno (bollería y café), cóctel a las 17:15 (canapés) y cena a las 19:30.",
+        "El jueves, el brunch se servirá de 10:30 a 14:00."
+      ],
+      "note": "Si necesitas snacks, almuerzo, comida específica o vienes con niños, te recomendamos comprar en Toulouse antes de llegar al chateau. Si necesitas algo estando en el lugar, este es el punto más cercano.",
+      "iconAlt": "Icono de patatas fritas",
+      "store": {
+        "name": "Carrefour City (7 min en coche):",
+        "address": "All. de l'Eglise, 31280 Dremil-Lafage, Francia",
+        "hours": "Abre de lunes a viernes de 7:00 a 21:30",
+        "url": "https://www.carrefour.fr/magasin/city-dremil-lafage"
+      },
+      "allergyNote": "Si tienes alergias, lleva contigo la medicación adecuada o un EpiPen."
+    },
+    "pharmacy": {
+      "iconAlt": "Icono de farmacia",
+      "places": [
+        {
+          "name": "Pharmacie de Lanta (8 min en coche):",
+          "address": "51 Avenue Grand Faubourg, 31590 Verfeil, Francia",
+          "phone": "Teléfono: +33 5 61 83 78 19",
+          "hours": "Abre de lunes a viernes de 9:00 a 12:30 y de 14:15 a 19:30",
+          "url": "https://www.pharmacie-lanta.fr"
+        },
+        {
+          "name": "Pharmacie du Grand Faubourg (10 min en coche)",
+          "address": "20 Rte de Caraman, 31570 Lanta, Francia",
+          "phone": "Teléfono: +33 5 61 53 61 47",
+          "hours": "Abre de lunes a viernes de 8:30 a 12:30 y de 14:00 a 19:30",
+          "url": "https://www.pharmaciedugrandfaubourg.fr"
+        }
+      ]
+    }
   },
   "drinkPreferences": {
     "label": "Preferencias de Bebidas",
