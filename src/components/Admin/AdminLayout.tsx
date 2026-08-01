@@ -4,6 +4,7 @@ import {
   Button,
   Flex,
   Heading,
+  HStack,
   Tab,
   TabList,
   TabPanel,
@@ -50,7 +51,16 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
         <Heading size="md" fontFamily="heading" letterSpacing="wide">
           Admin Panel
         </Heading>
-        <Flex align="center" gap={4}>
+        <Flex align="center" gap={4} flexWrap="wrap">
+          <Button
+            size="sm"
+            bg="primary.soft"
+            color="secondary.navy"
+            _hover={{ bg: 'primary.main' }}
+            onClick={() => setTabIndex(7)}
+          >
+            Generate Speeches Link
+          </Button>
           <Text fontSize="xs" opacity={0.7}>
             Authenticated
           </Text>

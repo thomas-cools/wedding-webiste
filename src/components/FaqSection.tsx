@@ -1,5 +1,5 @@
 import { useTranslation, Trans } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
+import { Link as RouterLink, useLocation } from 'react-router-dom'
 import {
   Box,
   Container,
@@ -257,7 +257,16 @@ export function FaqSection() {
                           fontFamily="elegant"
                           lineHeight="1.9"
                         >
-                          {item.answer}
+                          {item.question.toLowerCase().includes('transportation') ? (
+                            <>
+                              {item.answer}{' '}
+                              <Link as={RouterLink} to="/taxi" color="primary.deep" textDecoration="underline" _hover={{ color: 'primary.main' }}>
+                                {t('faq.transportationLinkLabel', 'See our taxi page')}
+                              </Link>
+                            </>
+                          ) : (
+                            item.answer
+                          )}
                         </Text>
                       )}
                     </AccordionPanel>

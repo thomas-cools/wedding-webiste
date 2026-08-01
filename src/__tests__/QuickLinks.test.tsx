@@ -37,6 +37,7 @@ describe('QuickLinks Component', () => {
     expect(screen.getByText('FAQ')).toBeInTheDocument()
     expect(screen.getByText('STAY')).toBeInTheDocument()
     expect(screen.getByText('SERVICES')).toBeInTheDocument()
+    expect(screen.getByText('PARKING')).toBeInTheDocument()
     expect(screen.getByText('REGISTRY')).toBeInTheDocument()
   })
 
@@ -46,11 +47,13 @@ describe('QuickLinks Component', () => {
     const faqLink = screen.getByRole('link', { name: /faq/i })
     const stayLink = screen.getByRole('link', { name: /stay/i })
     const servicesLink = screen.getByRole('link', { name: /services/i })
+    const parkingLink = screen.getByRole('link', { name: /parking/i })
     const registryLink = screen.getByRole('link', { name: /registry/i })
     
     expect(faqLink).toHaveAttribute('href', '/faq#page-top')
     expect(stayLink).toHaveAttribute('href', '/accommodations#page-top')
-    expect(servicesLink).toHaveAttribute('href', '/services#page-top')
+    expect(servicesLink).toHaveAttribute('href', '/taxi#page-top')
+    expect(parkingLink).toHaveAttribute('href', '/parking#page-top')
     expect(registryLink).toHaveAttribute('href', '/registry#page-top')
   })
 
@@ -60,11 +63,13 @@ describe('QuickLinks Component', () => {
     const faqIcon = screen.getByAltText('FAQ')
     const stayIcon = screen.getByAltText('Stay')
     const servicesIcon = screen.getByAltText('Services')
+    const parkingIcon = screen.getByAltText('Parking')
     const registryIcon = screen.getByAltText('Registry')
     
     expect(faqIcon).toBeInTheDocument()
     expect(stayIcon).toBeInTheDocument()
     expect(servicesIcon).toBeInTheDocument()
+    expect(parkingIcon).toBeInTheDocument()
     expect(registryIcon).toBeInTheDocument()
   })
 
@@ -87,7 +92,7 @@ describe('QuickLinks Component', () => {
     const { container } = render(<QuickLinks />)
     
     const images = container.querySelectorAll('img')
-    expect(images).toHaveLength(4)
+    expect(images).toHaveLength(5)
   })
 
   it('applies correct styling to labels', () => {

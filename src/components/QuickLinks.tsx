@@ -16,6 +16,7 @@ import luchadorIcon from '../assets/Mexa.svg'
 import restIcon from '../assets/Pillow.svg'
 import taxiIcon from '../assets/Taxi.svg'
 import giftIcon from '../assets/JustMarried.svg'
+import parkingIcon from '../assets/parking.svg'
 
 interface QuickLinkItem {
   to: string
@@ -94,6 +95,12 @@ export function QuickLinks() {
       alt: 'Services',
     },
     {
+      to: '/parking#page-top',
+      icon: parkingIcon,
+      label: t('quickLinks.parking', 'PARKING'),
+      alt: 'Parking',
+    },
+    {
       to: '/registry#page-top',
       icon: giftIcon,
       label: t('quickLinks.registry', 'REGISTRY'),
@@ -134,12 +141,13 @@ export function QuickLinks() {
             <StaggerContainer>
               <Flex
                 direction={['column', 'column', 'row']}
-                justify="center"
-                align={['center', 'center', 'flex-start']}
+                justify="space-between"
+                align={['center', 'center', 'stretch']}
                 gap={[10, 12, 0]}
                 position="relative"
-                maxW="1000px"
+                maxW="1200px"
                 mx="auto"
+                w="100%"
               >
                 {quickLinks.map((link) => (
                   <QuickLinkCard key={link.to} {...link} />
