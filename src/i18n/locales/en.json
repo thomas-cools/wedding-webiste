@@ -1,4 +1,28 @@
 {
+  "taxi": {
+    "backToHome": "Back",
+    "title": "Taxi Services",
+    "intro": "During the event days, transportation services will already be scheduled. If you need a particular departure time on the final day, please organize your own transportation. Below, you'll find details of the transportation providers we are using. We are not responsible for availability on the last day, so ensure you book your transport well in advance.",
+    "company": "CJ Transport",
+    "phoneLabel": "Phone:",
+    "phone": "+33 6 43 08 68 30",
+    "emailLabel": "Email:",
+    "email": "cjtransport31@gmail.com",
+    "estimateLabel": "Estimate:",
+    "estimates": [
+      "Aeroport Toulouse Blagnac - centre ville",
+      "Toulouse 38 euros",
+      "ATB - ch\u00e2teau 75 euros",
+      "centre ville - ch\u00e2teau 45 euros"
+    ],
+    "vansLabel": "Vans :",
+    "vansEstimates": [
+      "ATB - centre ville 60 euros",
+      "ATB - ch\u00e2teau 100 euros",
+      "centre ville - ch\u00e2teau 65 euros"
+    ],
+    "note": "If you would like to know the pickup time from Toulouse and the days of the wedding to the chateau, refer to the WhatsApp group \"Taxi\""
+  },
   "parking": {
     "warning": "Be mindful when parking if leaving early to avoid blocking cars; choose an exit-friendly spot",
     "backToHome": "Back",

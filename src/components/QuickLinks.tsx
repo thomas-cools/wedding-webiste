@@ -88,7 +88,7 @@ export function QuickLinks() {
       alt: 'Stay',
     },
     {
-      to: '/services#page-top',
+      to: '/taxi#page-top',
       icon: taxiIcon,
       label: t('quickLinks.services', 'SERVICES'),
       alt: 'Services',

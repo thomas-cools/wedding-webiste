@@ -1,4 +1,28 @@
 {
+  "taxi": {
+    "backToHome": "Terug",
+    "title": "Taxidiensten",
+    "intro": "Tijdens de evenementdagen zijn de vervoersdiensten al ingepland. Als je op de laatste dag op een specifiek tijdstip wilt vertrekken, regel dan je eigen vervoer. Hieronder vind je de contactgegevens van de vervoerders die wij gebruiken. Wij zijn niet verantwoordelijk voor de beschikbaarheid op de laatste dag, dus boek tijdig.",
+    "company": "CJ Transport",
+    "phoneLabel": "Telefoon:",
+    "phone": "+33 6 43 08 68 30",
+    "emailLabel": "E-mail:",
+    "email": "cjtransport31@gmail.com",
+    "estimateLabel": "Tarieven:",
+    "estimates": [
+      "Luchthaven Toulouse Blagnac - stadscentrum",
+      "Toulouse 38 euro",
+      "ATB - ch\u00e2teau 75 euro",
+      "stadscentrum - ch\u00e2teau 45 euro"
+    ],
+    "vansLabel": "Busjes :",
+    "vansEstimates": [
+      "ATB - stadscentrum 60 euro",
+      "ATB - ch\u00e2teau 100 euro",
+      "stadscentrum - ch\u00e2teau 65 euro"
+    ],
+    "note": "Als je de ophaaltijd vanuit Toulouse op de trouwdagen wilt weten, kijk dan in de WhatsApp-groep \"Taxi\""
+  },
   "parking": {
     "warning": "Let op bij het parkeren als je eerder vertrekt — kies een plek waar je zonder anderen te blokkeren weg kunt rijden.",
     "backToHome": "Terug",

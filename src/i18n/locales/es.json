@@ -1,4 +1,28 @@
 {
+  "taxi": {
+    "backToHome": "Volver",
+    "title": "Servicios de Taxi",
+    "intro": "Durante los d\u00edas del evento, los servicios de transporte ya estar\u00e1n programados. Si necesitas una hora de salida concreta el \u00faltimo d\u00eda, organiza tu propio transporte. A continuaci\u00f3n encontrar\u00e1s los datos de los proveedores que utilizamos. No nos hacemos responsables de la disponibilidad el \u00faltimo d\u00eda, as\u00ed que reserva con antelaci\u00f3n.",
+    "company": "CJ Transport",
+    "phoneLabel": "Tel\u00e9fono:",
+    "phone": "+33 6 43 08 68 30",
+    "emailLabel": "Email:",
+    "email": "cjtransport31@gmail.com",
+    "estimateLabel": "Tarifas orientativas:",
+    "estimates": [
+      "Aeropuerto Toulouse Blagnac - centro ciudad",
+      "Toulouse 38 euros",
+      "ATB - ch\u00e2teau 75 euros",
+      "centro ciudad - ch\u00e2teau 45 euros"
+    ],
+    "vansLabel": "Furgonetas :",
+    "vansEstimates": [
+      "ATB - centro ciudad 60 euros",
+      "ATB - ch\u00e2teau 100 euros",
+      "centro ciudad - ch\u00e2teau 65 euros"
+    ],
+    "note": "Si quieres saber el horario de recogida desde Toulouse los d\u00edas de la boda, consulta el grupo de WhatsApp \"Taxi\""
+  },
   "parking": {
     "warning": "Ten cuidado al aparcar si sales antes; elige un lugar desde el que puedas salir sin bloquear a nadie.",
     "backToHome": "Volver",
