@@ -1,4 +1,17 @@
 {
+  "parking": {
+    "warning": "Let op bij het parkeren als je eerder vertrekt — kies een plek waar je zonder anderen te blokkeren weg kunt rijden.",
+    "backToHome": "Terug",
+    "title": "Locatie & Parkeren",
+    "intro": "Als je met de auto komt, zijn er twee parkeerplaatsen, beide aan de voorkant van het kasteel. Het is verboden op het gazon te parkeren of te rijden — bedankt voor je begrip.",
+    "caption1": "Als je via de hoofdpoort van het kasteel binnenrijdt, sla dan links af.",
+    "caption2": "Als je via de zijkant van het kasteel binnenrijdt, sla dan links af en rijd langs de voorkant om de parkeerplaats te vinden.",
+    "addressLabel": "Adres:",
+    "image1Alt": "Ingang parkeerterrein",
+    "image2Alt": "Pad naar parkeerterrein",
+    "image3Alt": "Locatie parkeerterrein",
+    "mapTitle": "Kaart van de locatie"
+  },
   "header": {
     "initials": "C & T",
     "ourStory": "Ons Verhaal",

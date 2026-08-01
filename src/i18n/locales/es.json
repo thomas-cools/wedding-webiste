@@ -1,4 +1,17 @@
 {
+  "parking": {
+    "warning": "Ten cuidado al aparcar si sales antes; elige un lugar desde el que puedas salir sin bloquear a nadie.",
+    "backToHome": "Volver",
+    "title": "Ubicación y Aparcamiento",
+    "intro": "Si traes coche al lugar hay dos zonas de aparcamiento, ambas situadas en la parte delantera del castillo. Está prohibido aparcar y circular por el césped — gracias por tu comprensión.",
+    "caption1": "Si entras por la puerta principal del castillo, gira a la izquierda.",
+    "caption2": "Si entras por el lateral del castillo, gira a la izquierda, pasa por la parte delantera y encontrarás el aparcamiento.",
+    "addressLabel": "Dirección:",
+    "image1Alt": "Entrada al aparcamiento",
+    "image2Alt": "Camino al aparcamiento",
+    "image3Alt": "Ubicación del aparcamiento",
+    "mapTitle": "Mapa del lugar"
+  },
   "header": {
     "initials": "C & T",
     "ourStory": "Nuestra Historia",

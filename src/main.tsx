@@ -11,6 +11,7 @@ import DrinkPreferencesPage from './pages/DrinkPreferencesPage'
 import FinalRsvpPage from './pages/FinalRsvpPage'
 import SpeechesPage from './pages/SpeechesPage'
 import RegistryPage from './pages/RegistryPage'
+import ParkingPage from './pages/ParkingPage'
 import ServicesPage from './pages/ServicesPage'
 import theme from './theme'
 import { FeatureFlagsProvider } from './contexts/FeatureFlagsContext'
@@ -39,6 +40,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
             <Route path="/final-rsvp" element={<FinalRsvpPage />} />
             <Route path="/speeches" element={<SpeechesPage />} />
             <Route path="/registry" element={<RegistryPage />} />
+            <Route path="/parking" element={<ParkingPage />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route
               path="/admin"
