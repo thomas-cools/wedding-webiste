@@ -9,6 +9,7 @@ import FaqPage from './pages/FaqPage'
 import GalleryPage from './pages/GalleryPage'
 import DrinkPreferencesPage from './pages/DrinkPreferencesPage'
 import FinalRsvpPage from './pages/FinalRsvpPage'
+import SpeechesPage from './pages/SpeechesPage'
 import RegistryPage from './pages/RegistryPage'
 import ServicesPage from './pages/ServicesPage'
 import theme from './theme'
@@ -36,6 +37,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/drinks" element={<DrinkPreferencesPage />} />
             <Route path="/final-rsvp" element={<FinalRsvpPage />} />
+            <Route path="/speeches" element={<SpeechesPage />} />
             <Route path="/registry" element={<RegistryPage />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route

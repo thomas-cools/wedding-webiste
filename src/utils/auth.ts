@@ -14,6 +14,11 @@ interface AuthResponse {
   expiresIn?: number
 }
 
+function persistAuth(token: string): void {
+  localStorage.setItem(TOKEN_KEY, token)
+  sessionStorage.setItem(AUTH_KEY, 'true')
+}
+
 /**
  * Check if running in development mode (local dev server)
  */
@@ -44,8 +49,7 @@ export async function authenticate(password: string): Promise<AuthResponse> {
 
     if (data.ok && data.token) {
       // Store token in localStorage as backup (cookie is HttpOnly and set by server)
-      localStorage.setItem(TOKEN_KEY, data.token)
-      sessionStorage.setItem(AUTH_KEY, 'true')
+      persistAuth(data.token)
     }
 
     return data
@@ -54,6 +58,41 @@ export async function authenticate(password: string): Promise<AuthResponse> {
     if (isDevelopment()) {
       console.warn('[Auth] Server auth failed, using development fallback')
       return authenticateLocal(password)
+    }
+
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : 'Authentication failed',
+    }
+  }
+}
+
+/**
+ * Authenticate with a short-lived admin-generated link token.
+ */
+export async function authenticateWithToken(token: string): Promise<AuthResponse> {
+  try {
+    const response = await fetch(AUTH_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token }),
+      credentials: 'include',
+    })
+
+    const data: AuthResponse = await response.json()
+
+    if (data.ok && data.token) {
+      persistAuth(data.token)
+    }
+
+    return data
+  } catch (error) {
+    if (isDevelopment()) {
+      console.warn('[Auth] Token auth failed, using development fallback')
+      persistAuth(token)
+      return { ok: true, token, expiresIn: 7200 }
     }
 
     return {

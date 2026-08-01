@@ -72,6 +72,7 @@ function AppContent() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLoading, setIsLoading] = useState(true)
   const { features } = useFeatureFlags()
+  const isLocalWorkaround = process.env.NODE_ENV !== 'production'
 
   useEffect(() => {
     let cancelled = false
@@ -128,7 +129,12 @@ function AppContent() {
     { href: '/accommodations', label: t('header.travel'), enabled: features.showAccommodation, isExternal: true },
     { href: '/faq', label: t('header.faq'), enabled: true, isExternal: true },
     { href: '#timeline', label: t('header.details'), enabled: true, isExternal: false },
-    { href: '/drinks', label: t('header.drinks'), enabled: true, isExternal: true },
+    {
+      href: '/speeches',
+      label: t('header.speeches', 'Speeches'),
+      enabled: isLocalWorkaround,
+      isExternal: true,
+    },
     { href: '/registry', label: t('header.registry'), enabled: true, isExternal: true },
   ].filter((link) => link.enabled)
 

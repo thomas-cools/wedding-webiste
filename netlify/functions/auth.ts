@@ -1,9 +1,10 @@
 import type { Handler } from '@netlify/functions'
 import { consumeRateLimit, getClientIp, rateLimitHeaders, rateLimitKey } from './utils/rate-limiter'
-import { verifyPassword, getPasswordHash, createToken } from './utils/jwt'
+import { verifyPassword, getPasswordHash, createToken, verifyToken } from './utils/jwt'
 
 interface AuthRequest {
-  password: string
+  password?: string
+  token?: string
 }
 
 interface AuthResponse {
@@ -80,6 +81,32 @@ export const handler: Handler = async (event) => {
     body = JSON.parse(event.body || '{}')
   } catch {
     return json(400, { ok: false, error: 'Invalid JSON body' }, rateLimitHeaders(rl))
+  }
+
+  if (body.token !== undefined) {
+    if (typeof body.token !== 'string' || !body.token) {
+      return json(400, { ok: false, error: 'Token is required' }, rateLimitHeaders(rl))
+    }
+
+    const payload = verifyToken(body.token)
+    if (!payload || payload.sub !== 'wedding-guest') {
+      return json(401, { ok: false, error: 'Invalid token' }, rateLimitHeaders(rl))
+    }
+
+    const tokenExpiresIn = Math.max(0, payload.exp - Math.floor(Date.now() / 1000))
+
+    return json(
+      200,
+      {
+        ok: true,
+        token: body.token,
+        expiresIn: tokenExpiresIn,
+      },
+      {
+        ...rateLimitHeaders(rl),
+        'Set-Cookie': `wedding_auth=${body.token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${tokenExpiresIn}`,
+      }
+    )
   }
 
   // Validate password field exists

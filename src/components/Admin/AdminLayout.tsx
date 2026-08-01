@@ -20,6 +20,7 @@ import { RemindersPanel } from './RemindersPanel'
 import { DrinkPreferencesDashboard } from './DrinkPreferencesDashboard'
 import { FinalRsvpDashboard } from './FinalRsvpDashboard'
 import { FinalRsvpInvitationsPanel } from './FinalRsvpInvitationsPanel'
+import { SpeechesLinkPanel } from './SpeechesLinkPanel'
 
 interface AdminLayoutProps {
   onLogout: () => void
@@ -136,6 +137,13 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
             >
               Send Final RSVP
             </Tab>
+            <Tab
+              fontSize="sm"
+              fontWeight="medium"
+              _selected={{ bg: 'secondary.navy', color: 'white' }}
+            >
+              Speeches Link
+            </Tab>
           </TabList>
 
           <TabPanels>
@@ -159,6 +167,9 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
             </TabPanel>
             <TabPanel p={0}>
               <FinalRsvpInvitationsPanel adminData={adminData} />
+            </TabPanel>
+            <TabPanel p={0}>
+              <SpeechesLinkPanel />
             </TabPanel>
           </TabPanels>
         </Tabs>

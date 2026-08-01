@@ -193,6 +193,36 @@ describe('auth function', () => {
       expect(body.expiresIn).toBe(86400)
     })
 
+    it('returns token for a valid link token', async () => {
+      const linkToken = jwt.createToken('wedding-guest', 2 * 60 * 60)
+      const event = createEvent({
+        body: JSON.stringify({ token: linkToken }),
+      })
+      const response = await handler(event, mockContext)
+      if (!response) throw new Error('No response')
+
+      expect(response.statusCode).toBe(200)
+      const body = JSON.parse(response.body || '')
+      expect(body.ok).toBe(true)
+      expect(body.token).toBe(linkToken)
+      expect(body.expiresIn).toBe(7200)
+      expect(response.headers?.['Set-Cookie']).toContain(`wedding_auth=${linkToken}`)
+    })
+
+    it('rejects a token with the wrong subject', async () => {
+      const adminToken = jwt.createToken('admin', 2 * 60 * 60)
+      const event = createEvent({
+        body: JSON.stringify({ token: adminToken }),
+      })
+      const response = await handler(event, mockContext)
+      if (!response) throw new Error('No response')
+
+      expect(response.statusCode).toBe(401)
+      const body = JSON.parse(response.body || '')
+      expect(body.ok).toBe(false)
+      expect(body.error).toBe('Invalid token')
+    })
+
     it('password comparison is case-insensitive', async () => {
       const event = createEvent({
         body: JSON.stringify({ password: 'CORRECTPASSWORD' }),
