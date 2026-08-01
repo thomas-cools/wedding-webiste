@@ -6,6 +6,7 @@ import {
   Image as ChakraImage,
   Container,
   Flex,
+  Text,
   VStack,
   HStack,
   Divider,
@@ -27,9 +28,7 @@ import ErrorBoundary from './components/ErrorBoundary'
 import SkipToContent from './components/SkipToContent'
 import {
   CountdownSkeleton,
-  StorySkeleton,
   TimelineSkeleton,
-  SectionSkeleton,
 } from './components/SectionSkeletons'
 import { useFeatureFlags } from './contexts/FeatureFlagsContext'
 
@@ -55,10 +54,8 @@ import bannerTablet from './assets/banner-tablet.webp'
 import bannerDesktop from './assets/banner-desktop.webp'
 
 const Countdown = React.lazy(() => import('./components/Countdown'))
-const StorySection = React.lazy(() => import('./components/StorySection'))
 const Timeline = React.lazy(() => import('./components/Timeline'))
 const QuickLinks = React.lazy(() => import('./components/QuickLinks'))
-const RegistrySection = React.lazy(() => import('./components/RegistrySection'))
 
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
@@ -130,7 +127,7 @@ function AppContent() {
     { href: '/gallery', label: t('header.ourStory'), enabled: features.showGallery, isExternal: true },
     { href: '/accommodations', label: t('header.travel'), enabled: features.showAccommodation, isExternal: true },
     { href: '/faq', label: t('header.faq'), enabled: true, isExternal: true },
-    { href: '/rsvp', label: t('header.rsvp'), enabled: true, isExternal: true },
+    { href: '#timeline', label: t('header.details'), enabled: true, isExternal: false },
     { href: '/drinks', label: t('header.drinks'), enabled: true, isExternal: true },
     { href: '/registry', label: t('header.registry'), enabled: true, isExternal: true },
   ].filter((link) => link.enabled)
@@ -271,13 +268,13 @@ function AppContent() {
               )}
               <Divider borderColor="primary.soft" />
               <Button
-                as={Link}
-                to="/rsvp"
+                as="a"
+                href="#timeline"
                 variant="primary"
                 size="lg"
                 onClick={onClose}
               >
-                {t('hero.respond')}
+                {t('header.details')}
               </Button>
             </VStack>
           </DrawerBody>
@@ -306,24 +303,6 @@ function AppContent() {
           scrollIndicatorHref="#timeline"
         />
 
-        {/* Timeline Section - Controlled by feature flag */}
-        {features.showTimeline && (
-          <ErrorBoundary sectionName="timeline" silent>
-            <Suspense fallback={<TimelineSkeleton />}>
-              <Timeline />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-
-        {/* Story Section - Controlled by feature flag */}
-        {features.showStory && (
-          <ErrorBoundary sectionName="our story" silent>
-            <Suspense fallback={<StorySkeleton />}>
-              <StorySection />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-
         {/* Countdown Section - Controlled by feature flag */}
         {features.showCountdown && (
           <ErrorBoundary sectionName="countdown" silent>
@@ -333,12 +312,31 @@ function AppContent() {
           </ErrorBoundary>
         )}
 
-        {/* Registry Teaser Section - links out to external registry */}
-        <ErrorBoundary sectionName="registry" silent>
-          <Suspense fallback={<SectionSkeleton />}>
-            <RegistrySection />
-          </Suspense>
-        </ErrorBoundary>
+        {/* Timeline Section - Controlled by feature flag */}
+        {features.showTimeline && (
+          <ErrorBoundary sectionName="timeline" silent>
+            <Suspense fallback={<TimelineSkeleton />}>
+              <Timeline />
+            </Suspense>
+          </ErrorBoundary>
+        )}
+
+        {features.showTimeline && (
+          <Box as="section" bg="neutral.light" px={[4, 6, 8]} py={[12, 16, 20]}>
+            <Container maxW="container.md">
+              <Text
+                maxW="620px"
+                mx="auto"
+                textAlign="center"
+                color="neutral.dark"
+                fontSize={["sm", "md"]}
+                lineHeight="1.8"
+              >
+                {t('timeline.communityNote')}
+              </Text>
+            </Container>
+          </Box>
+        )}
 
         {/* Quick Links Section */}
         <Suspense fallback={null}>

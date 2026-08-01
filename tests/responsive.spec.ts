@@ -58,16 +58,15 @@ test.describe('Wedding Website - Home Page', () => {
     });
 
     test('navigation links work correctly', async ({ page }) => {
-      // Test RSVP link navigates to RSVP page
-      const rsvpLink = page.getByRole('link', { name: /rsvp/i }).first();
-      await expect(rsvpLink).toBeVisible();
-      await rsvpLink.click();
-      
-      await expect(page).toHaveURL(/\/rsvp/);
-      await authenticate(page);
-      
-      // Should see RSVP form content
-      await expect(page.getByRole('heading', { name: /rsvp/i })).toBeVisible({ timeout: 10000 });
+      // Test Details link scrolls to the wedding timeline section
+      const detailsLink = page.getByRole('link', { name: /details/i }).first();
+      await expect(detailsLink).toBeVisible();
+      await detailsLink.click();
+
+      await expect(page).toHaveURL(/#timeline$/);
+
+      // Should scroll to the timeline section
+      await expect(page.locator('section#timeline')).toBeVisible({ timeout: 10000 });
     });
 
     test('accommodations link navigates correctly', async ({ page, isMobile }) => {
@@ -120,13 +119,14 @@ test.describe('Wedding Website - Home Page', () => {
       await expect(page.getByText(/Vallesvilles/i).first()).toBeVisible();
     });
 
-    test('hero RSVP button links to RSVP page', async ({ page }) => {
-      // Find the RSVP button in the hero section
-      const heroRsvpButton = page.locator('section').first().getByRole('link', { name: /rsvp/i });
-      await expect(heroRsvpButton).toBeVisible();
+    test('hero Details button scrolls to the wedding timeline section', async ({ page }) => {
+      // Find the Details button in the hero section
+      const heroDetailsButton = page.locator('section').first().getByRole('link', { name: /details/i });
+      await expect(heroDetailsButton).toBeVisible();
       
-      await heroRsvpButton.click();
-      await expect(page).toHaveURL(/\/rsvp/);
+      await heroDetailsButton.click();
+      await expect(page).toHaveURL(/#timeline$/);
+      await expect(page.locator('section#timeline')).toBeVisible({ timeout: 10000 });
     });
   });
 

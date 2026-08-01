@@ -11,7 +11,7 @@ jest.mock('react-i18next', () => ({
         'hero.and': '&',
         'hero.date': 'August Twenty-Sixth',
         'hero.venue': 'Vallesvilles · Haute-Garonne, France',
-        'hero.respond': 'RSVP',
+        'header.details': 'Details',
       }
       return translations[key] || key
     },
@@ -45,18 +45,18 @@ describe('Hero Component', () => {
     expect(screen.getByText('Vallesvilles · Haute-Garonne, France')).toBeInTheDocument()
   })
 
-  it('renders the respond link styled as button', () => {
+  it('renders the details link styled as button', () => {
     render(<Hero />)
     
     // It's a link styled as a button, not a button element
-    expect(screen.getByRole('link', { name: /rsvp/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /details/i })).toBeInTheDocument()
   })
 
-  it('respond link points to RSVP page', () => {
+  it('details link scrolls to the wedding timeline section', () => {
     render(<Hero />)
     
-    const link = screen.getByRole('link', { name: /rsvp/i })
-    expect(link).toHaveAttribute('href', '/rsvp')
+    const link = screen.getByRole('link', { name: /details/i })
+    expect(link).toHaveAttribute('href', '#timeline')
   })
 
   it('renders with default styling when no background image', () => {
@@ -86,12 +86,12 @@ describe('Hero Component', () => {
     expect(headings[1]).toHaveTextContent('Thomas')
   })
 
-  it('renders scroll indicator link to story section', () => {
+  it('renders scroll indicator link to the wedding timeline section', () => {
     render(<Hero />)
     
-    // The scroll indicator is a link to #story
+    // The scroll indicator is a link to #timeline by default
     const scrollLink = screen.getByRole('link', { name: '' })
-    expect(scrollLink).toHaveAttribute('href', '#story')
+    expect(scrollLink).toHaveAttribute('href', '#timeline')
   })
 
   it('hides scroll indicator when disabled', () => {

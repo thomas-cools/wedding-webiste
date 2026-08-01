@@ -190,6 +190,7 @@
     "label": "Explorar",
     "title": "Enlaces Rápidos",
     "stay": "Estancia",
+    "services": "Servicios",
     "registry": "Regalos"
   },
   "registry": {
@@ -207,6 +208,18 @@
         "buttonLabel": "Ver Lista"
       }
     ]
+  },
+  "services": {
+    "backToHome": "Volver",
+    "pageTitle": "Servicios",
+    "pageIntro": "Algunos detalles útiles para que sea más fácil moverse durante el fin de semana de la boda.",
+    "transportation": {
+      "title": "Transporte",
+      "taxis": {
+        "title": "Taxis",
+        "description": "Empresa de taxis local: [Nombre] — [Número de teléfono]. Recomendamos reservar con anticipación para los viajes hacia y desde el lugar, especialmente por las noches."
+      }
+    }
   },
   "finalRsvp": {
     "title": "RSVP Final",
@@ -284,24 +297,38 @@
     }
   },
   "timeline": {
-    "label": "El Programa",
-    "title": "Programa de la Boda",
-    "intro": "Al comenzar este nuevo capítulo, significaría mucho para nosotros tenerte a nuestro lado en nuestro día especial. En esta página encontrarás todo lo que necesitas: el programa, la ubicación, información para confirmar asistencia y algunos detalles adicionales.",
-    "introClosing": "¡Por el amor, la alegría y el comienzo de nuestro para siempre!",
-    "events": {
-      "welcome": {
+    "label": "programa de boda",
+    "title": "Detalles",
+    "intro": "¡Contando los días para celebrar con ustedes! Sabemos que podrían estar planeando algunos detalles finales para el viaje, así que aquí tienen información que puede ayudar.",
+    "introClosing": "",
+    "communityNote": "También pueden encontrar toda esta información en la comunidad de WhatsApp. Si tienen preguntas más específicas, por favor contáctennos directamente.",
+    "schedule": {
+      "day1": {
+        "label": "Cena de Bienvenida",
         "date": "25 de Agosto, 2026",
-        "title": "Cena de Bienvenida",
+        "items": [
+          { "time": "14:00", "label": "Registro" },
+          { "time": "18:00 – 22:00", "label": "Cena de Bienvenida" }
+        ],
         "dressCode": "Vestimenta | Semiformal"
       },
-      "wedding": {
+      "day2": {
+        "label": "La Boda",
         "date": "26 de Agosto, 2026",
-        "title": "La Boda",
+        "items": [
+          { "time": "16:00", "label": "Cóctel de Bienvenida" },
+          { "time": "16:30", "label": "Ceremonia" },
+          { "time": "17:15 – 2:00", "label": "Celebración" }
+        ],
         "dressCode": "Vestimenta | Formal"
       },
-      "brunch": {
+      "day3": {
+        "label": "Brunch en la Piscina",
         "date": "27 de Agosto, 2026",
-        "title": "Brunch en la Piscina",
+        "items": [
+          { "time": "10:30", "label": "Brunch y Piscina" },
+          { "time": "17:00", "label": "Salida" }
+        ],
         "dressCode": "Vestimenta | Casual"
       }
     }

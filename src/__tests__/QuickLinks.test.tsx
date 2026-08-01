@@ -7,9 +7,9 @@ jest.mock('react-i18next', () => ({
     t: (key: string, fallback?: string) => {
       const translations: Record<string, string> = {
         'quickLinks.title': 'Links',
-        'header.rsvp': 'RSVP',
         'header.faq': 'FAQ',
         'quickLinks.stay': 'STAY',
+        'quickLinks.services': 'SERVICES',
         'quickLinks.registry': 'REGISTRY',
       }
       return translations[key] || fallback || key
@@ -19,10 +19,10 @@ jest.mock('react-i18next', () => ({
 }))
 
 // Mock the SVG imports
-jest.mock('../assets/love_birds.svg', () => 'love-birds-icon.svg')
-jest.mock('../assets/Luchador_icon.svg', () => 'luchador-icon.svg')
-jest.mock('../assets/rest_icon.svg', () => 'rest-icon.svg')
-jest.mock('../assets/gift_icon.svg', () => 'gift-icon.svg')
+jest.mock('../assets/Mexa.svg', () => 'luchador-icon.svg')
+jest.mock('../assets/Pillow.svg', () => 'rest-icon.svg')
+jest.mock('../assets/Taxi.svg', () => 'taxi-icon.svg')
+jest.mock('../assets/JustMarried.svg', () => 'gift-icon.svg')
 
 describe('QuickLinks Component', () => {
   it('renders the section title', () => {
@@ -34,37 +34,37 @@ describe('QuickLinks Component', () => {
   it('renders all quick link labels', () => {
     render(<QuickLinks />)
     
-    expect(screen.getByText('RSVP')).toBeInTheDocument()
     expect(screen.getByText('FAQ')).toBeInTheDocument()
     expect(screen.getByText('STAY')).toBeInTheDocument()
+    expect(screen.getByText('SERVICES')).toBeInTheDocument()
     expect(screen.getByText('REGISTRY')).toBeInTheDocument()
   })
 
   it('renders links to correct routes', () => {
     render(<QuickLinks />)
     
-    const rsvpLink = screen.getByRole('link', { name: /rsvp/i })
     const faqLink = screen.getByRole('link', { name: /faq/i })
     const stayLink = screen.getByRole('link', { name: /stay/i })
+    const servicesLink = screen.getByRole('link', { name: /services/i })
     const registryLink = screen.getByRole('link', { name: /registry/i })
     
-    expect(rsvpLink).toHaveAttribute('href', '/rsvp#page-top')
     expect(faqLink).toHaveAttribute('href', '/faq#page-top')
     expect(stayLink).toHaveAttribute('href', '/accommodations#page-top')
+    expect(servicesLink).toHaveAttribute('href', '/services#page-top')
     expect(registryLink).toHaveAttribute('href', '/registry#page-top')
   })
 
   it('renders icons for each quick link', () => {
     render(<QuickLinks />)
     
-    const rsvpIcon = screen.getByAltText('RSVP')
     const faqIcon = screen.getByAltText('FAQ')
     const stayIcon = screen.getByAltText('Stay')
+    const servicesIcon = screen.getByAltText('Services')
     const registryIcon = screen.getByAltText('Registry')
     
-    expect(rsvpIcon).toBeInTheDocument()
     expect(faqIcon).toBeInTheDocument()
     expect(stayIcon).toBeInTheDocument()
+    expect(servicesIcon).toBeInTheDocument()
     expect(registryIcon).toBeInTheDocument()
   })
 
@@ -93,9 +93,9 @@ describe('QuickLinks Component', () => {
   it('applies correct styling to labels', () => {
     render(<QuickLinks />)
     
-    const rsvpLabel = screen.getByText('RSVP')
+    const faqLabel = screen.getByText('FAQ')
     
     // Check that it has the elegant font family style applied
-    expect(rsvpLabel).toHaveStyle({ textTransform: 'uppercase' })
+    expect(faqLabel).toHaveStyle({ textTransform: 'uppercase' })
   })
 })

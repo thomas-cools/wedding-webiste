@@ -17,6 +17,7 @@ const theme = extendTheme({
     body: "'Montserrat', 'Helvetica Neue', sans-serif",
     accent: "'Playfair Display', 'Georgia', serif",
     elegant: "'Cormorant Garamond', 'Georgia', serif",
+    handwriting: "'Gochi Hand', cursive",
   },
   colors: {
     neutral: {

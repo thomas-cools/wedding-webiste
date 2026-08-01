@@ -191,6 +191,7 @@
     "label": "Verkennen",
     "title": "Snelle Links",
     "stay": "Verblijf",
+    "services": "Diensten",
     "registry": "Cadeaus"
   },
   "registry": {
@@ -208,6 +209,18 @@
         "buttonLabel": "Bekijk Lijst"
       }
     ]
+  },
+  "services": {
+    "backToHome": "Terug",
+    "pageTitle": "Diensten",
+    "pageIntro": "Een paar handige details om je verplaatsen tijdens het bruiloftsweekend zo soepel mogelijk te maken.",
+    "transportation": {
+      "title": "Vervoer",
+      "taxis": {
+        "title": "Taxi's",
+        "description": "Lokaal taxibedrijf: [Naam] — [Telefoonnummer]. We raden aan vooraf te boeken voor ritten van en naar de locatie, vooral 's avonds."
+      }
+    }
   },
   "finalRsvp": {
     "title": "Definitieve RSVP",
@@ -285,24 +298,38 @@
     }
   },
   "timeline": {
-    "label": "Het Programma",
-    "title": "Bruiloft Programma",
-    "intro": "Nu we aan dit nieuwe hoofdstuk beginnen, zou het zoveel voor ons betekenen om jullie aan onze zijde te hebben op onze speciale dag. Op deze pagina vinden jullie alles wat jullie nodig hebben: het programma, de locatie, RSVP informatie en een paar extra details.",
-    "introClosing": "Op de liefde, vreugde en het begin van ons voor altijd!",
-    "events": {
-      "welcome": {
+    "label": "bruiloft programma",
+    "title": "Details",
+    "intro": "We tellen de dagen af tot we samen met jullie kunnen vieren! We weten dat jullie misschien nog wat laatste details voor de reis aan het plannen zijn, dus hierbij wat informatie die kan helpen.",
+    "introClosing": "",
+    "communityNote": "Je vindt al deze informatie ook in de WhatsApp-community. Heb je meer specifieke vragen, neem dan rechtstreeks contact met ons op.",
+    "schedule": {
+      "day1": {
+        "label": "Welkomstdiner",
         "date": "25 Augustus 2026",
-        "title": "Welkomstdiner",
+        "items": [
+          { "time": "14:00", "label": "Inchecken" },
+          { "time": "18:00 – 22:00", "label": "Welkomstdiner" }
+        ],
         "dressCode": "Dresscode | Semi-formeel"
       },
-      "wedding": {
+      "day2": {
+        "label": "De Bruiloft",
         "date": "26 Augustus 2026",
-        "title": "Het Huwelijk",
+        "items": [
+          { "time": "16:00", "label": "Welkomstdrankjes" },
+          { "time": "16:30", "label": "Ceremonie" },
+          { "time": "17:15 – 2:00", "label": "Feest" }
+        ],
         "dressCode": "Dresscode | Formeel"
       },
-      "brunch": {
+      "day3": {
+        "label": "Brunch bij het Zwembad",
         "date": "27 Augustus 2026",
-        "title": "Zwembad Brunch",
+        "items": [
+          { "time": "10:30", "label": "Brunch en Zwembad" },
+          { "time": "17:00", "label": "Uitchecken" }
+        ],
         "dressCode": "Dresscode | Casual"
       }
     }

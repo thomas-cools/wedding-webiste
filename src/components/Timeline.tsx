@@ -4,238 +4,241 @@ import {
   Heading,
   Text,
   VStack,
-  Flex,
-  Circle,
+  HStack,
+  Grid,
+  GridItem,
   Image,
   Link,
+  VisuallyHidden,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
+import { StaggerContainer, StaggerItem } from './animations'
 
-// Import icons
-import CheersIcon from '../assets/Cheers_icon.svg'
-import WedCakeIcon from '../assets/WedCake_icon.svg'
-import PooldayIcon from '../assets/Poolday_icon.svg'
+// Corner decoration
+import belgiumFlower from '../assets/Belgium_flower.svg'
 
-interface WeddingEvent {
-  date: string
-  title: string
-  dressCode: string
-  icon: string
-  hash: string
+// Section title artwork and per-day icons
+import weddingTimelineArt from '../assets/WeddingTimeline.svg'
+import bubblesIcon from '../assets/Bubbles.svg'
+import cakeIcon from '../assets/Cake.svg'
+import poolIcon from '../assets/Pool.svg'
+
+interface ScheduleItem {
+  time: string
+  label: string
 }
+
+interface DaySchedule {
+  label: string
+  date: string
+  items: ScheduleItem[]
+  dressCode: string
+  hash: string
+  icon: string
+  iconAlt: string
+}
+
+const ROW_COLUMNS = ['1fr 1fr']
+const ICON_SIZE = ['76px', '92px', '108px']
 
 export default function Timeline() {
   const { t } = useTranslation()
 
-  // Wedding weekend events
-  const weddingEvents: WeddingEvent[] = [
+  const days: DaySchedule[] = [
     {
-      date: t('timeline.events.welcome.date'),
-      title: t('timeline.events.welcome.title'),
-      dressCode: t('timeline.events.welcome.dressCode'),
-      icon: CheersIcon,
+      label: t('timeline.schedule.day1.label'),
+      date: t('timeline.schedule.day1.date'),
+      items: t('timeline.schedule.day1.items', { returnObjects: true }) as ScheduleItem[],
+      dressCode: t('timeline.schedule.day1.dressCode'),
       hash: '#dress-code-welcome',
+      icon: bubblesIcon,
+      iconAlt: 'Champagne toast icon for the Welcome Dinner',
     },
     {
-      date: t('timeline.events.wedding.date'),
-      title: t('timeline.events.wedding.title'),
-      dressCode: t('timeline.events.wedding.dressCode'),
-      icon: WedCakeIcon,
+      label: t('timeline.schedule.day2.label'),
+      date: t('timeline.schedule.day2.date'),
+      items: t('timeline.schedule.day2.items', { returnObjects: true }) as ScheduleItem[],
+      dressCode: t('timeline.schedule.day2.dressCode'),
       hash: '#dress-code-wedding',
+      icon: cakeIcon,
+      iconAlt: 'Wedding cake icon for The Wedding',
     },
     {
-      date: t('timeline.events.brunch.date'),
-      title: t('timeline.events.brunch.title'),
-      dressCode: t('timeline.events.brunch.dressCode'),
-      icon: PooldayIcon,
+      label: t('timeline.schedule.day3.label'),
+      date: t('timeline.schedule.day3.date'),
+      items: t('timeline.schedule.day3.items', { returnObjects: true }) as ScheduleItem[],
+      dressCode: t('timeline.schedule.day3.dressCode'),
       hash: '#dress-code-brunch',
+      icon: poolIcon,
+      iconAlt: 'Beach umbrella icon for the Pool Brunch',
     },
   ]
 
   return (
-    <Box as="section" id="timeline" py={[16, 20, 28]} bg="#F6F1EB" position="relative" zIndex={0}>
-      <Container maxW="container.xl" px={[4, 6, 8]}>
+    <Box as="section" id="timeline" py={[16, 20, 28]} bg="neutral.light" position="relative" overflow="hidden" zIndex={0}>
+      {/* Belgium flower decoration - lower left, matches the Countdown section */}
+      <Box
+        position="absolute"
+        bottom={["-50px", "-80px", "-100px"]}
+        left={["-80px", "-60px", "-40px"]}
+        w={["300px", "400px", "500px"]}
+        h={["300px", "400px", "500px"]}
+        zIndex={0}
+        pointerEvents="none"
+        sx={{
+          opacity: 0.4,
+          mixBlendMode: 'overlay',
+          filter: 'drop-shadow(1px 1px 0px rgba(255,255,255,0.5)) drop-shadow(-1px -1px 0px rgba(0,0,0,0.2))',
+        }}
+      >
+        <Image src={belgiumFlower} alt="" w="100%" h="100%" objectFit="contain" />
+      </Box>
+
+      <Container maxW="container.xl" px={[4, 6, 8]} position="relative" zIndex={1}>
         <VStack spacing={[12, 16, 20]}>
           {/* Intro Text */}
           <VStack spacing={4} textAlign="center" alignItems="center" maxW="700px" mx="auto">
             <Text
-              color="neutral.muted"
+              color="neutral.dark"
               fontSize={["sm", "md"]}
               lineHeight="1.8"
               dangerouslySetInnerHTML={{ __html: t('timeline.intro') }}
             />
-            <Text
-              color="neutral.muted"
-              fontSize={["sm", "md"]}
-              lineHeight="1.8"
-              fontStyle="italic"
-            >
-              {t('timeline.introClosing')}
-            </Text>
+            {t('timeline.introClosing') && (
+              <Text
+                color="neutral.dark"
+                fontSize={["sm", "md"]}
+                lineHeight="1.8"
+                fontStyle="italic"
+              >
+                {t('timeline.introClosing')}
+              </Text>
+            )}
           </VStack>
 
           {/* Section Header */}
-          <VStack spacing={4} textAlign="center">
-            <Text 
-              fontSize="xs" 
-              textTransform="uppercase" 
-              letterSpacing="0.35em" 
-              color="primary.soft"
-              fontWeight="500"
-            >
-              {t('timeline.label')}
-            </Text>
-            <Heading
-              as="h2"
-              fontFamily="heading"
-              fontSize={["3xl", "4xl"]}
-              fontWeight="400"
-              color="neutral.dark"
-            >
-              {t('timeline.title')}
-            </Heading>
-          </VStack>
+          <Heading
+            as="h2"
+            fontFamily="handwriting"
+            fontWeight="400"
+            color="accent.olive"
+            textTransform="capitalize"
+            lineHeight="1"
+          >
+            <VisuallyHidden>{t('timeline.label')}</VisuallyHidden>
+            <Image
+              src={weddingTimelineArt}
+              alt=""
+              w={["220px", "280px", "340px"]}
+              h="auto"
+            />
+          </Heading>
 
-          {/* Wedding Events - Horizontal Layout */}
-          <Box w="full" position="relative">
-            {/* Events Grid */}
-            <Flex
-              direction={["column", "column", "row"]}
-              justify="center"
-              align={["center", "center", "flex-start"]}
-              gap={[10, 12, 0]}
-              position="relative"
-              maxW="1000px"
-              mx="auto"
-            >
-              {weddingEvents.map((event, index) => (
-                <EventCard key={index} event={event} />
-              ))}
-            </Flex>
+          {/* Day-by-day schedule */}
+          <Box w="full" maxW="700px" mx="auto" position="relative">
+            <StaggerContainer as={VStack} spacing={[14, 18, 24]} alignItems="stretch">
+              {days.map((day, index) => {
+                const isLast = index === days.length - 1
+                return (
+                  <StaggerItem key={day.label}>
+                    <Box position="relative">
+                      {/* Vertical line segment extending down to the next item's dot */}
+                      {!isLast && (
+                        <Box
+                          position="absolute"
+                          left="50%"
+                          top="13px"
+                          bottom={["-69px", "-85px", "-109px"]}
+                          w="2px"
+                          bg="primary.soft"
+                          transform="translateX(-50%)"
+                        />
+                      )}
 
-            {/* Horizontal Timeline Line - Desktop only */}
-            <Box
-              display={["none", "none", "block"]}
-              position="absolute"
-              bottom="0"
-              left="50%"
-              transform="translateX(-50%)"
-              w="70%"
-              maxW="700px"
-            >
-              <Box position="relative" w="full">
-                {/* Main line */}
-                <Box
-                  h="2px"
-                  bg="primary.soft"
-                  opacity={0.6}
-                  w="full"
-                />
-                {/* Dots */}
-                <Flex
-                  position="absolute"
-                  top="50%"
-                  left={0}
-                  right={0}
-                  transform="translateY(-50%)"
-                  justify="space-between"
-                >
-                  {[0, 1, 2].map((i) => (
-                    <Circle
-                      key={i}
-                      size="12px"
-                      bg="primary.soft"
-                      opacity={0.8}
-                    />
-                  ))}
-                </Flex>
-              </Box>
-            </Box>
+                      {/* Dot on vertical center line, level with dress code text */}
+                      <Box
+                        position="absolute"
+                        left="50%"
+                        top="6px"
+                        w="14px"
+                        h="14px"
+                        borderRadius="full"
+                        bg="primary.soft"
+                        transform="translateX(-50%)"
+                        zIndex={1}
+                      />
+
+                    <Grid templateColumns={ROW_COLUMNS} columnGap={[8, 12, 16]} alignItems="start">
+                      {/* Left column: Icon + Date + Event Name */}
+                      <GridItem display="flex" justifyContent="center">
+                        <VStack align="center" textAlign="center" spacing={1}>
+                          <Image
+                            src={day.icon}
+                            alt={day.iconAlt}
+                            w={ICON_SIZE}
+                            h="auto"
+                            mb={1}
+                          />
+                          <Text
+                            fontFamily="body"
+                            fontWeight="500"
+                            fontSize={["sm", "md", "lg"]}
+                            letterSpacing="0.08em"
+                            color="neutral.dark"
+                            textTransform="uppercase"
+                          >
+                            {day.date}
+                          </Text>
+                          <Text fontFamily="elegant" fontStyle="italic" fontSize={["md", "lg", "xl"]} color="neutral.muted">
+                            {day.label}
+                          </Text>
+                        </VStack>
+                      </GridItem>
+
+                      {/* Right column: Dress code + schedule times */}
+                      <GridItem display="flex" justifyContent="flex-start">
+                        <VStack align="flex-start" spacing={3} pt="2px">
+                          <Link as={RouterLink} to={`/faq${day.hash}`} _hover={{ textDecoration: 'none' }}>
+                            <Text
+                              fontSize={["sm", "md", "lg"]}
+                              color="neutral.muted"
+                              fontStyle="normal"
+                              textDecoration="none"
+                              _hover={{ color: 'neutral.dark' }}
+                              transition="color 0.2s"
+                            >
+                              {day.dressCode}
+                            </Text>
+                          </Link>
+                          <VStack align="flex-start" spacing={2} w="full">
+                            {day.items.map((item) => (
+                              <Grid
+                                key={item.time}
+                                templateColumns={["110px auto", "135px auto", "160px auto"]}
+                                columnGap={4}
+                                alignItems="baseline"
+                              >
+                                <Text fontFamily="elegant" fontStyle="normal" fontSize={["md", "lg", "xl"]} color="neutral.muted">
+                                  {item.label}
+                                </Text>
+                                <Text fontFamily="elegant" fontSize={["md", "lg", "xl"]} color="neutral.muted">
+                                  {item.time}
+                                </Text>
+                              </Grid>
+                            ))}
+                          </VStack>
+                        </VStack>
+                      </GridItem>
+                    </Grid>
+                  </Box>
+                </StaggerItem>
+              )
+            })}
+            </StaggerContainer>
           </Box>
         </VStack>
       </Container>
     </Box>
-  )
-}
-
-interface EventCardProps {
-  event: WeddingEvent
-}
-
-function EventCard({ event }: EventCardProps) {
-  return (
-    <VStack
-      flex={1}
-      spacing={4}
-      textAlign="center"
-      px={[4, 6, 8]}
-      pb={[0, 0, 10]}
-      maxW={["280px", "300px", "320px"]}
-    >
-      {/* Icon */}
-      <Box
-        w={["100px", "120px", "140px"]}
-        h={["100px", "120px", "140px"]}
-        mb={2}
-      >
-        <Image
-          src={event.icon}
-          alt=""
-          w="full"
-          h="full"
-          objectFit="contain"
-        />
-      </Box>
-
-      {/* Date */}
-      <Text
-        fontSize={["sm", "md"]}
-        textTransform="uppercase"
-        letterSpacing="0.2em"
-        fontWeight="500"
-        color="primary.deep"
-      >
-        {event.date}
-      </Text>
-
-      {/* Title */}
-      <Text
-        fontSize={["md", "lg"]}
-        color="neutral.muted"
-        fontWeight="400"
-      >
-        {event.title}
-      </Text>
-
-      {/* Dress Code */}
-      <Link 
-        as={RouterLink} 
-        to={`/faq${event.hash}`}
-        _hover={{ textDecoration: 'none' }}
-      >
-        <Text
-          fontSize={["sm", "md"]}
-          color="neutral.muted"
-          fontStyle="italic"
-          textDecoration="underline"
-          textUnderlineOffset="4px"
-          textDecorationColor="primary.soft"
-          _hover={{ color: 'primary.deep' }}
-          transition="color 0.2s"
-        >
-          {event.dressCode}
-        </Text>
-      </Link>
-
-      {/* Mobile dot */}
-      <Circle
-        display={["block", "block", "none"]}
-        size="10px"
-        bg="primary.soft"
-        opacity={0.8}
-        mt={2}
-      />
-    </VStack>
   )
 }

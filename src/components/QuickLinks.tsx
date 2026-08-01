@@ -12,10 +12,10 @@ import { Link } from 'react-router-dom'
 import { ScrollReveal, StaggerContainer, StaggerItem } from './animations'
 
 // Import icons
-import loveBirdsIcon from '../assets/love_birds.svg'
-import luchadorIcon from '../assets/Luchador_icon.svg'
-import restIcon from '../assets/rest_icon.svg'
-import giftIcon from '../assets/gift_icon.svg'
+import luchadorIcon from '../assets/Mexa.svg'
+import restIcon from '../assets/Pillow.svg'
+import taxiIcon from '../assets/Taxi.svg'
+import giftIcon from '../assets/JustMarried.svg'
 
 interface QuickLinkItem {
   to: string
@@ -76,12 +76,6 @@ export function QuickLinks() {
 
   const quickLinks: QuickLinkItem[] = [
     {
-      to: '/rsvp#page-top',
-      icon: loveBirdsIcon,
-      label: t('header.rsvp'),
-      alt: 'RSVP',
-    },
-    {
       to: '/faq#page-top',
       icon: luchadorIcon,
       label: t('header.faq'),
@@ -92,6 +86,12 @@ export function QuickLinks() {
       icon: restIcon,
       label: t('quickLinks.stay', 'STAY'),
       alt: 'Stay',
+    },
+    {
+      to: '/services#page-top',
+      icon: taxiIcon,
+      label: t('quickLinks.services', 'SERVICES'),
+      alt: 'Services',
     },
     {
       to: '/registry#page-top',

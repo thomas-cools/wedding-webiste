@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { MotionBox, heroFadeIn, heroStagger } from './animations'
 
 const MotionImg = motion.img
@@ -65,7 +64,7 @@ interface HeroProps {
 
   /** Whether to show the scroll indicator link (default: true) */
   showScrollIndicator?: boolean
-  /** Where the scroll indicator should link to (default: #story) */
+  /** Where the scroll indicator should link to (default: #timeline) */
   scrollIndicatorHref?: string
 }
 
@@ -75,7 +74,7 @@ export default function Hero({
   overlayOpacity = 0.3,
   collage,
   showScrollIndicator = true,
-  scrollIndicatorHref = '#story',
+  scrollIndicatorHref = '#timeline',
 }: HeroProps) {
   const { t } = useTranslation()
   
@@ -337,8 +336,8 @@ export default function Hero({
             zIndex={2}
           >
             <Button
-              as={Link}
-              to="/rsvp"
+              as="a"
+              href={scrollIndicatorHref}
               variant="ghost"
               size={["md", "lg", "lg"]}
               color="whiteAlpha.800"
@@ -358,7 +357,7 @@ export default function Hero({
               }}
               transition="all 0.3s ease"
             >
-              {t('hero.respond')}
+              {t('header.details')}
             </Button>
           </Box>
 
@@ -596,8 +595,8 @@ export default function Hero({
               whileTap={{ scale: 0.98 }}
             >
               <Button
-                as={Link}
-                to="/rsvp"
+                as="a"
+                href={scrollIndicatorHref}
                 variant={hasBackground ? "outline" : "primary"}
                 size="lg"
                 mt={8}
@@ -611,7 +610,7 @@ export default function Hero({
                 }}
                 transition="all 0.3s ease"
               >
-                {t('hero.respond')}
+                {t('header.details')}
               </Button>
             </MotionBox>
           )}

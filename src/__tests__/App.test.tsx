@@ -3,17 +3,6 @@ import { render, screen, waitFor } from '../test-utils'
 import App from '../App'
 
 // Mock lazy-loaded components to avoid dynamic import issues in Jest
-jest.mock('../components/StorySection', () => {
-  return function MockStorySection() {
-    return (
-      <section id="story">
-        <h2>story.title</h2>
-        <p>story.paragraph1</p>
-      </section>
-    )
-  }
-})
-
 jest.mock('../components/QuickLinks', () => {
   return function MockQuickLinks() {
     return <section id="quick-links">quick-links</section>
@@ -142,31 +131,22 @@ describe('App', () => {
     // Navigation uses ghost buttons as links
     const header = document.querySelector('header')
     expect(header).toBeInTheDocument()
-    // Check that the header exists and has navigation structure (RSVP is always enabled)
-    expect(header?.querySelector('a[href="/rsvp"]') || header?.textContent?.includes('header.rsvp')).toBeTruthy()
+    // Check that the header exists and has navigation structure (Details link to timeline is always enabled)
+    expect(header?.querySelector('a[href="#timeline"]') || header?.textContent?.includes('header.details')).toBeTruthy()
   })
-
-  it('renders the Our Story section', async () => {
-    await renderAppAndWait()
-    expect(screen.getByText('story.title')).toBeInTheDocument()
-    expect(screen.getByText('story.paragraph1')).toBeInTheDocument()
-  })
-
-
 
   it('renders the footer', async () => {
     await renderAppAndWait()
     expect(screen.getByText('footer.contactUs')).toBeInTheDocument()
   })
 
-  it('renders RSVP navigation link pointing to /rsvp page', async () => {
+  it('renders a Details navigation link that scrolls to the wedding timeline', async () => {
     await renderAppAndWait()
-    // RSVP form is now on a separate page, check for the navigation link
-    // The nav links use i18n keys, so check for links with 'header.rsvp' text
-    const rsvpLinks = screen.getAllByText('header.rsvp')
-    expect(rsvpLinks.length).toBeGreaterThan(0)
-    // Also check the Hero respond button which links to /rsvp
-    const heroRsvpLink = screen.getByRole('link', { name: 'hero.respond' })
-    expect(heroRsvpLink).toHaveAttribute('href', '/rsvp')
+    // The nav Details link and the Hero CTA both use the same 'header.details' text/href
+    const detailsLinks = screen.getAllByRole('link', { name: 'header.details' })
+    expect(detailsLinks.length).toBeGreaterThan(0)
+    detailsLinks.forEach((link) => {
+      expect(link).toHaveAttribute('href', '#timeline')
+    })
   })
 })

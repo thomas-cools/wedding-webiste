@@ -4,7 +4,7 @@ import { SimpleGrid } from '@chakra-ui/react';
 import { StaggerContainer, StaggerItem } from '../animations';
 import { RegistryLinkCard } from './RegistryLinkCard';
 import { registryLinks } from '../../config';
-import giftIcon from '../../assets/gift_icon.svg';
+import marriageGiftIcon from '../../assets/JustMarried.svg';
 
 interface RegistryLinkCopy {
   name: string;
@@ -29,7 +29,7 @@ export const RegistryLinksGrid: React.FC = () => {
                 description={copy.description}
                 buttonLabel={copy.buttonLabel}
                 url={link.url}
-                logoSrc={giftIcon}
+                logoSrc={marriageGiftIcon}
               />
             </StaggerItem>
           );

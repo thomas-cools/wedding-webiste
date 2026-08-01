@@ -191,6 +191,7 @@
     "label": "Explore",
     "title": "Quick Links",
     "stay": "Stay",
+    "services": "Services",
     "registry": "Registry"
   },
   "registry": {
@@ -208,6 +209,18 @@
         "buttonLabel": "View Registry"
       }
     ]
+  },
+  "services": {
+    "backToHome": "Back",
+    "pageTitle": "Services",
+    "pageIntro": "A few helpful details to make getting around during the wedding weekend as smooth as possible.",
+    "transportation": {
+      "title": "Transportation",
+      "taxis": {
+        "title": "Taxis",
+        "description": "Local taxi company: [Name] — [Phone number]. We recommend booking ahead for trips to and from the venue, especially in the evenings."
+      }
+    }
   },
   "finalRsvp": {
     "title": "Final RSVP",
@@ -285,24 +298,38 @@
     }
   },
   "timeline": {
-    "label": "The Schedule",
-    "title": "Wedding Timeline",
-    "intro": "As we step into this new chapter, it would mean so much to have you by our side on our special day. On this page, you’ll discover everything you need: the schedule, location, RSVP information, and a few extra touches.",
-    "introClosing": "Here’s to love, joy, and the beginning of our forever!",
-    "events": {
-      "welcome": {
+    "label": "wedding timeline",
+    "title": "Details",
+    "intro": "Countig the days to celebrate with you! We know you might be planning some final details for the trip, so here is some information that can help.",
+    "introClosing": "",
+    "communityNote": "You can also find all this information in the WhatsApp community. If you have more specific questions, please contact us directly.",
+    "schedule": {
+      "day1": {
+        "label": "Welcome Dinner",
         "date": "August 25th, 2026",
-        "title": "Welcome Dinner",
+        "items": [
+          { "time": "14:00", "label": "Check-in" },
+          { "time": "18:00 – 22:00", "label": "Welcome Dinner" }
+        ],
         "dressCode": "Dress Code | Semi-Formal"
       },
-      "wedding": {
+      "day2": {
+        "label": "The Wedding",
         "date": "August 26th, 2026",
-        "title": "The Wedding",
+        "items": [
+          { "time": "16:00", "label": "Welcome Drinks" },
+          { "time": "16:30", "label": "Ceremony" },
+          { "time": "17:15 – 2:00", "label": "Celebration" }
+        ],
         "dressCode": "Dress Code | Formal"
       },
-      "brunch": {
+      "day3": {
+        "label": "Pool Brunch",
         "date": "August 27th, 2026",
-        "title": "Pool Brunch",
+        "items": [
+          { "time": "10:30", "label": "Brunch and Pool" },
+          { "time": "17:00", "label": "Check-out" }
+        ],
         "dressCode": "Dress Code | Casual"
       }
     }
