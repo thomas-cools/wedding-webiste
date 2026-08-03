@@ -51,7 +51,7 @@ describe('admin-speeches-link function', () => {
     process.env = originalEnv
   })
 
-  it('returns a copyable speeches link with a 2 hour token', async () => {
+  it('returns a copyable speeches link with a 72 hour token', async () => {
     const response = await handler(createEvent(), mockContext)
     if (!response) throw new Error('No response')
 
@@ -59,7 +59,7 @@ describe('admin-speeches-link function', () => {
     const body = JSON.parse(response.body || '')
     expect(body.ok).toBe(true)
     expect(body.url).toContain('/speeches?t=')
-    expect(body.expiresIn).toBe(7200)
+    expect(body.expiresIn).toBe(72 * 60 * 60)
 
     const url = new URL(body.url)
     const token = url.searchParams.get('t')
@@ -68,6 +68,6 @@ describe('admin-speeches-link function', () => {
     const payload = jwt.verifyToken(token as string)
     expect(payload).not.toBeNull()
     expect(payload?.sub).toBe('wedding-guest')
-    expect(payload?.exp - payload!.iat).toBe(7200)
+    expect(payload?.exp - payload!.iat).toBe(72 * 60 * 60)
   })
 })

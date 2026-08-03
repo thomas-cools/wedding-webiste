@@ -2,7 +2,7 @@ import type { Handler } from '@netlify/functions'
 import { createToken } from './utils/jwt'
 import { adminCorsResponse, adminJson, adminUnauthorized, verifyAdminRequest } from './utils/admin-auth'
 
-const SPEECHES_LINK_EXPIRY_SECONDS = 2 * 60 * 60
+const SPEECHES_LINK_EXPIRY_SECONDS = 72 * 60 * 60
 
 function getBaseUrl(headers: Record<string, string | undefined>, rawUrl?: string): string {
   const proto = headers['x-forwarded-proto'] || headers['X-Forwarded-Proto'] || 'https'
