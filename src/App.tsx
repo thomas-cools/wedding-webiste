@@ -121,7 +121,7 @@ function AppContent() {
       
       <LoadingScreen isLoading={isLoading} logo={weddingLogoFull} />
       <Box minH="100vh" bg="neutral.light">
-      <SiteHeader withTimelineAnchor={features.showTimeline} />
+      <SiteHeader />
 
       <Box as="main" id="main-content" role="main" tabIndex={-1}>
         {/* Hero Section - using optimized responsive WebP images */}

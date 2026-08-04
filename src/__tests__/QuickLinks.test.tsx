@@ -10,6 +10,7 @@ jest.mock('react-i18next', () => ({
         'header.faq': 'FAQ',
         'quickLinks.stay': 'STAY',
         'quickLinks.transport': 'TRANSPORT',
+        'quickLinks.parking': 'PARKING',
         'quickLinks.registry': 'REGISTRY',
       }
       return translations[key] || fallback || key
@@ -22,6 +23,7 @@ jest.mock('react-i18next', () => ({
 jest.mock('../assets/Mexa.svg', () => 'luchador-icon.svg')
 jest.mock('../assets/Pillow.svg', () => 'rest-icon.svg')
 jest.mock('../assets/Taxi.svg', () => 'taxi-icon.svg')
+jest.mock('../assets/parking.svg', () => 'parking-icon.svg')
 jest.mock('../assets/JustMarried.svg', () => 'gift-icon.svg')
 
 describe('QuickLinks Component', () => {
@@ -37,6 +39,7 @@ describe('QuickLinks Component', () => {
     expect(screen.getByText('FAQ')).toBeInTheDocument()
     expect(screen.getByText('STAY')).toBeInTheDocument()
     expect(screen.getByText('TRANSPORT')).toBeInTheDocument()
+    expect(screen.getByText('PARKING')).toBeInTheDocument()
     expect(screen.getByText('REGISTRY')).toBeInTheDocument()
   })
 
@@ -46,11 +49,13 @@ describe('QuickLinks Component', () => {
     const faqLink = screen.getByRole('link', { name: /faq/i })
     const stayLink = screen.getByRole('link', { name: /stay/i })
     const transportLink = screen.getByRole('link', { name: /transport/i })
+    const parkingLink = screen.getByRole('link', { name: /parking/i })
     const registryLink = screen.getByRole('link', { name: /registry/i })
     
     expect(faqLink).toHaveAttribute('href', '/faq#page-top')
     expect(stayLink).toHaveAttribute('href', '/accommodations#page-top')
-    expect(transportLink).toHaveAttribute('href', '/services#page-top')
+    expect(transportLink).toHaveAttribute('href', '/taxi#page-top')
+    expect(parkingLink).toHaveAttribute('href', '/parking#page-top')
     expect(registryLink).toHaveAttribute('href', '/registry#page-top')
   })
 
@@ -60,11 +65,13 @@ describe('QuickLinks Component', () => {
     const faqIcon = screen.getByAltText('FAQ')
     const stayIcon = screen.getByAltText('Stay')
     const transportIcon = screen.getByAltText('Transport')
+    const parkingIcon = screen.getByAltText('Parking')
     const registryIcon = screen.getByAltText('Registry')
     
     expect(faqIcon).toBeInTheDocument()
     expect(stayIcon).toBeInTheDocument()
     expect(transportIcon).toBeInTheDocument()
+    expect(parkingIcon).toBeInTheDocument()
     expect(registryIcon).toBeInTheDocument()
   })
 
@@ -87,7 +94,7 @@ describe('QuickLinks Component', () => {
     const { container } = render(<QuickLinks />)
     
     const images = container.querySelectorAll('img')
-    expect(images).toHaveLength(4)
+    expect(images).toHaveLength(5)
   })
 
   it('applies correct styling to labels', () => {

@@ -42,6 +42,7 @@
     "gallery": "Gallery",
     "travel": "Stay",
     "transport": "Transport",
+    "parking": "Parking",
     "faq": "FAQ",
     "rsvp": "RSVP",
     "drinks": "Drinks",
@@ -230,6 +231,7 @@
     "title": "Quick Links",
     "stay": "Stay",
     "transport": "Transport",
+    "parking": "Parking",
     "services": "Services",
     "registry": "Registry"
   },
@@ -557,6 +559,9 @@
     "title": "Frequently Asked Questions",
     "description": "Everything you need to know about our wedding celebration in France.",
     "backToHome": "Back",
+    "transportationLinkLabel": "See our taxi page",
+    "parkingLinkLabel": "See our parking page",
+    "timelineLinkLabel": "See the detailed timeline",
     "contactNote": "Still have questions? Feel free to reach out to us directly at <emailLink>carolinaandthomaswedding@gmail.com</emailLink> —we're happy to help!",
     "dressCode": {
       "welcomeDinner": {
@@ -592,16 +597,8 @@
         "answer": "Yes! Feel free to bring a plus one (just let us know their name on the RSVP). Coming solo? That’s wonderful too! We have a great group of people coming and we can't wait to celebrate with you. If you aren't sure if your invite includes a guest, just send us a message."
       },
       {
-        "question": "Are children welcome?",
-        "answer": "Yes, children aged 3 and under are welcome at our celebration! Please indicate any children attending on your RSVP form so we can make appropriate arrangements."
-      },
-      {
         "question": "What are the transportation options?",
         "answer": "The nearest major airport is Toulouse-Blagnac (TLS), approximately 35 minutes from the venue. We recommend renting a car or arranging a taxi. We will provide more detailed transportation information closer to the wedding."
-      },
-      {
-        "question": "Will there be vegetarian or special dietary options?",
-        "answer": "Yes! Please indicate any dietary requirements on your RSVP form, and we'll ensure there are delicious options for you."
       },
       {
         "question": "What time should I arrive?",
@@ -614,10 +611,6 @@
       {
         "question": "Is there parking at the venue?",
         "answer": "Yes, there is free parking available at the venue."
-      },
-      {
-        "question": "When do I need to RSVP by?",
-        "answer": "Please respond by February 1, 2026, so we can finalize arrangements with our vendors."
       }
     ]
   }

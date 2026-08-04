@@ -1,5 +1,6 @@
 import React from 'react'
 import { render, screen, waitFor } from '../test-utils'
+import { within } from '@testing-library/react'
 import App from '../App'
 
 // Mock lazy-loaded components to avoid dynamic import issues in Jest
@@ -132,7 +133,9 @@ describe('App', () => {
     const header = document.querySelector('header')
     expect(header).toBeInTheDocument()
     expect(screen.getByLabelText('accessibility.openMenu')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'header.details' })).toBeInTheDocument()
+    expect(within(header as HTMLElement).getByText('header.transport')).toBeInTheDocument()
+    expect(within(header as HTMLElement).getByText('header.parking')).toBeInTheDocument()
+    expect(within(header as HTMLElement).queryByText('header.details')).not.toBeInTheDocument()
   })
 
   it('renders the footer', async () => {
@@ -140,13 +143,10 @@ describe('App', () => {
     expect(screen.getByText('footer.contactUs')).toBeInTheDocument()
   })
 
-  it('renders a Details navigation link that scrolls to the wedding timeline', async () => {
+  it('does not render Details in the shared header navigation', async () => {
     await renderAppAndWait()
-    // The nav Details link and the Hero CTA both use the same 'header.details' text/href
-    const detailsLinks = screen.getAllByRole('link', { name: 'header.details' })
-    expect(detailsLinks.length).toBeGreaterThan(0)
-    detailsLinks.forEach((link) => {
-      expect(link).toHaveAttribute('href', '#timeline')
-    })
+    const header = document.querySelector('header')
+    expect(header).toBeInTheDocument()
+    expect(within(header as HTMLElement).queryByText('header.details')).not.toBeInTheDocument()
   })
 })

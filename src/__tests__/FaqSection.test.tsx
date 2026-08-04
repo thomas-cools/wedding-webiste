@@ -11,10 +11,26 @@ jest.mock('react-i18next', () => ({
         'faq.description': 'Helpful details for the weekend',
         'faq.contactNote': 'Still have questions?',
         'faq.transportationLinkLabel': 'See our taxi page',
+        'faq.parkingLinkLabel': 'See our parking page',
+        'faq.timelineLinkLabel': 'See the detailed timeline',
+        'parking.addressLabel': 'Address:',
+        'parking.mapTitle': 'Venue map',
         'faq.items': [
+          {
+            question: 'When and where is the wedding?',
+            answer: 'Our wedding ceremony will take place on August 26, 2026 at Vallesvilles, France.',
+          },
           {
             question: 'What are the transportation options?',
             answer: 'The nearest major airport is Toulouse-Blagnac (TLS), approximately 35 minutes from the venue. We recommend renting a car or arranging a taxi.',
+          },
+          {
+            question: 'What time should I arrive?',
+            answer: 'We recommend arriving 15-30 minutes before each event begins to find your seat and settle in.',
+          },
+          {
+            question: 'Is there parking at the venue?',
+            answer: 'Yes, there is free parking available at the venue.',
           },
         ],
       }
@@ -43,5 +59,38 @@ describe('FaqSection', () => {
 
     const taxiLink = screen.getByRole('link', { name: /see our taxi page/i })
     expect(taxiLink).toHaveAttribute('href', '/taxi')
+  })
+
+  it('renders a link to the parking page for parking questions', async () => {
+    const user = userEvent.setup()
+    render(<FaqSection />)
+
+    await user.click(screen.getByRole('button', { name: /is there parking at the venue/i }))
+
+    const parkingLink = screen.getByRole('link', { name: /see our parking page/i })
+    expect(parkingLink).toHaveAttribute('href', '/parking')
+  })
+
+  it('renders a link to the detailed timeline for arrival-time questions', async () => {
+    const user = userEvent.setup()
+    render(<FaqSection />)
+
+    await user.click(screen.getByRole('button', { name: /what time should i arrive/i }))
+
+    const timelineLink = screen.getByRole('link', { name: /see the detailed timeline/i })
+    expect(timelineLink).toHaveAttribute('href', '/#timeline')
+  })
+
+  it('renders timeline link plus address and map embed for when-and-where question', async () => {
+    const user = userEvent.setup()
+    render(<FaqSection />)
+
+    await user.click(screen.getByRole('button', { name: /when and where is the wedding/i }))
+
+    const timelineLink = screen.getByRole('link', { name: /see the detailed timeline/i })
+    expect(timelineLink).toHaveAttribute('href', '/#timeline')
+
+    expect(screen.getByText('Address:')).toBeInTheDocument()
+    expect(screen.getByTitle('Venue map')).toBeInTheDocument()
   })
 })

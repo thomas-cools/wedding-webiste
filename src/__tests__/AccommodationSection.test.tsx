@@ -4,7 +4,7 @@ import { AccommodationSection } from '../components/AccommodationSection/Accommo
 // Mock react-i18next
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string, options?: { returnObjects?: boolean }) => {
+    t: (key: string, optionsOrFallback?: { returnObjects?: boolean } | string) => {
       const translations: Record<string, unknown> = {
         'travel.label': 'Vallesvilles & Toulouse',
         'travel.title': 'Stay',
@@ -20,7 +20,15 @@ jest.mock('react-i18next', () => ({
         'travel.food.iconAlt': 'Fries icon',
         'travel.food.allergyNote': 'If you have any allergies, please carry the appropriate medication or an EpiPen with you.',
         'travel.pharmacy.iconAlt': 'Pharmacy icon',
+        'parking.addressLabel': 'Address:',
+        'parking.mapTitle': 'Venue map',
       }
+
+      const options =
+        typeof optionsOrFallback === 'object' && optionsOrFallback !== null
+          ? optionsOrFallback
+          : undefined
+      const fallback = typeof optionsOrFallback === 'string' ? optionsOrFallback : undefined
 
       if (key === 'travel.introParagraphs' && options?.returnObjects) {
         return [
@@ -72,7 +80,7 @@ jest.mock('react-i18next', () => ({
         ]
       }
 
-      return (translations[key] as string) || key
+      return (translations[key] as string) || fallback || key
     },
     i18n: { language: 'en' },
   }),
@@ -128,6 +136,14 @@ describe('AccommodationSection', () => {
 
       expect(storeLink).toHaveAttribute('href', 'https://www.carrefour.fr/')
       expect(pharmacyLink).toHaveAttribute('href', 'https://example.com/pharmacie-lanta')
+    })
+
+    it('renders venue address and embedded map', () => {
+      render(<AccommodationSection enabled={true} />)
+
+      expect(screen.getByText('Address:')).toBeInTheDocument()
+      expect(screen.getByText(/962 Rte du Pujolet, 31570/)).toBeInTheDocument()
+      expect(screen.getByTitle('Venue map')).toBeInTheDocument()
     })
   })
 

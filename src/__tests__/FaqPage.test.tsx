@@ -28,6 +28,7 @@ jest.mock('react-i18next', () => ({
         'header.faq': 'header.faq',
         'header.travel': 'header.travel',
         'header.transport': 'header.transport',
+        'header.parking': 'header.parking',
         'header.registry': 'header.registry',
         'header.initials': 'header.initials',
         'accessibility.mainNavigation': 'accessibility.mainNavigation',
@@ -85,11 +86,12 @@ function renderFaqPage() {
 }
 
 describe('FaqPage', () => {
-  it('keeps the Details navigation link visible in the shared header', async () => {
+  it('shows Transport/Parking links and removes Details in the shared header', async () => {
     renderFaqPage()
 
     await screen.findByText('FAQ Section')
-    const detailsLink = await screen.findByText('header.details')
-    expect(detailsLink.closest('a')).toHaveAttribute('href', '/#timeline')
+    expect(screen.queryByText('header.details')).not.toBeInTheDocument()
+    expect(await screen.findByText('header.transport')).toBeInTheDocument()
+    expect(await screen.findByText('header.parking')).toBeInTheDocument()
   })
 })

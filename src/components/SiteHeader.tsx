@@ -18,31 +18,23 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { HamburgerIcon } from '@chakra-ui/icons'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useFeatureFlags } from '../contexts/FeatureFlagsContext'
 import LanguageSwitcher from './LanguageSwitcher'
 import weddingLogoSmall from '../assets/monogram_websiteT&C-small.webp'
 import weddingLogoMedium from '../assets/monogram_websiteT&C-medium.webp'
 import weddingLogo2x from '../assets/monogram_websiteT&C-2x.webp'
 
-interface SiteHeaderProps {
-  withTimelineAnchor?: boolean
-}
-
 interface SiteNavLink {
   href: string
   label: string
   enabled: boolean
-  isHashLink?: boolean
 }
 
-export default function SiteHeader({ withTimelineAnchor = true }: SiteHeaderProps) {
+export default function SiteHeader() {
   const { t } = useTranslation()
   const { features } = useFeatureFlags()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const location = useLocation()
-
-  const detailsHref = location.pathname === '/' ? '#timeline' : '/#timeline'
 
   const navLinks = useMemo(
     () =>
@@ -58,14 +50,13 @@ export default function SiteHeader({ withTimelineAnchor = true }: SiteHeaderProp
           enabled: true,
         },
         {
-          href: detailsHref,
-          label: t('header.details'),
-          enabled: withTimelineAnchor,
-          isHashLink: detailsHref.startsWith('#'),
+          href: '/taxi',
+          label: t('header.transport', 'Transport'),
+          enabled: true,
         },
         {
-          href: '/services',
-          label: t('header.transport', 'Transport'),
+          href: '/parking',
+          label: t('header.parking', 'Parking'),
           enabled: true,
         },
         {
@@ -74,7 +65,7 @@ export default function SiteHeader({ withTimelineAnchor = true }: SiteHeaderProp
           enabled: true,
         },
       ].filter((link) => link.enabled) as SiteNavLink[],
-    [detailsHref, features.showAccommodation, t, withTimelineAnchor]
+    [features.showAccommodation, t]
   )
 
   return (
@@ -99,17 +90,11 @@ export default function SiteHeader({ withTimelineAnchor = true }: SiteHeaderProp
                 spacing={10}
                 display={["none", "none", "flex"]}
               >
-                {navLinks.slice(0, Math.ceil(navLinks.length / 2)).map((link) =>
-                  link.isHashLink ? (
-                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                      {link.label}
-                    </Button>
-                  ) : (
-                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                      {link.label}
-                    </Button>
-                  )
-                )}
+                {navLinks.slice(0, Math.ceil(navLinks.length / 2)).map((link) => (
+                  <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                    {link.label}
+                  </Button>
+                ))}
               </HStack>
             </Box>
 
@@ -129,17 +114,11 @@ export default function SiteHeader({ withTimelineAnchor = true }: SiteHeaderProp
 
             <Flex justify="flex-end" align="center">
               <HStack spacing={10} display={["none", "none", "flex"]} align="center">
-                {navLinks.slice(Math.ceil(navLinks.length / 2)).map((link) =>
-                  link.isHashLink ? (
-                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                      {link.label}
-                    </Button>
-                  ) : (
-                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                      {link.label}
-                    </Button>
-                  )
-                )}
+                {navLinks.slice(Math.ceil(navLinks.length / 2)).map((link) => (
+                  <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                    {link.label}
+                  </Button>
+                ))}
                 <LanguageSwitcher />
               </HStack>
 
@@ -166,33 +145,19 @@ export default function SiteHeader({ withTimelineAnchor = true }: SiteHeaderProp
           <DrawerCloseButton />
           <DrawerBody pt={16}>
             <VStack spacing={6} align="stretch">
-              {navLinks.map((link) =>
-                link.isHashLink ? (
-                  <Button
-                    key={link.href}
-                    as={Link}
-                    to={link.href}
-                    variant="ghost"
-                    size="lg"
-                    justifyContent="flex-start"
-                    onClick={onClose}
-                  >
-                    {link.label}
-                  </Button>
-                ) : (
-                  <Button
-                    key={link.href}
-                    as={Link}
-                    to={link.href}
-                    variant="ghost"
-                    size="lg"
-                    justifyContent="flex-start"
-                    onClick={onClose}
-                  >
-                    {link.label}
-                  </Button>
-                )
-              )}
+              {navLinks.map((link) => (
+                <Button
+                  key={link.href}
+                  as={Link}
+                  to={link.href}
+                  variant="ghost"
+                  size="lg"
+                  justifyContent="flex-start"
+                  onClick={onClose}
+                >
+                  {link.label}
+                </Button>
+              ))}
             </VStack>
           </DrawerBody>
         </DrawerContent>

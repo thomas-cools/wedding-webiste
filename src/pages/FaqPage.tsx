@@ -42,7 +42,7 @@ function FaqSkeleton() {
 function FaqPageContent() {
   return (
     <Box id="page-top" minH="100vh" bg="neutral.light" display="flex" flexDirection="column">
-      <SiteHeader withTimelineAnchor={true} />
+      <SiteHeader />
 
       {/* Main Content */}
       <Box

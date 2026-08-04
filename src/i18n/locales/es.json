@@ -42,6 +42,8 @@
     "details": "Detalles",
     "gallery": "Galería",
     "travel": "Estancia",
+    "transport": "Transporte",
+    "parking": "Aparcamiento",
     "faq": "Preguntas",
     "rsvp": "Confirmar",
     "drinks": "Bebidas",
@@ -228,6 +230,8 @@
     "label": "Explorar",
     "title": "Enlaces Rápidos",
     "stay": "Estancia",
+    "transport": "Transporte",
+    "parking": "Aparcamiento",
     "services": "Servicios",
     "registry": "Regalos"
   },
@@ -555,6 +559,9 @@
     "title": "Preguntas Frecuentes",
     "description": "Todo lo que necesitas saber sobre nuestra celebración de boda en Francia.",
     "backToHome": "Volver",
+    "transportationLinkLabel": "Ver la página de taxis",
+    "parkingLinkLabel": "Ver la página de estacionamiento",
+    "timelineLinkLabel": "Ver el cronograma detallado",
     "contactNote": "¿Aún tienes preguntas? No dudes en contactarnos directamente en <emailLink>carolinaandthomaswedding@gmail.com</emailLink> —¡estaremos encantados de ayudarte!",
     "dressCode": {
       "welcomeDinner": {
@@ -590,16 +597,8 @@
         "answer": "¡Sí! Siéntete libre de traer un acompañante (solo avísanos su nombre en el RSVP). ¿Vienes solo? ¡Eso también es maravilloso! Tenemos un gran grupo de personas que asistirán y estamos ansiosos por celebrar contigo. Si no estás seguro de si tu invitación incluye un invitado, envíanos un mensaje."
       },
       {
-        "question": "¿Los niños son bienvenidos?",
-        "answer": "¡Sí, los niños de 3 años o menos son bienvenidos en nuestra celebración! Por favor indica cualquier niño que asistirá en tu formulario de confirmación para que podamos hacer los arreglos apropiados."
-      },
-      {
         "question": "¿Cuáles son las opciones de transporte?",
         "answer": "El aeropuerto principal más cercano es Toulouse-Blagnac (TLS), aproximadamente a 35 minutos del lugar. Recomendamos alquilar un auto o coordinar un taxi. Proporcionaremos información de transporte más detallada más cerca de la boda."
-      },
-      {
-        "question": "¿Habrá opciones vegetarianas o para dietas especiales?",
-        "answer": "¡Sí! Por favor indica cualquier requerimiento dietético en tu formulario de confirmación, y nos aseguraremos de que haya opciones deliciosas para ti."
       },
       {
         "question": "¿A qué hora debo llegar?",
@@ -612,10 +611,6 @@
       {
         "question": "¿Hay estacionamiento en el lugar?",
         "answer": "Sí, hay estacionamiento gratuito disponible en el lugar."
-      },
-      {
-        "question": "¿Para cuándo necesito confirmar mi asistencia?",
-        "answer": "Por favor responde antes del 1 de febrero de 2026, para que podamos finalizar los arreglos con nuestros proveedores."
       }
     ]
   }

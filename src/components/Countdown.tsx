@@ -106,8 +106,8 @@ export default function Countdown() {
         position="absolute"
         bottom={["-50px", "-80px", "-100px"]}
         left={["-80px", "-60px", "-40px"]}
-        w={["300px", "400px", "500px"]}
-        h={["300px", "400px", "500px"]}
+        w={["240px", "320px", "400px"]}
+        h={["240px", "320px", "400px"]}
         zIndex={10}
         pointerEvents="none"
         sx={{

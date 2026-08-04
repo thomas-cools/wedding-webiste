@@ -15,6 +15,7 @@ import { ScrollReveal, StaggerContainer, StaggerItem } from './animations'
 import luchadorIcon from '../assets/Mexa.svg'
 import restIcon from '../assets/Pillow.svg'
 import taxiIcon from '../assets/Taxi.svg'
+import parkingIcon from '../assets/parking.svg'
 import giftIcon from '../assets/JustMarried.svg'
 
 interface QuickLinkItem {
@@ -88,10 +89,16 @@ export function QuickLinks() {
       alt: 'Stay',
     },
     {
-      to: '/services#page-top',
+      to: '/taxi#page-top',
       icon: taxiIcon,
       label: t('quickLinks.transport', 'TRANSPORT'),
       alt: 'Transport',
+    },
+    {
+      to: '/parking#page-top',
+      icon: parkingIcon,
+      label: t('quickLinks.parking', 'PARKING'),
+      alt: 'Parking',
     },
     {
       to: '/registry#page-top',

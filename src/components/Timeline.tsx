@@ -14,9 +14,6 @@ import {
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
 
-// Corner decoration
-import belgiumFlower from '../assets/Belgium_flower.svg'
-
 // Section title artwork and per-day icons
 import weddingTimelineArt from '../assets/WeddingTimeline.svg'
 import bubblesIcon from '../assets/Bubbles.svg'
@@ -76,24 +73,6 @@ export default function Timeline() {
 
   return (
     <Box as="section" id="timeline" py={[16, 20, 28]} bg="neutral.light" position="relative" overflow="hidden" zIndex={0}>
-      {/* Belgium flower decoration - lower left, matches the Countdown section */}
-      <Box
-        position="absolute"
-        bottom={["-50px", "-80px", "-100px"]}
-        left={["-80px", "-60px", "-40px"]}
-        w={["300px", "400px", "500px"]}
-        h={["300px", "400px", "500px"]}
-        zIndex={0}
-        pointerEvents="none"
-        sx={{
-          opacity: 0.4,
-          mixBlendMode: 'overlay',
-          filter: 'drop-shadow(1px 1px 0px rgba(255,255,255,0.5)) drop-shadow(-1px -1px 0px rgba(0,0,0,0.2))',
-        }}
-      >
-        <Image src={belgiumFlower} alt="" w="100%" h="100%" objectFit="contain" />
-      </Box>
-
       <Container maxW="container.xl" px={[4, 6, 8]} position="relative" zIndex={1}>
         <VStack spacing={[12, 16, 20]}>
           {/* Intro Text */}

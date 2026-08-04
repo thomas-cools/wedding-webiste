@@ -135,6 +135,82 @@ function isDressCodeQuestion(question: string): boolean {
   )
 }
 
+function isTransportationQuestion(question: string): boolean {
+  const keywords = ['transportation', 'transporte', 'vervoersopties']
+  return keywords.some((keyword) => question.toLowerCase().includes(keyword))
+}
+
+function isParkingQuestion(question: string): boolean {
+  const keywords = ['parking', 'estacionamiento', 'parkeerruimte']
+  return keywords.some((keyword) => question.toLowerCase().includes(keyword))
+}
+
+function isArrivalQuestion(question: string): boolean {
+  const keywords = ['what time should i arrive', 'a qué hora debo llegar', 'hoe laat moet ik aankomen']
+  return keywords.some((keyword) => question.toLowerCase().includes(keyword))
+}
+
+function isWhenAndWhereQuestion(question: string): boolean {
+  const keywords = ['when and where is the wedding', 'cuándo y dónde es la boda', 'wanneer en waar is de bruiloft']
+  return keywords.some((keyword) => question.toLowerCase().includes(keyword))
+}
+
+function WeddingWhenWhereAnswer({ answer }: { answer: string }) {
+  const { t } = useTranslation()
+
+  return (
+    <VStack align="stretch" spacing={5}>
+      <Text whiteSpace="pre-line" fontFamily="elegant" lineHeight="1.9">
+        {answer}
+      </Text>
+
+      <Text fontFamily="elegant" lineHeight="1.9">
+        <Link as={RouterLink} to="/#timeline" color="primary.deep" textDecoration="underline" _hover={{ color: 'primary.main' }}>
+          {t('faq.timelineLinkLabel', 'See the detailed timeline')}
+        </Link>
+      </Text>
+
+      <VStack align="flex-start" spacing={1}>
+        <Text fontWeight="700" fontSize="md" color="neutral.dark">
+          {t('parking.addressLabel', 'Address:')}
+        </Text>
+        <Text fontSize="sm" lineHeight="1.9" color="neutral.dark">
+          962 Rte du Pujolet, 31570
+          <br />
+          Vallesvilles, France
+        </Text>
+      </VStack>
+
+      <Box
+        as="a"
+        href="https://maps.google.com/?q=Chateau+du+Pujolet+Vallesvilles+France"
+        target="_blank"
+        rel="noopener noreferrer"
+        w="100%"
+        maxW="420px"
+        h={["220px", "260px"]}
+        borderRadius="lg"
+        overflow="hidden"
+        border="2px solid"
+        borderColor="primary.soft"
+        display="block"
+      >
+        <Box
+          as="iframe"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2829.1030073649417!2d1.6686848261739966!3d43.60036382110467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12ae91b47b91454d%3A0xc512c55b21a49017!2sCh%C3%A2teau%20du%20Pujolet!5e1!3m2!1sen!2snl!4v1785588318612!5m2!1sen!2snl"
+          w="100%"
+          h="100%"
+          frameBorder="0"
+          loading="lazy"
+          referrerPolicy="strict-origin-when-cross-origin"
+          title={t('parking.mapTitle', 'Venue map')}
+          style={{ pointerEvents: 'none' }}
+        />
+      </Box>
+    </VStack>
+  )
+}
+
 export function FaqSection() {
   const { t } = useTranslation()
   const { hash } = useLocation()
@@ -251,17 +327,33 @@ export function FaqSection() {
                     >
                       {isDressCodeQuestion(item.question) ? (
                         <DressCodeAnswer />
+                      ) : isWhenAndWhereQuestion(item.question) ? (
+                        <WeddingWhenWhereAnswer answer={item.answer} />
                       ) : (
                         <Text 
                           whiteSpace="pre-line" 
                           fontFamily="elegant"
                           lineHeight="1.9"
                         >
-                          {item.question.toLowerCase().includes('transportation') ? (
+                          {isTransportationQuestion(item.question) ? (
                             <>
                               {item.answer}{' '}
                               <Link as={RouterLink} to="/taxi" color="primary.deep" textDecoration="underline" _hover={{ color: 'primary.main' }}>
                                 {t('faq.transportationLinkLabel', 'See our taxi page')}
+                              </Link>
+                            </>
+                          ) : isParkingQuestion(item.question) ? (
+                            <>
+                              {item.answer}{' '}
+                              <Link as={RouterLink} to="/parking" color="primary.deep" textDecoration="underline" _hover={{ color: 'primary.main' }}>
+                                {t('faq.parkingLinkLabel', 'See our parking page')}
+                              </Link>
+                            </>
+                          ) : isArrivalQuestion(item.question) ? (
+                            <>
+                              {item.answer}{' '}
+                              <Link as={RouterLink} to="/#timeline" color="primary.deep" textDecoration="underline" _hover={{ color: 'primary.main' }}>
+                                {t('faq.timelineLinkLabel', 'See the detailed timeline')}
                               </Link>
                             </>
                           ) : (
