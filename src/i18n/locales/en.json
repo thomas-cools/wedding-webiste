@@ -38,10 +38,10 @@
   },
   "header": {
     "initials": "C & T",
-    "ourStory": "Our Story",
     "details": "Details",
     "gallery": "Gallery",
     "travel": "Stay",
+    "transport": "Transport",
     "faq": "FAQ",
     "rsvp": "RSVP",
     "drinks": "Drinks",
@@ -229,6 +229,7 @@
     "label": "Explore",
     "title": "Quick Links",
     "stay": "Stay",
+    "transport": "Transport",
     "services": "Services",
     "registry": "Registry"
   },
@@ -338,7 +339,7 @@
   "timeline": {
     "label": "wedding timeline",
     "title": "Details",
-    "intro": "Countig the days to celebrate with you! We know you might be planning some final details for the trip, so here is some information that can help.",
+    "intro": "Counting the days to celebrate with you! We know you might be planning some final details for the trip, so here is some information that can help.",
     "introClosing": "",
     "communityNote": "You can also find all this information in the WhatsApp community. If you have more specific questions, please contact us directly.",
     "schedule": {

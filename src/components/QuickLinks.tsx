@@ -16,7 +16,6 @@ import luchadorIcon from '../assets/Mexa.svg'
 import restIcon from '../assets/Pillow.svg'
 import taxiIcon from '../assets/Taxi.svg'
 import giftIcon from '../assets/JustMarried.svg'
-import parkingIcon from '../assets/parking.svg'
 
 interface QuickLinkItem {
   to: string
@@ -89,16 +88,10 @@ export function QuickLinks() {
       alt: 'Stay',
     },
     {
-      to: '/taxi#page-top',
+      to: '/services#page-top',
       icon: taxiIcon,
-      label: t('quickLinks.services', 'SERVICES'),
-      alt: 'Services',
-    },
-    {
-      to: '/parking#page-top',
-      icon: parkingIcon,
-      label: t('quickLinks.parking', 'PARKING'),
-      alt: 'Parking',
+      label: t('quickLinks.transport', 'TRANSPORT'),
+      alt: 'Transport',
     },
     {
       to: '/registry#page-top',

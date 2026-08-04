@@ -2,26 +2,19 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Box,
-  Button,
   Container,
   Flex,
-  HStack,
   Heading,
   Image as ChakraImage,
   SimpleGrid,
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
-import { ArrowBackIcon } from '@chakra-ui/icons'
-import LanguageSwitcher from '../components/LanguageSwitcher'
 import PasswordGate from '../components/PasswordGate'
 import Footer from '../components/Footer'
 import { useFeatureFlags } from '../contexts/FeatureFlagsContext'
+import SiteHeader from '../components/SiteHeader'
 
-import weddingLogoSmall from '../assets/monogram_websiteT&C-small.webp'
-import weddingLogoMedium from '../assets/monogram_websiteT&C-medium.webp'
-import weddingLogo2x from '../assets/monogram_websiteT&C-2x.webp'
 import textureSvg from '../assets/texture.svg'
 import parking1 from '../assets/parking_1.webp'
 import parking2 from '../assets/parking_2.webp'
@@ -49,51 +42,7 @@ function ParkingPageContent() {
           sx={{ opacity: 0.25, mixBlendMode: 'overlay' }}
         />
 
-      <Box
-        as="header"
-        role="banner"
-        py={[4, 6]}
-        position="fixed"
-        top={0}
-        left={0}
-        right={0}
-        zIndex={100}
-        bg="#300F0C"
-      >
-        <Container maxW="container.xl" px={[4, 6, 8]}>
-          <Flex justify="center" align="center" position="relative">
-            <HStack spacing={4} position="absolute" left={0}>
-              <Button
-                as={Link}
-                to="/"
-                variant="ghost"
-                size="sm"
-                color="#E3DFCE"
-                _hover={{ bg: 'whiteAlpha.200' }}
-                leftIcon={<ArrowBackIcon />}
-              >
-                {t('parking.backToHome', 'Back')}
-              </Button>
-            </HStack>
-
-            <Link to="/">
-              <ChakraImage
-                src={weddingLogoSmall}
-                srcSet={`${weddingLogoSmall} 60w, ${weddingLogoMedium} 100w, ${weddingLogo2x} 200w`}
-                sizes="(max-width: 480px) 40px, (max-width: 768px) 45px, 50px"
-                alt={t('header.initials')}
-                h={['40px', '45px', '50px']}
-                w="auto"
-                cursor="pointer"
-              />
-            </Link>
-
-            <HStack spacing={4} position="absolute" right={0}>
-              <LanguageSwitcher />
-            </HStack>
-          </Flex>
-        </Container>
-      </Box>
+      <SiteHeader withTimelineAnchor={false} />
 
       <Box
         as="main"

@@ -9,7 +9,7 @@ jest.mock('react-i18next', () => ({
         'quickLinks.title': 'Links',
         'header.faq': 'FAQ',
         'quickLinks.stay': 'STAY',
-        'quickLinks.services': 'SERVICES',
+        'quickLinks.transport': 'TRANSPORT',
         'quickLinks.registry': 'REGISTRY',
       }
       return translations[key] || fallback || key
@@ -36,8 +36,7 @@ describe('QuickLinks Component', () => {
     
     expect(screen.getByText('FAQ')).toBeInTheDocument()
     expect(screen.getByText('STAY')).toBeInTheDocument()
-    expect(screen.getByText('SERVICES')).toBeInTheDocument()
-    expect(screen.getByText('PARKING')).toBeInTheDocument()
+    expect(screen.getByText('TRANSPORT')).toBeInTheDocument()
     expect(screen.getByText('REGISTRY')).toBeInTheDocument()
   })
 
@@ -46,14 +45,12 @@ describe('QuickLinks Component', () => {
     
     const faqLink = screen.getByRole('link', { name: /faq/i })
     const stayLink = screen.getByRole('link', { name: /stay/i })
-    const servicesLink = screen.getByRole('link', { name: /services/i })
-    const parkingLink = screen.getByRole('link', { name: /parking/i })
+    const transportLink = screen.getByRole('link', { name: /transport/i })
     const registryLink = screen.getByRole('link', { name: /registry/i })
     
     expect(faqLink).toHaveAttribute('href', '/faq#page-top')
     expect(stayLink).toHaveAttribute('href', '/accommodations#page-top')
-    expect(servicesLink).toHaveAttribute('href', '/taxi#page-top')
-    expect(parkingLink).toHaveAttribute('href', '/parking#page-top')
+    expect(transportLink).toHaveAttribute('href', '/services#page-top')
     expect(registryLink).toHaveAttribute('href', '/registry#page-top')
   })
 
@@ -62,14 +59,12 @@ describe('QuickLinks Component', () => {
     
     const faqIcon = screen.getByAltText('FAQ')
     const stayIcon = screen.getByAltText('Stay')
-    const servicesIcon = screen.getByAltText('Services')
-    const parkingIcon = screen.getByAltText('Parking')
+    const transportIcon = screen.getByAltText('Transport')
     const registryIcon = screen.getByAltText('Registry')
     
     expect(faqIcon).toBeInTheDocument()
     expect(stayIcon).toBeInTheDocument()
-    expect(servicesIcon).toBeInTheDocument()
-    expect(parkingIcon).toBeInTheDocument()
+    expect(transportIcon).toBeInTheDocument()
     expect(registryIcon).toBeInTheDocument()
   })
 
@@ -92,7 +87,7 @@ describe('QuickLinks Component', () => {
     const { container } = render(<QuickLinks />)
     
     const images = container.querySelectorAll('img')
-    expect(images).toHaveLength(5)
+    expect(images).toHaveLength(4)
   })
 
   it('applies correct styling to labels', () => {

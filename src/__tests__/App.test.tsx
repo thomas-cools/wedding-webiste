@@ -128,11 +128,11 @@ describe('App', () => {
 
   it('renders navigation elements', async () => {
     await renderAppAndWait()
-    // Navigation uses ghost buttons as links
+    // Shared SiteHeader should render navigation controls.
     const header = document.querySelector('header')
     expect(header).toBeInTheDocument()
-    // Check that the header exists and has navigation structure (Details link to timeline is always enabled)
-    expect(header?.querySelector('a[href="#timeline"]') || header?.textContent?.includes('header.details')).toBeTruthy()
+    expect(screen.getByLabelText('accessibility.openMenu')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'header.details' })).toBeInTheDocument()
   })
 
   it('renders the footer', async () => {

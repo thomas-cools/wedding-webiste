@@ -9,15 +9,13 @@ beforeAll(() => {
   Element.prototype.scrollTo = jest.fn()
 })
 
-// Local override: the global setupTests mock for @chakra-ui/icons doesn't
-// include ArrowBackIcon (used for this page's "Back" button) or ChevronDownIcon
-// (used by LanguageSwitcher), so re-declare the full set needed here.
+// Local override for icons used by SiteHeader and LanguageSwitcher.
 jest.mock('@chakra-ui/icons', () => {
   const React = require('react')
   const icon = (testId: string) => (props: Record<string, unknown>) =>
     React.createElement('svg', { 'data-testid': testId, ...props })
   return {
-    ArrowBackIcon: icon('arrow-back-icon'),
+    HamburgerIcon: icon('hamburger-icon'),
     ChevronDownIcon: icon('chevron-down-icon'),
     CheckIcon: icon('check-icon'),
   }

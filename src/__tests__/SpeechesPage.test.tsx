@@ -9,7 +9,7 @@ jest.mock('@chakra-ui/icons', () => {
   const icon = (testId: string) => (props: Record<string, unknown>) =>
     React.createElement('svg', { 'data-testid': testId, ...props })
   return {
-    ArrowBackIcon: icon('arrow-back-icon'),
+    HamburgerIcon: icon('hamburger-icon'),
     ChevronDownIcon: icon('chevron-down-icon'),
     CheckIcon: icon('check-icon'),
     ViewIcon: icon('view-icon'),
@@ -79,7 +79,7 @@ describe('SpeechesPage', () => {
       )
     })
 
-    expect(await screen.findByText('Wedding Speeches')).toBeInTheDocument()
+    expect(await screen.findByText('Speeches')).toBeInTheDocument()
   })
 
   it('falls back to the password gate when no token is present', async () => {

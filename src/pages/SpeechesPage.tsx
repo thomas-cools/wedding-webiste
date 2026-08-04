@@ -12,11 +12,11 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { ArrowBackIcon } from '@chakra-ui/icons'
 import PasswordGate from '../components/PasswordGate'
 import Footer from '../components/Footer'
 import { useFeatureFlags } from '../contexts/FeatureFlagsContext'
 import { authenticateWithToken, isAuthenticated } from '../utils/auth'
+import SiteHeader from '../components/SiteHeader'
 import textureSvg from '../assets/texture.svg'
 
 interface SpeechEntry {
@@ -112,6 +112,8 @@ function SpeechesPageContent() {
       position="relative"
       overflow="hidden"
     >
+      <SiteHeader withTimelineAnchor={false} />
+
       <Box
         position="absolute"
         inset={0}
@@ -139,7 +141,7 @@ function SpeechesPageContent() {
       >
       </Box>
 
-      <Box as="header" role="banner" position="relative" zIndex={1} pt={[6, 8, 10]} pb={[4, 6]}>
+      <Box as="header" role="banner" position="relative" zIndex={1} pt={[20, 24, 28]} pb={[4, 6]}>
         <Container maxW="container.lg" px={[4, 6, 8]}>
           <VStack spacing={5} textAlign="center">
             <Heading

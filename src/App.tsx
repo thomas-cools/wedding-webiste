@@ -2,30 +2,16 @@ import React, { Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Box,
-  Button,
-  Image as ChakraImage,
   Container,
-  Flex,
-  Text,
-  VStack,
-  HStack,
   Divider,
-  Grid,
-  IconButton,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerBody,
-  useDisclosure} from '@chakra-ui/react';
-import { Link } from 'react-router-dom'
-import { HamburgerIcon } from '@chakra-ui/icons'
-import LanguageSwitcher from './components/LanguageSwitcher'
+  Text,
+} from '@chakra-ui/react'
 import Hero from './components/Hero'
 import PasswordGate from './components/PasswordGate'
 import LoadingScreen from './components/LoadingScreen'
 import ErrorBoundary from './components/ErrorBoundary'
 import SkipToContent from './components/SkipToContent'
+import SiteHeader from './components/SiteHeader'
 import {
   CountdownSkeleton,
   TimelineSkeleton,
@@ -33,9 +19,6 @@ import {
 import { useFeatureFlags } from './contexts/FeatureFlagsContext'
 
 // Import assets
-import weddingLogoSmall from './assets/monogram_websiteT&C-small.webp'
-import weddingLogoMedium from './assets/monogram_websiteT&C-medium.webp'
-import weddingLogo2x from './assets/monogram_websiteT&C-2x.webp'
 import weddingLogoFull from './assets/T&C-Monogram.webp'
 import Footer from './components/Footer'
 
@@ -69,10 +52,8 @@ const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) =
  */
 function AppContent() {
   const { t } = useTranslation()
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLoading, setIsLoading] = useState(true)
   const { features } = useFeatureFlags()
-  const isLocalWorkaround = process.env.NODE_ENV !== 'production'
 
   useEffect(() => {
     let cancelled = false
@@ -124,20 +105,6 @@ function AppContent() {
     }
   }, [])
 
-  const navLinks = [
-    { href: '/gallery', label: t('header.ourStory'), enabled: features.showGallery, isExternal: true },
-    { href: '/accommodations', label: t('header.travel'), enabled: features.showAccommodation, isExternal: true },
-    { href: '/faq', label: t('header.faq'), enabled: true, isExternal: true },
-    { href: '#timeline', label: t('header.details'), enabled: true, isExternal: false },
-    {
-      href: '/speeches',
-      label: t('header.speeches', 'Speeches'),
-      enabled: isLocalWorkaround,
-      isExternal: true,
-    },
-    { href: '/registry', label: t('header.registry'), enabled: true, isExternal: true },
-  ].filter((link) => link.enabled)
-
   const content = (
     <>
       {/* Skip to content link for keyboard users */}
@@ -147,145 +114,7 @@ function AppContent() {
       
       <LoadingScreen isLoading={isLoading} logo={weddingLogoFull} />
       <Box minH="100vh" bg="neutral.light">
-      {/* Minimal Elegant Header */}
-      <Box 
-        as="header"
-        role="banner"
-        py={[4, 6]} 
-        position="fixed" 
-        top={0} 
-        left={0} 
-        right={0} 
-        zIndex={100}
-        bg="#300F0C"
-      >
-        <Container maxW="container.xl" px={[4, 6, 8]}>
-          <Grid templateColumns="1fr auto 1fr" alignItems="center" width="100%">
-            {/* Left Navigation - Desktop */}
-            <Box>
-              <HStack 
-                as="nav" 
-                aria-label={t('accessibility.mainNavigation', 'Main navigation')}
-                spacing={10} 
-                display={["none", "none", "flex"]}
-              >
-                {navLinks.slice(0, Math.ceil(navLinks.length / 2)).map((link) => 
-                  link.isExternal ? (
-                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                      {link.label}
-                    </Button>
-                  ) : (
-                    <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                      {link.label}
-                    </Button>
-                  )
-                )}
-              </HStack>
-            </Box>
-            
-            {/* Centered Logo */}
-            <Flex justify="center">
-              <ChakraImage 
-                src={weddingLogoSmall} 
-                srcSet={`${weddingLogoSmall} 60w, ${weddingLogoMedium} 100w, ${weddingLogo2x} 200w`}
-                sizes="(max-width: 480px) 40px, (max-width: 768px) 45px, 50px"
-                alt={t('header.initials')}
-                h={["40px", "45px", "50px"]}
-                w="auto"
-              />
-            </Flex>
-            
-            {/* Right Navigation - Desktop & Mobile Controls */}
-            <Flex justify="flex-end" align="center">
-              {/* Desktop Right Nav */}
-              <HStack 
-                spacing={10} 
-                display={["none", "none", "flex"]}
-                align="center"
-              >
-                {navLinks.slice(Math.ceil(navLinks.length / 2)).map((link) => 
-                  link.isExternal ? (
-                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                      {link.label}
-                    </Button>
-                  ) : (
-                    <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                      {link.label}
-                    </Button>
-                  )
-                )}
-                <LanguageSwitcher />
-              </HStack>
-              
-              {/* Mobile Controls */}
-              <HStack 
-                spacing={2} 
-                display={["flex", "flex", "none"]}
-              >
-                <LanguageSwitcher />
-                <IconButton
-                  aria-label="Open menu"
-                  icon={<HamburgerIcon />}
-                  variant="ghost"
-                  onClick={onOpen}
-                  size="sm"
-                  color="#E3DFCE"
-                  _hover={{ bg: 'whiteAlpha.200' }}
-                />
-              </HStack>
-            </Flex>
-          </Grid>
-        </Container>
-      </Box>
-
-      {/* Mobile Navigation Drawer */}
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
-        <DrawerOverlay />
-        <DrawerContent bg="neutral.light">
-          <DrawerCloseButton />
-          <DrawerBody pt={16}>
-            <VStack spacing={6} align="stretch">
-              {navLinks.map((link) => 
-                link.isExternal ? (
-                  <Button
-                    key={link.href}
-                    as={Link}
-                    to={link.href}
-                    variant="ghost"
-                    size="lg"
-                    justifyContent="flex-start"
-                    onClick={onClose}
-                  >
-                    {link.label}
-                  </Button>
-                ) : (
-                  <Button
-                    key={link.href}
-                    as="a"
-                    href={link.href}
-                    variant="ghost"
-                    size="lg"
-                    justifyContent="flex-start"
-                    onClick={onClose}
-                  >
-                    {link.label}
-                  </Button>
-                )
-              )}
-              <Divider borderColor="primary.soft" />
-              <Button
-                as="a"
-                href="#timeline"
-                variant="primary"
-                size="lg"
-                onClick={onClose}
-              >
-                {t('header.details')}
-              </Button>
-            </VStack>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+      <SiteHeader withTimelineAnchor={features.showTimeline} />
 
       <Box as="main" id="main-content" role="main" tabIndex={-1}>
         {/* Hero Section - using optimized responsive WebP images */}
