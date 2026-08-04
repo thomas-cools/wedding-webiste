@@ -17,7 +17,7 @@ function ServicesPageContent() {
 
   return (
     <Box id="page-top" minH="100vh" bg="neutral.light" display="flex" flexDirection="column">
-      <SiteHeader withTimelineAnchor={false} />
+      <SiteHeader />
 
       {/* Main Content */}
       <Box

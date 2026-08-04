@@ -40,6 +40,8 @@ const Countdown = React.lazy(() => import('./components/Countdown'))
 const Timeline = React.lazy(() => import('./components/Timeline'))
 const QuickLinks = React.lazy(() => import('./components/QuickLinks'))
 
+let hasShownLoadingScreen = false
+
 // Elegant thin decorative divider - classic minimalist style
 const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) => (
   <Box my={8} {...props}>
@@ -52,10 +54,14 @@ const ElegantDivider = ({ color = 'primary.soft', width = '120px', ...props }) =
  */
 function AppContent() {
   const { t } = useTranslation()
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(() => !hasShownLoadingScreen)
   const { features } = useFeatureFlags()
 
   useEffect(() => {
+    if (!isLoading) {
+      return
+    }
+
     let cancelled = false
 
     const preloadImage = (src: string) =>
@@ -96,6 +102,7 @@ function AppContent() {
     ]).then(() => {
       if (cancelled) return
       clearTimeout(maxDelay)
+      hasShownLoadingScreen = true
       setIsLoading(false)
     })
 
@@ -103,7 +110,7 @@ function AppContent() {
       cancelled = true
       clearTimeout(maxDelay)
     }
-  }, [])
+  }, [isLoading])
 
   const content = (
     <>

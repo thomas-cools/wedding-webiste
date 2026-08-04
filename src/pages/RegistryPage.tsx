@@ -46,7 +46,7 @@ function RegistryPageContent() {
         }}
       />
 
-      <SiteHeader withTimelineAnchor={false} />
+      <SiteHeader />
 
       {/* Main Content */}
       <Box

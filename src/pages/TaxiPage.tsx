@@ -22,7 +22,7 @@ function TaxiPageContent() {
 
   return (
     <Box id="page-top" minH="100vh" bg="neutral.cream" display="flex" flexDirection="column">
-      <SiteHeader withTimelineAnchor={false} />
+      <SiteHeader />
 
       <Box
         as="main"

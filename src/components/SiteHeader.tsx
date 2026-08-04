@@ -101,7 +101,7 @@ export default function SiteHeader({ withTimelineAnchor = true }: SiteHeaderProp
               >
                 {navLinks.slice(0, Math.ceil(navLinks.length / 2)).map((link) =>
                   link.isHashLink ? (
-                    <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
                       {link.label}
                     </Button>
                   ) : (
@@ -131,7 +131,7 @@ export default function SiteHeader({ withTimelineAnchor = true }: SiteHeaderProp
               <HStack spacing={10} display={["none", "none", "flex"]} align="center">
                 {navLinks.slice(Math.ceil(navLinks.length / 2)).map((link) =>
                   link.isHashLink ? (
-                    <Button key={link.href} as="a" href={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
                       {link.label}
                     </Button>
                   ) : (
@@ -170,8 +170,8 @@ export default function SiteHeader({ withTimelineAnchor = true }: SiteHeaderProp
                 link.isHashLink ? (
                   <Button
                     key={link.href}
-                    as="a"
-                    href={link.href}
+                    as={Link}
+                    to={link.href}
                     variant="ghost"
                     size="lg"
                     justifyContent="flex-start"

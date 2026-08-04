@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
-import { StaggerContainer, StaggerItem } from './animations'
 
 // Corner decoration
 import belgiumFlower from '../assets/Belgium_flower.svg'
@@ -137,37 +136,37 @@ export default function Timeline() {
 
           {/* Day-by-day schedule */}
           <Box w="full" maxW="700px" mx="auto" position="relative">
-            <StaggerContainer as={VStack} spacing={[14, 18, 24]} alignItems="stretch">
+            <VStack spacing={[14, 18, 24]} alignItems="stretch">
               {days.map((day, index) => {
                 const isLast = index === days.length - 1
-                return (
-                  <StaggerItem key={day.label}>
-                    <Box position="relative">
-                      {/* Vertical line segment extending down to the next item's dot */}
-                      {!isLast && (
-                        <Box
-                          position="absolute"
-                          left="50%"
-                          top="13px"
-                          bottom={["-69px", "-85px", "-109px"]}
-                          w="2px"
-                          bg="primary.soft"
-                          transform="translateX(-50%)"
-                        />
-                      )}
 
-                      {/* Dot on vertical center line, level with dress code text */}
+                return (
+                  <Box key={day.label} position="relative">
+                    {/* Vertical line segment extending down to the next item's dot */}
+                    {!isLast && (
                       <Box
                         position="absolute"
                         left="50%"
-                        top="6px"
-                        w="14px"
-                        h="14px"
-                        borderRadius="full"
+                        top="13px"
+                        bottom={["-69px", "-85px", "-109px"]}
+                        w="2px"
                         bg="primary.soft"
                         transform="translateX(-50%)"
-                        zIndex={1}
                       />
+                    )}
+
+                    {/* Dot on vertical center line, level with dress code text */}
+                    <Box
+                      position="absolute"
+                      left="50%"
+                      top="6px"
+                      w="14px"
+                      h="14px"
+                      borderRadius="full"
+                      bg="primary.soft"
+                      transform="translateX(-50%)"
+                      zIndex={1}
+                    />
 
                     <Grid templateColumns={ROW_COLUMNS} columnGap={[8, 12, 16]} alignItems="start">
                       {/* Left column: Icon + Date + Event Name */}
@@ -232,10 +231,9 @@ export default function Timeline() {
                       </GridItem>
                     </Grid>
                   </Box>
-                </StaggerItem>
-              )
-            })}
-            </StaggerContainer>
+                )
+              })}
+            </VStack>
           </Box>
         </VStack>
       </Container>

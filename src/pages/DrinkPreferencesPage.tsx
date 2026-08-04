@@ -66,7 +66,7 @@ function DrinkPreferencesPageContent() {
         }}
       />
 
-      <SiteHeader withTimelineAnchor={false} />
+      <SiteHeader />
 
       {/* Main Content */}
       <Box

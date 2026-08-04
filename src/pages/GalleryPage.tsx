@@ -40,7 +40,7 @@ function GalleryPageContent() {
 
   return (
     <Box minH="100vh" bg="neutral.warm" display="flex" flexDirection="column">
-      <SiteHeader withTimelineAnchor={false} />
+      <SiteHeader />
 
       {/* Main Content */}
       <Box 

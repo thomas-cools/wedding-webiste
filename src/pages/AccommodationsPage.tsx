@@ -17,7 +17,7 @@ const AccommodationSection = React.lazy(() =>
 function AccommodationsPageContent() {
   return (
     <Box id="page-top" minH="100vh" bg="#E3DFCE" display="flex" flexDirection="column" position="relative" overflow="hidden">
-      <SiteHeader withTimelineAnchor={false} />
+      <SiteHeader />
 
       {/* Main Content */}
       <Box 

@@ -78,7 +78,7 @@ function FinalRsvpPageContent() {
         }}
       />
 
-      <SiteHeader withTimelineAnchor={false} />
+      <SiteHeader />
 
       {/* Main Content */}
       <Box

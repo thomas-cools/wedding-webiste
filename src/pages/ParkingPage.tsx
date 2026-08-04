@@ -42,7 +42,7 @@ function ParkingPageContent() {
           sx={{ opacity: 0.25, mixBlendMode: 'overlay' }}
         />
 
-      <SiteHeader withTimelineAnchor={false} />
+      <SiteHeader />
 
       <Box
         as="main"

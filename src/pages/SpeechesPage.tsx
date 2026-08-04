@@ -112,7 +112,7 @@ function SpeechesPageContent() {
       position="relative"
       overflow="hidden"
     >
-      <SiteHeader withTimelineAnchor={false} />
+      <SiteHeader />
 
       <Box
         position="absolute"
