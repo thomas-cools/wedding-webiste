@@ -14,6 +14,8 @@ import {
   saveSpeechDocumentFile,
 } from './utils/speech-documents'
 import { validateSpeechDocumentUpload } from './utils/speech-documents-security'
+import { extractSpeechTextFromDocxBytes } from './utils/speech-document-content'
+import { translateSpeechContentWithGemini } from './utils/speech-translation'
 
 function getHeader(headers: Record<string, string | undefined>, name: string): string {
   const needle = name.toLowerCase()
@@ -93,6 +95,17 @@ export const handler: Handler = async (event) => {
 
   const id = randomUUID()
   const storageKey = buildSpeechDocumentStorageKey(id)
+
+  const extraction = await extractSpeechTextFromDocxBytes(bytes)
+  if (!extraction.ok) {
+    return adminJson(400, { ok: false, error: extraction.error })
+  }
+
+  const translation = await translateSpeechContentWithGemini(
+    extraction.text,
+    extraction.detectedLanguage
+  )
+
   const document = {
     id,
     fileName: validation.fileName,
@@ -102,6 +115,17 @@ export const handler: Handler = async (event) => {
     mimeType: validation.mimeType,
     originalFileName: validation.originalFileName,
     docType: 'docx' as const,
+    sourceText: extraction.text,
+    translatedText: translation.status === 'success' ? translation.translatedText : undefined,
+    detectedLanguage:
+      translation.status === 'success'
+        ? translation.detectedSourceLanguage
+        : extraction.detectedLanguage || undefined,
+    translatedLanguage: translation.status === 'success' ? translation.targetLanguage : undefined,
+    translationStatus: translation.status,
+    translationProvider: translation.status === 'success' ? translation.provider : undefined,
+    translatedAt: translation.status === 'success' ? translation.translatedAt : undefined,
+    translationError: translation.status === 'success' ? undefined : translation.error,
     createdAt: new Date().toISOString(),
     createdBy: payload.sub,
   }
@@ -124,6 +148,7 @@ export const handler: Handler = async (event) => {
     type: document.docType,
     sizeBucket: sizeBucket(document.fileSizeBytes),
     sourceKind: document.sourceKind,
+    translationStatus: document.translationStatus,
   })
 
   return adminJson(200, {

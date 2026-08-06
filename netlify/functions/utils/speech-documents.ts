@@ -7,6 +7,8 @@ const FILES_PREFIX = 'files/'
 
 export type SpeechDocumentType = 'pdf' | 'docx' | 'google-doc'
 export type SpeechDocumentSourceKind = 'url' | 'upload'
+export type SpeechDocumentLanguage = 'en' | 'es'
+export type SpeechTranslationStatus = 'success' | 'failed' | 'skipped'
 
 export interface SpeechDocument {
   id: string
@@ -19,6 +21,14 @@ export interface SpeechDocument {
   originalFileName?: string
   fileSizeBytes: number
   docType: SpeechDocumentType
+  sourceText?: string
+  translatedText?: string
+  detectedLanguage?: SpeechDocumentLanguage
+  translatedLanguage?: SpeechDocumentLanguage
+  translationStatus?: SpeechTranslationStatus
+  translationProvider?: 'gemini'
+  translatedAt?: string
+  translationError?: string
   createdAt: string
   createdBy: string
 }

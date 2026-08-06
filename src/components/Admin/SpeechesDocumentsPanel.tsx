@@ -31,6 +31,7 @@ import { getAdminAuthHeaders } from '../../utils/adminAuth'
 
 type SpeechDocumentType = 'pdf' | 'docx' | 'google-doc'
 type SpeechDocumentSourceKind = 'url' | 'upload'
+type SpeechTranslationStatus = 'success' | 'failed' | 'skipped'
 type EntryMode = 'url' | 'upload'
 
 interface SpeechDocument {
@@ -44,6 +45,10 @@ interface SpeechDocument {
   originalFileName?: string
   fileSizeBytes: number
   docType: SpeechDocumentType
+  translationStatus?: SpeechTranslationStatus
+  translationError?: string
+  detectedLanguage?: 'en' | 'es'
+  translatedLanguage?: 'en' | 'es'
   createdAt: string
   createdBy: string
 }
@@ -76,6 +81,38 @@ function formatBytes(value: number): string {
 function docTypeLabel(type: SpeechDocumentType): string {
   if (type === 'google-doc') return 'Google Doc'
   return type.toUpperCase()
+}
+
+function translationStatusLabel(document: SpeechDocument): {
+  scheme: 'green' | 'orange' | 'gray'
+  label: string
+} {
+  if (document.translationStatus === 'success') {
+    const source = document.detectedLanguage?.toUpperCase() || 'EN/ES'
+    const target = document.translatedLanguage?.toUpperCase() || 'ES/EN'
+    return { scheme: 'green', label: `${source} -> ${target}` }
+  }
+
+  if (document.translationStatus === 'failed') {
+    return { scheme: 'orange', label: 'Failed' }
+  }
+
+  return { scheme: 'gray', label: 'Skipped' }
+}
+
+function speechLanguageLabel(document: SpeechDocument): {
+  scheme: 'blue' | 'gray'
+  label: string
+} {
+  if (document.detectedLanguage === 'en') {
+    return { scheme: 'blue', label: 'English' }
+  }
+
+  if (document.detectedLanguage === 'es') {
+    return { scheme: 'blue', label: 'Spanish' }
+  }
+
+  return { scheme: 'gray', label: 'Unknown' }
 }
 
 type UrlStatus = 'idle' | 'error' | 'warning' | 'success'
@@ -609,6 +646,8 @@ export function SpeechesDocumentsPanel() {
                     <Th>Type</Th>
                     <Th>Size</Th>
                     <Th>Source</Th>
+                    <Th>Language</Th>
+                    <Th>Translation</Th>
                     <Th>Added</Th>
                     <Th></Th>
                   </Tr>
@@ -631,6 +670,30 @@ export function SpeechesDocumentsPanel() {
                         {doc.sourceKind === 'upload'
                           ? `Uploaded (${doc.originalFileName || 'DOCX'})`
                           : doc.sourceHost || 'Unknown host'}
+                      </Td>
+                      <Td>
+                        {(() => {
+                          const language = speechLanguageLabel(doc)
+                          return (
+                            <Badge colorScheme={language.scheme} variant="subtle">
+                              {language.label}
+                            </Badge>
+                          )
+                        })()}
+                      </Td>
+                      <Td>
+                        {(() => {
+                          const status = translationStatusLabel(doc)
+                          return (
+                            <Badge
+                              colorScheme={status.scheme}
+                              variant="subtle"
+                              title={doc.translationError || undefined}
+                            >
+                              {status.label}
+                            </Badge>
+                          )
+                        })()}
                       </Td>
                       <Td fontSize="xs" color="gray.500">{new Date(doc.createdAt).toLocaleString()}</Td>
                       <Td>

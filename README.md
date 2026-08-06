@@ -1066,6 +1066,12 @@ ADMIN_TOTP_SECRET=<base32-totp-secret-from-enrollment>
 ADMIN_SKIP_MFA_IN_LOCAL_DEV=true
 # Optional: additional trusted hosts for speech docs (comma-separated)
 SPEECH_DOC_ALLOWED_HOSTS=example.com,files.example.org
+# Optional: Gemini API key for speech translation (server-only)
+GEMINI_API_KEY=
+# Optional: Gemini model override for speech translation
+GEMINI_TRANSLATION_MODEL=gemini-2.5-flash
+# Optional: cap extracted speech characters
+SPEECH_DOC_MAX_EXTRACTED_CHARS=14000
 ```
 
 #### Generating a Password Hash
@@ -1118,6 +1124,9 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 | `NETLIFY_API_TOKEN` | Netlify personal access token for Forms API access |
 | `SITE_ID` | Netlify site ID for Forms API queries |
 | `SITE_URL` | Full public URL of the site, e.g. `https://your-site.netlify.app` (required for final RSVP token links) |
+| `GEMINI_API_KEY` | Gemini API key for server-side speech translation |
+| `GEMINI_TRANSLATION_MODEL` | Optional Gemini model override for speech translation (default: `gemini-2.5-flash`) |
+| `SPEECH_DOC_MAX_EXTRACTED_CHARS` | Optional max extracted speech characters before translation (default: `14000`) |
 | `RATE_LIMIT_FINAL_RSVP_MAX` | Max final RSVP confirmation emails per rate-limit window (default: `5`) |
 | `RATE_LIMIT_FINAL_RSVP_WINDOW_SECONDS` | Rate limit window in seconds for final RSVP confirmations (default: `900`) |
 
@@ -1139,6 +1148,9 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 | `NETLIFY_API_TOKEN` | Server | Netlify personal access token for Forms API |
 | `SITE_ID` | Server | Netlify site ID for Forms API queries |
 | `SITE_URL` | Server | Full public URL of the site (used to build final RSVP token links) |
+| `GEMINI_API_KEY` | Server | Gemini API key used for speech EN<->ES translation |
+| `GEMINI_TRANSLATION_MODEL` | Server | Optional Gemini model override for speech translation |
+| `SPEECH_DOC_MAX_EXTRACTED_CHARS` | Server | Optional cap for extracted speech text length |
 | `RATE_LIMIT_FINAL_RSVP_MAX` | Server | Max final RSVP confirmation emails per window (default: `5`) |
 | `RATE_LIMIT_FINAL_RSVP_WINDOW_SECONDS` | Server | Rate limit window in seconds (default: `900`) |
 | `NODE_VERSION` | Build | Node.js version for Netlify builds |

@@ -14,6 +14,8 @@ import {
   resolveAllowedSpeechDocumentHosts,
   validateSpeechDocumentInput,
 } from './utils/speech-documents-security'
+import { extractSpeechTextFromUrl } from './utils/speech-document-content'
+import { translateSpeechContentWithGemini } from './utils/speech-translation'
 
 function sizeBucket(bytes: number): string {
   if (bytes < 250 * 1024) return '<250KB'
@@ -62,6 +64,26 @@ export const handler: Handler = async (event) => {
     return adminJson(400, { ok: false, error: probeResult.error })
   }
 
+  const extraction = await extractSpeechTextFromUrl({
+    sourceUrl: validation.normalizedUrl,
+    docType: validation.docType,
+    maxFileSizeBytes: probeResult.fileSizeBytes,
+  })
+
+  if (!extraction.ok) {
+    console.warn('Rejected speech document submission', {
+      reason: extraction.error,
+      sourceHost: validation.sourceHost,
+      type: validation.docType,
+    })
+    return adminJson(400, { ok: false, error: extraction.error })
+  }
+
+  const translation = await translateSpeechContentWithGemini(
+    extraction.text,
+    extraction.detectedLanguage
+  )
+
   const document = {
     id: randomUUID(),
     fileName: validation.fileName,
@@ -70,6 +92,17 @@ export const handler: Handler = async (event) => {
     sourceHost: validation.sourceHost,
     fileSizeBytes: probeResult.fileSizeBytes,
     docType: validation.docType,
+    sourceText: extraction.text,
+    translatedText: translation.status === 'success' ? translation.translatedText : undefined,
+    detectedLanguage:
+      translation.status === 'success'
+        ? translation.detectedSourceLanguage
+        : extraction.detectedLanguage || undefined,
+    translatedLanguage: translation.status === 'success' ? translation.targetLanguage : undefined,
+    translationStatus: translation.status,
+    translationProvider: translation.status === 'success' ? translation.provider : undefined,
+    translatedAt: translation.status === 'success' ? translation.translatedAt : undefined,
+    translationError: translation.status === 'success' ? undefined : translation.error,
     createdAt: new Date().toISOString(),
     createdBy: payload.sub,
   }
@@ -80,6 +113,7 @@ export const handler: Handler = async (event) => {
       type: document.docType,
       sizeBucket: sizeBucket(document.fileSizeBytes),
       sourceHost: document.sourceHost,
+      translationStatus: document.translationStatus,
     })
 
     return adminJson(200, {

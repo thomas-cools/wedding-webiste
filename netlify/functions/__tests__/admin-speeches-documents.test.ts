@@ -15,6 +15,31 @@ const mockGetSpeechDocumentById = jest.fn<Promise<SpeechDocument | null>, [strin
 const mockSaveSpeechDocumentFile = jest.fn<Promise<void>, [string, Uint8Array]>()
 const mockGetSpeechDocumentFile = jest.fn<Promise<Uint8Array | null>, [string]>()
 const mockDeleteSpeechDocumentFile = jest.fn<Promise<boolean>, [string]>()
+const mockExtractSpeechTextFromUrl =
+  jest.fn<
+    Promise<{ ok: true; text: string; detectedLanguage: 'en' | 'es' | null } | { ok: false; error: string }>,
+    [{ sourceUrl: string; docType: 'pdf' | 'docx' | 'google-doc'; maxFileSizeBytes?: number }]
+  >()
+const mockExtractSpeechTextFromDocxBytes =
+  jest.fn<
+    Promise<{ ok: true; text: string; detectedLanguage: 'en' | 'es' | null } | { ok: false; error: string }>,
+    [Uint8Array]
+  >()
+const mockTranslateSpeechContentWithGemini =
+  jest.fn<
+    Promise<
+      | {
+          status: 'success'
+          translatedText: string
+          detectedSourceLanguage: 'en' | 'es'
+          targetLanguage: 'en' | 'es'
+          provider: 'gemini'
+          translatedAt: string
+        }
+      | { status: 'failed' | 'skipped'; error: string }
+    >,
+    [string, 'en' | 'es' | null]
+  >()
 
 jest.mock('../utils/speech-documents', () => ({
   getAllSpeechDocuments: () => mockGetAllSpeechDocuments(),
@@ -26,6 +51,19 @@ jest.mock('../utils/speech-documents', () => ({
   getSpeechDocumentFile: (storageKey: string) => mockGetSpeechDocumentFile(storageKey),
   deleteSpeechDocumentFile: (storageKey: string) => mockDeleteSpeechDocumentFile(storageKey),
   buildSpeechDocumentStorageKey: (id: string) => `files/${id}.docx`,
+}))
+
+jest.mock('../utils/speech-document-content', () => ({
+  extractSpeechTextFromUrl: (...args: Parameters<typeof mockExtractSpeechTextFromUrl>) =>
+    mockExtractSpeechTextFromUrl(...args),
+  extractSpeechTextFromDocxBytes: (...args: Parameters<typeof mockExtractSpeechTextFromDocxBytes>) =>
+    mockExtractSpeechTextFromDocxBytes(...args),
+}))
+
+jest.mock('../utils/speech-translation', () => ({
+  translateSpeechContentWithGemini: (
+    ...args: Parameters<typeof mockTranslateSpeechContentWithGemini>
+  ) => mockTranslateSpeechContentWithGemini(...args),
 }))
 
 function assertResponse(result: void | HandlerResponse): HandlerResponse {
@@ -101,8 +139,30 @@ describe('admin-speeches-documents handlers', () => {
     jest.resetModules()
     jest.clearAllMocks()
     mockFetch.mockReset()
+    mockExtractSpeechTextFromUrl.mockReset()
+    mockExtractSpeechTextFromDocxBytes.mockReset()
+    mockTranslateSpeechContentWithGemini.mockReset()
     process.env.JWT_SECRET = 'test-jwt-secret'
     delete process.env.SPEECH_DOC_ALLOWED_HOSTS
+
+    mockExtractSpeechTextFromUrl.mockResolvedValue({
+      ok: true,
+      text: 'Thank you everyone for being here today.',
+      detectedLanguage: 'en',
+    })
+    mockExtractSpeechTextFromDocxBytes.mockResolvedValue({
+      ok: true,
+      text: 'Thank you everyone for being here today.',
+      detectedLanguage: 'en',
+    })
+    mockTranslateSpeechContentWithGemini.mockResolvedValue({
+      status: 'success',
+      translatedText: 'Gracias a todos por estar aqui hoy.',
+      detectedSourceLanguage: 'en',
+      targetLanguage: 'es',
+      provider: 'gemini',
+      translatedAt: '2026-01-01T00:00:00.000Z',
+    })
   })
 
   afterEach(() => {
@@ -142,6 +202,11 @@ describe('admin-speeches-documents handlers', () => {
     expect(savedDocument.docType).toBe('google-doc')
     expect(savedDocument.sourceHost).toBe('docs.google.com')
     expect(savedDocument.fileSizeBytes).toBe(128000)
+    expect(savedDocument.translationStatus).toBe('success')
+    expect(savedDocument.detectedLanguage).toBe('en')
+    expect(savedDocument.translatedLanguage).toBe('es')
+    expect(mockExtractSpeechTextFromUrl).toHaveBeenCalledTimes(1)
+    expect(mockTranslateSpeechContentWithGemini).toHaveBeenCalledTimes(1)
 
     const body = JSON.parse(result.body || '{}')
     expect(body.ok).toBe(true)
@@ -443,6 +508,46 @@ describe('admin-speeches-documents handlers', () => {
     expect(body.ok).toBe(true)
     expect(body.document.sourceKind).toBe('upload')
     expect(body.document.docType).toBe('docx')
+    expect(body.document.translationStatus).toBe('success')
+    expect(mockExtractSpeechTextFromDocxBytes).toHaveBeenCalledTimes(1)
+    expect(mockTranslateSpeechContentWithGemini).toHaveBeenCalledTimes(1)
+  })
+
+  it('saves the document when translation fails', async () => {
+    mockTranslateSpeechContentWithGemini.mockResolvedValueOnce({
+      status: 'failed',
+      error: 'Gemini request failed with HTTP 429',
+    })
+    mockFetch.mockResolvedValueOnce(
+      new Response('', {
+        status: 200,
+        headers: {
+          'content-type': 'application/pdf',
+          'content-length': '128000',
+        },
+      })
+    )
+
+    const { handler } = await import('../admin-speeches-documents-add')
+
+    const event = createEvent({
+      headers: createAdminHeaders(),
+      body: JSON.stringify({
+        fileName: 'Welcome Speech',
+        sourceUrl: 'https://docs.google.com/document/d/abc123/edit',
+      }),
+    })
+
+    const result = assertResponse(await handler(event, mockContext))
+    expect(result.statusCode).toBe(200)
+
+    const firstCall = mockSaveSpeechDocument.mock.calls[0]
+    expect(firstCall).toBeDefined()
+    const savedDocument = firstCall![0]
+    expect(savedDocument.translationStatus).toBe('failed')
+    expect(savedDocument.translationError).toMatch(/429/)
+    expect(savedDocument.sourceText).toBeTruthy()
+    expect(savedDocument.translatedText).toBeUndefined()
   })
 
   it('rejects upload for wrong MIME type', async () => {
