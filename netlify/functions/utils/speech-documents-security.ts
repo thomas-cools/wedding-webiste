@@ -1,5 +1,6 @@
 import net from 'node:net'
 
+import { isSpeechSpeakerKey, type SpeechSpeakerKey } from '../../../src/config/speeches'
 import type { SpeechDocumentType } from './speech-documents'
 
 const DEFAULT_ALLOWED_HOSTS = ['docs.google.com', 'drive.google.com']
@@ -117,11 +118,13 @@ function detectDocumentType(url: URL): SpeechDocumentType | null {
 export interface SpeechDocumentInput {
   fileName: unknown
   sourceUrl: unknown
+  speakerKey: unknown
 }
 
 export interface SpeechDocumentValidationSuccess {
   ok: true
   fileName: string
+  speakerKey: SpeechSpeakerKey
   normalizedUrl: string
   sourceHost: string
   docType: SpeechDocumentType
@@ -151,6 +154,11 @@ export function validateSpeechDocumentInput(
 
   if (typeof input.sourceUrl !== 'string' || !input.sourceUrl.trim()) {
     return { ok: false, error: 'sourceUrl is required' }
+  }
+
+  const speakerKey = validateSpeakerKey(input.speakerKey)
+  if (!speakerKey) {
+    return { ok: false, error: 'speakerKey is required' }
   }
 
   let url: URL
@@ -188,6 +196,7 @@ export function validateSpeechDocumentInput(
   return {
     ok: true,
     fileName,
+    speakerKey,
     normalizedUrl: url.toString(),
     sourceHost: url.hostname.toLowerCase(),
     docType,
@@ -217,6 +226,7 @@ export type SpeechDocumentProbeOutcome = SpeechDocumentProbeResult | SpeechDocum
 
 export interface UploadValidationInput {
   fileName: unknown
+  speakerKey: unknown
   originalFileName: unknown
   mimeType: unknown
   fileSizeBytes: unknown
@@ -226,6 +236,7 @@ export interface UploadValidationInput {
 export interface UploadValidationSuccess {
   ok: true
   fileName: string
+  speakerKey: SpeechSpeakerKey
   originalFileName: string
   mimeType: string
   fileSizeBytes: number
@@ -474,6 +485,10 @@ function hasDocxSignature(bytes: Uint8Array): boolean {
   return DOCX_FILE_SIGNATURE.every((value, index) => bytes[index] === value)
 }
 
+function validateSpeakerKey(input: unknown): SpeechSpeakerKey | null {
+  return isSpeechSpeakerKey(input) ? input : null
+}
+
 export function validateSpeechDocumentUpload(input: UploadValidationInput): UploadValidationResult {
   if (typeof input.fileName !== 'string' || !input.fileName.trim()) {
     return { ok: false, error: 'fileName is required' }
@@ -514,9 +529,15 @@ export function validateSpeechDocumentUpload(input: UploadValidationInput): Uplo
     return { ok: false, error: 'Uploaded file does not appear to be a DOCX file' }
   }
 
+  const speakerKey = validateSpeakerKey(input.speakerKey)
+  if (!speakerKey) {
+    return { ok: false, error: 'speakerKey is required' }
+  }
+
   return {
     ok: true,
     fileName,
+    speakerKey,
     originalFileName,
     mimeType: DOCX_MIME_TYPE,
     fileSizeBytes,

@@ -24,6 +24,8 @@ const mockI18n = {
   changeLanguage: mockChangeLanguage,
 }
 
+let mockAuthenticated = false
+
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
@@ -43,9 +45,29 @@ jest.mock('../contexts/FeatureFlagsContext', () => ({
   useFeatureFlags: () => ({ features: { requirePassword: true } }),
 }))
 
+jest.mock('../components/PasswordGate', () => {
+  const React = require('react')
+  const { isAuthenticated } = require('../utils/auth')
+
+  return function MockPasswordGate({ children }: { children: React.ReactNode }) {
+    return isAuthenticated() ? React.createElement(React.Fragment, null, children) : React.createElement('div', {
+      'data-testid': 'password-input',
+    })
+  }
+})
+
+jest.mock('../utils/auth', () => ({
+  authenticateWithToken: jest.fn(async () => {
+    mockAuthenticated = true
+    return { ok: true, token: 'session-token', expiresIn: 7200 }
+  }),
+  isAuthenticated: jest.fn(() => mockAuthenticated),
+}))
+
 describe('SpeechesPage', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
+    mockAuthenticated = false
     sessionStorage.clear()
     localStorage.clear()
   })
@@ -60,21 +82,45 @@ describe('SpeechesPage', () => {
     )
   }
 
-  it('exchanges a valid token and renders the speeches page', async () => {
-    const fetchMock = jest.spyOn(global, 'fetch' as never).mockResolvedValue({
-      ok: true,
-      json: async () => ({ ok: true, token: 'session-token', expiresIn: 7200 }),
-    } as never)
+  it('renders the translated speech for the authenticated page', async () => {
+    mockAuthenticated = true
+    const fetchMock = jest.spyOn(global, 'fetch' as never).mockImplementation(async (input: RequestInfo | URL) => {
+      const url = String(input)
 
-    renderAt('/speeches?t=link-token')
+      if (url === '/api/speeches-documents') {
+        return new Response(
+          JSON.stringify({
+            ok: true,
+            documents: [
+              {
+                id: '11111111-1111-1111-1111-111111111111',
+                fileName: 'Guy & Karin',
+                speakerKey: 'guy-karin',
+                translatedText: 'Gracias a todos por estar aqui hoy.\n\nCelebramos el amor y la familia.',
+                detectedLanguage: 'en',
+                translatedLanguage: 'es',
+                translationStatus: 'success',
+                createdAt: '2026-01-01T00:00:00.000Z',
+              },
+            ],
+          }),
+          {
+            status: 200,
+            headers: { 'content-type': 'application/json' },
+          }
+        ) as never
+      }
+
+      throw new Error(`Unexpected fetch call: ${url}`)
+    })
+
+    renderAt('/speeches')
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
-        '/.netlify/functions/auth',
+        '/api/speeches-documents',
         expect.objectContaining({
-          method: 'POST',
-          body: JSON.stringify({ token: 'link-token' }),
-          credentials: 'include',
+          method: 'GET',
         })
       )
     })

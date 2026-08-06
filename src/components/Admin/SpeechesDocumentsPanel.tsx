@@ -5,6 +5,7 @@ import {
   Badge,
   Box,
   Button,
+  Divider,
   FormControl,
   FormLabel,
   Heading,
@@ -13,6 +14,7 @@ import {
   ListItem,
   List,
   ListIcon,
+  Select,
   Table,
   Tbody,
   Td,
@@ -20,6 +22,12 @@ import {
   Th,
   Thead,
   Tr,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Wrap,
   WrapItem,
   useToast,
@@ -28,6 +36,7 @@ import {
 import { CheckCircleIcon, InfoOutlineIcon, WarningTwoIcon } from '@chakra-ui/icons'
 
 import { getAdminAuthHeaders } from '../../utils/adminAuth'
+import { getSpeechSpeakerByKey, getSpeechSpeakers, type SpeechSpeakerKey } from '../../config/speeches'
 
 type SpeechDocumentType = 'pdf' | 'docx' | 'google-doc'
 type SpeechDocumentSourceKind = 'url' | 'upload'
@@ -37,6 +46,7 @@ type EntryMode = 'url' | 'upload'
 interface SpeechDocument {
   id: string
   fileName: string
+  speakerKey?: SpeechSpeakerKey
   sourceUrl?: string
   sourceHost?: string
   sourceKind?: SpeechDocumentSourceKind
@@ -45,10 +55,14 @@ interface SpeechDocument {
   originalFileName?: string
   fileSizeBytes: number
   docType: SpeechDocumentType
+  sourceText?: string
+  translatedText?: string
   translationStatus?: SpeechTranslationStatus
   translationError?: string
   detectedLanguage?: 'en' | 'es'
   translatedLanguage?: 'en' | 'es'
+  translationProvider?: 'gemini'
+  translatedAt?: string
   createdAt: string
   createdBy: string
 }
@@ -63,6 +77,13 @@ interface ListResponse {
   documents?: SpeechDocument[]
   limits?: Limits
   allowedHosts?: string[]
+  error?: string
+}
+
+interface BackfillResponse {
+  ok: boolean
+  total?: number
+  backfilled?: number
   error?: string
 }
 
@@ -81,6 +102,10 @@ function formatBytes(value: number): string {
 function docTypeLabel(type: SpeechDocumentType): string {
   if (type === 'google-doc') return 'Google Doc'
   return type.toUpperCase()
+}
+
+function speakerLabel(document: SpeechDocument): string {
+  return getSpeechSpeakerByKey(document.speakerKey)?.label || 'Unassigned'
 }
 
 function translationStatusLabel(document: SpeechDocument): {
@@ -180,11 +205,14 @@ export function SpeechesDocumentsPanel() {
   const [limits, setLimits] = useState<Limits>({ maxFileSizeBytes: 1024 * 1024, maxFileNameLength: 120 })
   const [entryMode, setEntryMode] = useState<EntryMode>('url')
   const [fileName, setFileName] = useState('')
+  const [speakerKey, setSpeakerKey] = useState('')
   const [sourceUrl, setSourceUrl] = useState('')
   const [uploadFile, setUploadFile] = useState<File | null>(null)
   const [loadingList, setLoadingList] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [backfilling, setBackfilling] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [selectedTranslation, setSelectedTranslation] = useState<SpeechDocument | null>(null)
 
   const toast = useToast()
 
@@ -223,6 +251,41 @@ export function SpeechesDocumentsPanel() {
     }
   }, [toast])
 
+  const handleBackfillSpeakers = async () => {
+    setBackfilling(true)
+    try {
+      const res = await fetch('/api/admin-speeches-documents-backfill', {
+        method: 'POST',
+        headers: {
+          ...getAdminAuthHeaders(),
+        },
+      })
+
+      const data: BackfillResponse = await res.json()
+      if (!res.ok || !data.ok) {
+        toast({
+          title: 'Backfill failed',
+          description: data.error,
+          status: 'error',
+          duration: 5000,
+        })
+        return
+      }
+
+      await refreshDocuments()
+      toast({
+        title: 'Speaker backfill complete',
+        description: `${data.backfilled || 0} of ${data.total || 0} documents updated.`,
+        status: 'success',
+        duration: 4000,
+      })
+    } catch {
+      toast({ title: 'Network error', description: 'Could not backfill speakers', status: 'error', duration: 5000 })
+    } finally {
+      setBackfilling(false)
+    }
+  }
+
   useEffect(() => {
     void refreshDocuments()
   }, [refreshDocuments])
@@ -231,6 +294,8 @@ export function SpeechesDocumentsPanel() {
     () => detectUrlStatus(sourceUrl, allowedHosts),
     [sourceUrl, allowedHosts]
   )
+
+  const speakerOptions = getSpeechSpeakers()
 
   const handleAdd = async () => {
     if (entryMode === 'upload') {
@@ -251,6 +316,16 @@ export function SpeechesDocumentsPanel() {
       return
     }
 
+    if (!speakerKey) {
+      toast({
+        title: 'Missing fields',
+        description: 'Please choose a speaker.',
+        status: 'warning',
+        duration: 4000,
+      })
+      return
+    }
+
     setSubmitting(true)
     try {
       const res = await fetch('/api/admin-speeches-documents-add', {
@@ -262,6 +337,7 @@ export function SpeechesDocumentsPanel() {
         body: JSON.stringify({
           fileName: trimmedName,
           sourceUrl: trimmedUrl,
+          speakerKey,
         }),
       })
 
@@ -277,6 +353,7 @@ export function SpeechesDocumentsPanel() {
       }
 
       setFileName('')
+      setSpeakerKey('')
       setSourceUrl('')
       await refreshDocuments()
       toast({
@@ -308,6 +385,16 @@ export function SpeechesDocumentsPanel() {
       return
     }
 
+    if (!speakerKey) {
+      toast({
+        title: 'Missing fields',
+        description: 'Please choose a speaker.',
+        status: 'warning',
+        duration: 4000,
+      })
+      return
+    }
+
     if (!uploadFile.name.toLowerCase().endsWith('.docx')) {
       toast({
         title: 'Unsupported file type',
@@ -332,6 +419,7 @@ export function SpeechesDocumentsPanel() {
     try {
       const formData = new FormData()
       formData.append('fileName', trimmedName)
+      formData.append('speakerKey', speakerKey)
       formData.append('file', uploadFile)
 
       const res = await fetch('/api/admin-speeches-documents-upload', {
@@ -354,6 +442,7 @@ export function SpeechesDocumentsPanel() {
       }
 
       setFileName('')
+      setSpeakerKey('')
       setUploadFile(null)
       await refreshDocuments()
       toast({
@@ -417,6 +506,14 @@ export function SpeechesDocumentsPanel() {
     }
   }
 
+  const handleViewTranslation = (document: SpeechDocument) => {
+    setSelectedTranslation(document)
+  }
+
+  const handleCloseTranslation = () => {
+    setSelectedTranslation(null)
+  }
+
   const handleOpenDocument = async (document: SpeechDocument) => {
     const sourceKind = document.sourceKind || 'url'
 
@@ -467,7 +564,7 @@ export function SpeechesDocumentsPanel() {
       <VStack spacing={4} align="stretch">
         <Box bg="white" rounded="xl" p={5} shadow="sm" border="1px solid" borderColor="gray.100">
           <Text fontSize="sm" color="gray.500" mb={4}>
-            Add trusted document links or upload DOCX files for speech content experiments.
+            Add trusted document links or upload DOCX files for speech content experiments. Assign each speech to a speaker so the public page can render it in the right place.
           </Text>
 
           <Alert status="info" rounded="md" mb={4} fontSize="sm">
@@ -531,6 +628,22 @@ export function SpeechesDocumentsPanel() {
                 placeholder="Wedding speech notes"
                 size="sm"
               />
+            </FormControl>
+
+            <FormControl minW="220px" flex={1}>
+              <FormLabel fontSize="sm" fontWeight="medium">Speaker</FormLabel>
+              <Select
+                placeholder="Select a speaker"
+                value={speakerKey}
+                onChange={(event) => setSpeakerKey(event.target.value)}
+                size="sm"
+              >
+                {speakerOptions.map((speaker) => (
+                  <option key={speaker.key} value={speaker.key}>
+                    {speaker.label}
+                  </option>
+                ))}
+              </Select>
             </FormControl>
 
             {entryMode === 'url' ? (
@@ -620,9 +733,14 @@ export function SpeechesDocumentsPanel() {
         <Box bg="white" rounded="xl" p={5} shadow="sm" border="1px solid" borderColor="gray.100">
           <HStack justify="space-between" mb={3}>
             <Text fontWeight="semibold">Stored documents</Text>
-            <Button variant="outline" size="sm" onClick={() => void refreshDocuments()} isLoading={loadingList}>
-              Refresh
-            </Button>
+            <HStack spacing={2}>
+              <Button variant="outline" size="sm" onClick={() => void handleBackfillSpeakers()} isLoading={backfilling}>
+                Backfill speakers
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => void refreshDocuments()} isLoading={loadingList}>
+                Refresh
+              </Button>
+            </HStack>
           </HStack>
 
           {documents.length === 0 ? (
@@ -646,6 +764,7 @@ export function SpeechesDocumentsPanel() {
                     <Th>Type</Th>
                     <Th>Size</Th>
                     <Th>Source</Th>
+                    <Th>Speaker</Th>
                     <Th>Language</Th>
                     <Th>Translation</Th>
                     <Th>Added</Th>
@@ -670,6 +789,11 @@ export function SpeechesDocumentsPanel() {
                         {doc.sourceKind === 'upload'
                           ? `Uploaded (${doc.originalFileName || 'DOCX'})`
                           : doc.sourceHost || 'Unknown host'}
+                      </Td>
+                      <Td>
+                        <Badge colorScheme={doc.speakerKey ? 'blue' : 'gray'} variant="subtle">
+                          {speakerLabel(doc)}
+                        </Badge>
                       </Td>
                       <Td>
                         {(() => {
@@ -701,6 +825,11 @@ export function SpeechesDocumentsPanel() {
                           <Button size="xs" variant="outline" onClick={() => void handleOpenDocument(doc)}>
                             Open
                           </Button>
+                          {doc.translationStatus === 'success' && doc.translatedText ? (
+                            <Button size="xs" variant="outline" onClick={() => handleViewTranslation(doc)}>
+                              Translation
+                            </Button>
+                          ) : null}
                           {doc.sourceKind !== 'upload' && doc.sourceUrl ? (
                             <Button
                               size="xs"
@@ -729,6 +858,86 @@ export function SpeechesDocumentsPanel() {
           )}
         </Box>
       </VStack>
+
+      <Modal isOpen={selectedTranslation != null} onClose={handleCloseTranslation} size="3xl" scrollBehavior="inside">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader fontFamily="heading" color="secondary.navy">
+            {selectedTranslation?.fileName || 'Translation'}
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            {selectedTranslation?.translationStatus === 'success' && selectedTranslation.translatedText ? (
+              <VStack align="stretch" spacing={4}>
+                <HStack spacing={2} flexWrap="wrap">
+                  <Badge colorScheme="green" variant="subtle">
+                    {selectedTranslation.detectedLanguage?.toUpperCase() || 'EN/ES'}
+                    {' -> '}
+                    {selectedTranslation.translatedLanguage?.toUpperCase() || 'ES/EN'}
+                  </Badge>
+                  {selectedTranslation.translationProvider ? (
+                    <Badge colorScheme="blue" variant="subtle">
+                      {selectedTranslation.translationProvider.toUpperCase()}
+                    </Badge>
+                  ) : null}
+                  {selectedTranslation.translatedAt ? (
+                    <Badge colorScheme="gray" variant="subtle">
+                      {new Date(selectedTranslation.translatedAt).toLocaleString()}
+                    </Badge>
+                  ) : null}
+                </HStack>
+
+                <Box
+                  border="1px solid"
+                  borderColor="gray.200"
+                  rounded="md"
+                  bg="gray.50"
+                  p={4}
+                  maxH="70vh"
+                  overflowY="auto"
+                >
+                  <Text whiteSpace="pre-wrap" lineHeight="tall" color="gray.800">
+                    {selectedTranslation.translatedText}
+                  </Text>
+                </Box>
+
+                {selectedTranslation.sourceText ? (
+                  <>
+                    <Divider />
+                    <Box>
+                      <Text fontSize="sm" fontWeight="semibold" mb={2} color="gray.700">
+                        Original source text
+                      </Text>
+                      <Box
+                        border="1px solid"
+                        borderColor="gray.200"
+                        rounded="md"
+                        bg="white"
+                        p={4}
+                        maxH="35vh"
+                        overflowY="auto"
+                      >
+                        <Text whiteSpace="pre-wrap" lineHeight="tall" color="gray.600">
+                          {selectedTranslation.sourceText}
+                        </Text>
+                      </Box>
+                    </Box>
+                  </>
+                ) : null}
+              </VStack>
+            ) : (
+              <Box>
+                <Text fontWeight="semibold" mb={2}>
+                  Translation unavailable
+                </Text>
+                <Text color="gray.600" whiteSpace="pre-wrap">
+                  {selectedTranslation?.translationError || 'This document does not have a translated version yet.'}
+                </Text>
+              </Box>
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }

@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
+  Badge,
   Container,
-  Flex,
-  Heading,
   HStack,
+  Heading,
   Skeleton,
   Text,
   VStack,
@@ -18,88 +20,134 @@ import { useFeatureFlags } from '../contexts/FeatureFlagsContext'
 import { authenticateWithToken, isAuthenticated } from '../utils/auth'
 import SiteHeader from '../components/SiteHeader'
 import textureSvg from '../assets/texture.svg'
+import {
+  getSpeechSpeakers,
+  type SpeechSpeakerKey,
+} from '../config/speeches'
 
-interface SpeechEntry {
+interface PublicSpeechDocument {
   id: string
-  label: string
-  title: string
-  body: string[]
+  fileName: string
+  speakerKey?: SpeechSpeakerKey
+  sourceText?: string
+  translatedText?: string
+  detectedLanguage?: 'en' | 'es'
+  translatedLanguage?: 'en' | 'es'
+  translationStatus?: 'success' | 'failed' | 'skipped'
+  createdAt: string
 }
 
-const SPEECHES: SpeechEntry[] = [
-  {
-    id: 'guy-karin',
-    label: 'Guy & Karin',
-    title: 'Translated version',
-    body: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean malesuada quam sed ornare tristique. Etiam ipsum arcu, vulputate non libero vitae, sollicitudin consectetur mauris.',
-      'Maecenas ultrices magna eget lectus fermentum eleifend. Praesent sed blandit tortor, a vehicula velit. Vestibulum suscipit odio vel dui fermentum consectetur. Suspendisse a magna aliquet purus consequat porttitor.',
-      'Vestibulum sagittis felis sem, nec vestibulum orci convallis non. Suspendisse elementum felis sed purus dictum, auctor pharetra ipsum faucibus. In cursus enim vitae arcu placerat, ac sollicitudin libero fermentum.',
-      'In tempor dignissim sagittis. Vestibulum non metus eget arcu rhoncus luctus. Etiam lacus tellus, pharetra ut placerat in, bibendum in magna. Duis eleifend turpis ut tempor tristique.',
-    ],
-  },
-  {
-    id: 'carlos-edith',
-    label: 'Carlos & Edith',
-    title: 'Speech notes',
-    body: [
-      'A warm toast about shared adventures, family, and the people gathered here today.',
-      'A second paragraph can hold the translated version or the original speech text, depending on what the operator wants to show.',
-      'Use this panel for a clean, centered presentation that stays calm and readable on desktop and mobile.',
-    ],
-  },
-  {
-    id: 'ellen',
-    label: 'Ellen',
-    title: 'Speech notes',
-    body: [
-      'Short, affectionate remarks about the couple and a small anecdote from the wedding weekend.',
-      'This section can be replaced with the final speech copy once it is ready.',
-    ],
-  },
-  {
-    id: 'jimena',
-    label: 'Jimena',
-    title: 'Speech notes',
-    body: [
-      'A celebratory speech with a soft, lyrical tone and a final toast to the newlyweds.',
-      'Keep the layout centered and spacious so the reading rhythm feels deliberate.',
-    ],
-  },
-  {
-    id: 'miguel',
-    label: 'Miguel',
-    title: 'Speech notes',
-    body: [
-      'A few lines about friendship, travel, and the moments that brought everyone to this table.',
-      'A second paragraph can be used for the translated version if needed.',
-    ],
-  },
-  {
-    id: 'jackie-gino',
-    label: 'Jackie',
-    title: 'Speech notes',
-    body: [
-      'A concise speech card for a final toast or closing remarks.',
-      'The page is designed so the content block stays centered and holds up as the number of speeches changes.',
-    ],
-  },
-  {
-    id: 'gino',
-    label: 'Gino',
-    title: 'Speech notes',
-    body: [
-      'Additional speaker content can be added here without changing the page structure.',
-      'This layout intentionally leaves room for different lengths of speeches while preserving the visual rhythm.',
-    ],
-  },
-]
+interface PublicSpeechView {
+  key: SpeechSpeakerKey
+  label: string
+  fileName: string
+  translatedText: string
+  sourceText?: string
+  detectedLanguage?: 'en' | 'es'
+  translatedLanguage?: 'en' | 'es'
+}
+
+interface PublicSpeechesResponse {
+  ok: boolean
+  documents?: PublicSpeechDocument[]
+  error?: string
+}
+
+function splitParagraphs(text: string): string[] {
+  return text
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+}
 
 function SpeechesPageContent() {
   const { t } = useTranslation()
-  const [activeSpeechId, setActiveSpeechId] = useState(SPEECHES[0]?.id ?? '')
+  const [documents, setDocuments] = useState<PublicSpeechDocument[]>([])
+  const [loadingSpeeches, setLoadingSpeeches] = useState(true)
+  const [loadError, setLoadError] = useState('')
+  const [activeSpeechKey, setActiveSpeechKey] = useState<SpeechSpeakerKey | ''>('')
 
-  const activeSpeech = SPEECHES.find((speech) => speech.id === activeSpeechId) ?? SPEECHES[0]!
+  useEffect(() => {
+    let isActive = true
+
+    const loadSpeeches = async () => {
+      setLoadingSpeeches(true)
+      setLoadError('')
+
+      try {
+        const response = await fetch('/api/speeches-documents', {
+          method: 'GET',
+        })
+        const data: PublicSpeechesResponse = await response.json()
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Failed to load speeches')
+        }
+
+        if (!isActive) return
+        setDocuments(Array.isArray(data.documents) ? data.documents : [])
+      } catch {
+        if (!isActive) return
+        setDocuments([])
+        setLoadError('Translated speeches are not available right now.')
+      } finally {
+        if (isActive) {
+          setLoadingSpeeches(false)
+        }
+      }
+    }
+
+    void loadSpeeches()
+
+    return () => {
+      isActive = false
+    }
+  }, [])
+
+  const availableSpeeches = useMemo(() => {
+    const latestBySpeaker = new Map<SpeechSpeakerKey, PublicSpeechDocument>()
+
+    for (const document of documents) {
+      if (!document.speakerKey || !document.translatedText) {
+        continue
+      }
+
+      const current = latestBySpeaker.get(document.speakerKey)
+      if (!current || new Date(document.createdAt).getTime() >= new Date(current.createdAt).getTime()) {
+        latestBySpeaker.set(document.speakerKey, document)
+      }
+    }
+
+    return getSpeechSpeakers()
+      .map((speaker) => ({
+        speaker,
+        document: latestBySpeaker.get(speaker.key),
+      }))
+      .filter((entry): entry is { speaker: { key: SpeechSpeakerKey; label: string; order: number }; document: PublicSpeechDocument } => Boolean(entry.document))
+      .map((entry) => ({
+        key: entry.speaker.key,
+        label: entry.speaker.label,
+        fileName: entry.document.fileName,
+        translatedText: entry.document.translatedText || '',
+        sourceText: entry.document.sourceText,
+        detectedLanguage: entry.document.detectedLanguage,
+        translatedLanguage: entry.document.translatedLanguage,
+      }))
+  }, [documents])
+
+  useEffect(() => {
+    if (availableSpeeches.length === 0) {
+      setActiveSpeechKey('')
+      return
+    }
+
+    setActiveSpeechKey((current) =>
+      availableSpeeches.some((speech) => speech.key === current) ? current : availableSpeeches[0]!.key
+    )
+  }, [availableSpeeches])
+
+  const activeSpeech =
+    availableSpeeches.find((speech) => speech.key === activeSpeechKey) ?? availableSpeeches[0] ?? null
 
   return (
     <Box
@@ -164,7 +212,7 @@ function SpeechesPageContent() {
               lineHeight="1.9"
               fontWeight="400"
             >
-              We don&apos;t want you too miss anything. Select the person giving the speech for the translated version.
+              We don&apos;t want you too miss anything. Select the speaker to read the translated version.
             </Text>
           </VStack>
         </Container>
@@ -173,83 +221,153 @@ function SpeechesPageContent() {
       <Box as="main" flex="1" position="relative" zIndex={1} pt={[6, 8, 10]} pb={[10, 12, 16]}>
         <Container maxW="container.lg" px={[4, 6, 8]}>
           <VStack spacing={[6, 7, 8]}>
-            <Box
-              w="100%"
-              maxW="920px"
-              mx="auto"
-              border="1px solid"
-              borderColor="rgba(132,169,210,0.7)"
-              bg="rgba(246,241,235,0.72)"
-              backdropFilter="blur(2px)"
-              rounded="full"
-              px={[3, 4]}
-              py={[2, 3]}
-              boxShadow="0 10px 24px rgba(11,25,55,0.05)"
-              overflowX="auto"
-            >
-              <HStack spacing={2} justify="space-between" minW={["640px", "auto"]}>
-                {SPEECHES.map((speech) => {
-                  const isActive = speech.id === activeSpeechId
-                  return (
-                    <Button
-                      key={speech.id}
-                      onClick={() => setActiveSpeechId(speech.id)}
-                      variant="ghost"
-                      rounded="full"
-                      minH="40px"
-                      px={[3, 5]}
-                      py={2}
-                      fontSize={["xs", "sm"]}
-                      fontWeight={isActive ? '600' : '500'}
-                      letterSpacing="0.005em"
-                      textTransform="none"
-                      color={isActive ? '#F6F1EB' : 'rgba(11,25,55,0.72)'}
-                      bg={isActive ? '#0B1937' : 'transparent'}
-                      _hover={{
-                        bg: isActive ? '#0B1937' : 'rgba(11,25,55,0.05)',
-                      }}
-                      _active={{ transform: 'none' }}
-                      flexShrink={0}
-                    >
-                      {speech.label}
-                    </Button>
-                  )
-                })}
-              </HStack>
-            </Box>
-
-            <Box
-              w="100%"
-              maxW="920px"
-              mx="auto"
-              bg="#F6F1EB"
-              border="1px solid"
-              borderColor="rgba(132,169,210,0.55)"
-              rounded="md"
-              boxShadow="0 16px 40px rgba(11,25,55,0.06)"
-              px={[6, 8, 14]}
-              py={[8, 10, 14]}
-              minH={['420px', '500px']}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <VStack spacing={0} maxW="620px" textAlign="center">
-                <Box>
-                  {activeSpeech.body.map((paragraph) => (
-                    <Text
-                      key={paragraph}
-                      fontSize={['sm', 'md']}
-                      lineHeight="2.1"
-                      color="rgba(48,23,9,0.82)"
-                      mb={5}
-                    >
-                      {paragraph}
-                    </Text>
-                  ))}
+            {loadingSpeeches ? (
+              <Box
+                w="100%"
+                maxW="920px"
+                mx="auto"
+                bg="#F6F1EB"
+                border="1px solid"
+                borderColor="rgba(132,169,210,0.55)"
+                rounded="md"
+                boxShadow="0 16px 40px rgba(11,25,55,0.06)"
+                px={[6, 8, 14]}
+                py={[8, 10, 14]}
+              >
+                <Skeleton h="24px" w="220px" mb={4} />
+                <Skeleton h="16px" w="140px" mb={10} />
+                <Skeleton h="18px" w="100%" mb={4} />
+                <Skeleton h="18px" w="92%" mb={4} />
+                <Skeleton h="18px" w="96%" mb={4} />
+              </Box>
+            ) : availableSpeeches.length > 0 && activeSpeech ? (
+              <>
+                <Box
+                  w="100%"
+                  maxW="920px"
+                  mx="auto"
+                  border="1px solid"
+                  borderColor="rgba(132,169,210,0.7)"
+                  bg="rgba(246,241,235,0.72)"
+                  backdropFilter="blur(2px)"
+                  rounded="full"
+                  px={[3, 4]}
+                  py={[2, 3]}
+                  boxShadow="0 10px 24px rgba(11,25,55,0.05)"
+                  overflowX="auto"
+                >
+                  <HStack spacing={2} justify="space-between" minW={["640px", "auto"]}>
+                    {availableSpeeches.map((speech) => {
+                      const isActive = speech.key === activeSpeech.key
+                      return (
+                        <Button
+                          key={speech.key}
+                          onClick={() => setActiveSpeechKey(speech.key)}
+                          variant="ghost"
+                          rounded="full"
+                          minH="40px"
+                          px={[3, 5]}
+                          py={2}
+                          fontSize={["xs", "sm"]}
+                          fontWeight={isActive ? '600' : '500'}
+                          letterSpacing="0.005em"
+                          textTransform="none"
+                          color={isActive ? '#F6F1EB' : 'rgba(11,25,55,0.72)'}
+                          bg={isActive ? '#0B1937' : 'transparent'}
+                          _hover={{
+                            bg: isActive ? '#0B1937' : 'rgba(11,25,55,0.05)',
+                          }}
+                          _active={{ transform: 'none' }}
+                          flexShrink={0}
+                        >
+                          {speech.label}
+                        </Button>
+                      )
+                    })}
+                  </HStack>
                 </Box>
-              </VStack>
-            </Box>
+
+                <Box
+                  w="100%"
+                  maxW="920px"
+                  mx="auto"
+                  bg="#F6F1EB"
+                  border="1px solid"
+                  borderColor="rgba(132,169,210,0.55)"
+                  rounded="md"
+                  boxShadow="0 16px 40px rgba(11,25,55,0.06)"
+                  px={[6, 8, 14]}
+                  py={[8, 10, 14]}
+                  minH={['420px', '500px']}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <VStack spacing={0} maxW="620px" textAlign="center" width="100%">
+                    <Box width="100%">
+                      <Text fontFamily="elegant" fontSize={['2xl', '3xl']} color="#4C050C" mb={2}>
+                        {activeSpeech.label}
+                      </Text>
+                      <Text fontSize="sm" color="rgba(11,25,55,0.68)" mb={6}>
+                        {activeSpeech.fileName}
+                      </Text>
+                      <Box mb={6}>
+                        {splitParagraphs(activeSpeech.translatedText).map((paragraph) => (
+                          <Text
+                            key={paragraph}
+                            fontSize={['sm', 'md']}
+                            lineHeight="2.1"
+                            color="rgba(48,23,9,0.82)"
+                            mb={5}
+                          >
+                            {paragraph}
+                          </Text>
+                        ))}
+                      </Box>
+                      <HStack justify="center" spacing={2} flexWrap="wrap">
+                        <Badge colorScheme="green" variant="subtle">
+                          {activeSpeech.detectedLanguage?.toUpperCase() || 'EN/ES'}
+                          {' -> '}
+                          {activeSpeech.translatedLanguage?.toUpperCase() || 'ES/EN'}
+                        </Badge>
+                        <Badge colorScheme="gray" variant="subtle">
+                          Speaker matched
+                        </Badge>
+                      </HStack>
+                    </Box>
+                  </VStack>
+                </Box>
+              </>
+            ) : (
+              <Box
+                w="100%"
+                maxW="920px"
+                mx="auto"
+                bg="#F6F1EB"
+                border="1px solid"
+                borderColor="rgba(132,169,210,0.55)"
+                rounded="md"
+                boxShadow="0 16px 40px rgba(11,25,55,0.06)"
+                px={[6, 8, 14]}
+                py={[8, 10, 14]}
+              >
+                {loadError ? (
+                  <Alert status="warning" rounded="md">
+                    <AlertIcon />
+                    {loadError}
+                  </Alert>
+                ) : (
+                  <VStack spacing={3} textAlign="center">
+                    <Text fontFamily="elegant" fontSize={['2xl', '3xl']} color="#4C050C">
+                      No speeches yet
+                    </Text>
+                    <Text color="rgba(48,23,9,0.74)" maxW="32rem">
+                      Translated speeches will appear here once an admin assigns a speaker and saves the document.
+                    </Text>
+                  </VStack>
+                )}
+              </Box>
+            )}
           </VStack>
         </Container>
       </Box>

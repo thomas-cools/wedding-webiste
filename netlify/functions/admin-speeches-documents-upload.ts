@@ -80,6 +80,7 @@ export const handler: Handler = async (event) => {
   const bytes = new Uint8Array(await uploadedFile.arrayBuffer())
   const validation = validateSpeechDocumentUpload({
     fileName: fileNameValue,
+    speakerKey: formData.get('speakerKey'),
     originalFileName: uploadedFile.name,
     mimeType: uploadedFile.type,
     fileSizeBytes: uploadedFile.size,
@@ -109,6 +110,7 @@ export const handler: Handler = async (event) => {
   const document = {
     id,
     fileName: validation.fileName,
+    speakerKey: validation.speakerKey,
     sourceKind: 'upload' as const,
     storageKey,
     fileSizeBytes: validation.fileSizeBytes,
@@ -146,6 +148,7 @@ export const handler: Handler = async (event) => {
 
   console.info('Accepted speech document upload', {
     type: document.docType,
+    speakerKey: document.speakerKey,
     sizeBucket: sizeBucket(document.fileSizeBytes),
     sourceKind: document.sourceKind,
     translationStatus: document.translationStatus,

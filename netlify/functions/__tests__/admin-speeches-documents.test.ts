@@ -9,6 +9,7 @@ const mockFetch = jest.fn()
 global.fetch = mockFetch as typeof fetch
 
 const mockGetAllSpeechDocuments = jest.fn<Promise<SpeechDocument[]>, []>()
+const mockBackfillSpeechDocumentSpeakerKeys = jest.fn<Promise<{ total: number; backfilled: number; documents: SpeechDocument[] }>, []>()
 const mockSaveSpeechDocument = jest.fn<Promise<void>, [SpeechDocument]>()
 const mockDeleteSpeechDocument = jest.fn<Promise<boolean>, [string]>()
 const mockGetSpeechDocumentById = jest.fn<Promise<SpeechDocument | null>, [string]>()
@@ -43,6 +44,7 @@ const mockTranslateSpeechContentWithGemini =
 
 jest.mock('../utils/speech-documents', () => ({
   getAllSpeechDocuments: () => mockGetAllSpeechDocuments(),
+  backfillSpeechDocumentSpeakerKeys: () => mockBackfillSpeechDocumentSpeakerKeys(),
   saveSpeechDocument: (document: SpeechDocument) => mockSaveSpeechDocument(document),
   deleteSpeechDocument: (id: string) => mockDeleteSpeechDocument(id),
   getSpeechDocumentById: (id: string) => mockGetSpeechDocumentById(id),
@@ -99,6 +101,7 @@ async function createUploadEvent(
   overrides: Partial<HandlerEvent> = {},
   options: {
     fileName?: string
+    speakerKey?: string
     fileBytes?: Uint8Array
     uploadedFileName?: string
     mimeType?: string
@@ -106,6 +109,7 @@ async function createUploadEvent(
 ): Promise<HandlerEvent> {
   const formData = new FormData()
   formData.append('fileName', options.fileName || 'Uploaded Speech')
+  formData.append('speakerKey', options.speakerKey || 'guy-karin')
 
   const bytes = options.fileBytes || new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0x01, 0x02])
   const file = new File([bytes], options.uploadedFileName || 'speech.docx', {
@@ -142,6 +146,7 @@ describe('admin-speeches-documents handlers', () => {
     mockExtractSpeechTextFromUrl.mockReset()
     mockExtractSpeechTextFromDocxBytes.mockReset()
     mockTranslateSpeechContentWithGemini.mockReset()
+    mockBackfillSpeechDocumentSpeakerKeys.mockReset()
     process.env.JWT_SECRET = 'test-jwt-secret'
     delete process.env.SPEECH_DOC_ALLOWED_HOSTS
 
@@ -188,6 +193,7 @@ describe('admin-speeches-documents handlers', () => {
       body: JSON.stringify({
         fileName: '  Welcome Speech  ',
         sourceUrl: 'https://docs.google.com/document/d/abc123/edit',
+        speakerKey: 'guy-karin',
       }),
     })
 
@@ -199,6 +205,7 @@ describe('admin-speeches-documents handlers', () => {
     expect(firstCall).toBeDefined()
     const savedDocument = firstCall![0]
     expect(savedDocument.fileName).toBe('Welcome Speech')
+    expect(savedDocument.speakerKey).toBe('guy-karin')
     expect(savedDocument.docType).toBe('google-doc')
     expect(savedDocument.sourceHost).toBe('docs.google.com')
     expect(savedDocument.fileSizeBytes).toBe(128000)
@@ -221,6 +228,7 @@ describe('admin-speeches-documents handlers', () => {
       body: JSON.stringify({
         fileName: 'Unsafe URL',
         sourceUrl: 'http://docs.google.com/document/d/abc123/edit',
+        speakerKey: 'guy-karin',
       }),
     })
 
@@ -238,6 +246,7 @@ describe('admin-speeches-documents handlers', () => {
       body: JSON.stringify({
         fileName: 'Random Host',
         sourceUrl: 'https://example.com/speech.pdf',
+        speakerKey: 'guy-karin',
       }),
     })
 
@@ -265,6 +274,7 @@ describe('admin-speeches-documents handlers', () => {
       body: JSON.stringify({
         fileName: 'Local PDF',
         sourceUrl: 'https://example.com/files/final-speech.pdf',
+        speakerKey: 'guy-karin',
       }),
     })
 
@@ -287,6 +297,7 @@ describe('admin-speeches-documents handlers', () => {
       body: JSON.stringify({
         fileName: 'Loopback',
         sourceUrl: 'https://localhost/speech.pdf',
+        speakerKey: 'guy-karin',
       }),
     })
 
@@ -314,6 +325,7 @@ describe('admin-speeches-documents handlers', () => {
       body: JSON.stringify({
         fileName: 'Large file',
         sourceUrl: 'https://docs.google.com/document/d/abc123/edit',
+        speakerKey: 'guy-karin',
       }),
     })
 
@@ -341,6 +353,7 @@ describe('admin-speeches-documents handlers', () => {
       body: JSON.stringify({
         fileName: 'Private doc',
         sourceUrl: 'https://docs.google.com/document/d/private-doc-id/edit',
+        speakerKey: 'guy-karin',
       }),
     })
 
@@ -384,6 +397,7 @@ describe('admin-speeches-documents handlers', () => {
       body: JSON.stringify({
         fileName: 'No size headers',
         sourceUrl: 'https://docs.google.com/document/d/abc123/edit',
+        speakerKey: 'guy-karin',
       }),
     })
 
@@ -446,6 +460,31 @@ describe('admin-speeches-documents handlers', () => {
     const body = JSON.parse(result.body || '{}')
     expect(body.ok).toBe(true)
     expect(body.documents).toEqual([])
+  })
+
+  it('backfills legacy speaker keys when requested', async () => {
+    mockBackfillSpeechDocumentSpeakerKeys.mockResolvedValueOnce({
+      total: 2,
+      backfilled: 1,
+      documents: [],
+    })
+
+    const { handler } = await import('../admin-speeches-documents-backfill')
+    const event = createEvent({
+      httpMethod: 'POST',
+      path: '/.netlify/functions/admin-speeches-documents-backfill',
+      rawUrl: 'https://example.com/.netlify/functions/admin-speeches-documents-backfill',
+      headers: createAdminHeaders(),
+    })
+
+    const result = assertResponse(await handler(event, mockContext))
+    expect(result.statusCode).toBe(200)
+    expect(mockBackfillSpeechDocumentSpeakerKeys).toHaveBeenCalledTimes(1)
+
+    const body = JSON.parse(result.body || '{}')
+    expect(body.ok).toBe(true)
+    expect(body.total).toBe(2)
+    expect(body.backfilled).toBe(1)
   })
 
   it('deletes known documents and returns 404 for missing entries', async () => {
@@ -535,6 +574,7 @@ describe('admin-speeches-documents handlers', () => {
       body: JSON.stringify({
         fileName: 'Welcome Speech',
         sourceUrl: 'https://docs.google.com/document/d/abc123/edit',
+        speakerKey: 'guy-karin',
       }),
     })
 
@@ -546,6 +586,7 @@ describe('admin-speeches-documents handlers', () => {
     const savedDocument = firstCall![0]
     expect(savedDocument.translationStatus).toBe('failed')
     expect(savedDocument.translationError).toMatch(/429/)
+    expect(savedDocument.speakerKey).toBe('guy-karin')
     expect(savedDocument.sourceText).toBeTruthy()
     expect(savedDocument.translatedText).toBeUndefined()
   })

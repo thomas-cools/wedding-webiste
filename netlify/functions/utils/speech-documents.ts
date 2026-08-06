@@ -2,6 +2,8 @@ import { getStore } from '@netlify/blobs'
 import { mkdir, readFile, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
+import { inferSpeechSpeakerKeyFromLabel, type SpeechSpeakerKey } from '../../../src/config/speeches'
+
 const STORE_NAME = 'speech-documents'
 const FILES_PREFIX = 'files/'
 
@@ -13,6 +15,7 @@ export type SpeechTranslationStatus = 'success' | 'failed' | 'skipped'
 export interface SpeechDocument {
   id: string
   fileName: string
+  speakerKey?: SpeechSpeakerKey
   sourceUrl?: string
   sourceHost?: string
   sourceKind?: SpeechDocumentSourceKind
@@ -99,6 +102,49 @@ function normalizeDocument(entry: SpeechDocument): SpeechDocument {
   }
 }
 
+function withLegacySpeakerKey(entry: SpeechDocument): SpeechDocument {
+  if (entry.speakerKey) {
+    return entry
+  }
+
+  const inferredSpeakerKey = inferSpeechSpeakerKeyFromLabel(entry.fileName)
+  if (!inferredSpeakerKey) {
+    return entry
+  }
+
+  return {
+    ...entry,
+    speakerKey: inferredSpeakerKey,
+  }
+}
+
+export interface SpeechSpeakerBackfillResult {
+  total: number
+  backfilled: number
+  documents: SpeechDocument[]
+}
+
+async function persistSpeakerKeyBackfill(document: SpeechDocument): Promise<void> {
+  await saveSpeechDocument(document)
+}
+
+async function backfillDocuments(documents: SpeechDocument[]): Promise<SpeechSpeakerBackfillResult> {
+  const normalized = documents.map(normalizeDocument)
+  const backfilledDocuments = normalized.map(withLegacySpeakerKey)
+
+  const documentsToPersist = backfilledDocuments.filter(
+    (document, index) => document.speakerKey && normalized[index]?.speakerKey !== document.speakerKey
+  )
+
+  await Promise.all(documentsToPersist.map((document) => persistSpeakerKeyBackfill(document)))
+
+  return {
+    total: normalized.length,
+    backfilled: documentsToPersist.length,
+    documents: sortDocuments(backfilledDocuments),
+  }
+}
+
 export function buildSpeechDocumentStorageKey(documentId: string): string {
   return `${FILES_PREFIX}${documentId}.docx`
 }
@@ -116,11 +162,45 @@ export async function getAllSpeechDocuments(): Promise<SpeechDocument[]> {
       })
     )
 
-    return sortDocuments(entries.filter((entry): entry is SpeechDocument => entry != null).map(normalizeDocument))
+    const { documents } = await backfillDocuments(entries.filter((entry): entry is SpeechDocument => entry != null))
+    return documents
   } catch (error) {
     if (!isNetlifyDev()) throw error
     const localStore = await readLocalStore()
-    return sortDocuments(localStore.documents.map(normalizeDocument))
+    const { documents, backfilled } = await backfillDocuments(localStore.documents)
+
+    if (backfilled > 0) {
+      await writeLocalStore({
+        documents,
+      })
+    }
+
+    return documents
+  }
+}
+
+export async function backfillSpeechDocumentSpeakerKeys(): Promise<SpeechSpeakerBackfillResult> {
+  const store = getSpeechDocumentsStore()
+
+  try {
+    const { blobs } = await store.list()
+    const entries = await Promise.all(
+      blobs.map(async (blob) => {
+        const data = await store.get(blob.key, { type: 'json' })
+        return data as SpeechDocument | null
+      })
+    )
+
+    return backfillDocuments(entries.filter((entry): entry is SpeechDocument => entry != null))
+  } catch (error) {
+    if (!isNetlifyDev()) throw error
+
+    const localStore = await readLocalStore()
+    const result = await backfillDocuments(localStore.documents)
+    if (result.backfilled > 0) {
+      await writeLocalStore({ documents: result.documents })
+    }
+    return result
   }
 }
 

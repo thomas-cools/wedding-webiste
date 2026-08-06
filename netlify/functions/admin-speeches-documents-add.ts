@@ -87,6 +87,7 @@ export const handler: Handler = async (event) => {
   const document = {
     id: randomUUID(),
     fileName: validation.fileName,
+    speakerKey: validation.speakerKey,
     sourceKind: 'url' as const,
     sourceUrl: validation.normalizedUrl,
     sourceHost: validation.sourceHost,
@@ -111,6 +112,7 @@ export const handler: Handler = async (event) => {
     await saveSpeechDocument(document)
     console.info('Accepted speech document submission', {
       type: document.docType,
+      speakerKey: document.speakerKey,
       sizeBucket: sizeBucket(document.fileSizeBytes),
       sourceHost: document.sourceHost,
       translationStatus: document.translationStatus,
