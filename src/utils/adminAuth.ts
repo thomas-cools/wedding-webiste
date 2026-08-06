@@ -11,6 +11,7 @@ interface LoginResult {
   requiresMfa: boolean
   mfaConfigured: boolean
   pendingToken: string
+  token?: string
   error?: string
 }
 
@@ -18,6 +19,12 @@ interface MfaVerifyResult {
   ok: boolean
   token?: string
   error?: string
+}
+
+function persistAdminToken(token: string): void {
+  const expiry = Date.now() + 8 * 60 * 60 * 1000
+  sessionStorage.setItem(ADMIN_TOKEN_KEY, token)
+  sessionStorage.setItem(ADMIN_TOKEN_EXP_KEY, String(expiry))
 }
 
 interface MfaEnrollResult {
@@ -44,6 +51,7 @@ export async function adminLogin(password: string): Promise<LoginResult> {
     requiresMfa: data.requiresMfa,
     mfaConfigured: data.mfaConfigured ?? false,
     pendingToken: data.pendingToken,
+    token: data.token,
   }
 }
 
@@ -62,12 +70,13 @@ export async function adminVerifyMfa(
     return { ok: false, error: data.error }
   }
 
-  // Store the admin token (8h expiry)
-  const expiry = Date.now() + 8 * 60 * 60 * 1000
-  sessionStorage.setItem(ADMIN_TOKEN_KEY, data.token)
-  sessionStorage.setItem(ADMIN_TOKEN_EXP_KEY, String(expiry))
+  persistAdminToken(data.token)
 
   return { ok: true, token: data.token }
+}
+
+export function storeAdminToken(token: string): void {
+  persistAdminToken(token)
 }
 
 export async function adminEnrollMfa(

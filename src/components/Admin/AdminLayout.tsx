@@ -22,6 +22,7 @@ import { DrinkPreferencesDashboard } from './DrinkPreferencesDashboard'
 import { FinalRsvpDashboard } from './FinalRsvpDashboard'
 import { FinalRsvpInvitationsPanel } from './FinalRsvpInvitationsPanel'
 import { SpeechesLinkPanel } from './SpeechesLinkPanel'
+import { SpeechesDocumentsPanel } from './SpeechesDocumentsPanel'
 
 interface AdminLayoutProps {
   onLogout: () => void
@@ -154,6 +155,13 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
             >
               Speeches Link
             </Tab>
+            <Tab
+              fontSize="sm"
+              fontWeight="medium"
+              _selected={{ bg: 'secondary.navy', color: 'white' }}
+            >
+              Speech Documents
+            </Tab>
           </TabList>
 
           <TabPanels>
@@ -180,6 +188,9 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
             </TabPanel>
             <TabPanel p={0}>
               <SpeechesLinkPanel />
+            </TabPanel>
+            <TabPanel p={0}>
+              <SpeechesDocumentsPanel />
             </TabPanel>
           </TabPanels>
         </Tabs>

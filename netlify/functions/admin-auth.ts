@@ -25,6 +25,31 @@ function getAdminTotpSecret(): string | null {
   return process.env.ADMIN_TOTP_SECRET || null
 }
 
+function isTrue(value: string | undefined): boolean {
+  if (!value) return false
+  const normalized = value.trim().toLowerCase()
+  return normalized === '1' || normalized === 'true' || normalized === 'yes' || normalized === 'on'
+}
+
+function isLocalHost(hostHeader: string | undefined): boolean {
+  if (!hostHeader) return false
+  const host = hostHeader.trim().toLowerCase().split(':')[0]
+  return host === 'localhost' || host === '127.0.0.1'
+}
+
+function shouldBypassMfaInLocalDev(headers: Record<string, string | undefined>): boolean {
+  if (!isTrue(process.env.ADMIN_SKIP_MFA_IN_LOCAL_DEV)) {
+    return false
+  }
+
+  if (process.env.NETLIFY_DEV === 'true') {
+    return true
+  }
+
+  const host = headers.host || headers.Host || headers['x-forwarded-host'] || headers['X-Forwarded-Host']
+  return isLocalHost(host)
+}
+
 function numberFromEnv(value: string | undefined, fallback: number): number {
   const parsed = Number.parseInt(String(value || ''), 10)
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
@@ -45,7 +70,7 @@ export const handler: Handler = async (event) => {
 
   switch (action) {
     case 'login':
-      return handleLogin(event.body, ip)
+      return handleLogin(event.body, ip, event.headers || {})
     case 'verify-mfa':
       return handleVerifyMfa(event.body, ip)
     case 'enroll-mfa':
@@ -58,7 +83,11 @@ export const handler: Handler = async (event) => {
 /**
  * Phase 1: Verify admin password, return short-lived MFA pending token.
  */
-async function handleLogin(body: string | null, ip: string) {
+async function handleLogin(
+  body: string | null,
+  ip: string,
+  headers: Record<string, string | undefined>
+) {
   // Rate limit: 5 attempts per 10 minutes
   const limit = numberFromEnv(process.env.RATE_LIMIT_ADMIN_LOGIN_MAX, 5)
   const windowSeconds = numberFromEnv(process.env.RATE_LIMIT_ADMIN_LOGIN_WINDOW_SECONDS, 600)
@@ -89,6 +118,22 @@ async function handleLogin(body: string | null, ip: string) {
 
   if (!verifyPassword(parsed.password, passwordHash)) {
     return adminJson(401, { ok: false, error: 'Invalid password' }, rateLimitHeaders(rl))
+  }
+
+  if (shouldBypassMfaInLocalDev(headers)) {
+    const adminToken = createToken('admin', ADMIN_TOKEN_EXPIRY)
+    return adminJson(200, {
+      ok: true,
+      requiresMfa: false,
+      mfaConfigured: !!getAdminTotpSecret(),
+      token: adminToken,
+      expiresIn: ADMIN_TOKEN_EXPIRY,
+      pendingToken: '',
+      localDevBypass: true,
+    }, {
+      ...rateLimitHeaders(rl),
+      'Set-Cookie': `admin_auth=${adminToken}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${ADMIN_TOKEN_EXPIRY}`,
+    })
   }
 
   // Password verified — check if MFA is configured

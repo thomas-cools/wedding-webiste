@@ -38,6 +38,10 @@ jest.mock('../components/Admin/SpeechesLinkPanel', () => ({
   SpeechesLinkPanel: () => <div>Speeches Link Panel</div>,
 }))
 
+jest.mock('../components/Admin/SpeechesDocumentsPanel', () => ({
+  SpeechesDocumentsPanel: () => <div>Speeches Documents Panel</div>,
+}))
+
 describe('AdminLayout', () => {
   it('shows a prominent button to open the speeches link generator', async () => {
     const user = userEvent.setup()

@@ -1062,6 +1062,10 @@ VITE_GOOGLE_MAPS_API_KEY=AIza...
 # Admin panel (optional, for /admin)
 ADMIN_PASSWORD_HASH=<hmac-sha256-hash-of-admin-password>
 ADMIN_TOTP_SECRET=<base32-totp-secret-from-enrollment>
+# Local-only convenience: skip MFA step in netlify dev (never enable in prod)
+ADMIN_SKIP_MFA_IN_LOCAL_DEV=true
+# Optional: additional trusted hosts for speech docs (comma-separated)
+SPEECH_DOC_ALLOWED_HOSTS=example.com,files.example.org
 ```
 
 #### Generating a Password Hash

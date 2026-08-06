@@ -50,6 +50,8 @@ describe('admin-auth handler', () => {
     delete process.env.ADMIN_PASSWORD_HASH
     delete process.env.JWT_SECRET
     delete process.env.ADMIN_TOTP_SECRET
+    delete process.env.NETLIFY_DEV
+    delete process.env.ADMIN_SKIP_MFA_IN_LOCAL_DEV
   })
 
   describe('login action', () => {
@@ -127,6 +129,78 @@ describe('admin-auth handler', () => {
       const body = JSON.parse(result.body!)
 
       expect(body.mfaConfigured).toBe(true)
+    })
+
+    it('can bypass MFA in local netlify dev when explicitly enabled', async () => {
+      const { hashPassword } = await import('../utils/jwt')
+      process.env.ADMIN_PASSWORD_HASH = hashPassword('testpass')
+      process.env.NETLIFY_DEV = 'true'
+      process.env.ADMIN_SKIP_MFA_IN_LOCAL_DEV = 'true'
+
+      jest.resetModules()
+      const mod = await import('../admin-auth')
+
+      const event = createEvent({
+        body: JSON.stringify({ password: 'testpass' }),
+      })
+      const result = assertResponse(await mod.handler(event, mockContext))
+      expect(result.statusCode).toBe(200)
+
+      const body = JSON.parse(result.body!)
+      expect(body.ok).toBe(true)
+      expect(body.requiresMfa).toBe(false)
+      expect(body.localDevBypass).toBe(true)
+      expect(typeof body.token).toBe('string')
+
+      const cookie = result.headers?.['Set-Cookie'] || result.headers?.['set-cookie']
+      expect(cookie).toContain('admin_auth=')
+    })
+
+    it('does not bypass MFA outside local netlify dev', async () => {
+      const { hashPassword } = await import('../utils/jwt')
+      process.env.ADMIN_PASSWORD_HASH = hashPassword('testpass')
+      process.env.ADMIN_SKIP_MFA_IN_LOCAL_DEV = 'true'
+      delete process.env.NETLIFY_DEV
+
+      jest.resetModules()
+      const mod = await import('../admin-auth')
+
+      const event = createEvent({
+        body: JSON.stringify({ password: 'testpass' }),
+      })
+      const result = assertResponse(await mod.handler(event, mockContext))
+      expect(result.statusCode).toBe(200)
+
+      const body = JSON.parse(result.body!)
+      expect(body.requiresMfa).toBe(true)
+      expect(body.localDevBypass).toBeUndefined()
+      expect(body.token).toBeUndefined()
+      expect(typeof body.pendingToken).toBe('string')
+    })
+
+    it('bypasses MFA for localhost requests when bypass flag is enabled', async () => {
+      const { hashPassword } = await import('../utils/jwt')
+      process.env.ADMIN_PASSWORD_HASH = hashPassword('testpass')
+      process.env.ADMIN_SKIP_MFA_IN_LOCAL_DEV = 'true'
+      delete process.env.NETLIFY_DEV
+
+      jest.resetModules()
+      const mod = await import('../admin-auth')
+
+      const event = createEvent({
+        headers: {
+          'content-type': 'application/json',
+          host: 'localhost:8888',
+        },
+        body: JSON.stringify({ password: 'testpass' }),
+      })
+      const result = assertResponse(await mod.handler(event, mockContext))
+      expect(result.statusCode).toBe(200)
+
+      const body = JSON.parse(result.body!)
+      expect(body.requiresMfa).toBe(false)
+      expect(body.localDevBypass).toBe(true)
+      expect(typeof body.token).toBe('string')
     })
   })
 

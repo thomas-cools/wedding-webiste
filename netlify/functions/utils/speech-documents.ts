@@ -1,0 +1,226 @@
+import { getStore } from '@netlify/blobs'
+import { mkdir, readFile, unlink, writeFile } from 'node:fs/promises'
+import path from 'node:path'
+
+const STORE_NAME = 'speech-documents'
+const FILES_PREFIX = 'files/'
+
+export type SpeechDocumentType = 'pdf' | 'docx' | 'google-doc'
+export type SpeechDocumentSourceKind = 'url' | 'upload'
+
+export interface SpeechDocument {
+  id: string
+  fileName: string
+  sourceUrl?: string
+  sourceHost?: string
+  sourceKind?: SpeechDocumentSourceKind
+  storageKey?: string
+  mimeType?: string
+  originalFileName?: string
+  fileSizeBytes: number
+  docType: SpeechDocumentType
+  createdAt: string
+  createdBy: string
+}
+
+interface LocalSpeechDocumentsStore {
+  documents: SpeechDocument[]
+}
+
+function getSpeechDocumentsStore() {
+  const siteID = process.env.SITE_ID
+  const token = process.env.NETLIFY_API_TOKEN
+  if (siteID && token) {
+    return getStore({ name: STORE_NAME, siteID, token })
+  }
+  return getStore(STORE_NAME)
+}
+
+function isNetlifyDev(): boolean {
+  return process.env.NETLIFY_DEV === 'true'
+}
+
+function getLocalStorePath(): string {
+  if (process.env.SPEECH_DOC_LOCAL_STORE_PATH) {
+    return process.env.SPEECH_DOC_LOCAL_STORE_PATH
+  }
+
+  return path.join(process.cwd(), '.netlify', 'state', 'speech-documents.json')
+}
+
+function getLocalFilesDirectory(): string {
+  const localStorePath = getLocalStorePath()
+  return path.join(path.dirname(localStorePath), 'speech-documents-files')
+}
+
+function getLocalFilePath(storageKey: string): string {
+  const normalized = storageKey.replace(/^\/+/, '')
+  return path.join(getLocalFilesDirectory(), normalized)
+}
+
+async function readLocalStore(): Promise<LocalSpeechDocumentsStore> {
+  const localPath = getLocalStorePath()
+  try {
+    const content = await readFile(localPath, 'utf-8')
+    const parsed = JSON.parse(content) as LocalSpeechDocumentsStore
+    if (!Array.isArray(parsed.documents)) {
+      return { documents: [] }
+    }
+    return { documents: parsed.documents }
+  } catch {
+    return { documents: [] }
+  }
+}
+
+async function writeLocalStore(store: LocalSpeechDocumentsStore): Promise<void> {
+  const localPath = getLocalStorePath()
+  await mkdir(path.dirname(localPath), { recursive: true })
+  await writeFile(localPath, JSON.stringify(store, null, 2), 'utf-8')
+}
+
+function sortDocuments(documents: SpeechDocument[]): SpeechDocument[] {
+  return documents.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+}
+
+function normalizeDocument(entry: SpeechDocument): SpeechDocument {
+  return {
+    ...entry,
+    sourceKind: entry.sourceKind || 'url',
+  }
+}
+
+export function buildSpeechDocumentStorageKey(documentId: string): string {
+  return `${FILES_PREFIX}${documentId}.docx`
+}
+
+export async function getAllSpeechDocuments(): Promise<SpeechDocument[]> {
+  const store = getSpeechDocumentsStore()
+
+  try {
+    const { blobs } = await store.list()
+
+    const entries = await Promise.all(
+      blobs.map(async (blob) => {
+        const data = await store.get(blob.key, { type: 'json' })
+        return data as SpeechDocument | null
+      })
+    )
+
+    return sortDocuments(entries.filter((entry): entry is SpeechDocument => entry != null).map(normalizeDocument))
+  } catch (error) {
+    if (!isNetlifyDev()) throw error
+    const localStore = await readLocalStore()
+    return sortDocuments(localStore.documents.map(normalizeDocument))
+  }
+}
+
+export async function getSpeechDocumentById(id: string): Promise<SpeechDocument | null> {
+  const store = getSpeechDocumentsStore()
+
+  try {
+    const data = await store.get(id, { type: 'json' })
+    if (!data) return null
+    return normalizeDocument(data as SpeechDocument)
+  } catch (error) {
+    if (!isNetlifyDev()) throw error
+    const localStore = await readLocalStore()
+    return localStore.documents.find((entry) => entry.id === id) || null
+  }
+}
+
+export async function saveSpeechDocument(document: SpeechDocument): Promise<void> {
+  const store = getSpeechDocumentsStore()
+
+  try {
+    await store.setJSON(document.id, document)
+  } catch (error) {
+    if (!isNetlifyDev()) throw error
+
+    const localStore = await readLocalStore()
+    const withoutExisting = localStore.documents.filter((entry) => entry.id !== document.id)
+    await writeLocalStore({ documents: [...withoutExisting, document] })
+  }
+}
+
+export async function deleteSpeechDocument(id: string): Promise<boolean> {
+  const store = getSpeechDocumentsStore()
+
+  try {
+    const existing = await store.get(id, { type: 'json' })
+    if (existing == null) {
+      return false
+    }
+
+    await store.delete(id)
+    return true
+  } catch (error) {
+    if (!isNetlifyDev()) throw error
+
+    const localStore = await readLocalStore()
+    const nextDocuments = localStore.documents.filter((entry) => entry.id !== id)
+    const wasDeleted = nextDocuments.length !== localStore.documents.length
+    if (wasDeleted) {
+      await writeLocalStore({ documents: nextDocuments })
+    }
+    return wasDeleted
+  }
+}
+
+export async function saveSpeechDocumentFile(storageKey: string, bytes: Uint8Array): Promise<void> {
+  const store = getSpeechDocumentsStore()
+
+  try {
+    const arrayBuffer = Uint8Array.from(bytes).buffer
+    await store.set(storageKey, arrayBuffer, {
+      metadata: {
+        kind: 'speech-document-file',
+      },
+    })
+  } catch (error) {
+    if (!isNetlifyDev()) throw error
+
+    const localFilePath = getLocalFilePath(storageKey)
+    await mkdir(path.dirname(localFilePath), { recursive: true })
+    await writeFile(localFilePath, bytes)
+  }
+}
+
+export async function getSpeechDocumentFile(storageKey: string): Promise<Uint8Array | null> {
+  const store = getSpeechDocumentsStore()
+
+  try {
+    const payload = await store.get(storageKey, { type: 'arrayBuffer' })
+    if (!payload) return null
+    return new Uint8Array(payload)
+  } catch (error) {
+    if (!isNetlifyDev()) throw error
+
+    try {
+      const localFilePath = getLocalFilePath(storageKey)
+      return await readFile(localFilePath)
+    } catch {
+      return null
+    }
+  }
+}
+
+export async function deleteSpeechDocumentFile(storageKey: string): Promise<boolean> {
+  const store = getSpeechDocumentsStore()
+
+  try {
+    const existing = await store.get(storageKey)
+    if (!existing) return false
+    await store.delete(storageKey)
+    return true
+  } catch (error) {
+    if (!isNetlifyDev()) throw error
+
+    try {
+      const localFilePath = getLocalFilePath(storageKey)
+      await unlink(localFilePath)
+      return true
+    } catch {
+      return false
+    }
+  }
+}

@@ -15,7 +15,7 @@ import {
   PinInputField,
   Flex,
 } from '@chakra-ui/react'
-import { adminLogin, adminVerifyMfa } from '../../utils/adminAuth'
+import { adminLogin, adminVerifyMfa, storeAdminToken } from '../../utils/adminAuth'
 import { MfaEnrollment } from './MfaEnrollment'
 
 type Step = 'password' | 'mfa' | 'enroll'
@@ -45,6 +45,12 @@ export function AdminLogin({ onAuthenticated }: AdminLoginProps) {
       }
 
       setPendingToken(result.pendingToken)
+
+      if (!result.requiresMfa && result.token) {
+        storeAdminToken(result.token)
+        onAuthenticated()
+        return
+      }
 
       if (result.mfaConfigured) {
         setStep('mfa')
