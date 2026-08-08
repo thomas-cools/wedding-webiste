@@ -11,6 +11,8 @@ const MAX_FILE_SIZE_BYTES = 1024 * 1024
 const DOCX_MIME_TYPE =
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 const DOCX_FILE_SIGNATURE = [0x50, 0x4b, 0x03, 0x04]
+const PDF_MIME_TYPE = 'application/pdf'
+const PDF_FILE_SIGNATURE = [0x25, 0x50, 0x44, 0x46, 0x2d]
 
 const PRIVATE_IPV4_CIDRS = [
   { base: '10.0.0.0', maskBits: 8 },
@@ -240,6 +242,7 @@ export interface UploadValidationSuccess {
   originalFileName: string
   mimeType: string
   fileSizeBytes: number
+  docType: 'docx' | 'pdf'
 }
 
 export interface UploadValidationFailure {
@@ -485,6 +488,14 @@ function hasDocxSignature(bytes: Uint8Array): boolean {
   return DOCX_FILE_SIGNATURE.every((value, index) => bytes[index] === value)
 }
 
+function hasPdfSignature(bytes: Uint8Array): boolean {
+  if (bytes.byteLength < PDF_FILE_SIGNATURE.length) {
+    return false
+  }
+
+  return PDF_FILE_SIGNATURE.every((value, index) => bytes[index] === value)
+}
+
 function validateSpeakerKey(input: unknown): SpeechSpeakerKey | null {
   return isSpeechSpeakerKey(input) ? input : null
 }
@@ -541,5 +552,58 @@ export function validateSpeechDocumentUpload(input: UploadValidationInput): Uplo
     originalFileName,
     mimeType: DOCX_MIME_TYPE,
     fileSizeBytes,
+    docType: 'docx',
+  }
+}
+
+export function validateSpeechDocumentBinary(
+  input: UploadValidationInput
+): UploadValidationResult {
+  const originalFileName =
+    typeof input.originalFileName === 'string' ? input.originalFileName.trim() : ''
+  const mimeType = typeof input.mimeType === 'string' ? input.mimeType.toLowerCase() : ''
+
+  if (originalFileName.toLowerCase().endsWith('.docx') || mimeType === DOCX_MIME_TYPE) {
+    return validateSpeechDocumentUpload(input)
+  }
+
+  if (!originalFileName.toLowerCase().endsWith('.pdf')) {
+    return { ok: false, error: 'Only DOCX and PDF files are supported' }
+  }
+  if (mimeType !== PDF_MIME_TYPE) {
+    return { ok: false, error: 'Uploaded file must be a valid PDF document' }
+  }
+
+  const fileName =
+    typeof input.fileName === 'string' ? sanitizeFileName(input.fileName) : ''
+  if (!fileName) {
+    return { ok: false, error: 'fileName is required' }
+  }
+  const speakerKey = validateSpeakerKey(input.speakerKey)
+  if (!speakerKey) {
+    return { ok: false, error: 'speakerKey is required' }
+  }
+  const fileSizeBytes =
+    typeof input.fileSizeBytes === 'number'
+      ? input.fileSizeBytes
+      : Number.parseInt(String(input.fileSizeBytes || ''), 10)
+  if (!Number.isFinite(fileSizeBytes) || fileSizeBytes <= 0) {
+    return { ok: false, error: 'Uploaded file is empty or invalid' }
+  }
+  if (fileSizeBytes > MAX_FILE_SIZE_BYTES) {
+    return { ok: false, error: `Document exceeds the ${MAX_FILE_SIZE_BYTES} byte limit` }
+  }
+  if (!hasPdfSignature(input.fileBytes)) {
+    return { ok: false, error: 'Uploaded file does not appear to be a PDF file' }
+  }
+
+  return {
+    ok: true,
+    fileName,
+    speakerKey,
+    originalFileName,
+    mimeType: PDF_MIME_TYPE,
+    fileSizeBytes,
+    docType: 'pdf',
   }
 }

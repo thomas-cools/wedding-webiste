@@ -7,8 +7,9 @@ import { inferSpeechSpeakerKeyFromLabel, type SpeechSpeakerKey } from '../../../
 const STORE_NAME = 'speech-documents'
 const FILES_PREFIX = 'files/'
 
-export type SpeechDocumentType = 'pdf' | 'docx' | 'google-doc'
-export type SpeechDocumentSourceKind = 'url' | 'upload'
+export type SpeechDocumentType = 'pdf' | 'docx' | 'google-doc' | 'text'
+export type SpeechDocumentSourceKind = 'url' | 'upload' | 'gmail'
+export type SpeechDocumentSourceSubtype = 'docx' | 'pdf' | 'google-doc' | 'body'
 export type SpeechDocumentLanguage = 'en' | 'es'
 export type SpeechTranslationStatus = 'success' | 'failed' | 'skipped'
 
@@ -19,6 +20,7 @@ export interface SpeechDocument {
   sourceUrl?: string
   sourceHost?: string
   sourceKind?: SpeechDocumentSourceKind
+  sourceSubtype?: SpeechDocumentSourceSubtype
   storageKey?: string
   mimeType?: string
   originalFileName?: string
@@ -32,6 +34,8 @@ export interface SpeechDocument {
   translationProvider?: 'gemini'
   translatedAt?: string
   translationError?: string
+  gmailMessageId?: string
+  ingestedAt?: string
   createdAt: string
   createdBy: string
 }
@@ -145,8 +149,13 @@ async function backfillDocuments(documents: SpeechDocument[]): Promise<SpeechSpe
   }
 }
 
-export function buildSpeechDocumentStorageKey(documentId: string): string {
-  return `${FILES_PREFIX}${documentId}.docx`
+export function buildSpeechDocumentStorageKey(
+  documentId: string,
+  extension: 'docx' | 'pdf' = 'docx',
+  version?: string
+): string {
+  const suffix = version ? `-${version}` : ''
+  return `${FILES_PREFIX}${documentId}${suffix}.${extension}`
 }
 
 export async function getAllSpeechDocuments(): Promise<SpeechDocument[]> {

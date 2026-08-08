@@ -75,6 +75,14 @@ function normalizeExtractedText(text: string): string {
   return text.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n').replace(/[ \t]{2,}/g, ' ').trim()
 }
 
+export function extractSpeechTextFromPlainText(text: string): SpeechTextExtractionResult {
+  const normalized = normalizeExtractedText(text)
+  if (!normalized) {
+    return { ok: false, error: 'Email body did not contain readable speech text' }
+  }
+  return enforceLengthLimit(normalized)
+}
+
 async function loadPdfParseModule(): Promise<PdfParseModule> {
   const globalScope = globalThis as typeof globalThis & {
     DOMMatrix?: typeof DOMMatrix

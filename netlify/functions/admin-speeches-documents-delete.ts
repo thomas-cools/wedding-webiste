@@ -52,7 +52,7 @@ export const handler: Handler = async (event) => {
       return adminJson(404, { ok: false, error: 'Document not found' })
     }
 
-    if (document.sourceKind === 'upload' && document.storageKey) {
+    if (document.storageKey) {
       await deleteSpeechDocumentFile(document.storageKey)
     }
 

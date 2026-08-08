@@ -7,6 +7,9 @@
 [functions]
   node_bundler = "esbuild"
 
+[functions."sync-gmail-speeches"]
+  schedule = "*/10 * * * *"
+
 # Edge function for runtime config
 [[edge_functions]]
   path = "/api/config"

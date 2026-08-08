@@ -38,8 +38,8 @@ import { CheckCircleIcon, InfoOutlineIcon, WarningTwoIcon } from '@chakra-ui/ico
 import { getAdminAuthHeaders } from '../../utils/adminAuth'
 import { getSpeechSpeakerByKey, getSpeechSpeakers, type SpeechSpeakerKey } from '../../config/speeches'
 
-type SpeechDocumentType = 'pdf' | 'docx' | 'google-doc'
-type SpeechDocumentSourceKind = 'url' | 'upload'
+type SpeechDocumentType = 'pdf' | 'docx' | 'google-doc' | 'text'
+type SpeechDocumentSourceKind = 'url' | 'upload' | 'gmail'
 type SpeechTranslationStatus = 'success' | 'failed' | 'skipped'
 type EntryMode = 'url' | 'upload'
 
@@ -91,6 +91,18 @@ interface AddResponse {
   ok: boolean
   document?: SpeechDocument
   error?: string
+}
+
+interface GmailSyncStatus {
+  processing: number
+  processed: number
+  failed: number
+  failures: Array<{
+    speakerKey?: SpeechSpeakerKey
+    errorCode?: string
+    error?: string
+    updatedAt: string
+  }>
 }
 
 function formatBytes(value: number): string {
@@ -215,6 +227,8 @@ export function SpeechesDocumentsPanel() {
   const [selectedTranslation, setSelectedTranslation] = useState<SpeechDocument | null>(null)
   const [updatingSpeakerId, setUpdatingSpeakerId] = useState<string | null>(null)
   const [rowSpeakerKey, setRowSpeakerKey] = useState<Record<string, string>>({})
+  const [gmailSyncStatus, setGmailSyncStatus] = useState<GmailSyncStatus | null>(null)
+  const [retryingGmail, setRetryingGmail] = useState(false)
 
   const toast = useToast()
 
@@ -256,6 +270,19 @@ export function SpeechesDocumentsPanel() {
     }
   }, [toast])
 
+  const refreshGmailSyncStatus = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin-speeches-gmail-sync', {
+        method: 'GET',
+        headers: { ...getAdminAuthHeaders() },
+      })
+      const data = (await res.json()) as { ok: boolean; status?: GmailSyncStatus }
+      if (res.ok && data.ok && data.status) setGmailSyncStatus(data.status)
+    } catch {
+      // Document management remains available when Gmail sync is not configured.
+    }
+  }, [])
+
   const handleBackfillSpeakers = async () => {
     setBackfilling(true)
     try {
@@ -293,7 +320,29 @@ export function SpeechesDocumentsPanel() {
 
   useEffect(() => {
     void refreshDocuments()
-  }, [refreshDocuments])
+    void refreshGmailSyncStatus()
+  }, [refreshDocuments, refreshGmailSyncStatus])
+
+  const handleRetryGmail = async () => {
+    setRetryingGmail(true)
+    try {
+      const res = await fetch('/api/admin-speeches-gmail-sync', {
+        method: 'POST',
+        headers: { ...getAdminAuthHeaders() },
+      })
+      const data = (await res.json()) as { ok: boolean; error?: string }
+      if (!res.ok || !data.ok) {
+        toast({ title: 'Gmail retry failed', description: data.error, status: 'error', duration: 5000 })
+        return
+      }
+      await Promise.all([refreshDocuments(), refreshGmailSyncStatus()])
+      toast({ title: 'Gmail speech retry complete', status: 'success', duration: 3000 })
+    } catch {
+      toast({ title: 'Network error', description: 'Could not retry Gmail imports', status: 'error', duration: 5000 })
+    } finally {
+      setRetryingGmail(false)
+    }
+  }
 
   const handleUpdateSpeaker = async (id: string) => {
     const key = rowSpeakerKey[id] ?? ''
@@ -551,7 +600,7 @@ export function SpeechesDocumentsPanel() {
       return
     }
 
-    if (sourceKind !== 'upload') {
+    if (!document.storageKey) {
       toast({ title: 'Unsupported document source', status: 'error', duration: 3000 })
       return
     }
@@ -591,6 +640,36 @@ export function SpeechesDocumentsPanel() {
       </Heading>
 
       <VStack spacing={4} align="stretch">
+        {gmailSyncStatus ? (
+          <Box bg="white" rounded="xl" p={5} shadow="sm" border="1px solid" borderColor="gray.100">
+            <HStack justify="space-between" align="center" flexWrap="wrap" gap={3}>
+              <Box>
+                <Text fontWeight="semibold">Gmail speech imports</Text>
+                <HStack spacing={2} mt={2}>
+                  <Badge colorScheme="green">{gmailSyncStatus.processed} processed</Badge>
+                  <Badge colorScheme="orange">{gmailSyncStatus.failed} failed</Badge>
+                  <Badge colorScheme="blue">{gmailSyncStatus.processing} processing</Badge>
+                </HStack>
+              </Box>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => void handleRetryGmail()}
+                isLoading={retryingGmail}
+                isDisabled={gmailSyncStatus.failed === 0}
+              >
+                Retry failed imports
+              </Button>
+            </HStack>
+            {gmailSyncStatus.failures.map((failure, index) => (
+              <Alert status="warning" rounded="md" mt={3} fontSize="sm" key={`${failure.speakerKey || 'unknown'}-${index}`}>
+                <AlertIcon />
+                {getSpeechSpeakerByKey(failure.speakerKey)?.label || 'Unknown speaker'}: {failure.error || 'Import failed'}
+              </Alert>
+            ))}
+          </Box>
+        ) : null}
+
         <Box bg="white" rounded="xl" p={5} shadow="sm" border="1px solid" borderColor="gray.100">
           <Text fontSize="sm" color="gray.500" mb={4}>
             Add trusted document links or upload DOCX files for speech content experiments. Assign each speech to a speaker so the public page can render it in the right place.
@@ -815,7 +894,9 @@ export function SpeechesDocumentsPanel() {
                         whiteSpace="nowrap"
                         title={doc.sourceUrl || doc.originalFileName || doc.storageKey || 'Uploaded DOCX'}
                       >
-                        {doc.sourceKind === 'upload'
+                        {doc.sourceKind === 'gmail'
+                          ? `Gmail (${doc.originalFileName || doc.docType})`
+                          : doc.sourceKind === 'upload'
                           ? `Uploaded (${doc.originalFileName || 'DOCX'})`
                           : doc.sourceHost || 'Unknown host'}
                       </Td>

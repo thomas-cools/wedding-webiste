@@ -41,8 +41,8 @@ export const handler: Handler = async (event) => {
       return adminJson(404, { ok: false, error: 'Document not found' })
     }
 
-    if (document.sourceKind !== 'upload' || !document.storageKey) {
-      return adminJson(400, { ok: false, error: 'Document is not an uploaded file' })
+    if (!document.storageKey) {
+      return adminJson(400, { ok: false, error: 'Document does not have a stored file' })
     }
 
     const bytes = await getSpeechDocumentFile(document.storageKey)
@@ -50,7 +50,8 @@ export const handler: Handler = async (event) => {
       return adminJson(404, { ok: false, error: 'Uploaded file payload not found' })
     }
 
-    const fallbackName = `${document.fileName || 'speech-document'}.docx`
+    const extension = document.docType === 'pdf' ? 'pdf' : 'docx'
+    const fallbackName = `${document.fileName || 'speech-document'}.${extension}`
     const downloadName = sanitizeDownloadFileName(document.originalFileName || fallbackName)
 
     return {

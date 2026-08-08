@@ -74,6 +74,17 @@ describe('speech-document-content', () => {
     }
   })
 
+  it('normalizes plain-text email body content', async () => {
+    const { extractSpeechTextFromPlainText } = await import('../speech-document-content')
+    const result = extractSpeechTextFromPlainText('Hello   everyone.\r\n\r\n\r\nThank you.')
+
+    expect(result).toEqual({
+      ok: true,
+      text: 'Hello everyone.\n\nThank you.',
+      detectedLanguage: 'en',
+    })
+  })
+
   it('rejects extracted content that exceeds the configured limit', async () => {
     process.env.SPEECH_DOC_MAX_EXTRACTED_CHARS = '10'
     mockMammothExtractRawText.mockResolvedValueOnce({
