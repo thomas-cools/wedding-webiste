@@ -5,13 +5,14 @@ export interface SpeechSpeaker {
 }
 
 export const SPEECH_SPEAKERS = [
-  { key: 'guy-karin', label: 'Guy & Karin', order: 1 },
-  { key: 'carlos-edith', label: 'Carlos & Edith', order: 2 },
+  { key: 'carlos', label: 'Carlos', order: 1 },
+  { key: 'edith', label: 'Edith', order: 2 },
   { key: 'ellen', label: 'Ellen', order: 3 },
   { key: 'jimena', label: 'Jimena', order: 4 },
-  { key: 'miguel', label: 'Miguel', order: 5 },
-  { key: 'jackie', label: 'Jackie', order: 6 },
-  { key: 'gino', label: 'Gino', order: 7 },
+  { key: 'gino', label: 'Gino', order: 5 },
+  { key: 'miguel', label: 'Miguel', order: 6 },
+  { key: 'jackie', label: 'Jackie', order: 7 },
+  { key: 'guy-karin', label: 'Guy & Karin', order: 8 },
 ] as const satisfies readonly SpeechSpeaker[]
 
 export type SpeechSpeakerKey = (typeof SPEECH_SPEAKERS)[number]['key']
