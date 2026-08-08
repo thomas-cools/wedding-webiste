@@ -213,6 +213,8 @@ export function SpeechesDocumentsPanel() {
   const [backfilling, setBackfilling] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [selectedTranslation, setSelectedTranslation] = useState<SpeechDocument | null>(null)
+  const [updatingSpeakerId, setUpdatingSpeakerId] = useState<string | null>(null)
+  const [rowSpeakerKey, setRowSpeakerKey] = useState<Record<string, string>>({})
 
   const toast = useToast()
 
@@ -238,6 +240,9 @@ export function SpeechesDocumentsPanel() {
       }
 
       setDocuments(data.documents || [])
+      setRowSpeakerKey(
+        Object.fromEntries((data.documents || []).map((d) => [d.id, d.speakerKey ?? '']))
+      )
       if (Array.isArray(data.allowedHosts)) {
         setAllowedHosts(data.allowedHosts)
       }
@@ -289,6 +294,30 @@ export function SpeechesDocumentsPanel() {
   useEffect(() => {
     void refreshDocuments()
   }, [refreshDocuments])
+
+  const handleUpdateSpeaker = async (id: string) => {
+    const key = rowSpeakerKey[id] ?? ''
+    if (!key) return
+    setUpdatingSpeakerId(id)
+    try {
+      const res = await fetch('/api/admin-speeches-documents-update-speaker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...getAdminAuthHeaders() },
+        body: JSON.stringify({ id, speakerKey: key }),
+      })
+      const data = (await res.json()) as { ok: boolean; error?: string }
+      if (!res.ok || !data.ok) {
+        toast({ title: 'Failed to update speaker', description: data.error, status: 'error', duration: 5000 })
+        return
+      }
+      setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, speakerKey: key as SpeechSpeakerKey } : d)))
+      toast({ title: 'Speaker updated', status: 'success', duration: 2500 })
+    } catch {
+      toast({ title: 'Network error', description: 'Could not update speaker', status: 'error', duration: 5000 })
+    } finally {
+      setUpdatingSpeakerId(null)
+    }
+  }
 
   const urlStatus = useMemo(
     () => detectUrlStatus(sourceUrl, allowedHosts),
@@ -791,9 +820,33 @@ export function SpeechesDocumentsPanel() {
                           : doc.sourceHost || 'Unknown host'}
                       </Td>
                       <Td>
-                        <Badge colorScheme={doc.speakerKey ? 'blue' : 'gray'} variant="subtle">
-                          {speakerLabel(doc)}
-                        </Badge>
+                        <HStack spacing={1}>
+                          <Select
+                            size="xs"
+                            value={rowSpeakerKey[doc.id] ?? ''}
+                            onChange={(e) =>
+                              setRowSpeakerKey((prev) => ({ ...prev, [doc.id]: e.target.value }))
+                            }
+                            minW="140px"
+                          >
+                            <option value="">Unassigned</option>
+                            {speakerOptions.map((s) => (
+                              <option key={s.key} value={s.key}>{s.label}</option>
+                            ))}
+                          </Select>
+                          <Button
+                            size="xs"
+                            variant="outline"
+                            isLoading={updatingSpeakerId === doc.id}
+                            isDisabled={
+                              !rowSpeakerKey[doc.id] ||
+                              rowSpeakerKey[doc.id] === (doc.speakerKey ?? '')
+                            }
+                            onClick={() => void handleUpdateSpeaker(doc.id)}
+                          >
+                            Save
+                          </Button>
+                        </HStack>
                       </Td>
                       <Td>
                         {(() => {
