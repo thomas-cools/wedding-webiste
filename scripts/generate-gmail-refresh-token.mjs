@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto'
 import { spawn } from 'node:child_process'
 import http from 'node:http'
+import { google } from 'googleapis'
 
 const clientId = process.env.GMAIL_CLIENT_ID?.trim()
 const clientSecret = process.env.GMAIL_CLIENT_SECRET?.trim()
@@ -19,19 +20,16 @@ if (redirect.protocol !== 'http:' || !['127.0.0.1', 'localhost'].includes(redire
 }
 
 const state = randomBytes(24).toString('hex')
-const authorizeUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth')
-authorizeUrl.search = new URLSearchParams({
-  client_id: clientId,
-  redirect_uri: redirectUri,
-  response_type: 'code',
+const oauthClient = new google.auth.OAuth2(clientId, clientSecret, redirectUri)
+const authorizeUrl = oauthClient.generateAuthUrl({
   access_type: 'offline',
   prompt: 'consent',
   state,
   scope: [
     'https://www.googleapis.com/auth/gmail.modify',
     'https://www.googleapis.com/auth/drive.readonly',
-  ].join(' '),
-}).toString()
+  ],
+})
 
 const server = http.createServer(async (request, response) => {
   const callbackUrl = new URL(request.url || '/', redirectUri)
@@ -53,19 +51,8 @@ const server = http.createServer(async (request, response) => {
   }
 
   try {
-    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-      method: 'POST',
-      headers: { 'content-type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        client_id: clientId,
-        client_secret: clientSecret,
-        redirect_uri: redirectUri,
-        code,
-        grant_type: 'authorization_code',
-      }),
-    })
-    const tokens = await tokenResponse.json()
-    if (!tokenResponse.ok || typeof tokens.refresh_token !== 'string') {
+    const { tokens } = await oauthClient.getToken(code)
+    if (typeof tokens.refresh_token !== 'string') {
       throw new Error('Google did not return a refresh token. Revoke prior consent and retry.')
     }
 
@@ -86,7 +73,7 @@ const server = http.createServer(async (request, response) => {
 server.listen(Number(redirect.port), redirect.hostname, () => {
   console.log(`Open this URL to authorize the wedding Gmail account:\n${authorizeUrl}`)
   if (process.env.BROWSER) {
-    spawn(process.env.BROWSER, [authorizeUrl.toString()], {
+    spawn(process.env.BROWSER, [authorizeUrl], {
       detached: true,
       stdio: 'ignore',
     }).unref()

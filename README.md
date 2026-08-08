@@ -30,6 +30,7 @@ A modern, elegant wedding website built with React, TypeScript, and Chakra UI. F
   - [Final RSVP Invitations](#final-rsvp-invitations)
   - [Drink Preference Invitations](#drink-preference-invitations)
 - [Performance Optimizations](#performance-optimizations)
+- [Blind Gmail Speech Ingestion](#blind-gmail-speech-ingestion)
 - [Deployment](#deployment)
   - [Netlify (Recommended)](#netlify-recommended)
   - [GitHub Codespaces](#github-codespaces)
@@ -258,6 +259,7 @@ This starts the Vite development server at `http://localhost:5173` with hot modu
 | `test:e2e:headed` | `npm run test:e2e:headed` | Run E2E tests with visible browser |
 | `test:e2e:debug` | `npm run test:e2e:debug` | Debug E2E tests with inspector |
 | `test:e2e:report` | `npm run test:e2e:report` | View HTML test report |
+| `gmail:authorize` | `npm run gmail:authorize` | Generate a Gmail OAuth refresh token through localhost consent |
 
 ---
 
@@ -1040,6 +1042,119 @@ The site includes several performance optimizations:
 
 ---
 
+## Blind Gmail Speech Ingestion
+
+The scheduled `sync-gmail-speeches` Netlify function retrieves speeches sent to the wedding Gmail account without requiring anyone to open the messages. It runs every 10 minutes, exact-matches each sender against a secret map, translates the extracted speech through the existing Gemini pipeline, and stores the active speech in Netlify Blobs.
+
+No sender addresses, subjects, raw headers, message bodies, or OAuth credentials are written to the ingestion-state store. The state store contains only opaque Gmail message IDs, speaker keys, timestamps, retry counts, and sanitized errors.
+
+### Accepted Submissions
+
+A message must come from an address configured in `GMAIL_SPEAKER_MAP_JSON`. The importer accepts one of these sources:
+
+- One DOCX attachment, up to 1 MB
+- One text-based PDF attachment, up to 1 MB
+- One Google Docs link; private Docs must be shared with `carolinaandthomaswedding@gmail.com`
+- The complete plain-text email body when no supported attachment or Google Docs link exists
+
+Messages containing more than one supported attachment or Google Docs link are rejected as ambiguous. A normal note accompanying one attachment or link is ignored. HTML-only messages and scanned PDFs without extractable text are rejected. A later successful message replaces that speaker's previous Gmail-imported speech; a failed revision leaves the current speech active.
+
+Body-only submissions preserve the entire plain-text body, including greetings and signatures. Speakers using this route should send only the intended speech text.
+
+### Google Cloud Setup
+
+1. Create or select a Google Cloud project owned by the couple.
+2. Enable **Gmail API** and **Google Drive API** under **APIs & Services**.
+3. Configure the OAuth consent screen as **External** for the consumer `@gmail.com` mailbox.
+4. Add `carolinaandthomaswedding@gmail.com` as a test user while configuring the app.
+5. Add these scopes:
+   - `https://www.googleapis.com/auth/gmail.modify`
+   - `https://www.googleapis.com/auth/drive.readonly`
+6. Create an OAuth client with application type **Desktop app**.
+7. Record the generated client ID and client secret. Never commit either value.
+
+An External OAuth app left in **Testing** normally issues refresh tokens that expire after seven days. Before relying on scheduled ingestion, move the consent app to **Production**. A personal app using sensitive scopes may show an unverified-app warning; keep access limited to the wedding mailbox and follow Google's current consent-screen requirements.
+
+Service-account domain-wide delegation is not available for a standalone consumer Gmail account, so this integration intentionally uses one-time user consent and a refresh token.
+
+### Generate the Refresh Token
+
+Run the helper locally from a trusted terminal:
+
+```bash
+export GMAIL_CLIENT_ID='your-desktop-client-id'
+export GMAIL_CLIENT_SECRET='your-desktop-client-secret'
+npm run gmail:authorize
+```
+
+The script starts a temporary callback server at `http://127.0.0.1:53682/oauth2/callback`, opens Google's consent screen through `$BROWSER` when available, and prints `GMAIL_REFRESH_TOKEN` after authorization. Sign in as `carolinaandthomaswedding@gmail.com` and place the resulting token directly in Netlify. Do not add it to `.env.example`, commit it, paste it into an issue, or include it in logs.
+
+To use another localhost port, set `GMAIL_OAUTH_REDIRECT_URI` before running the command. Only `http://127.0.0.1` and `http://localhost` callback hosts are accepted.
+
+If Google does not return a refresh token, revoke the app's prior account access and run the command again. The helper requests `prompt=consent` and offline access explicitly.
+
+### Configure Netlify
+
+Set these server-only variables under **Site configuration** -> **Environment variables**. Apply them to Functions and all production deploy contexts that should process speeches.
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GMAIL_CLIENT_ID` | Yes | Desktop OAuth client ID |
+| `GMAIL_CLIENT_SECRET` | Yes | Desktop OAuth client secret |
+| `GMAIL_REFRESH_TOKEN` | Yes | Refresh token generated while signed in to the wedding mailbox |
+| `GMAIL_SPEAKER_MAP_JSON` | Yes | Exact sender-address to speaker-key JSON map |
+| `GEMINI_API_KEY` | Yes | Existing server-side translation key |
+| `SPEECH_GMAIL_PROCESSED_LABEL` | No | Success label; default `Wedding Speech/Processed` |
+| `SPEECH_GMAIL_ERROR_LABEL` | No | Quarantine label; default `Wedding Speech/Error` |
+| `SPEECH_GMAIL_MAX_MESSAGES_PER_RUN` | No | Sequential messages per invocation, from 1 to 10; default `2` |
+
+The speaker map must be a JSON object. Addresses are normalized case-insensitively, but each message's decoded `From` address must exactly match one configured address. Values must be keys from `src/config/speeches.ts`:
+
+```json
+{
+  "speaker-one@example.com": "carlos",
+  "speaker-two@example.com": "edith",
+  "joint-speakers@example.com": "guy-karin"
+}
+```
+
+Available keys are `carlos`, `edith`, `ellen`, `jimena`, `gino`, `miguel`, `jackie`, and `guy-karin`. The example addresses are placeholders; keep the real JSON only in secret environment configuration.
+
+Netlify reads the schedule from `netlify.toml`. Deploy the site after setting the variables so the scheduled function is registered. The importer creates its processed and error Gmail labels on first use. It does not mark messages read or archive them.
+
+### Verify and Operate
+
+Scheduled functions are not triggered automatically by `netlify dev`. For a local integration check, start `netlify dev` with the Gmail variables in `.env.local`, then invoke the local function from another terminal:
+
+```bash
+netlify functions:invoke sync-gmail-speeches
+```
+
+Local invocation uses local Netlify Blobs state but calls the real Gmail, Drive, and Gemini APIs. Use a dedicated test message and remember that successful/error labels are applied to the real mailbox.
+
+For production verification, deploy after setting the Netlify variables, send a message from a temporary mapped sender, and wait for the next 10-minute scheduled run. Test one source at a time.
+
+Verify that:
+
+1. A valid message receives the processed label and appears under Speech Documents.
+2. An invalid or ambiguous message receives the error label with no source content in logs.
+3. Invoking synchronization again does not create a duplicate.
+4. A revised valid speech replaces the prior Gmail-imported record.
+5. A failed revision leaves the prior speech and file available.
+
+The admin Speech Documents panel displays processed, failed, and processing counts without sender addresses or Gmail links. Use **Retry failed imports** after correcting a failed message or its permissions. Retry removes the error label and clears failed leases before synchronization; the normal per-run message limit still applies.
+
+### Rotation and Revocation
+
+- **Rotate the client secret:** create or reset the secret in Google Cloud, replace `GMAIL_CLIENT_SECRET` in Netlify, and redeploy.
+- **Rotate the refresh token:** run `npm run gmail:authorize` again and replace `GMAIL_REFRESH_TOKEN` in Netlify. Confirm one manual sync before revoking old access.
+- **Revoke access:** remove the app under the wedding Google account's third-party connections or revoke its token in Google Cloud, then remove all Gmail secrets from Netlify.
+- **Disable ingestion temporarily:** remove `GMAIL_SPEAKER_MAP_JSON` or pause the scheduled function by removing its schedule and deploying. Missing configuration causes the function to fail closed.
+
+After any rotation, inspect Netlify function logs for only aggregate sync counts and sanitized errors. Never log the environment map, OAuth tokens, message headers, subjects, or source content.
+
+---
+
 ## Environment Variables
 
 ### Local Development
@@ -1072,6 +1187,16 @@ GEMINI_API_KEY=
 GEMINI_TRANSLATION_MODEL=gemini-2.5-flash
 # Optional: cap extracted speech characters
 SPEECH_DOC_MAX_EXTRACTED_CHARS=14000
+
+# Blind Gmail speech ingestion (see the dedicated setup section)
+GMAIL_CLIENT_ID=
+GMAIL_CLIENT_SECRET=
+GMAIL_REFRESH_TOKEN=
+GMAIL_SPEAKER_MAP_JSON={"speaker@example.com":"carlos"}
+GMAIL_OAUTH_REDIRECT_URI=http://127.0.0.1:53682/oauth2/callback
+SPEECH_GMAIL_PROCESSED_LABEL=Wedding Speech/Processed
+SPEECH_GMAIL_ERROR_LABEL=Wedding Speech/Error
+SPEECH_GMAIL_MAX_MESSAGES_PER_RUN=2
 ```
 
 #### Generating a Password Hash
@@ -1127,6 +1252,13 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 | `GEMINI_API_KEY` | Gemini API key for server-side speech translation |
 | `GEMINI_TRANSLATION_MODEL` | Optional Gemini model override for speech translation (default: `gemini-2.5-flash`) |
 | `SPEECH_DOC_MAX_EXTRACTED_CHARS` | Optional max extracted speech characters before translation (default: `14000`) |
+| `GMAIL_CLIENT_ID` | Gmail Desktop OAuth client ID for blind speech ingestion |
+| `GMAIL_CLIENT_SECRET` | Gmail Desktop OAuth client secret; server-only |
+| `GMAIL_REFRESH_TOKEN` | Offline token authorized by the wedding Gmail account; server-only |
+| `GMAIL_SPEAKER_MAP_JSON` | Secret exact sender-address to speaker-key JSON map |
+| `SPEECH_GMAIL_PROCESSED_LABEL` | Optional Gmail success label override |
+| `SPEECH_GMAIL_ERROR_LABEL` | Optional Gmail error label override |
+| `SPEECH_GMAIL_MAX_MESSAGES_PER_RUN` | Optional sequential import batch size, from 1 to 10 (default: `2`) |
 | `RATE_LIMIT_FINAL_RSVP_MAX` | Max final RSVP confirmation emails per rate-limit window (default: `5`) |
 | `RATE_LIMIT_FINAL_RSVP_WINDOW_SECONDS` | Rate limit window in seconds for final RSVP confirmations (default: `900`) |
 
@@ -1151,6 +1283,14 @@ Configure these in your Netlify dashboard under **Site settings** → **Environm
 | `GEMINI_API_KEY` | Server | Gemini API key used for speech EN<->ES translation |
 | `GEMINI_TRANSLATION_MODEL` | Server | Optional Gemini model override for speech translation |
 | `SPEECH_DOC_MAX_EXTRACTED_CHARS` | Server | Optional cap for extracted speech text length |
+| `GMAIL_CLIENT_ID` | Server | Gmail Desktop OAuth client ID |
+| `GMAIL_CLIENT_SECRET` | Server | Gmail Desktop OAuth client secret |
+| `GMAIL_REFRESH_TOKEN` | Server | Wedding mailbox offline OAuth token |
+| `GMAIL_SPEAKER_MAP_JSON` | Server | Secret exact sender-address to speaker-key map |
+| `GMAIL_OAUTH_REDIRECT_URI` | Local script | Optional localhost callback for OAuth bootstrap |
+| `SPEECH_GMAIL_PROCESSED_LABEL` | Server | Optional processed-label override |
+| `SPEECH_GMAIL_ERROR_LABEL` | Server | Optional error-label override |
+| `SPEECH_GMAIL_MAX_MESSAGES_PER_RUN` | Server | Optional import batch size, from 1 to 10 |
 | `RATE_LIMIT_FINAL_RSVP_MAX` | Server | Max final RSVP confirmation emails per window (default: `5`) |
 | `RATE_LIMIT_FINAL_RSVP_WINDOW_SECONDS` | Server | Rate limit window in seconds (default: `900`) |
 | `NODE_VERSION` | Build | Node.js version for Netlify builds |
