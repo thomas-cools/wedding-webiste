@@ -24,12 +24,11 @@
     "note": "Si quieres saber el horario de recogida desde Toulouse los d\u00edas de la boda, consulta el grupo de WhatsApp \"Taxi\""
   },
   "parking": {
-    "warning": "Ten cuidado al aparcar si sales antes; elige un lugar desde el que puedas salir sin bloquear a nadie.",
     "backToHome": "Volver",
     "title": "Ubicación y Aparcamiento",
-    "intro": "Si traes coche al lugar hay dos zonas de aparcamiento, ambas situadas en la parte delantera del castillo. Está prohibido aparcar y circular por el césped — gracias por tu comprensión.",
-    "caption1": "Si entras por la puerta principal del castillo, gira a la izquierda.",
-    "caption2": "Si entras por el lateral del castillo, gira a la izquierda, pasa por la parte delantera y encontrarás el aparcamiento.",
+    "intro": "Si vienes en coche al lugar, sigue el camino hacia la derecha al entrar y continúa alrededor del lateral del castillo para llegar a la zona de aparcamiento. Está prohibido aparcar y circular por el césped — gracias por tu comprensión.",
+    "caption1": "Si entras por la puerta principal del castillo, gira a la derecha.",
+    "caption2": "Sigue el camino a la derecha y continúa alrededor del lateral del castillo para encontrar el aparcamiento.",
     "addressLabel": "Dirección:",
     "image1Alt": "Entrada al aparcamiento",
     "image2Alt": "Camino al aparcamiento",

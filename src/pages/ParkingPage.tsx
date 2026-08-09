@@ -54,11 +54,6 @@ function ParkingPageContent() {
         position="relative"
         zIndex={2}
       >
-        <Box w="100%" bg="primary.soft" py={3} px={[4, 6, 8]} textAlign="center">
-          <Text color="neutral.dark" fontSize={['sm', 'md']} fontWeight="500">
-            {t('parking.warning')}
-          </Text>
-        </Box>
         <Container maxW="container.md" px={[4, 6, 8]} py={[8, 12, 16]}>
           <VStack spacing={[10, 12, 14]} align="stretch">
             <VStack spacing={4} textAlign="center">

@@ -24,12 +24,11 @@
     "note": "If you would like to know the pickup time from Toulouse and the days of the wedding to the chateau, refer to the WhatsApp group \"Taxi\""
   },
   "parking": {
-    "warning": "Be mindful when parking if leaving early to avoid blocking cars; choose an exit-friendly spot",
     "backToHome": "Back",
     "title": "Location & Parking",
-    "intro": "If you are bringing a car to the venue there are two parking places, both of them are located on the front of the chateau. It is forbidden to park and drive on the lawn — thank you for understanding.",
-    "caption1": "If you are entering from the gate in front of the chateau, turn left.",
-    "caption2": "If you are entering from the side of the chateau, turn left and pass the front of the chateau to find the parking lot.",
+    "intro": "If you are bringing a car to the venue, please follow the driveway to the right upon entering and continue around the side of the chateau to reach the parking area. It is forbidden to park and drive on the lawn — thank you for understanding.",
+    "caption1": "If you are entering from the gate in front of the chateau, turn right.",
+    "caption2": "Follow the path to the right and continue around the side of the chateau to find the parking lot.",
     "addressLabel": "Address:",
     "image1Alt": "Parking area entrance gate",
     "image2Alt": "Parking area path",
