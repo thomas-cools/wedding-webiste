@@ -105,6 +105,7 @@ function ParkingPageContent() {
                   w="100%"
                   h={['220px', '280px', '340px']}
                   objectFit="cover"
+                  objectPosition="right center"
                   mb={4}
                 />
                 <Text

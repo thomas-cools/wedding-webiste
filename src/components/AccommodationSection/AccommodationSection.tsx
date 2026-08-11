@@ -162,10 +162,11 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
             <Image
               src={poolIcon}
               alt={t('travel.amenities.imageAlt', 'Pool lounge illustration')}
-              maxW={["170px", "190px", "210px"]}
-              w="100%"
+              w={["170px", "190px", "210px"]}
               h="auto"
               objectFit="contain"
+              display="block"
+              mx="auto"
             />
           </GridItem>
 
