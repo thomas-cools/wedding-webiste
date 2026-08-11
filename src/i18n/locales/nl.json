@@ -29,6 +29,7 @@
     "intro": "Als je met de auto naar de locatie komt, volg dan bij binnenkomst de oprit naar rechts en rijd verder langs de zijkant van het kasteel om de parkeerplaats te bereiken. Het is verboden op het gazon te parkeren of te rijden — bedankt voor je begrip.",
     "caption1": "Als je via de hoofdpoort van het kasteel binnenrijdt, sla dan rechts af.",
     "caption2": "Volg het pad naar rechts en rijd verder langs de zijkant van het kasteel om de parkeerplaats te vinden.",
+    "caption3": "Het gemarkeerde gebied is de parkeerplaats waar je je auto kunt achterlaten.",
     "addressLabel": "Adres:",
     "image1Alt": "Ingang parkeerterrein",
     "image2Alt": "Pad naar parkeerterrein",
@@ -586,15 +587,11 @@
     "items": [
       {
         "question": "Wanneer en waar is de bruiloft?",
-        "answer": "Onze huwelijksceremonie vindt plaats op 26 augustus 2026 in Vallesvilles, Frankrijk. De ceremonie begint halverwege de middag (we zullen een specifieke tijd in onze uitnodigingen vermelden). Er is ook een welkomstdiner op 25 augustus en een zwembadbrunch op 27 augustus. Deze evenementen tijdens de huwelijksweek zijn optioneel, maar we zouden het geweldig vinden als jullie erbij kunnen zijn."
+        "answer": "Onze huwelijksceremonie vindt plaats op 26 augustus 2026 in Vallesvilles, Frankrijk. Welkomstdrankjes beginnen om 4:00 PM, gevolgd door de ceremonie om 4:30 PM. Er is ook een welkomstdiner op 25 augustus en een zwembadbrunch op 27 augustus. Deze evenementen tijdens de huwelijksweek zijn optioneel, maar we zouden het geweldig vinden als jullie erbij kunnen zijn."
       },
       {
         "question": "Wat is de dresscode?",
         "answer": ""
-      },
-      {
-        "question": "Mag ik iemand meenemen?",
-        "answer": "Ja! Voel je vrij om een plus one mee te nemen (laat ons gewoon hun naam weten op de RSVP). Kom je alleen? Dat is ook geweldig! We hebben een geweldige groep mensen die komen en we kunnen niet wachten om het met je te vieren. Als je niet zeker weet of je uitnodiging een gast bevat, stuur ons dan gewoon een bericht."
       },
       {
         "question": "Wat zijn de vervoersopties?",
@@ -602,7 +599,7 @@
       },
       {
         "question": "Hoe laat moet ik aankomen?",
-        "answer": "We raden aan 15-30 minuten voor aanvang van elk evenement te arriveren om je plaats te vinden en te settelen. Een meer gedetailleerde tijdlijn voor alle drie de dagen zal dichter bij de huwelijksweek worden gedeeld."
+        "answer": "We raden aan 15-30 minuten voor aanvang van elk evenement te arriveren om je plaats te vinden en te settelen."
       },
       {
         "question": "Mag ik foto's maken tijdens de ceremonie?",

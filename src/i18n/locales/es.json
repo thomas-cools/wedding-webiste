@@ -29,6 +29,7 @@
     "intro": "Si vienes en coche al lugar, sigue el camino hacia la derecha al entrar y continúa alrededor del lateral del castillo para llegar a la zona de aparcamiento. Está prohibido aparcar y circular por el césped — gracias por tu comprensión.",
     "caption1": "Si entras por la puerta principal del castillo, gira a la derecha.",
     "caption2": "Sigue el camino a la derecha y continúa alrededor del lateral del castillo para encontrar el aparcamiento.",
+    "caption3": "La zona marcada es el aparcamiento donde puedes dejar tu coche.",
     "addressLabel": "Dirección:",
     "image1Alt": "Entrada al aparcamiento",
     "image2Alt": "Camino al aparcamiento",
@@ -585,15 +586,11 @@
     "items": [
       {
         "question": "¿Cuándo y dónde es la boda?",
-        "answer": "Nuestra ceremonia de boda tendrá lugar el 26 de agosto de 2026 en Vallesvilles, Francia. La ceremonia comenzará a media tarde (proporcionaremos una hora específica en nuestras invitaciones). También habrá una cena de bienvenida el 25 de agosto y un brunch en la piscina el 27 de agosto. Estos eventos de la semana de la boda son opcionales, pero nos encantaría que nos acompañaran si pueden."
+        "answer": "Nuestra ceremonia de boda tendrá lugar el 26 de agosto de 2026 en Vallesvilles, Francia. Las bebidas de bienvenida comienzan a las 4:00 PM, seguidas de la ceremonia a las 4:30 PM. También habrá una cena de bienvenida el 25 de agosto y un brunch en la piscina el 27 de agosto. Estos eventos de la semana de la boda son opcionales, pero nos encantaría que nos acompañaran si pueden."
       },
       {
         "question": "¿Cuál es el código de vestimenta?",
         "answer": ""
-      },
-      {
-        "question": "¿Puedo llevar acompañante?",
-        "answer": "¡Sí! Siéntete libre de traer un acompañante (solo avísanos su nombre en el RSVP). ¿Vienes solo? ¡Eso también es maravilloso! Tenemos un gran grupo de personas que asistirán y estamos ansiosos por celebrar contigo. Si no estás seguro de si tu invitación incluye un invitado, envíanos un mensaje."
       },
       {
         "question": "¿Cuáles son las opciones de transporte?",
@@ -601,7 +598,7 @@
       },
       {
         "question": "¿A qué hora debo llegar?",
-        "answer": "Recomendamos llegar 15-30 minutos antes de que comience cada evento para encontrar tu asiento y acomodarte. Se compartirá un cronograma más detallado para los tres días más cerca de la semana de la boda."
+        "answer": "Recomendamos llegar 15-30 minutos antes de que comience cada evento para encontrar tu asiento y acomodarte."
       },
       {
         "question": "¿Puedo tomar fotos durante la ceremonia?",

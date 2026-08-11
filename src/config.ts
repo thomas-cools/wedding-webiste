@@ -69,6 +69,8 @@ export interface RegistryLinkConfig {
   url: string
 }
 
+export const withJoyRegistryUrl = 'https://withjoy.com/carolinaandthomas-2026/registry'
+
 /**
  * External wedding registry links.
  *
@@ -78,5 +80,5 @@ export interface RegistryLinkConfig {
  * to the site's own PasswordGate.
  */
 export const registryLinks: RegistryLinkConfig[] = [
-  { id: 'primary', url: 'https://withjoy.com/carolinaandthomas-2026/registry' },
+  { id: 'primary', url: withJoyRegistryUrl },
 ]

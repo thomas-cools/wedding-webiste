@@ -10,8 +10,8 @@
     "email": "cjtransport31@gmail.com",
     "estimateLabel": "Estimate:",
     "estimates": [
-      "Aeroport Toulouse Blagnac - centre ville",
-      "Toulouse 38 euros",
+      "Aéroport Toulouse Blagnac - centre ville",
+      "Toulouse : 38 euros",
       "ATB - ch\u00e2teau 75 euros",
       "centre ville - ch\u00e2teau 45 euros"
     ],
@@ -29,6 +29,7 @@
     "intro": "If you are bringing a car to the venue, please follow the driveway to the right upon entering and continue around the side of the chateau to reach the parking area. It is forbidden to park and drive on the lawn — thank you for understanding.",
     "caption1": "If you are entering from the gate in front of the chateau, turn right.",
     "caption2": "Follow the path to the right and continue around the side of the chateau to find the parking lot.",
+    "caption3": "The marked area is the parking lot where you can leave your car.",
     "addressLabel": "Address:",
     "image1Alt": "Parking area entrance gate",
     "image2Alt": "Parking area path",
@@ -585,15 +586,11 @@
     "items": [
       {
         "question": "When and where is the wedding?",
-        "answer": "Our wedding ceremony will take place on August 26, 2026 at Vallesvilles, France. The ceremony will begin mid-afternoon (we’ll provide a specific time in our invites). There will also be a welcome dinner on August 25th and a pool brunch on August 27th. These wedding week events are optional but we would love for you to join if you can."
+        "answer": "Our wedding ceremony will take place on August 26, 2026 at Vallesvilles, France. Welcome drinks begin at 4:00 PM, followed by the ceremony at 4:30 PM. There will also be a welcome dinner on August 25th and a pool brunch on August 27th. These wedding week events are optional but we would love for you to join if you can."
       },
       {
         "question": "What is the dress code?",
         "answer": ""
-      },
-      {
-        "question": "Can I bring a plus one?",
-        "answer": "Yes! Feel free to bring a plus one (just let us know their name on the RSVP). Coming solo? That’s wonderful too! We have a great group of people coming and we can't wait to celebrate with you. If you aren't sure if your invite includes a guest, just send us a message."
       },
       {
         "question": "What are the transportation options?",
@@ -601,7 +598,7 @@
       },
       {
         "question": "What time should I arrive?",
-        "answer": "We recommend arriving 15-30 minutes before each event begins to find your seat and settle in. A more detailed timeline for all three days will be shared closer to the wedding week."
+        "answer": "We recommend arriving 15-30 minutes before each event begins to find your seat and settle in."
       },
       {
         "question": "Can I take photos during the ceremony?",

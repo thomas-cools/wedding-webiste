@@ -1,6 +1,8 @@
 import { render, screen } from '../test-utils'
 import { QuickLinks } from '../components/QuickLinks'
 
+const WITHJOY_REGISTRY_URL = 'https://withjoy.com/carolinaandthomas-2026/registry'
+
 // Mock react-i18next
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -56,7 +58,7 @@ describe('QuickLinks Component', () => {
     expect(stayLink).toHaveAttribute('href', '/accommodations#page-top')
     expect(transportLink).toHaveAttribute('href', '/taxi#page-top')
     expect(parkingLink).toHaveAttribute('href', '/parking#page-top')
-    expect(registryLink).toHaveAttribute('href', '/registry#page-top')
+    expect(registryLink).toHaveAttribute('href', WITHJOY_REGISTRY_URL)
   })
 
   it('renders icons for each quick link', () => {

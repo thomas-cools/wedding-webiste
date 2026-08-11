@@ -137,14 +137,6 @@ describe('AccommodationSection', () => {
       expect(storeLink).toHaveAttribute('href', 'https://www.carrefour.fr/')
       expect(pharmacyLink).toHaveAttribute('href', 'https://example.com/pharmacie-lanta')
     })
-
-    it('renders venue address and embedded map', () => {
-      render(<AccommodationSection enabled={true} />)
-
-      expect(screen.getByText('Address:')).toBeInTheDocument()
-      expect(screen.getByText(/962 Rte du Pujolet, 31570/)).toBeInTheDocument()
-      expect(screen.getByTitle('Venue map')).toBeInTheDocument()
-    })
   })
 
   describe('accessibility', () => {

@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { ScrollReveal, StaggerContainer, StaggerItem } from './animations'
+import { withJoyRegistryUrl } from '../config'
 
 // Import icons
 import luchadorIcon from '../assets/Mexa.svg'
@@ -23,6 +24,7 @@ interface QuickLinkItem {
   icon: string
   label: string
   alt: string
+  isExternal?: boolean
 }
 
 const ICON_FILTER = 'brightness(0) saturate(100%) invert(12%) sepia(24%) saturate(1500%) hue-rotate(190deg) brightness(95%) contrast(95%)'
@@ -30,44 +32,85 @@ const ICON_FILTER = 'brightness(0) saturate(100%) invert(12%) sepia(24%) saturat
 function QuickLinkCard({ to, icon, label, alt }: QuickLinkItem) {
   return (
     <StaggerItem flex={1}>
-      <Link to={to} style={{ textDecoration: 'none' }} onClick={() => window.scrollTo(0, 0)}>
-        <VStack
-          spacing={4}
-          textAlign="center"
-          px={[4, 6, 8]}
-          pb={[0, 0, 10]}
-          cursor="pointer"
-          transition="all 0.3s ease"
-          _hover={{ transform: 'translateY(-4px)' }}
-          maxW={['280px', '300px', '320px']}
-          mx="auto"
-        >
-          <Box
-            w={['100px', '120px', '140px']}
-            h={['100px', '120px', '140px']}
-            mb={2}
+      {to.startsWith('http') ? (
+        <Box as="a" href={to} style={{ textDecoration: 'none' }}>
+          <VStack
+            spacing={4}
+            textAlign="center"
+            px={[4, 6, 8]}
+            pb={[0, 0, 10]}
+            cursor="pointer"
+            transition="all 0.3s ease"
+            _hover={{ transform: 'translateY(-4px)' }}
+            maxW={['280px', '300px', '320px']}
+            mx="auto"
           >
-            <Image
-              src={icon}
-              alt={alt}
-              w="100%"
-              h="100%"
-              objectFit="contain"
-              filter={ICON_FILTER}
-            />
-          </Box>
-          <Text
-            fontFamily="elegant"
-            fontSize={['sm', 'md']}
-            textTransform="uppercase"
-            letterSpacing="0.2em"
-            color="secondary.navy"
-            fontWeight="500"
+            <Box
+              w={['100px', '120px', '140px']}
+              h={['100px', '120px', '140px']}
+              mb={2}
+            >
+              <Image
+                src={icon}
+                alt={alt}
+                w="100%"
+                h="100%"
+                objectFit="contain"
+                filter={ICON_FILTER}
+              />
+            </Box>
+            <Text
+              fontFamily="elegant"
+              fontSize={['sm', 'md']}
+              textTransform="uppercase"
+              letterSpacing="0.2em"
+              color="secondary.navy"
+              fontWeight="500"
+            >
+              {label}
+            </Text>
+          </VStack>
+        </Box>
+      ) : (
+        <Link to={to} style={{ textDecoration: 'none' }} onClick={() => window.scrollTo(0, 0)}>
+          <VStack
+            spacing={4}
+            textAlign="center"
+            px={[4, 6, 8]}
+            pb={[0, 0, 10]}
+            cursor="pointer"
+            transition="all 0.3s ease"
+            _hover={{ transform: 'translateY(-4px)' }}
+            maxW={['280px', '300px', '320px']}
+            mx="auto"
           >
-            {label}
-          </Text>
-        </VStack>
-      </Link>
+            <Box
+              w={['100px', '120px', '140px']}
+              h={['100px', '120px', '140px']}
+              mb={2}
+            >
+              <Image
+                src={icon}
+                alt={alt}
+                w="100%"
+                h="100%"
+                objectFit="contain"
+                filter={ICON_FILTER}
+              />
+            </Box>
+            <Text
+              fontFamily="elegant"
+              fontSize={['sm', 'md']}
+              textTransform="uppercase"
+              letterSpacing="0.2em"
+              color="secondary.navy"
+              fontWeight="500"
+            >
+              {label}
+            </Text>
+          </VStack>
+        </Link>
+      )}
     </StaggerItem>
   )
 }
@@ -101,10 +144,11 @@ export function QuickLinks() {
       alt: 'Parking',
     },
     {
-      to: '/registry#page-top',
+      to: withJoyRegistryUrl,
       icon: giftIcon,
       label: t('quickLinks.registry', 'REGISTRY'),
       alt: 'Registry',
+      isExternal: true,
     },
   ]
 

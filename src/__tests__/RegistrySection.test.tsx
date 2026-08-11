@@ -1,6 +1,8 @@
 import { render, screen } from '../test-utils'
 import RegistrySection from '../components/RegistrySection'
 
+const WITHJOY_REGISTRY_URL = 'https://withjoy.com/carolinaandthomas-2026/registry'
+
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
@@ -24,11 +26,11 @@ describe('RegistrySection', () => {
     expect(screen.getByText('Your presence is the greatest gift.')).toBeInTheDocument()
   })
 
-  it('renders a link to the full registry page', () => {
+  it('renders a link to the registry on WithJoy', () => {
     render(<RegistrySection />)
 
     const link = screen.getByRole('link', { name: 'View Our Registry' })
-    expect(link).toHaveAttribute('href', '/registry#page-top')
+    expect(link).toHaveAttribute('href', WITHJOY_REGISTRY_URL)
   })
 
   it('renders the section with correct id', () => {

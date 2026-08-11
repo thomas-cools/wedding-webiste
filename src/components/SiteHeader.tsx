@@ -20,6 +20,7 @@ import {
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Link } from 'react-router-dom'
 import { useFeatureFlags } from '../contexts/FeatureFlagsContext'
+import { withJoyRegistryUrl } from '../config'
 import LanguageSwitcher from './LanguageSwitcher'
 import weddingLogoSmall from '../assets/monogram_websiteT&C-small.webp'
 import weddingLogoMedium from '../assets/monogram_websiteT&C-medium.webp'
@@ -29,6 +30,7 @@ interface SiteNavLink {
   href: string
   label: string
   enabled: boolean
+  isExternal?: boolean
 }
 
 export default function SiteHeader() {
@@ -60,9 +62,10 @@ export default function SiteHeader() {
           enabled: true,
         },
         {
-          href: '/registry',
+          href: withJoyRegistryUrl,
           label: t('header.registry'),
           enabled: true,
+          isExternal: true,
         },
       ].filter((link) => link.enabled) as SiteNavLink[],
     [features.showAccommodation, t]
@@ -91,9 +94,23 @@ export default function SiteHeader() {
                 display={["none", "none", "flex"]}
               >
                 {navLinks.slice(0, Math.ceil(navLinks.length / 2)).map((link) => (
-                  <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                    {link.label}
-                  </Button>
+                  link.isExternal ? (
+                    <Button
+                      key={link.href}
+                      as="a"
+                      href={link.href}
+                      variant="ghost"
+                      size="sm"
+                      color="#E3DFCE"
+                      _hover={{ bg: 'whiteAlpha.200' }}
+                    >
+                      {link.label}
+                    </Button>
+                  ) : (
+                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                      {link.label}
+                    </Button>
+                  )
                 ))}
               </HStack>
             </Box>
@@ -115,9 +132,23 @@ export default function SiteHeader() {
             <Flex justify="flex-end" align="center">
               <HStack spacing={10} display={["none", "none", "flex"]} align="center">
                 {navLinks.slice(Math.ceil(navLinks.length / 2)).map((link) => (
-                  <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
-                    {link.label}
-                  </Button>
+                  link.isExternal ? (
+                    <Button
+                      key={link.href}
+                      as="a"
+                      href={link.href}
+                      variant="ghost"
+                      size="sm"
+                      color="#E3DFCE"
+                      _hover={{ bg: 'whiteAlpha.200' }}
+                    >
+                      {link.label}
+                    </Button>
+                  ) : (
+                    <Button key={link.href} as={Link} to={link.href} variant="ghost" size="sm" color="#E3DFCE" _hover={{ bg: 'whiteAlpha.200' }}>
+                      {link.label}
+                    </Button>
+                  )
                 ))}
                 <LanguageSwitcher />
               </HStack>
@@ -146,17 +177,31 @@ export default function SiteHeader() {
           <DrawerBody pt={16}>
             <VStack spacing={6} align="stretch">
               {navLinks.map((link) => (
-                <Button
-                  key={link.href}
-                  as={Link}
-                  to={link.href}
-                  variant="ghost"
-                  size="lg"
-                  justifyContent="flex-start"
-                  onClick={onClose}
-                >
-                  {link.label}
-                </Button>
+                link.isExternal ? (
+                  <Button
+                    key={link.href}
+                    as="a"
+                    href={link.href}
+                    variant="ghost"
+                    size="lg"
+                    justifyContent="flex-start"
+                    onClick={onClose}
+                  >
+                    {link.label}
+                  </Button>
+                ) : (
+                  <Button
+                    key={link.href}
+                    as={Link}
+                    to={link.href}
+                    variant="ghost"
+                    size="lg"
+                    justifyContent="flex-start"
+                    onClick={onClose}
+                  >
+                    {link.label}
+                  </Button>
+                )
               ))}
             </VStack>
           </DrawerBody>

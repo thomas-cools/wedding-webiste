@@ -6,7 +6,6 @@ import {
   Flex,
   Heading,
   Image as ChakraImage,
-  SimpleGrid,
   Text,
   VStack,
 } from '@chakra-ui/react'
@@ -77,54 +76,67 @@ function ParkingPageContent() {
               </Text>
             </VStack>
 
-            <Box>
-              <SimpleGrid columns={[1, 2]} spacing={4} mb={5}>
+            <VStack spacing={7} align="stretch" maxW="760px" mx="auto">
+              <Box>
                 <ChakraImage
                   src={parking1}
                   alt={t('parking.image1Alt', 'Parking area entrance')}
                   rounded="sm"
                   w="100%"
-                  h="auto"
+                  h={['220px', '280px', '340px']}
                   objectFit="cover"
+                  mb={4}
                 />
+                <Text
+                  textAlign="center"
+                  color="rgba(227,223,206,0.65)"
+                  fontSize="sm"
+                  lineHeight="1.8"
+                >
+                  {t('parking.caption1')}
+                </Text>
+              </Box>
+
+              <Box>
                 <ChakraImage
                   src={parking2}
                   alt={t('parking.image2Alt', 'Parking area path')}
                   rounded="sm"
                   w="100%"
-                  h="auto"
+                  h={['220px', '280px', '340px']}
                   objectFit="cover"
+                  mb={4}
                 />
-              </SimpleGrid>
-              <Text
-                textAlign="center"
-                color="rgba(227,223,206,0.65)"
-                fontSize="sm"
-                lineHeight="1.8"
-              >
-                {t('parking.caption1')}
-              </Text>
-            </Box>
+                <Text
+                  textAlign="center"
+                  color="rgba(227,223,206,0.65)"
+                  fontSize="sm"
+                  lineHeight="1.8"
+                >
+                  {t('parking.caption2')}
+                </Text>
+              </Box>
 
-            <Box>
-              <ChakraImage
-                src={parking3}
-                alt={t('parking.image3Alt', 'Parking lot location')}
-                rounded="sm"
-                w="100%"
-                h="auto"
-                objectFit="cover"
-                mb={5}
-              />
-              <Text
-                textAlign="center"
-                color="rgba(227,223,206,0.65)"
-                fontSize="sm"
-                lineHeight="1.8"
-              >
-                {t('parking.caption2')}
-              </Text>
-            </Box>
+              <Box>
+                <ChakraImage
+                  src={parking3}
+                  alt={t('parking.image3Alt', 'Parking lot location')}
+                  rounded="sm"
+                  w="100%"
+                  h={['220px', '280px', '340px']}
+                  objectFit="cover"
+                  mb={4}
+                />
+                <Text
+                  textAlign="center"
+                  color="rgba(227,223,206,0.65)"
+                  fontSize="sm"
+                  lineHeight="1.8"
+                >
+                  {t('parking.caption3', 'The marked area is the parking lot where you can leave your car.')}
+                </Text>
+              </Box>
+            </VStack>
 
             <Flex
               direction={['column', 'row']}
