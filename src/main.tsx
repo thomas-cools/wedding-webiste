@@ -12,6 +12,7 @@ import FinalRsvpPage from './pages/FinalRsvpPage'
 import SpeechesPage from './pages/SpeechesPage'
 import ParkingPage from './pages/ParkingPage'
 import TaxiPage from './pages/TaxiPage'
+import RegistryPage from './pages/RegistryPage'
 import theme from './theme'
 import { FeatureFlagsProvider } from './contexts/FeatureFlagsContext'
 import ScrollToTop from './components/ScrollToTop'
@@ -40,6 +41,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
             <Route path="/speeches" element={<SpeechesPage />} />
             <Route path="/parking" element={<ParkingPage />} />
             <Route path="/taxi" element={<TaxiPage />} />
+            <Route path="/registry" element={<RegistryPage />} />
             <Route
               path="/admin"
               element={

@@ -33,6 +33,7 @@ jest.mock('@chakra-ui/icons', () => {
   const React = require('react')
   return {
     ExternalLinkIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'external-link-icon', ...props }),
+    CopyIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'copy-icon', ...props }),
     ChevronDownIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'chevron-down-icon', ...props }),
     CloseIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'close-icon', ...props }),
     HamburgerIcon: (props: Record<string, unknown>) => React.createElement('svg', { 'data-testid': 'hamburger-icon', ...props }),

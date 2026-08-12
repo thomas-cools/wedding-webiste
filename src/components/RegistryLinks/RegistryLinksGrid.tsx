@@ -3,13 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { SimpleGrid } from '@chakra-ui/react';
 import { StaggerContainer, StaggerItem } from '../animations';
 import { RegistryLinkCard } from './RegistryLinkCard';
-import { registryLinks } from '../../config';
+import { registryLinks, withJoyRegistryPassword } from '../../config';
 import marriageGiftIcon from '../../assets/JustMarried.svg';
 
 interface RegistryLinkCopy {
   name: string;
   description: string;
   buttonLabel: string;
+  passwordLabel: string;
+  copyPassword: string;
+  passwordCopied: string;
 }
 
 export const RegistryLinksGrid: React.FC = () => {
@@ -18,7 +21,12 @@ export const RegistryLinksGrid: React.FC = () => {
 
   return (
     <StaggerContainer>
-      <SimpleGrid columns={[1, 1, 2]} spacing={6}>
+      <SimpleGrid
+        columns={[1, 1, registryLinks.length > 1 ? 2 : 1]}
+        spacing={6}
+        maxW={registryLinks.length === 1 ? '560px' : undefined}
+        mx="auto"
+      >
         {registryLinks.map((link, index) => {
           const copy = linksCopy?.[index];
           if (!copy) return null;
@@ -28,6 +36,10 @@ export const RegistryLinksGrid: React.FC = () => {
                 name={copy.name}
                 description={copy.description}
                 buttonLabel={copy.buttonLabel}
+                passwordLabel={copy.passwordLabel}
+                copyPassword={copy.copyPassword}
+                passwordCopied={copy.passwordCopied}
+                password={withJoyRegistryPassword}
                 url={link.url}
                 logoSrc={marriageGiftIcon}
               />

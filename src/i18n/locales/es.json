@@ -246,7 +246,10 @@
       {
         "name": "Nuestra Lista de Regalos",
         "description": "Explora nuestra lista de regalos seleccionada en WithJoy. Está protegida con contraseña — usa el código 6rqr56 para entrar.",
-        "buttonLabel": "Ver Lista"
+        "buttonLabel": "Ver Lista",
+        "passwordLabel": "Contraseña de la lista",
+        "copyPassword": "Copiar contraseña",
+        "passwordCopied": "Contraseña copiada"
       }
     ]
   },

@@ -1,7 +1,6 @@
 import { Box, Container, VStack, Text, Heading, Button } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { ScrollReveal } from './animations';
-import { withJoyRegistryUrl } from '../config';
 
 export default function RegistrySection() {
   const { t } = useTranslation();
@@ -31,7 +30,7 @@ export default function RegistrySection() {
             <Text fontSize={["md", "lg"]} lineHeight="1.9" color="neutral.dark" maxW="600px">
               {t('registry.teaserDescription')}
             </Text>
-            <Button as="a" href={withJoyRegistryUrl} variant="primary" mt={2}>
+            <Button as="a" href="/registry" variant="primary" mt={2}>
               {t('registry.viewButton')}
             </Button>
           </VStack>

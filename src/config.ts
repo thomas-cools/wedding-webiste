@@ -70,6 +70,7 @@ export interface RegistryLinkConfig {
 }
 
 export const withJoyRegistryUrl = 'https://withjoy.com/carolinaandthomas-2026/registry'
+export const withJoyRegistryPassword = '6rqr56'
 
 /**
  * External wedding registry links.

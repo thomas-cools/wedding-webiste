@@ -1,7 +1,7 @@
 import { render, screen } from '../test-utils'
 import RegistrySection from '../components/RegistrySection'
 
-const WITHJOY_REGISTRY_URL = 'https://withjoy.com/carolinaandthomas-2026/registry'
+const REGISTRY_PAGE_URL = '/registry'
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -30,7 +30,7 @@ describe('RegistrySection', () => {
     render(<RegistrySection />)
 
     const link = screen.getByRole('link', { name: 'View Our Registry' })
-    expect(link).toHaveAttribute('href', WITHJOY_REGISTRY_URL)
+    expect(link).toHaveAttribute('href', REGISTRY_PAGE_URL)
   })
 
   it('renders the section with correct id', () => {

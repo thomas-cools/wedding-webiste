@@ -20,7 +20,6 @@ import {
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Link } from 'react-router-dom'
 import { useFeatureFlags } from '../contexts/FeatureFlagsContext'
-import { withJoyRegistryUrl } from '../config'
 import LanguageSwitcher from './LanguageSwitcher'
 import weddingLogoSmall from '../assets/monogram_websiteT&C-small.webp'
 import weddingLogoMedium from '../assets/monogram_websiteT&C-medium.webp'
@@ -62,10 +61,9 @@ export default function SiteHeader() {
           enabled: true,
         },
         {
-          href: withJoyRegistryUrl,
+          href: '/registry',
           label: t('header.registry'),
           enabled: true,
-          isExternal: true,
         },
       ].filter((link) => link.enabled) as SiteNavLink[],
     [features.showAccommodation, t]

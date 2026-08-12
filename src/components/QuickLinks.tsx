@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { ScrollReveal, StaggerContainer, StaggerItem } from './animations'
-import { withJoyRegistryUrl } from '../config'
 
 // Import icons
 import luchadorIcon from '../assets/Mexa.svg'
@@ -144,11 +143,10 @@ export function QuickLinks() {
       alt: 'Parking',
     },
     {
-      to: withJoyRegistryUrl,
+      to: '/registry',
       icon: giftIcon,
       label: t('quickLinks.registry', 'REGISTRY'),
       alt: 'Registry',
-      isExternal: true,
     },
   ]
 
