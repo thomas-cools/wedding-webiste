@@ -22,9 +22,11 @@ import {
   markGmailSpeechMessage,
 } from './gmail-speech-state'
 import { ingestGmailSpeech, type GmailSpeechIngestionSource } from './speech-gmail-ingestion'
+import { MAX_PAGES_FILE_SIZE_BYTES } from './speech-documents-security'
 
 const DEFAULT_PROCESSED_LABEL = 'Wedding Speech/Processed'
 const DEFAULT_ERROR_LABEL = 'Wedding Speech/Error'
+const MAX_GMAIL_ATTACHMENT_BYTES = 1024 * 1024
 
 export interface GmailSpeechSyncResult {
   found: number
@@ -51,6 +53,31 @@ interface GmailSyncContext {
   speakerMap: ReadonlyMap<string, SpeechSpeakerKey>
   processedLabelId: string
   errorLabelId: string
+}
+
+interface SanitizedProcessingFailure {
+  errorCode: string
+  error: string
+}
+
+function sanitizeProcessingFailure(error: unknown): SanitizedProcessingFailure {
+  const message = error instanceof Error ? error.message.trim() : ''
+  const rules: Array<{ pattern: RegExp; errorCode: string }> = [
+    { pattern: /^Document exceeds the \d+ byte limit$/, errorCode: 'attachment_too_large' },
+    { pattern: /^Apple Pages attachment .+$/, errorCode: 'pages_invalid' },
+    { pattern: /^Apple Pages (?:package|PDF preview|XML content) .+$/, errorCode: 'pages_extraction_failed' },
+    { pattern: /^Could not (?:extract text from this|read) Apple Pages .+$/, errorCode: 'pages_extraction_failed' },
+    { pattern: /^Could not extract (?:readable )?text from (?:PDF|DOCX)(?: document)?$/, errorCode: 'extraction_failed' },
+    { pattern: /^Extracted content exceeds \d+ characters\. Use a shorter speech document\.$/, errorCode: 'content_too_long' },
+    { pattern: /^Uploaded file (?:is empty or invalid|does not appear to be a .+ file|must be a valid .+ document)$/, errorCode: 'attachment_invalid' },
+    { pattern: /^Only DOCX, PDF, and Apple Pages files are supported$/, errorCode: 'attachment_invalid' },
+  ]
+  const match = rules.find((rule) => rule.pattern.test(message))
+  if (match) return { errorCode: match.errorCode, error: message }
+  return {
+    errorCode: 'processing_failed',
+    error: 'Speech message could not be processed',
+  }
 }
 
 function getMaxMessages(): number {
@@ -94,6 +121,12 @@ async function resolveIngestionSource(
       text: await exportGoogleDocText(accessToken, source.documentId),
     }
   }
+  const maxAttachmentBytes = source.docType === 'pages'
+    ? MAX_PAGES_FILE_SIZE_BYTES
+    : MAX_GMAIL_ATTACHMENT_BYTES
+  if (source.size > maxAttachmentBytes) {
+    throw new Error(`Document exceeds the ${maxAttachmentBytes} byte limit`)
+  }
   return {
     kind: 'attachment',
     fileName: source.fileName,
@@ -135,11 +168,12 @@ async function processClaimedGmailMessage(
       [context.errorLabelId]
     )
     return 'processed'
-  } catch {
+  } catch (error) {
+    const sanitized = sanitizeProcessingFailure(error)
     await markGmailSpeechMessage(messageId, 'failed', {
       speakerKey,
-      errorCode: 'processing_failed',
-      error: 'Speech message could not be processed',
+      errorCode: sanitized.errorCode,
+      error: sanitized.error,
     })
     await modifyGmailMessageLabels(
       context.accessToken,

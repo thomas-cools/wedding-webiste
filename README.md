@@ -1054,7 +1054,7 @@ A message must be received on or after **August 1, 2026** and its `From` address
 
 - One DOCX attachment, up to 1 MB
 - One text-based PDF attachment, up to 1 MB
-- One Apple Pages attachment, up to 1 MB; the importer extracts an embedded PDF preview or legacy XML when available
+- One Apple Pages attachment, up to 10 MB; the importer extracts an embedded PDF preview or legacy XML when available
 - One Google Docs link; private Docs must be shared with `carolinaandthomaswedding@gmail.com`
 - A plain-text email body of at least 300 characters when no supported attachment or Google Docs link exists
 

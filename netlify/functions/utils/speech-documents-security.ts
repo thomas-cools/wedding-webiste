@@ -8,6 +8,7 @@ const BLOCKED_SCHEMES = new Set(['javascript:', 'data:', 'file:'])
 
 const MAX_FILE_NAME_LENGTH = 120
 const MAX_FILE_SIZE_BYTES = 1024 * 1024
+export const MAX_PAGES_FILE_SIZE_BYTES = 10 * 1024 * 1024
 const DOCX_MIME_TYPE =
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 const DOCX_FILE_SIGNATURE = [0x50, 0x4b, 0x03, 0x04]
@@ -588,8 +589,8 @@ export function validateSpeechDocumentBinary(
     if (!Number.isFinite(fileSizeBytes) || fileSizeBytes <= 0) {
       return { ok: false, error: 'Uploaded file is empty or invalid' }
     }
-    if (fileSizeBytes > MAX_FILE_SIZE_BYTES) {
-      return { ok: false, error: `Document exceeds the ${MAX_FILE_SIZE_BYTES} byte limit` }
+    if (fileSizeBytes > MAX_PAGES_FILE_SIZE_BYTES) {
+      return { ok: false, error: `Document exceeds the ${MAX_PAGES_FILE_SIZE_BYTES} byte limit` }
     }
 
     const fileName = typeof input.fileName === 'string' ? sanitizeFileName(input.fileName) : ''

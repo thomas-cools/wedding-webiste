@@ -214,6 +214,7 @@ describe('Gmail speech synchronization', () => {
         attachmentId: 'attachment-1',
         fileName: 'speech.pdf',
         mimeType: 'application/pdf',
+        size: 100,
       },
     })
     mockGetGmailAttachment.mockRejectedValueOnce(new Error('private upstream details'))
@@ -223,6 +224,83 @@ describe('Gmail speech synchronization', () => {
       speakerKey: 'carlos',
       errorCode: 'processing_failed',
       error: 'Speech message could not be processed',
+    })
+  })
+
+  it('preserves an actionable Pages extraction failure without exposing message data', async () => {
+    mockListGmailMessageIds.mockResolvedValueOnce(['pages-message'])
+    mockGetGmailMessage.mockResolvedValueOnce({ id: 'pages-message' })
+    mockParseSpeechMessage.mockReturnValueOnce({
+      ok: true,
+      speakerKey: 'carlos',
+      source: {
+        kind: 'attachment',
+        attachmentId: 'pages-attachment',
+        fileName: 'speech.pages',
+        mimeType: 'application/vnd.apple.pages',
+        size: 100,
+      },
+    })
+    mockGetGmailAttachment.mockResolvedValueOnce(new Uint8Array([0x50, 0x4b, 0x03, 0x04]))
+    mockIngestGmailSpeech.mockRejectedValueOnce(
+      new Error('Could not extract text from this Apple Pages file. Export it as DOCX or PDF and resend it.')
+    )
+
+    await expect(syncGmailSpeeches()).resolves.toMatchObject({ failed: 1, processed: 0 })
+    expect(mockMarkGmailSpeechMessage).toHaveBeenCalledWith('pages-message', 'failed', {
+      speakerKey: 'carlos',
+      errorCode: 'pages_extraction_failed',
+      error: 'Could not extract text from this Apple Pages file. Export it as DOCX or PDF and resend it.',
+    })
+  })
+
+  it('reports an attachment size limit without exposing upstream details', async () => {
+    mockListGmailMessageIds.mockResolvedValueOnce(['large-message'])
+    mockGetGmailMessage.mockResolvedValueOnce({ id: 'large-message' })
+    mockParseSpeechMessage.mockReturnValueOnce({
+      ok: true,
+      speakerKey: 'carlos',
+      source: {
+        kind: 'attachment',
+        attachmentId: 'large-attachment',
+        fileName: 'speech.pages',
+        mimeType: 'application/vnd.apple.pages',
+        size: 100,
+      },
+    })
+    mockGetGmailAttachment.mockResolvedValueOnce(new Uint8Array([0x50, 0x4b, 0x03, 0x04]))
+    mockIngestGmailSpeech.mockRejectedValueOnce(new Error('Document exceeds the 1048576 byte limit'))
+
+    await expect(syncGmailSpeeches()).resolves.toMatchObject({ failed: 1, processed: 0 })
+    expect(mockMarkGmailSpeechMessage).toHaveBeenCalledWith('large-message', 'failed', {
+      speakerKey: 'carlos',
+      errorCode: 'attachment_too_large',
+      error: 'Document exceeds the 1048576 byte limit',
+    })
+  })
+
+  it('rejects an oversized attachment from Gmail metadata before downloading it', async () => {
+    mockListGmailMessageIds.mockResolvedValueOnce(['oversized-message'])
+    mockGetGmailMessage.mockResolvedValueOnce({ id: 'oversized-message' })
+    mockParseSpeechMessage.mockReturnValueOnce({
+      ok: true,
+      speakerKey: 'carlos',
+      source: {
+        kind: 'attachment',
+        attachmentId: 'oversized-attachment',
+        fileName: 'speech.pages',
+        mimeType: 'application/vnd.apple.pages',
+        size: 11 * 1024 * 1024,
+        docType: 'pages',
+      },
+    })
+
+    await expect(syncGmailSpeeches()).resolves.toMatchObject({ failed: 1, processed: 0 })
+    expect(mockGetGmailAttachment).not.toHaveBeenCalled()
+    expect(mockMarkGmailSpeechMessage).toHaveBeenCalledWith('oversized-message', 'failed', {
+      speakerKey: 'carlos',
+      errorCode: 'attachment_too_large',
+      error: 'Document exceeds the 10485760 byte limit',
     })
   })
 
