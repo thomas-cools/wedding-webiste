@@ -3,6 +3,7 @@ import JSZip from 'jszip'
 import { XMLParser } from 'fast-xml-parser'
 
 import type { SpeechDocumentLanguage, SpeechDocumentType } from './speech-documents'
+import { extractTextFromIwaBytes } from './pages-iwa-text'
 
 const EXTRACTION_TIMEOUT_MS = 12000
 const DEFAULT_MAX_EXTRACTED_CHARS = 14000
@@ -10,6 +11,8 @@ const DEFAULT_MAX_FETCH_BYTES = 1024 * 1024
 const MAX_PAGES_ENTRIES = 500
 const MAX_PAGES_PREVIEW_BYTES = 5 * 1024 * 1024
 const MAX_PAGES_XML_BYTES = 2 * 1024 * 1024
+const MAX_PAGES_IWA_FILES = 100
+const MAX_PAGES_IWA_FILE_BYTES = 8 * 1024 * 1024
 type PdfParseModule = typeof import('pdf-parse')
 let pdfParseModulePromise: Promise<PdfParseModule> | null = null
 
@@ -463,6 +466,23 @@ export async function extractSpeechTextFromPagesBytes(
       const fragments: string[] = []
       collectXmlText(parsed, fragments)
       const text = normalizeExtractedText(fragments.join(' '))
+      if (text) return enforceLengthLimit(text)
+    }
+
+    const iwaEntries = entries.filter((entry) => /^index\/.*\.iwa$/i.test(entry.name))
+    if (iwaEntries.length > 0 && iwaEntries.length <= MAX_PAGES_IWA_FILES) {
+      const recovered: string[] = []
+      for (const entry of iwaEntries) {
+        const size = zipEntrySize(entry)
+        if (size == null || size > MAX_PAGES_IWA_FILE_BYTES) continue
+        try {
+          const text = extractTextFromIwaBytes(await entry.async('uint8array'))
+          if (text) recovered.push(text)
+        } catch {
+          // Some IWA files contain only binary metadata; continue with the rest.
+        }
+      }
+      const text = normalizeExtractedText(Array.from(new Set(recovered)).join('\n\n'))
       if (text) return enforceLengthLimit(text)
     }
 

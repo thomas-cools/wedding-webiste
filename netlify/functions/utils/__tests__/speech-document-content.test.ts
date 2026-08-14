@@ -3,6 +3,7 @@
  */
 
 import JSZip from 'jszip'
+import snappy from 'snappyjs'
 
 const mockPdfParse = jest.fn()
 const mockMammothExtractRawText = jest.fn()
@@ -102,6 +103,38 @@ describe('speech-document-content', () => {
       ok: false,
       error: 'Could not extract text from this Apple Pages file. Export it as DOCX or PDF and resend it.',
     })
+  })
+
+  it('recovers best-effort text from modern Pages IWA content', async () => {
+    const speech = [
+      'Hello everyone and thank you for joining us for this wonderful celebration.',
+      'Carolina and Thomas, your love has brought all of us together today.',
+      'May your years ahead be filled with laughter, friendship, and adventure.',
+    ].join('\n')
+    const payload = Buffer.concat([
+      Buffer.from([0x08, 0x96, 0x01, 0x12]),
+      Buffer.from(speech, 'utf-8'),
+      Buffer.from([0x18, 0x01]),
+    ])
+    const compressed = new Uint8Array(snappy.compress(payload))
+    const frame = new Uint8Array(compressed.byteLength + 4)
+    frame[0] = 0
+    frame[1] = compressed.byteLength & 0xff
+    frame[2] = (compressed.byteLength >> 8) & 0xff
+    frame[3] = (compressed.byteLength >> 16) & 0xff
+    frame.set(compressed, 4)
+    const archive = new JSZip()
+    archive.file('Index/Document.iwa', frame)
+    const bytes = await archive.generateAsync({ type: 'uint8array' })
+
+    const { extractSpeechTextFromPagesBytes } = await import('../speech-document-content')
+    const result = await extractSpeechTextFromPagesBytes(bytes)
+
+    expect(result).toMatchObject({ ok: true })
+    if (result.ok) {
+      expect(result.text).toContain('Carolina and Thomas')
+      expect(result.text).toContain('laughter, friendship, and adventure')
+    }
   })
 
   it('extracts text from a Google Docs URL', async () => {
