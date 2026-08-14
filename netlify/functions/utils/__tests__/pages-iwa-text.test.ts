@@ -57,4 +57,21 @@ describe('Pages IWA text recovery', () => {
     expect(() => decompressIwaFrames(new Uint8Array([1, 2, 3, 4]))).toThrow(/invalid Snappy frame/i)
     expect(recoverTextFromIwaPayload(Buffer.from('short metadata'))).toBeNull()
   })
+
+  it('selects coherent speech under the extraction budget when metadata text is noisy', () => {
+    const speech = [
+      'Buenas tardes a todos. Gracias por acompañarnos en este día tan especial.',
+      'Carolina y Thomas han construido una historia llena de amor, alegría y aventuras.',
+      'Levantemos nuestras copas para celebrar muchos años de felicidad juntos.',
+    ].join('\n')
+    const metadata = Array.from({ length: 500 }, (_, index) =>
+      `Document metadata property number ${index} contains configuration values for the application.`
+    )
+    const payload = Buffer.from([...metadata, speech].join('\u0000'), 'utf-8')
+
+    const recovered = recoverTextFromIwaPayload(payload)
+    expect(recovered).toContain('Carolina y Thomas')
+    expect(recovered!.length).toBeLessThanOrEqual(13000)
+    expect(recovered).not.toContain('property number 0')
+  })
 })

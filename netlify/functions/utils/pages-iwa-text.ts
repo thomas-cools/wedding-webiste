@@ -4,8 +4,15 @@ const MAX_IWA_FILE_BYTES = 8 * 1024 * 1024
 const MAX_IWA_FRAME_BYTES = 4 * 1024 * 1024
 const MAX_IWA_DECOMPRESSED_BYTES = 24 * 1024 * 1024
 const MAX_TEXT_RUNS = 4000
-const MIN_TEXT_RUN_CHARS = 4
+const MIN_TEXT_RUN_CHARS = 12
 const MIN_RECOVERED_CHARS = 120
+const MAX_RECOVERED_CHARS = 13000
+
+const LANGUAGE_MARKERS = new Set([
+  'a', 'al', 'and', 'are', 'as', 'con', 'de', 'del', 'el', 'en', 'es', 'for', 'have',
+  'la', 'las', 'los', 'of', 'para', 'por', 'que', 'the', 'to', 'un', 'una', 'we', 'with',
+  'y', 'you',
+])
 
 const NOISE_PATTERNS = [
   /^[A-Za-z0-9+/=_-]{40,}$/,
@@ -79,16 +86,57 @@ function isPlausibleText(value: string): boolean {
   }
   const characters = Array.from(value)
   const letters = characters.filter((character) => /\p{L}/u.test(character)).length
+  const words = value.match(/[\p{L}\p{M}]+/gu) || []
   const controls = characters.filter((character) =>
     /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(character)
   ).length
-  if (controls > 0 || letters < Math.max(2, Math.floor(characters.length * 0.35))) return false
-  return /\s/.test(value) || value.length >= 12
+  if (controls > 0 || words.length < 3 || letters < Math.max(8, Math.floor(characters.length * 0.5))) {
+    return false
+  }
+  const markerCount = words.filter((word) => LANGUAGE_MARKERS.has(word.toLowerCase())).length
+  return markerCount > 0 || /[.!?;:,]/.test(value) || value.length >= 80
+}
+
+interface TextCandidate {
+  value: string
+  position: number
+  score: number
+}
+
+function scoreCandidate(value: string): number {
+  const words = value.match(/[\p{L}\p{M}]+/gu) || []
+  const markers = words.filter((word) => LANGUAGE_MARKERS.has(word.toLowerCase())).length
+  const punctuation = (value.match(/[.!?;:]/g) || []).length
+  const lines = value.split('\n').filter((line) => line.trim().length > 0).length
+  return Math.min(value.length, 2000) + words.length * 4 + markers * 18 + punctuation * 20 + lines * 8
+}
+
+function selectCoherentCandidates(candidates: TextCandidate[]): string[] {
+  const byLength = [...candidates].sort((left, right) => right.value.length - left.value.length)
+  const unique: TextCandidate[] = []
+  for (const candidate of byLength) {
+    const normalized = candidate.value.toLowerCase().replace(/\s+/g, ' ')
+    const isContained = unique.some((existing) => {
+      const existingNormalized = existing.value.toLowerCase().replace(/\s+/g, ' ')
+      return existingNormalized.includes(normalized)
+    })
+    if (!isContained) unique.push(candidate)
+  }
+
+  const selected: TextCandidate[] = []
+  let totalChars = 0
+  for (const candidate of unique.sort((left, right) => right.score - left.score)) {
+    const separatorChars = selected.length > 0 ? 2 : 0
+    if (totalChars + separatorChars + candidate.value.length > MAX_RECOVERED_CHARS) continue
+    selected.push(candidate)
+    totalChars += separatorChars + candidate.value.length
+  }
+  return selected.sort((left, right) => left.position - right.position).map((candidate) => candidate.value)
 }
 
 export function recoverTextFromIwaPayload(bytes: Uint8Array): string | null {
   const decoder = new TextDecoder('utf-8', { fatal: true })
-  const runs: string[] = []
+  const runs: TextCandidate[] = []
   const seen = new Set<string>()
   let start = -1
 
@@ -101,7 +149,7 @@ export function recoverTextFromIwaPayload(bytes: Uint8Array): string | null {
       const candidate = normalizeCandidate(decoder.decode(bytes.subarray(start, end)))
       if (isPlausibleText(candidate) && !seen.has(candidate)) {
         seen.add(candidate)
-        runs.push(candidate)
+        runs.push({ value: candidate, position: start, score: scoreCandidate(candidate) })
       }
     } catch {
       // Invalid UTF-8 runs are binary protobuf content, not speech text.
@@ -118,7 +166,7 @@ export function recoverTextFromIwaPayload(bytes: Uint8Array): string | null {
   }
   flush(bytes.byteLength)
 
-  const text = runs.join('\n').replace(/\n{3,}/g, '\n\n').trim()
+  const text = selectCoherentCandidates(runs).join('\n\n').replace(/\n{3,}/g, '\n\n').trim()
   const letterCount = Array.from(text).filter((character) => /\p{L}/u.test(character)).length
   return text.length >= MIN_RECOVERED_CHARS && letterCount >= 80 ? text : null
 }
