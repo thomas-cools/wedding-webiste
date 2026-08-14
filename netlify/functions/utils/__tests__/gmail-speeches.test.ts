@@ -28,6 +28,7 @@ jest.mock('../google-mail-api', () => ({
 }))
 
 jest.mock('../gmail-speech-message', () => ({
+  GMAIL_SPEECH_CUTOFF_MS: Date.UTC(2026, 7, 1),
   parseGmailSpeakerMap: (...args: unknown[]) => mockParseGmailSpeakerMap(...args),
   parseSpeechMessage: (...args: unknown[]) => mockParseSpeechMessage(...args),
 }))
@@ -87,9 +88,14 @@ describe('Gmail speech synchronization', () => {
         'Wedding Speech/Error'
       )
     ).toBe(
-      '{from:"speaker@example.com" from:"second@example.com"} ' +
+      '{from:"speaker@example.com" from:"second@example.com"} after:1785542399 ' +
         '-label:"Wedding Speech/Processed" -label:"Wedding Speech/Error"'
     )
+    expect(buildGmailSpeechQuery(
+      ['speaker@example.com'],
+      'Wedding Speech/Processed',
+      'Wedding Speech/Error'
+    )).not.toContain('to:')
   })
 
   it('skips claimed messages and processes a valid body submission in order', async () => {

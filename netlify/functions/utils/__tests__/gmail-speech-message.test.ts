@@ -4,9 +4,13 @@ import {
   type GmailMessage,
 } from '../gmail-speech-message'
 
-function message(payload: GmailMessage['payload']): GmailMessage {
+function message(
+  payload: GmailMessage['payload'],
+  internalDate = String(Date.UTC(2026, 7, 1))
+): GmailMessage {
   return {
     id: 'opaque-message-id',
+    internalDate,
     payload,
   }
 }
@@ -160,5 +164,68 @@ describe('gmail speech message parsing', () => {
         speakerMap
       )
     ).toMatchObject({ ok: false, code: 'no_supported_source' })
+  })
+
+  it('rejects messages received before August 1, 2026', () => {
+    const result = parseSpeechMessage(
+      message(
+        {
+          headers: [{ name: 'From', value: 'speaker@example.com' }],
+          mimeType: 'text/plain',
+          body: { data: Buffer.from('Old unrelated message').toString('base64url') },
+        },
+        String(Date.UTC(2026, 6, 31, 23, 59, 59, 999))
+      ),
+      new Map([['speaker@example.com', 'carlos']])
+    )
+
+    expect(result).toEqual({
+      ok: false,
+      code: 'message_before_cutoff',
+      error: 'Message was received before August 1, 2026',
+    })
+  })
+
+  it('requires the configured speaker to be the sender, not a recipient', () => {
+    const result = parseSpeechMessage(
+      message({
+        headers: [
+          { name: 'From', value: 'other@example.com' },
+          { name: 'To', value: 'speaker@example.com' },
+        ],
+        mimeType: 'text/plain',
+        body: { data: Buffer.from('Email sent to a speaker').toString('base64url') },
+      }),
+      new Map([['speaker@example.com', 'carlos']])
+    )
+
+    expect(result).toMatchObject({ ok: false, code: 'sender_not_allowed' })
+  })
+
+  it('detects Apple Pages attachments instead of falling back to the email body', () => {
+    const result = parseSpeechMessage(
+      message({
+        headers: [{ name: 'From', value: 'speaker@example.com' }],
+        mimeType: 'multipart/mixed',
+        parts: [
+          {
+            mimeType: 'text/plain',
+            body: { data: Buffer.from('My speech is attached.').toString('base64url') },
+          },
+          {
+            mimeType: 'application/vnd.apple.pages',
+            filename: 'speech.pages',
+            body: { attachmentId: 'pages-1', size: 512 },
+          },
+        ],
+      }),
+      new Map([['speaker@example.com', 'carlos']])
+    )
+
+    expect(result).toEqual({
+      ok: false,
+      code: 'unsupported_format',
+      error: 'Apple Pages files are not supported. Export the speech as DOCX or PDF and resend it.',
+    })
   })
 })

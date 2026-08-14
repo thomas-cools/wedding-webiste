@@ -23,6 +23,7 @@ import { FinalRsvpDashboard } from './FinalRsvpDashboard'
 import { FinalRsvpInvitationsPanel } from './FinalRsvpInvitationsPanel'
 import { SpeechesLinkPanel } from './SpeechesLinkPanel'
 import { SpeechesDocumentsPanel } from './SpeechesDocumentsPanel'
+import { GmailSpeechSyncPanel } from './GmailSpeechSyncPanel'
 
 interface AdminLayoutProps {
   onLogout: () => void
@@ -162,6 +163,13 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
             >
               Speech Documents
             </Tab>
+            <Tab
+              fontSize="sm"
+              fontWeight="medium"
+              _selected={{ bg: 'secondary.navy', color: 'white' }}
+            >
+              Gmail Sync
+            </Tab>
           </TabList>
 
           <TabPanels>
@@ -191,6 +199,9 @@ export function AdminLayout({ onLogout }: AdminLayoutProps) {
             </TabPanel>
             <TabPanel p={0}>
               <SpeechesDocumentsPanel />
+            </TabPanel>
+            <TabPanel p={0}>
+              <GmailSpeechSyncPanel />
             </TabPanel>
           </TabPanels>
         </Tabs>

@@ -9,6 +9,7 @@ import {
   modifyGmailMessageLabels,
 } from './google-mail-api'
 import {
+  GMAIL_SPEECH_CUTOFF_MS,
   parseGmailSpeakerMap,
   parseSpeechMessage,
   type GmailSpeechSource,
@@ -66,7 +67,8 @@ export function buildGmailSpeechQuery(
   errorLabel: string
 ): string {
   const senderTerms = Array.from(emails, (email) => `from:${quoteGmailQueryValue(email)}`)
-  return `{${senderTerms.join(' ')}} -label:${quoteGmailQueryValue(processedLabel)} -label:${quoteGmailQueryValue(errorLabel)}`
+  const afterEpochSeconds = Math.floor(GMAIL_SPEECH_CUTOFF_MS / 1000) - 1
+  return `{${senderTerms.join(' ')}} after:${afterEpochSeconds} -label:${quoteGmailQueryValue(processedLabel)} -label:${quoteGmailQueryValue(errorLabel)}`
 }
 
 async function resolveIngestionSource(

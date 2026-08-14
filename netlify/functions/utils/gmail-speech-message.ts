@@ -6,8 +6,13 @@ import {
 const DOCX_MIME_TYPE =
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 const PDF_MIME_TYPE = 'application/pdf'
+const PAGES_MIME_TYPES = new Set([
+  'application/vnd.apple.pages',
+  'application/x-iwork-pages-sffpages',
+])
 const EMAIL_PATTERN = /^[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+$/
 const GOOGLE_DOC_URL_PATTERN = /https:\/\/docs\.google\.com\/document\/d\/([^\s/?#<>]+)/gi
+export const GMAIL_SPEECH_CUTOFF_MS = Date.UTC(2026, 7, 1)
 
 export interface GmailMessageHeader {
   name?: string
@@ -28,6 +33,7 @@ export interface GmailMessagePart {
 
 export interface GmailMessage {
   id?: string
+  internalDate?: string
   payload?: GmailMessagePart
 }
 
@@ -63,8 +69,10 @@ export type GmailSpeechMessageResult =
       ok: false
       code:
         | 'invalid_message'
+        | 'message_before_cutoff'
         | 'sender_not_allowed'
         | 'ambiguous_sources'
+        | 'unsupported_format'
         | 'no_supported_source'
       error: string
     }
@@ -128,6 +136,7 @@ interface MessageCandidates {
   attachments: Extract<GmailSpeechSource, { kind: 'attachment' }>[]
   googleDocs: Extract<GmailSpeechSource, { kind: 'google-doc' }>[]
   plainTextBodies: string[]
+  hasPagesAttachment: boolean
 }
 
 function collectGoogleDocs(text: string, candidates: MessageCandidates): void {
@@ -152,7 +161,9 @@ function collectCandidates(part: GmailMessagePart, candidates: MessageCandidates
 
   if (attachmentId && fileName) {
     const lowerName = fileName.toLowerCase()
-    if (mimeType === DOCX_MIME_TYPE && lowerName.endsWith('.docx')) {
+    if (lowerName.endsWith('.pages') || PAGES_MIME_TYPES.has(mimeType)) {
+      candidates.hasPagesAttachment = true
+    } else if (mimeType === DOCX_MIME_TYPE && lowerName.endsWith('.docx')) {
       candidates.attachments.push({
         kind: 'attachment',
         attachmentId,
@@ -195,6 +206,18 @@ export function parseSpeechMessage(
     return { ok: false, code: 'invalid_message', error: 'Gmail message payload is invalid' }
   }
 
+  const internalDate = Number.parseInt(message.internalDate || '', 10)
+  if (!Number.isFinite(internalDate)) {
+    return { ok: false, code: 'invalid_message', error: 'Gmail message receipt date is invalid' }
+  }
+  if (internalDate < GMAIL_SPEECH_CUTOFF_MS) {
+    return {
+      ok: false,
+      code: 'message_before_cutoff',
+      error: 'Message was received before August 1, 2026',
+    }
+  }
+
   const fromAddress = extractFromAddress(getHeader(message.payload.headers, 'from'))
   const speakerKey = fromAddress ? speakerMap.get(fromAddress) : undefined
   if (!speakerKey) {
@@ -209,8 +232,17 @@ export function parseSpeechMessage(
     attachments: [],
     googleDocs: [],
     plainTextBodies: [],
+    hasPagesAttachment: false,
   }
   collectCandidates(message.payload, candidates)
+
+  if (candidates.hasPagesAttachment) {
+    return {
+      ok: false,
+      code: 'unsupported_format',
+      error: 'Apple Pages files are not supported. Export the speech as DOCX or PDF and resend it.',
+    }
+  }
 
   const primarySources: GmailSpeechSource[] = [
     ...candidates.attachments,

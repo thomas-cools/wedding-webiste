@@ -118,6 +118,46 @@ describe('Gmail speech sync handlers', () => {
     expect(mockRetryFailedGmailSpeeches).toHaveBeenCalledTimes(1)
   })
 
+  it('runs an on-demand mailbox sync for an admin', async () => {
+    const response = assertResponse(await adminHandler(
+      createEvent({
+        httpMethod: 'POST',
+        headers: adminHeaders(),
+        body: JSON.stringify({ action: 'sync' }),
+      }),
+      mockContext
+    ))
+
+    expect(response.statusCode).toBe(200)
+    expect(JSON.parse(response.body || '{}')).toEqual({
+      ok: true,
+      sync: { found: 2, processed: 1, failed: 1, skipped: 0 },
+      requestedBy: 'admin',
+    })
+    expect(mockSyncGmailSpeeches).toHaveBeenCalledTimes(1)
+    expect(mockRetryFailedGmailSpeeches).not.toHaveBeenCalled()
+  })
+
+  it('rejects invalid sync commands', async () => {
+    const invalidJson = assertResponse(await adminHandler(
+      createEvent({ httpMethod: 'POST', headers: adminHeaders(), body: '{' }),
+      mockContext
+    ))
+    expect(invalidJson.statusCode).toBe(400)
+
+    const invalidAction = assertResponse(await adminHandler(
+      createEvent({
+        httpMethod: 'POST',
+        headers: adminHeaders(),
+        body: JSON.stringify({ action: 'delete' }),
+      }),
+      mockContext
+    ))
+    expect(invalidAction.statusCode).toBe(400)
+    expect(mockSyncGmailSpeeches).not.toHaveBeenCalled()
+    expect(mockRetryFailedGmailSpeeches).not.toHaveBeenCalled()
+  })
+
   it('returns only aggregate counts from the scheduled function', async () => {
     jest.spyOn(console, 'info').mockImplementation(() => undefined)
     const response = assertResponse(await scheduledHandler(createEvent(), mockContext))

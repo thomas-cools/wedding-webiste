@@ -1050,14 +1050,14 @@ No sender addresses, subjects, raw headers, message bodies, or OAuth credentials
 
 ### Accepted Submissions
 
-A message must come from an address configured in `GMAIL_SPEAKER_MAP_JSON`. The importer accepts one of these sources:
+A message must be received on or after **August 1, 2026** and its `From` address must exactly match an address configured in `GMAIL_SPEAKER_MAP_JSON`. An address appearing only in `To` or `Cc` is never treated as a speaker submission. The importer accepts one of these sources:
 
 - One DOCX attachment, up to 1 MB
 - One text-based PDF attachment, up to 1 MB
 - One Google Docs link; private Docs must be shared with `carolinaandthomaswedding@gmail.com`
 - The complete plain-text email body when no supported attachment or Google Docs link exists
 
-Messages containing more than one supported attachment or Google Docs link are rejected as ambiguous. A normal note accompanying one attachment or link is ignored. HTML-only messages and scanned PDFs without extractable text are rejected. A later successful message replaces that speaker's previous Gmail-imported speech; a failed revision leaves the current speech active.
+Messages containing more than one supported attachment or Google Docs link are rejected as ambiguous. A normal note accompanying one attachment or link is ignored. HTML-only messages and scanned PDFs without extractable text are rejected. Apple Pages (`.pages`) attachments are detected and quarantined with instructions to export as DOCX or PDF because Pages files cannot be reliably parsed server-side. A later successful message replaces that speaker's previous Gmail-imported speech; a failed revision leaves the current speech active.
 
 Body-only submissions preserve the entire plain-text body, including greetings and signatures. Speakers using this route should send only the intended speech text.
 

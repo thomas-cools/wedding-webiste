@@ -9,7 +9,12 @@ import {
 import {
   getGmailSpeechSyncStatus,
   retryFailedGmailSpeeches,
+  syncGmailSpeeches,
 } from './utils/gmail-speeches'
+
+interface SyncBody {
+  action?: unknown
+}
 
 export const handler: Handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return adminCorsResponse()
@@ -22,7 +27,23 @@ export const handler: Handler = async (event) => {
 
   try {
     if (event.httpMethod === 'POST') {
-      const sync = await retryFailedGmailSpeeches()
+      let body: SyncBody = {}
+      if (event.body) {
+        try {
+          body = JSON.parse(event.body) as SyncBody
+        } catch {
+          return adminJson(400, { ok: false, error: 'Invalid JSON body' })
+        }
+      }
+
+      const action = body.action === undefined ? 'retry' : body.action
+      if (action !== 'sync' && action !== 'retry') {
+        return adminJson(400, { ok: false, error: 'action must be sync or retry' })
+      }
+
+      const sync = action === 'sync'
+        ? await syncGmailSpeeches()
+        : await retryFailedGmailSpeeches()
       return adminJson(200, { ok: true, sync, requestedBy: payload.sub })
     }
 

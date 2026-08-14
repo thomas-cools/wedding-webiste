@@ -42,6 +42,10 @@ jest.mock('../components/Admin/SpeechesDocumentsPanel', () => ({
   SpeechesDocumentsPanel: () => <div>Speeches Documents Panel</div>,
 }))
 
+jest.mock('../components/Admin/GmailSpeechSyncPanel', () => ({
+  GmailSpeechSyncPanel: () => <div>Gmail Speech Sync Panel</div>,
+}))
+
 describe('AdminLayout', () => {
   it('shows a prominent button to open the speeches link generator', async () => {
     const user = userEvent.setup()
@@ -53,5 +57,14 @@ describe('AdminLayout', () => {
     await user.click(button)
 
     expect(screen.getByText('Speeches Link Panel')).toBeInTheDocument()
+  })
+
+  it('opens the Gmail sync diagnostics tab', async () => {
+    const user = userEvent.setup()
+    render(<AdminLayout onLogout={jest.fn()} />)
+
+    await user.click(screen.getByRole('tab', { name: 'Gmail Sync' }))
+
+    expect(screen.getByText('Gmail Speech Sync Panel')).toBeInTheDocument()
   })
 })
