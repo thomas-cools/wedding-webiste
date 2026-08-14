@@ -41,6 +41,7 @@ describe('GmailSpeechSyncPanel', () => {
               processing: 0,
               processed: getCount === 1 ? 3 : 4,
               failed: 0,
+              processedSpeakers: ['carlos'],
               failures: [],
             },
           }),
@@ -93,6 +94,7 @@ describe('GmailSpeechSyncPanel', () => {
               processing: 0,
               processed: 2,
               failed: 1,
+              processedSpeakers: ['carlos'],
               failures: [{
                 speakerKey: 'carlos',
                 errorCode: 'processing_failed',
@@ -119,5 +121,49 @@ describe('GmailSpeechSyncPanel', () => {
         })
       )
     })
+  })
+
+  it('reprocesses the newest processed message for one speaker', async () => {
+    const user = userEvent.setup()
+    const fetchMock = jest.spyOn(global, 'fetch' as never).mockImplementation(
+      async (_input: RequestInfo | URL, init?: RequestInit) => {
+        if (init?.method === 'POST') {
+          return {
+            ok: true,
+            json: async () => ({
+              ok: true,
+              sync: { found: 1, processed: 1, failed: 0, skipped: 0 },
+            }),
+          } as never
+        }
+        return {
+          ok: true,
+          json: async () => ({
+            ok: true,
+            status: {
+              processing: 0,
+              processed: 1,
+              failed: 0,
+              processedSpeakers: ['carlos'],
+              failures: [],
+            },
+          }),
+        } as never
+      }
+    )
+
+    render(<GmailSpeechSyncPanel />)
+    await user.click(await screen.findByRole('button', { name: 'Reprocess Carlos' }))
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        '/api/admin-speeches-gmail-sync',
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({ action: 'reprocess-speaker', speakerKey: 'carlos' }),
+        })
+      )
+    })
+    expect(await screen.findByText('Latest on-demand run')).toBeInTheDocument()
   })
 })

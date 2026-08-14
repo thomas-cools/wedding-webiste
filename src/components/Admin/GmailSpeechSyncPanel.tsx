@@ -24,6 +24,7 @@ interface GmailSyncStatus {
   processing: number
   processed: number
   failed: number
+  processedSpeakers: SpeechSpeakerKey[]
   failures: Array<{
     speakerKey?: SpeechSpeakerKey
     errorCode?: string
@@ -46,13 +47,13 @@ interface GmailSyncResponse {
   error?: string
 }
 
-type SyncAction = 'sync' | 'retry'
+type SyncAction = 'sync' | 'retry' | 'reprocess-speaker'
 
 export function GmailSpeechSyncPanel() {
   const [status, setStatus] = useState<GmailSyncStatus | null>(null)
   const [lastResult, setLastResult] = useState<GmailSyncResult | null>(null)
   const [loadingStatus, setLoadingStatus] = useState(true)
-  const [activeAction, setActiveAction] = useState<SyncAction | null>(null)
+  const [activeAction, setActiveAction] = useState<string | null>(null)
   const toast = useToast()
 
   const refreshStatus = useCallback(async (): Promise<boolean> => {
@@ -86,8 +87,9 @@ export function GmailSpeechSyncPanel() {
     }
   }
 
-  const runAction = async (action: SyncAction) => {
-    setActiveAction(action)
+  const runAction = async (action: SyncAction, speakerKey?: SpeechSpeakerKey) => {
+    const actionKey = speakerKey ? `${action}:${speakerKey}` : action
+    setActiveAction(actionKey)
     try {
       const response = await fetch('/api/admin-speeches-gmail-sync', {
         method: 'POST',
@@ -95,12 +97,16 @@ export function GmailSpeechSyncPanel() {
           'Content-Type': 'application/json',
           ...getAdminAuthHeaders(),
         },
-        body: JSON.stringify({ action }),
+        body: JSON.stringify({ action, ...(speakerKey ? { speakerKey } : {}) }),
       })
       const data = (await response.json()) as GmailSyncResponse
       if (!response.ok || !data.ok || !data.sync) {
         toast({
-          title: action === 'sync' ? 'Gmail sync failed' : 'Gmail retry failed',
+          title: action === 'sync'
+            ? 'Gmail sync failed'
+            : action === 'retry'
+              ? 'Gmail retry failed'
+              : 'Gmail reprocessing failed',
           description: data.error,
           status: 'error',
           duration: 5000,
@@ -111,14 +117,22 @@ export function GmailSpeechSyncPanel() {
       setLastResult(data.sync)
       await refreshStatus()
       toast({
-        title: action === 'sync' ? 'Gmail sync complete' : 'Failed imports retried',
+        title: action === 'sync'
+          ? 'Gmail sync complete'
+          : action === 'retry'
+            ? 'Failed imports retried'
+            : `${getSpeechSpeakerByKey(speakerKey)?.label || 'Speaker'} reprocessed`,
         description: `${data.sync.processed} processed, ${data.sync.failed} failed`,
         status: data.sync.failed > 0 ? 'warning' : 'success',
         duration: 4000,
       })
     } catch {
       toast({
-        title: action === 'sync' ? 'Gmail sync failed' : 'Gmail retry failed',
+        title: action === 'sync'
+          ? 'Gmail sync failed'
+          : action === 'retry'
+            ? 'Gmail retry failed'
+            : 'Gmail reprocessing failed',
         description: 'Could not reach the sync service',
         status: 'error',
         duration: 5000,
@@ -193,6 +207,34 @@ export function GmailSpeechSyncPanel() {
             <StatNumber color="blue.600">{status?.processing ?? 0}</StatNumber>
           </Stat>
         </SimpleGrid>
+
+        {status?.processedSpeakers?.length ? (
+          <Box bg="white" rounded="md" p={5} border="1px solid" borderColor="gray.100">
+            <Text fontWeight="semibold" color="secondary.navy">
+              Reprocess a speaker
+            </Text>
+            <Text fontSize="sm" color="gray.600" mt={1} mb={3}>
+              Re-run the newest processed Gmail message for one speaker using the current extraction rules.
+            </Text>
+            <HStack spacing={2} flexWrap="wrap">
+              {status.processedSpeakers.map((speakerKey) => {
+                const actionKey = `reprocess-speaker:${speakerKey}`
+                return (
+                  <Button
+                    key={speakerKey}
+                    size="sm"
+                    variant="outline"
+                    onClick={() => void runAction('reprocess-speaker', speakerKey)}
+                    isLoading={activeAction === actionKey}
+                    isDisabled={activeAction !== null}
+                  >
+                    Reprocess {getSpeechSpeakerByKey(speakerKey)?.label || speakerKey}
+                  </Button>
+                )
+              })}
+            </HStack>
+          </Box>
+        ) : null}
 
         {lastResult ? (
           <Alert status={lastResult.failed > 0 ? 'warning' : 'success'} rounded="md">

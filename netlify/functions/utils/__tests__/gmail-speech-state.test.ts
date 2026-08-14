@@ -27,6 +27,7 @@ jest.mock('@netlify/blobs', () => ({
 import {
   claimGmailSpeechMessage,
   clearFailedGmailSpeechStates,
+  deleteGmailSpeechState,
   listGmailSpeechStates,
   markGmailSpeechMessage,
 } from '../gmail-speech-state'
@@ -139,5 +140,15 @@ describe('Gmail speech ingestion state', () => {
     expect(records.has('messages/failed')).toBe(false)
     expect(records.has('messages/processed')).toBe(true)
     expect(records.has('unrelated')).toBe(true)
+  })
+
+  it('deletes only the requested Gmail message state', async () => {
+    records.set('messages/target', { messageId: 'target', status: 'processed' })
+    records.set('messages/sibling', { messageId: 'sibling', status: 'processed' })
+
+    await deleteGmailSpeechState('target')
+
+    expect(records.has('messages/target')).toBe(false)
+    expect(records.has('messages/sibling')).toBe(true)
   })
 })

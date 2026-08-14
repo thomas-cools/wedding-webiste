@@ -1143,7 +1143,7 @@ Verify that:
 4. A revised valid speech replaces the prior Gmail-imported record.
 5. A failed revision leaves the prior speech and file available.
 
-The admin Speech Documents panel displays processed, failed, and processing counts without sender addresses or Gmail links. Use **Retry failed imports** after correcting a failed message or its permissions. Retry removes the error label and clears failed leases before synchronization; the normal per-run message limit still applies.
+The admin Gmail Sync panel displays processed, failed, and processing counts without sender addresses or Gmail links. Use **Retry failed imports** after correcting a failed message or its permissions. Retry removes the error label and clears failed leases before synchronization; the normal per-run message limit still applies. For an already processed message, use **Reprocess [speaker]** to run only that speaker's newest processed Gmail message through the current extraction rules. This leaves every other speaker and older message untouched.
 
 ### Rotation and Revocation
 

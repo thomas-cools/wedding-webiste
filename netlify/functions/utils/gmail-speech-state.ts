@@ -87,3 +87,7 @@ export async function clearFailedGmailSpeechStates(): Promise<string[]> {
   await Promise.all(failed.map((state) => store.delete(stateKey(state.messageId))))
   return failed.map((state) => state.messageId)
 }
+
+export async function deleteGmailSpeechState(messageId: string): Promise<void> {
+  await getStateStore().delete(stateKey(messageId))
+}

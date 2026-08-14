@@ -15,6 +15,7 @@ const mockClaimGmailSpeechMessage = jest.fn()
 const mockMarkGmailSpeechMessage = jest.fn()
 const mockListGmailSpeechStates = jest.fn()
 const mockClearFailedGmailSpeechStates = jest.fn()
+const mockDeleteGmailSpeechState = jest.fn()
 const mockIngestGmailSpeech = jest.fn()
 
 jest.mock('../google-mail-api', () => ({
@@ -38,6 +39,7 @@ jest.mock('../gmail-speech-state', () => ({
   markGmailSpeechMessage: (...args: unknown[]) => mockMarkGmailSpeechMessage(...args),
   listGmailSpeechStates: (...args: unknown[]) => mockListGmailSpeechStates(...args),
   clearFailedGmailSpeechStates: (...args: unknown[]) => mockClearFailedGmailSpeechStates(...args),
+  deleteGmailSpeechState: (...args: unknown[]) => mockDeleteGmailSpeechState(...args),
 }))
 
 jest.mock('../speech-gmail-ingestion', () => ({
@@ -47,6 +49,7 @@ jest.mock('../speech-gmail-ingestion', () => ({
 import {
   buildGmailSpeechQuery,
   getGmailSpeechSyncStatus,
+  reprocessLatestGmailSpeech,
   retryFailedGmailSpeeches,
   syncGmailSpeeches,
 } from '../gmail-speeches'
@@ -71,6 +74,7 @@ describe('Gmail speech synchronization', () => {
     mockIngestGmailSpeech.mockResolvedValue({ id: 'gmail-carlos' })
     mockListGmailSpeechStates.mockResolvedValue([])
     mockClearFailedGmailSpeechStates.mockResolvedValue([])
+    mockDeleteGmailSpeechState.mockResolvedValue(undefined)
   })
 
   afterAll(() => {
@@ -237,6 +241,7 @@ describe('Gmail speech synchronization', () => {
       {
         messageId: 'message-5',
         status: 'processed',
+        speakerKey: 'edith',
         updatedAt: '2026-08-08T12:00:00.000Z',
         retryCount: 0,
       },
@@ -246,6 +251,7 @@ describe('Gmail speech synchronization', () => {
       processing: 0,
       processed: 1,
       failed: 1,
+      processedSpeakers: ['edith'],
       failures: [{
         speakerKey: 'carlos',
         errorCode: 'processing_failed',
@@ -275,5 +281,63 @@ describe('Gmail speech synchronization', () => {
       ['error-label']
     )
     expect(mockClearFailedGmailSpeechStates).toHaveBeenCalledTimes(1)
+  })
+
+  it('reprocesses only the newest processed message for a selected speaker', async () => {
+    mockListGmailSpeechStates.mockResolvedValueOnce([
+      {
+        messageId: 'older-message',
+        status: 'processed',
+        speakerKey: 'carlos',
+        updatedAt: '2026-08-08T10:00:00.000Z',
+        retryCount: 0,
+      },
+      {
+        messageId: 'newest-message',
+        status: 'processed',
+        speakerKey: 'carlos',
+        updatedAt: '2026-08-08T12:00:00.000Z',
+        retryCount: 0,
+      },
+      {
+        messageId: 'other-speaker',
+        status: 'processed',
+        speakerKey: 'edith',
+        updatedAt: '2026-08-08T13:00:00.000Z',
+        retryCount: 0,
+      },
+    ])
+    mockEnsureGmailLabel
+      .mockReset()
+      .mockResolvedValueOnce('processed-label')
+      .mockResolvedValueOnce('error-label')
+    mockGetGmailMessage.mockResolvedValueOnce({ id: 'newest-message' })
+    mockParseSpeechMessage.mockReturnValueOnce({
+      ok: true,
+      speakerKey: 'carlos',
+      source: { kind: 'body', text: 'Complete speech text' },
+    })
+
+    await expect(reprocessLatestGmailSpeech('carlos')).resolves.toEqual({
+      found: 1,
+      processed: 1,
+      failed: 0,
+      skipped: 0,
+    })
+    expect(mockModifyGmailMessageLabels).toHaveBeenNthCalledWith(
+      1,
+      'access-token',
+      'newest-message',
+      [],
+      ['processed-label', 'error-label']
+    )
+    expect(mockDeleteGmailSpeechState).toHaveBeenCalledWith('newest-message')
+    expect(mockDeleteGmailSpeechState).not.toHaveBeenCalledWith('older-message')
+    expect(mockClaimGmailSpeechMessage).toHaveBeenCalledWith('newest-message')
+    expect(mockIngestGmailSpeech).toHaveBeenCalledWith({
+      messageId: 'newest-message',
+      speakerKey: 'carlos',
+      source: { kind: 'body', text: 'Complete speech text' },
+    })
   })
 })

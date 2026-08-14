@@ -8,11 +8,13 @@ import * as jwt from '../utils/jwt'
 const mockGetGmailSpeechSyncStatus = jest.fn()
 const mockRetryFailedGmailSpeeches = jest.fn()
 const mockSyncGmailSpeeches = jest.fn()
+const mockReprocessLatestGmailSpeech = jest.fn()
 
 jest.mock('../utils/gmail-speeches', () => ({
   getGmailSpeechSyncStatus: (...args: unknown[]) => mockGetGmailSpeechSyncStatus(...args),
   retryFailedGmailSpeeches: (...args: unknown[]) => mockRetryFailedGmailSpeeches(...args),
   syncGmailSpeeches: (...args: unknown[]) => mockSyncGmailSpeeches(...args),
+  reprocessLatestGmailSpeech: (...args: unknown[]) => mockReprocessLatestGmailSpeech(...args),
 }))
 
 import { handler as adminHandler } from '../admin-speeches-gmail-sync'
@@ -68,6 +70,12 @@ describe('Gmail speech sync handlers', () => {
       found: 2,
       processed: 1,
       failed: 1,
+      skipped: 0,
+    })
+    mockReprocessLatestGmailSpeech.mockResolvedValue({
+      found: 1,
+      processed: 1,
+      failed: 0,
       skipped: 0,
     })
   })
@@ -156,6 +164,38 @@ describe('Gmail speech sync handlers', () => {
     expect(invalidAction.statusCode).toBe(400)
     expect(mockSyncGmailSpeeches).not.toHaveBeenCalled()
     expect(mockRetryFailedGmailSpeeches).not.toHaveBeenCalled()
+  })
+
+  it('reprocesses the latest processed message for a validated speaker', async () => {
+    const response = assertResponse(await adminHandler(
+      createEvent({
+        httpMethod: 'POST',
+        headers: adminHeaders(),
+        body: JSON.stringify({ action: 'reprocess-speaker', speakerKey: 'carlos' }),
+      }),
+      mockContext
+    ))
+
+    expect(response.statusCode).toBe(200)
+    expect(mockReprocessLatestGmailSpeech).toHaveBeenCalledWith('carlos')
+    expect(JSON.parse(response.body || '{}')).toMatchObject({
+      ok: true,
+      sync: { found: 1, processed: 1, failed: 0, skipped: 0 },
+    })
+  })
+
+  it('rejects reprocessing for an invalid speaker key', async () => {
+    const response = assertResponse(await adminHandler(
+      createEvent({
+        httpMethod: 'POST',
+        headers: adminHeaders(),
+        body: JSON.stringify({ action: 'reprocess-speaker', speakerKey: 'unknown' }),
+      }),
+      mockContext
+    ))
+
+    expect(response.statusCode).toBe(400)
+    expect(mockReprocessLatestGmailSpeech).not.toHaveBeenCalled()
   })
 
   it('returns only aggregate counts from the scheduled function', async () => {

@@ -1,4 +1,5 @@
 import type { Handler } from '@netlify/functions'
+import { isSpeechSpeakerKey } from '../../src/config/speeches'
 
 import {
   adminCorsResponse,
@@ -8,12 +9,14 @@ import {
 } from './utils/admin-auth'
 import {
   getGmailSpeechSyncStatus,
+  reprocessLatestGmailSpeech,
   retryFailedGmailSpeeches,
   syncGmailSpeeches,
 } from './utils/gmail-speeches'
 
 interface SyncBody {
   action?: unknown
+  speakerKey?: unknown
 }
 
 export const handler: Handler = async (event) => {
@@ -37,13 +40,19 @@ export const handler: Handler = async (event) => {
       }
 
       const action = body.action === undefined ? 'retry' : body.action
-      if (action !== 'sync' && action !== 'retry') {
-        return adminJson(400, { ok: false, error: 'action must be sync or retry' })
+      if (action !== 'sync' && action !== 'retry' && action !== 'reprocess-speaker') {
+        return adminJson(400, { ok: false, error: 'action must be sync, retry, or reprocess-speaker' })
+      }
+
+      if (action === 'reprocess-speaker' && !isSpeechSpeakerKey(body.speakerKey)) {
+        return adminJson(400, { ok: false, error: 'A valid speakerKey is required' })
       }
 
       const sync = action === 'sync'
         ? await syncGmailSpeeches()
-        : await retryFailedGmailSpeeches()
+        : action === 'retry'
+          ? await retryFailedGmailSpeeches()
+          : await reprocessLatestGmailSpeech(body.speakerKey as Parameters<typeof reprocessLatestGmailSpeech>[0])
       return adminJson(200, { ok: true, sync, requestedBy: payload.sub })
     }
 
