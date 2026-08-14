@@ -242,7 +242,7 @@ export interface UploadValidationSuccess {
   originalFileName: string
   mimeType: string
   fileSizeBytes: number
-  docType: 'docx' | 'pdf'
+  docType: 'docx' | 'pdf' | 'pages'
 }
 
 export interface UploadValidationFailure {
@@ -496,6 +496,10 @@ function hasPdfSignature(bytes: Uint8Array): boolean {
   return PDF_FILE_SIGNATURE.every((value, index) => bytes[index] === value)
 }
 
+function hasZipSignature(bytes: Uint8Array): boolean {
+  return bytes.byteLength >= 4 && bytes[0] === 0x50 && bytes[1] === 0x4b && bytes[2] === 0x03 && bytes[3] === 0x04
+}
+
 function validateSpeakerKey(input: unknown): SpeechSpeakerKey | null {
   return isSpeechSpeakerKey(input) ? input : null
 }
@@ -567,8 +571,45 @@ export function validateSpeechDocumentBinary(
     return validateSpeechDocumentUpload(input)
   }
 
+  const isPages = originalFileName.toLowerCase().endsWith('.pages') ||
+    mimeType === 'application/vnd.apple.pages' ||
+    mimeType === 'application/x-iwork-pages-sffpages'
+  if (isPages) {
+    if (!originalFileName.toLowerCase().endsWith('.pages')) {
+      return { ok: false, error: 'Apple Pages attachment must use a .pages filename' }
+    }
+    if (!hasZipSignature(input.fileBytes)) {
+      return { ok: false, error: 'Apple Pages attachment does not appear to be a valid package' }
+    }
+
+    const fileSizeBytes = typeof input.fileSizeBytes === 'number'
+      ? input.fileSizeBytes
+      : Number.parseInt(String(input.fileSizeBytes || ''), 10)
+    if (!Number.isFinite(fileSizeBytes) || fileSizeBytes <= 0) {
+      return { ok: false, error: 'Uploaded file is empty or invalid' }
+    }
+    if (fileSizeBytes > MAX_FILE_SIZE_BYTES) {
+      return { ok: false, error: `Document exceeds the ${MAX_FILE_SIZE_BYTES} byte limit` }
+    }
+
+    const fileName = typeof input.fileName === 'string' ? sanitizeFileName(input.fileName) : ''
+    if (!fileName) return { ok: false, error: 'fileName is required' }
+    const speakerKey = validateSpeakerKey(input.speakerKey)
+    if (!speakerKey) return { ok: false, error: 'speakerKey is required' }
+
+    return {
+      ok: true,
+      fileName,
+      speakerKey,
+      originalFileName,
+      mimeType: mimeType || 'application/vnd.apple.pages',
+      fileSizeBytes,
+      docType: 'pages',
+    }
+  }
+
   if (!originalFileName.toLowerCase().endsWith('.pdf')) {
-    return { ok: false, error: 'Only DOCX and PDF files are supported' }
+    return { ok: false, error: 'Only DOCX, PDF, and Apple Pages files are supported' }
   }
   if (mimeType !== PDF_MIME_TYPE) {
     return { ok: false, error: 'Uploaded file must be a valid PDF document' }

@@ -13,6 +13,7 @@ const PAGES_MIME_TYPES = new Set([
 const EMAIL_PATTERN = /^[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+$/
 const GOOGLE_DOC_URL_PATTERN = /https:\/\/docs\.google\.com\/document\/d\/([^\s/?#<>]+)/gi
 export const GMAIL_SPEECH_CUTOFF_MS = Date.UTC(2026, 7, 1)
+export const GMAIL_SPEECH_MIN_BODY_CHARS = 300
 
 export interface GmailMessageHeader {
   name?: string
@@ -44,7 +45,7 @@ export type GmailSpeechSource =
       fileName: string
       mimeType: string
       size: number
-      docType: 'docx' | 'pdf'
+      docType: 'docx' | 'pdf' | 'pages'
     }
   | {
       kind: 'google-doc'
@@ -72,7 +73,6 @@ export type GmailSpeechMessageResult =
         | 'message_before_cutoff'
         | 'sender_not_allowed'
         | 'ambiguous_sources'
-        | 'unsupported_format'
         | 'no_supported_source'
       error: string
     }
@@ -136,7 +136,6 @@ interface MessageCandidates {
   attachments: Extract<GmailSpeechSource, { kind: 'attachment' }>[]
   googleDocs: Extract<GmailSpeechSource, { kind: 'google-doc' }>[]
   plainTextBodies: string[]
-  hasPagesAttachment: boolean
 }
 
 function collectGoogleDocs(text: string, candidates: MessageCandidates): void {
@@ -162,7 +161,14 @@ function collectCandidates(part: GmailMessagePart, candidates: MessageCandidates
   if (attachmentId && fileName) {
     const lowerName = fileName.toLowerCase()
     if (lowerName.endsWith('.pages') || PAGES_MIME_TYPES.has(mimeType)) {
-      candidates.hasPagesAttachment = true
+      candidates.attachments.push({
+        kind: 'attachment',
+        attachmentId,
+        fileName,
+        mimeType: mimeType || 'application/vnd.apple.pages',
+        size: part.body?.size || 0,
+        docType: 'pages',
+      })
     } else if (mimeType === DOCX_MIME_TYPE && lowerName.endsWith('.docx')) {
       candidates.attachments.push({
         kind: 'attachment',
@@ -232,17 +238,8 @@ export function parseSpeechMessage(
     attachments: [],
     googleDocs: [],
     plainTextBodies: [],
-    hasPagesAttachment: false,
   }
   collectCandidates(message.payload, candidates)
-
-  if (candidates.hasPagesAttachment) {
-    return {
-      ok: false,
-      code: 'unsupported_format',
-      error: 'Apple Pages files are not supported. Export the speech as DOCX or PDF and resend it.',
-    }
-  }
 
   const primarySources: GmailSpeechSource[] = [
     ...candidates.attachments,
@@ -262,11 +259,11 @@ export function parseSpeechMessage(
   }
 
   const bodyText = candidates.plainTextBodies.join('\n\n').trim()
-  if (!bodyText) {
+  if (bodyText.length < GMAIL_SPEECH_MIN_BODY_CHARS) {
     return {
       ok: false,
       code: 'no_supported_source',
-      error: 'Message does not contain a supported speech source',
+      error: `Message does not contain a document attachment, Google Doc, or at least ${GMAIL_SPEECH_MIN_BODY_CHARS} characters of speech text`,
     }
   }
 

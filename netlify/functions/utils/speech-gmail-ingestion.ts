@@ -14,6 +14,7 @@ import {
 } from './speech-documents'
 import {
   extractSpeechTextFromDocxBytes,
+  extractSpeechTextFromPagesBytes,
   extractSpeechTextFromPdfBytes,
   extractSpeechTextFromPlainText,
   type SpeechTextExtractionResult,
@@ -45,8 +46,8 @@ export interface GmailSpeechIngestionInput {
 
 interface PreparedSource {
   extraction: SpeechTextExtractionResult
-  docType: 'docx' | 'pdf' | 'google-doc' | 'text'
-  sourceSubtype: 'docx' | 'pdf' | 'google-doc' | 'body'
+  docType: 'docx' | 'pdf' | 'pages' | 'google-doc' | 'text'
+  sourceSubtype: 'docx' | 'pdf' | 'pages' | 'google-doc' | 'body'
   bytes?: Uint8Array
   mimeType?: string
   originalFileName?: string
@@ -92,9 +93,10 @@ function prepareSource(
   }
 
   return {
-    extraction:
-      validation.docType === 'docx'
-        ? extractSpeechTextFromDocxBytes(input.source.bytes)
+    extraction: validation.docType === 'docx'
+      ? extractSpeechTextFromDocxBytes(input.source.bytes)
+      : validation.docType === 'pages'
+        ? extractSpeechTextFromPagesBytes(input.source.bytes)
         : extractSpeechTextFromPdfBytes(input.source.bytes),
     docType: validation.docType,
     sourceSubtype: validation.docType,
@@ -127,7 +129,7 @@ export async function ingestGmailSpeech(
   const previous = await getSpeechDocumentById(id)
   const version = randomUUID()
   const storageKey = prepared.bytes
-    ? buildSpeechDocumentStorageKey(id, prepared.docType as 'docx' | 'pdf', version)
+    ? buildSpeechDocumentStorageKey(id, prepared.docType as 'docx' | 'pdf' | 'pages', version)
     : undefined
   const now = new Date().toISOString()
 

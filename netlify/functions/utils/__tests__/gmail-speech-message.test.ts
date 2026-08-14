@@ -68,12 +68,13 @@ describe('gmail speech message parsing', () => {
     })
   })
 
-  it('uses the complete plain-text body only when no file or Google Doc exists', () => {
+  it('uses a long plain-text body only when no file or Google Doc exists', () => {
+    const speech = `Hello everyone. ${'Thank you for being here with us today. '.repeat(10)}`
     const result = parseSpeechMessage(
       message({
         headers: [{ name: 'From', value: 'speaker@example.com' }],
         mimeType: 'text/plain',
-        body: { data: Buffer.from('Hello everyone.\n\nThis is my speech.').toString('base64url') },
+        body: { data: Buffer.from(speech).toString('base64url') },
       }),
       new Map([['speaker@example.com', 'carlos']])
     )
@@ -83,7 +84,7 @@ describe('gmail speech message parsing', () => {
       speakerKey: 'carlos',
       source: {
         kind: 'body',
-        text: 'Hello everyone.\n\nThis is my speech.',
+        text: speech.trim(),
         docType: 'text',
       },
     })
@@ -202,7 +203,7 @@ describe('gmail speech message parsing', () => {
     expect(result).toMatchObject({ ok: false, code: 'sender_not_allowed' })
   })
 
-  it('detects Apple Pages attachments instead of falling back to the email body', () => {
+  it('selects Apple Pages attachments instead of falling back to the email body', () => {
     const result = parseSpeechMessage(
       message({
         headers: [{ name: 'From', value: 'speaker@example.com' }],
@@ -223,9 +224,30 @@ describe('gmail speech message parsing', () => {
     )
 
     expect(result).toEqual({
-      ok: false,
-      code: 'unsupported_format',
-      error: 'Apple Pages files are not supported. Export the speech as DOCX or PDF and resend it.',
+      ok: true,
+      messageId: 'opaque-message-id',
+      speakerKey: 'carlos',
+      source: {
+        kind: 'attachment',
+        attachmentId: 'pages-1',
+        fileName: 'speech.pages',
+        mimeType: 'application/vnd.apple.pages',
+        size: 512,
+        docType: 'pages',
+      },
     })
+  })
+
+  it('rejects a short conversational body when there is no document source', () => {
+    const result = parseSpeechMessage(
+      message({
+        headers: [{ name: 'From', value: 'speaker@example.com' }],
+        mimeType: 'text/plain',
+        body: { data: Buffer.from('Thanks, I will send it soon.').toString('base64url') },
+      }),
+      new Map([['speaker@example.com', 'carlos']])
+    )
+
+    expect(result).toMatchObject({ ok: false, code: 'no_supported_source' })
   })
 })

@@ -1054,10 +1054,11 @@ A message must be received on or after **August 1, 2026** and its `From` address
 
 - One DOCX attachment, up to 1 MB
 - One text-based PDF attachment, up to 1 MB
+- One Apple Pages attachment, up to 1 MB; the importer extracts an embedded PDF preview or legacy XML when available
 - One Google Docs link; private Docs must be shared with `carolinaandthomaswedding@gmail.com`
-- The complete plain-text email body when no supported attachment or Google Docs link exists
+- A plain-text email body of at least 300 characters when no supported attachment or Google Docs link exists
 
-Messages containing more than one supported attachment or Google Docs link are rejected as ambiguous. A normal note accompanying one attachment or link is ignored. HTML-only messages and scanned PDFs without extractable text are rejected. Apple Pages (`.pages`) attachments are detected and quarantined with instructions to export as DOCX or PDF because Pages files cannot be reliably parsed server-side. A later successful message replaces that speaker's previous Gmail-imported speech; a failed revision leaves the current speech active.
+Document attachments and Google Docs links always take priority over email body text. Messages containing more than one supported attachment or Google Docs link are rejected as ambiguous. A normal note accompanying one attachment or link is ignored. HTML-only messages, short conversational bodies, scanned PDFs without extractable text, and Pages packages without an embedded preview or legacy XML are rejected with actionable errors. A later successful message replaces that speaker's previous Gmail-imported speech; a failed revision leaves the current speech active.
 
 Body-only submissions preserve the entire plain-text body, including greetings and signatures. Speakers using this route should send only the intended speech text.
 

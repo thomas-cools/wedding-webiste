@@ -8,6 +8,7 @@ const mockSaveSpeechDocumentFile = jest.fn()
 const mockDeleteSpeechDocumentFile = jest.fn()
 const mockExtractDocx = jest.fn()
 const mockExtractPdf = jest.fn()
+const mockExtractPages = jest.fn()
 const mockTranslate = jest.fn()
 
 jest.mock('../speech-documents', () => ({
@@ -22,6 +23,7 @@ jest.mock('../speech-documents', () => ({
 jest.mock('../speech-document-content', () => ({
   extractSpeechTextFromDocxBytes: (...args: unknown[]) => mockExtractDocx(...args),
   extractSpeechTextFromPdfBytes: (...args: unknown[]) => mockExtractPdf(...args),
+  extractSpeechTextFromPagesBytes: (...args: unknown[]) => mockExtractPages(...args),
   extractSpeechTextFromPlainText: (text: string) => ({
     ok: true,
     text: text.trim(),
@@ -42,6 +44,7 @@ describe('Gmail speech ingestion', () => {
     mockDeleteSpeechDocumentFile.mockResolvedValue(true)
     mockExtractDocx.mockResolvedValue({ ok: true, text: 'Speech text', detectedLanguage: 'en' })
     mockExtractPdf.mockResolvedValue({ ok: true, text: 'PDF speech', detectedLanguage: 'en' })
+    mockExtractPages.mockResolvedValue({ ok: true, text: 'Pages speech', detectedLanguage: 'en' })
     mockTranslate.mockResolvedValue({
       status: 'success',
       translatedText: 'Texto del discurso',
@@ -91,6 +94,28 @@ describe('Gmail speech ingestion', () => {
     expect(result.sourceSubtype).toBe('docx')
     expect(mockExtractDocx).toHaveBeenCalledTimes(1)
     expect(mockTranslate).toHaveBeenCalledWith('Speech text', 'en')
+    expect(mockSaveSpeechDocumentFile).toHaveBeenCalledTimes(1)
+  })
+
+  it('extracts, translates, and stages an Apple Pages attachment', async () => {
+    const { ingestGmailSpeech } = await import('../speech-gmail-ingestion')
+    const result = await ingestGmailSpeech({
+      messageId: 'message-pages',
+      speakerKey: 'jimena',
+      source: {
+        kind: 'attachment',
+        fileName: 'speech.pages',
+        mimeType: 'application/vnd.apple.pages',
+        bytes: new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0x10]),
+      },
+    })
+
+    expect(result.id).toBe('gmail-jimena')
+    expect(result.docType).toBe('pages')
+    expect(result.sourceSubtype).toBe('pages')
+    expect(result.storageKey).toContain('.pages')
+    expect(mockExtractPages).toHaveBeenCalledTimes(1)
+    expect(mockTranslate).toHaveBeenCalledWith('Pages speech', 'en')
     expect(mockSaveSpeechDocumentFile).toHaveBeenCalledTimes(1)
   })
 

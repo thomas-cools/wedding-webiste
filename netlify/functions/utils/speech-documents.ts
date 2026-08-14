@@ -7,9 +7,9 @@ import { inferSpeechSpeakerKeyFromLabel, type SpeechSpeakerKey } from '../../../
 const STORE_NAME = 'speech-documents'
 const FILES_PREFIX = 'files/'
 
-export type SpeechDocumentType = 'pdf' | 'docx' | 'google-doc' | 'text'
+export type SpeechDocumentType = 'pdf' | 'docx' | 'pages' | 'google-doc' | 'text'
 export type SpeechDocumentSourceKind = 'url' | 'upload' | 'gmail'
-export type SpeechDocumentSourceSubtype = 'docx' | 'pdf' | 'google-doc' | 'body'
+export type SpeechDocumentSourceSubtype = 'docx' | 'pdf' | 'pages' | 'google-doc' | 'body'
 export type SpeechDocumentLanguage = 'en' | 'es'
 export type SpeechTranslationStatus = 'success' | 'failed' | 'skipped'
 
@@ -151,7 +151,7 @@ async function backfillDocuments(documents: SpeechDocument[]): Promise<SpeechSpe
 
 export function buildSpeechDocumentStorageKey(
   documentId: string,
-  extension: 'docx' | 'pdf' = 'docx',
+  extension: 'docx' | 'pdf' | 'pages' = 'docx',
   version?: string
 ): string {
   const suffix = version ? `-${version}` : ''

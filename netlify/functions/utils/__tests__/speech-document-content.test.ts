@@ -2,6 +2,8 @@
  * @jest-environment node
  */
 
+import JSZip from 'jszip'
+
 const mockPdfParse = jest.fn()
 const mockMammothExtractRawText = jest.fn()
 const mockFetch = jest.fn()
@@ -51,6 +53,55 @@ describe('speech-document-content', () => {
       expect(result.text).toBe('Gracias a todos y celebrar con nosotros.')
       expect(result.detectedLanguage).toBe('es')
     }
+  })
+
+  it('extracts an embedded PDF preview from an Apple Pages package', async () => {
+    mockPdfParse.mockResolvedValueOnce({ text: 'Thank you all for being here with us today.' })
+    const archive = new JSZip()
+    archive.file('QuickLook/Preview.pdf', Buffer.from('%PDF-1.7 preview'))
+    const bytes = await archive.generateAsync({ type: 'uint8array' })
+
+    const { extractSpeechTextFromPagesBytes } = await import('../speech-document-content')
+    const result = await extractSpeechTextFromPagesBytes(bytes)
+
+    expect(result).toMatchObject({
+      ok: true,
+      text: 'Thank you all for being here with us today.',
+      detectedLanguage: 'en',
+    })
+    expect(mockPdfParse).toHaveBeenCalledTimes(1)
+  })
+
+  it('falls back to legacy XML text in an Apple Pages package', async () => {
+    const archive = new JSZip()
+    archive.file(
+      'index.xml',
+      '<document><paragraph>Hello everyone and thank you for sharing this day with us.</paragraph></document>'
+    )
+    const bytes = await archive.generateAsync({ type: 'uint8array' })
+
+    const { extractSpeechTextFromPagesBytes } = await import('../speech-document-content')
+    const result = await extractSpeechTextFromPagesBytes(bytes)
+
+    expect(result).toMatchObject({
+      ok: true,
+      text: 'Hello everyone and thank you for sharing this day with us.',
+      detectedLanguage: 'en',
+    })
+  })
+
+  it('returns an actionable error when a Pages package has no extractable preview', async () => {
+    const archive = new JSZip()
+    archive.file('Index/Document.iwa', new Uint8Array([1, 2, 3]))
+    const bytes = await archive.generateAsync({ type: 'uint8array' })
+
+    const { extractSpeechTextFromPagesBytes } = await import('../speech-document-content')
+    const result = await extractSpeechTextFromPagesBytes(bytes)
+
+    expect(result).toEqual({
+      ok: false,
+      error: 'Could not extract text from this Apple Pages file. Export it as DOCX or PDF and resend it.',
+    })
   })
 
   it('extracts text from a Google Docs URL', async () => {

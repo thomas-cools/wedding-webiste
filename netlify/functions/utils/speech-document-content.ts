@@ -1,10 +1,15 @@
 import mammoth from 'mammoth'
+import JSZip from 'jszip'
+import { XMLParser } from 'fast-xml-parser'
 
 import type { SpeechDocumentLanguage, SpeechDocumentType } from './speech-documents'
 
 const EXTRACTION_TIMEOUT_MS = 12000
 const DEFAULT_MAX_EXTRACTED_CHARS = 14000
 const DEFAULT_MAX_FETCH_BYTES = 1024 * 1024
+const MAX_PAGES_ENTRIES = 500
+const MAX_PAGES_PREVIEW_BYTES = 5 * 1024 * 1024
+const MAX_PAGES_XML_BYTES = 2 * 1024 * 1024
 type PdfParseModule = typeof import('pdf-parse')
 let pdfParseModulePromise: Promise<PdfParseModule> | null = null
 
@@ -385,6 +390,88 @@ export async function extractSpeechTextFromDocxBytes(
     return enforceLengthLimit(text)
   } catch {
     return { ok: false, error: 'Could not extract text from DOCX document' }
+  }
+}
+
+interface ZipEntryWithSize {
+  _data?: {
+    uncompressedSize?: number
+  }
+}
+
+function zipEntrySize(entry: JSZip.JSZipObject): number | null {
+  const size = (entry as JSZip.JSZipObject & ZipEntryWithSize)._data?.uncompressedSize
+  return typeof size === 'number' && Number.isFinite(size) ? size : null
+}
+
+function collectXmlText(value: unknown, output: string[]): void {
+  if (typeof value === 'string') {
+    const text = value.trim()
+    if (text) output.push(text)
+    return
+  }
+  if (Array.isArray(value)) {
+    value.forEach((entry) => collectXmlText(entry, output))
+    return
+  }
+  if (!value || typeof value !== 'object') return
+  Object.entries(value).forEach(([key, entry]) => {
+    if (key === ':@') return
+    collectXmlText(entry, output)
+  })
+}
+
+export async function extractSpeechTextFromPagesBytes(
+  bytes: Uint8Array
+): Promise<SpeechTextExtractionResult> {
+  try {
+    const archive = await JSZip.loadAsync(bytes, { checkCRC32: true })
+    const entries = Object.values(archive.files).filter((entry) => !entry.dir)
+    if (entries.length === 0 || entries.length > MAX_PAGES_ENTRIES) {
+      return { ok: false, error: 'Apple Pages package contains an invalid number of files' }
+    }
+
+    const previewNames = [
+      'quicklook/preview.pdf',
+      'preview-web.pdf',
+      'preview.pdf',
+    ]
+    const preview = entries.find((entry) => previewNames.includes(entry.name.toLowerCase()))
+    if (preview) {
+      const size = zipEntrySize(preview)
+      if (size == null || size > MAX_PAGES_PREVIEW_BYTES) {
+        return { ok: false, error: 'Apple Pages PDF preview is too large or invalid' }
+      }
+      const previewBytes = await preview.async('uint8array')
+      if (previewBytes.byteLength > MAX_PAGES_PREVIEW_BYTES) {
+        return { ok: false, error: 'Apple Pages PDF preview exceeds the extraction limit' }
+      }
+      return extractSpeechTextFromPdfBytes(previewBytes)
+    }
+
+    const legacyXml = entries.find((entry) => ['index.xml', 'manifest.xml'].includes(entry.name.toLowerCase()))
+    if (legacyXml) {
+      const size = zipEntrySize(legacyXml)
+      if (size == null || size > MAX_PAGES_XML_BYTES) {
+        return { ok: false, error: 'Apple Pages XML content is too large or invalid' }
+      }
+      const xml = await legacyXml.async('string')
+      if (Buffer.byteLength(xml, 'utf-8') > MAX_PAGES_XML_BYTES) {
+        return { ok: false, error: 'Apple Pages XML content exceeds the extraction limit' }
+      }
+      const parsed = new XMLParser({ ignoreAttributes: true, trimValues: true }).parse(xml)
+      const fragments: string[] = []
+      collectXmlText(parsed, fragments)
+      const text = normalizeExtractedText(fragments.join(' '))
+      if (text) return enforceLengthLimit(text)
+    }
+
+    return {
+      ok: false,
+      error: 'Could not extract text from this Apple Pages file. Export it as DOCX or PDF and resend it.',
+    }
+  } catch {
+    return { ok: false, error: 'Could not read Apple Pages document package' }
   }
 }
 
