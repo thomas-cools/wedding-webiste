@@ -164,8 +164,9 @@ export async function getAllSpeechDocuments(): Promise<SpeechDocument[]> {
   try {
     const { blobs } = await store.list()
 
+    const metadataBlobs = blobs.filter((blob) => !blob.key.startsWith(FILES_PREFIX))
     const entries = await Promise.all(
-      blobs.map(async (blob) => {
+      metadataBlobs.map(async (blob) => {
         const data = await store.get(blob.key, { type: 'json' })
         return data as SpeechDocument | null
       })
@@ -193,8 +194,9 @@ export async function backfillSpeechDocumentSpeakerKeys(): Promise<SpeechSpeaker
 
   try {
     const { blobs } = await store.list()
+    const metadataBlobs = blobs.filter((blob) => !blob.key.startsWith(FILES_PREFIX))
     const entries = await Promise.all(
-      blobs.map(async (blob) => {
+      metadataBlobs.map(async (blob) => {
         const data = await store.get(blob.key, { type: 'json' })
         return data as SpeechDocument | null
       })

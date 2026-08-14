@@ -95,6 +95,41 @@ describe('speech-documents local fallback', () => {
     expect(result[0]!.fileName).toBe('Stored Doc')
   })
 
+  it('does not parse stored document files as JSON metadata', async () => {
+    process.env.NETLIFY_DEV = 'false'
+    mockList.mockResolvedValueOnce({
+      blobs: [
+        { key: 'gmail-carlos' },
+        { key: 'files/gmail-carlos-version.pages' },
+      ],
+    })
+    mockGet.mockImplementationOnce(async (key: string) => {
+      if (key !== 'gmail-carlos') throw new Error('Binary file was requested as JSON')
+      return {
+        id: 'gmail-carlos',
+        fileName: 'Carlos Speech',
+        speakerKey: 'carlos',
+        sourceKind: 'gmail',
+        sourceSubtype: 'pages',
+        storageKey: 'files/gmail-carlos-version.pages',
+        fileSizeBytes: 1024,
+        docType: 'pages',
+        translationStatus: 'success',
+        translatedText: 'Translated speech',
+        createdAt: '2026-08-14T12:00:00.000Z',
+        createdBy: 'gmail-import',
+      }
+    })
+
+    const { getAllSpeechDocuments } = await import('../speech-documents')
+    const result = await getAllSpeechDocuments()
+
+    expect(result).toHaveLength(1)
+    expect(result[0]).toMatchObject({ id: 'gmail-carlos', docType: 'pages' })
+    expect(mockGet).toHaveBeenCalledTimes(1)
+    expect(mockGet).toHaveBeenCalledWith('gmail-carlos', { type: 'json' })
+  })
+
   it('saves and reads uploaded file bytes locally when blob operations fail', async () => {
     const tempDir = await mkdtemp(path.join(os.tmpdir(), 'speech-docs-upload-test-'))
     const localPath = path.join(tempDir, 'speech-documents.json')

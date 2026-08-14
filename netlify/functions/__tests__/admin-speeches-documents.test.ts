@@ -635,6 +635,38 @@ describe('admin-speeches-documents handlers', () => {
     expect(Buffer.from(result.body || '', 'base64')).toEqual(Buffer.from(fileBytes))
   })
 
+  it('downloads a stored Pages file with the correct fallback extension', async () => {
+    const { handler } = await import('../admin-speeches-documents-file')
+    const fileBytes = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0x10])
+    mockGetSpeechDocumentById.mockResolvedValueOnce({
+      id: 'gmail-carlos',
+      fileName: 'Carlos Speech',
+      speakerKey: 'carlos',
+      sourceKind: 'gmail',
+      sourceSubtype: 'pages',
+      storageKey: 'files/gmail-carlos-version.pages',
+      fileSizeBytes: 5,
+      docType: 'pages',
+      mimeType: 'application/vnd.apple.pages',
+      createdAt: '2026-08-14T12:00:00.000Z',
+      createdBy: 'gmail-import',
+    })
+    mockGetSpeechDocumentFile.mockResolvedValueOnce(fileBytes)
+
+    const result = assertResponse(await handler(
+      createEvent({
+        httpMethod: 'GET',
+        headers: createAdminHeaders(),
+        queryStringParameters: { id: 'gmail-carlos' },
+      }),
+      mockContext
+    ))
+
+    expect(result.statusCode).toBe(200)
+    expect(result.headers?.['Content-Type']).toBe('application/vnd.apple.pages')
+    expect(result.headers?.['Content-Disposition']).toContain('Carlos%20Speech.pages')
+  })
+
   it('deletes uploaded file payload before deleting metadata', async () => {
     const { handler } = await import('../admin-speeches-documents-delete')
 

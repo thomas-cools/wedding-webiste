@@ -50,7 +50,11 @@ export const handler: Handler = async (event) => {
       return adminJson(404, { ok: false, error: 'Uploaded file payload not found' })
     }
 
-    const extension = document.docType === 'pdf' ? 'pdf' : 'docx'
+    const extension = document.docType === 'pdf'
+      ? 'pdf'
+      : document.docType === 'pages'
+        ? 'pages'
+        : 'docx'
     const fallbackName = `${document.fileName || 'speech-document'}.${extension}`
     const downloadName = sanitizeDownloadFileName(document.originalFileName || fallbackName)
 

@@ -38,7 +38,7 @@ import { CheckCircleIcon, InfoOutlineIcon, WarningTwoIcon } from '@chakra-ui/ico
 import { getAdminAuthHeaders } from '../../utils/adminAuth'
 import { getSpeechSpeakerByKey, getSpeechSpeakers, type SpeechSpeakerKey } from '../../config/speeches'
 
-type SpeechDocumentType = 'pdf' | 'docx' | 'google-doc' | 'text'
+type SpeechDocumentType = 'pdf' | 'docx' | 'pages' | 'google-doc' | 'text'
 type SpeechDocumentSourceKind = 'url' | 'upload' | 'gmail'
 type SpeechTranslationStatus = 'success' | 'failed' | 'skipped'
 type EntryMode = 'url' | 'upload'
