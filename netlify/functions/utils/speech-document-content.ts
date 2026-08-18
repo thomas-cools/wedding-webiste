@@ -363,19 +363,43 @@ async function fetchGoogleDocText(sourceUrl: string): Promise<string> {
 export async function extractSpeechTextFromPdfBytes(
   bytes: Uint8Array
 ): Promise<SpeechTextExtractionResult> {
+  let parser: InstanceType<PdfParseModule['PDFParse']> | undefined
   try {
     const { PDFParse } = await loadPdfParseModule()
-    const parser = new PDFParse({ data: Buffer.from(bytes) })
+    parser = new PDFParse({ data: Buffer.from(bytes) })
     const result = await parser.getText()
-    await parser.destroy()
 
     const text = normalizeExtractedText(result.text || '')
     if (!text) {
       return { ok: false, error: 'Could not extract readable text from PDF' }
     }
     return enforceLengthLimit(text)
-  } catch {
+  } catch (error) {
+    const errorName =
+      typeof error === 'object' && error !== null && 'name' in error
+        ? String(error.name)
+        : ''
+    if (errorName === 'PasswordException') {
+      return {
+        ok: false,
+        error: 'PDF is password-protected. Remove the password and resend it.',
+      }
+    }
+    if (errorName === 'InvalidPDFException') {
+      return {
+        ok: false,
+        error: 'PDF file is damaged or has an invalid structure. Re-export it and resend it.',
+      }
+    }
     return { ok: false, error: 'Could not extract text from PDF document' }
+  } finally {
+    if (parser) {
+      try {
+        await parser.destroy()
+      } catch {
+        // Extraction result is more useful than a parser cleanup failure.
+      }
+    }
   }
 }
 

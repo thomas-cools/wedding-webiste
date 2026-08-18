@@ -68,6 +68,8 @@ function sanitizeProcessingFailure(error: unknown): SanitizedProcessingFailure {
     { pattern: /^Apple Pages (?:package|PDF preview|XML content) .+$/, errorCode: 'pages_extraction_failed' },
     { pattern: /^Could not (?:extract text from this|read) Apple Pages .+$/, errorCode: 'pages_extraction_failed' },
     { pattern: /^Could not extract (?:readable )?text from (?:PDF|DOCX)(?: document)?$/, errorCode: 'extraction_failed' },
+    { pattern: /^PDF is password-protected\. Remove the password and resend it\.$/, errorCode: 'pdf_password_protected' },
+    { pattern: /^PDF file is damaged or has an invalid structure\. Re-export it and resend it\.$/, errorCode: 'pdf_invalid' },
     { pattern: /^Extracted content exceeds \d+ characters\. Use a shorter speech document\.$/, errorCode: 'content_too_long' },
     { pattern: /^Uploaded file (?:is empty or invalid|does not appear to be a .+ file|must be a valid .+ document)$/, errorCode: 'attachment_invalid' },
     { pattern: /^Only DOCX, PDF, and Apple Pages files are supported$/, errorCode: 'attachment_invalid' },

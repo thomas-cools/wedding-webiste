@@ -254,6 +254,40 @@ describe('Gmail speech synchronization', () => {
     })
   })
 
+  it.each([
+    [
+      'PDF is password-protected. Remove the password and resend it.',
+      'pdf_password_protected',
+    ],
+    [
+      'PDF file is damaged or has an invalid structure. Re-export it and resend it.',
+      'pdf_invalid',
+    ],
+  ])('preserves the sanitized PDF failure %s', async (error, errorCode) => {
+    mockListGmailMessageIds.mockResolvedValueOnce(['pdf-message'])
+    mockGetGmailMessage.mockResolvedValueOnce({ id: 'pdf-message' })
+    mockParseSpeechMessage.mockReturnValueOnce({
+      ok: true,
+      speakerKey: 'carlos',
+      source: {
+        kind: 'attachment',
+        attachmentId: 'pdf-attachment',
+        fileName: 'speech.pdf',
+        mimeType: 'application/pdf',
+        size: 100,
+      },
+    })
+    mockGetGmailAttachment.mockResolvedValueOnce(new Uint8Array([0x25, 0x50, 0x44, 0x46]))
+    mockIngestGmailSpeech.mockRejectedValueOnce(new Error(error))
+
+    await expect(syncGmailSpeeches()).resolves.toMatchObject({ failed: 1, processed: 0 })
+    expect(mockMarkGmailSpeechMessage).toHaveBeenCalledWith('pdf-message', 'failed', {
+      speakerKey: 'carlos',
+      errorCode,
+      error,
+    })
+  })
+
   it('reports an attachment size limit without exposing upstream details', async () => {
     mockListGmailMessageIds.mockResolvedValueOnce(['large-message'])
     mockGetGmailMessage.mockResolvedValueOnce({ id: 'large-message' })

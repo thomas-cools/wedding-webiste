@@ -452,6 +452,11 @@
       ]
     },
     "houseNote": "El chateau funciona como Airbnb, por lo que no hay servicio de limpieza durante la estancia. Por favor, limpia después de usar los espacios para que todos disfrutemos. Al ser un edificio antiguo, te pedimos cuidado para evitar daños y conservar este lugar histórico.",
+    "checkout": {
+      "title": "Salida del jueves",
+      "chambre": "Las familias alojadas en la Chambre deben dejar sus habitaciones antes de las 14:00 del jueves. Si lo necesitan, pueden guardar sus pertenencias en el edificio principal del chateau hasta las 18:00.",
+      "mainHouse": "Los huéspedes alojados en el edificio principal deben dejar sus habitaciones antes de las 18:00 del jueves."
+    },
     "food": {
       "title": "Comida",
       "schedule": [
@@ -609,6 +614,10 @@
       {
         "question": "¿Hay estacionamiento en el lugar?",
         "answer": "Sí, hay estacionamiento gratuito disponible en el lugar."
+      },
+      {
+        "question": "¿A qué hora es la salida el jueves?",
+        "answer": "Las familias alojadas en la Chambre deben dejar sus habitaciones antes de las 14:00 del jueves. Si lo necesitan, pueden guardar sus pertenencias en el edificio principal del chateau hasta las 18:00. Los huéspedes alojados en el edificio principal deben dejar sus habitaciones antes de las 18:00 del jueves."
       }
     ]
   }

@@ -32,6 +32,10 @@ jest.mock('react-i18next', () => ({
             question: 'Is there parking at the venue?',
             answer: 'Yes, there is free parking available at the venue.',
           },
+          {
+            question: 'What time is checkout on Thursday?',
+            answer: 'Families staying in the Chambre must check out by 2:00 PM on Thursday. You may store your belongings in the main building of the chateau until 6:00 PM if needed. Guests staying in the main building must check out of their rooms by 6:00 PM on Thursday.',
+          },
         ],
       }
 
@@ -92,5 +96,16 @@ describe('FaqSection', () => {
 
     expect(screen.getByText('Address:')).toBeInTheDocument()
     expect(screen.getByTitle('Venue map')).toBeInTheDocument()
+  })
+
+  it('renders dedicated Thursday checkout guidance', async () => {
+    const user = userEvent.setup()
+    render(<FaqSection />)
+
+    await user.click(screen.getByRole('button', { name: /what time is checkout on thursday/i }))
+
+    expect(screen.getByText(/Chambre must check out by 2:00 PM/)).toBeInTheDocument()
+    expect(screen.getByText(/store your belongings in the main building.*until 6:00 PM/i)).toBeInTheDocument()
+    expect(screen.getByText(/main building must check out of their rooms by 6:00 PM/i)).toBeInTheDocument()
   })
 })

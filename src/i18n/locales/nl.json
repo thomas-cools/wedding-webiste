@@ -453,6 +453,11 @@
       ]
     },
     "houseNote": "Het chateau wordt als Airbnb uitgebaat, dus er is geen schoonmaakservice tijdens je verblijf. Laat alles netjes achter zodat iedereen prettig kan verblijven. Omdat het een oud gebouw is, vragen we extra zorg om schade te voorkomen en deze historische plek te behouden.",
+    "checkout": {
+      "title": "Uitchecken op donderdag",
+      "chambre": "Families die in de Chambre verblijven, moeten donderdag om 14:00 uur uitchecken. Indien nodig kunnen jullie bagage tot 18:00 uur in het hoofdgebouw van het chateau bewaren.",
+      "mainHouse": "Gasten die in het hoofdgebouw verblijven, moeten hun kamer donderdag om 18:00 uur verlaten."
+    },
     "food": {
       "title": "Eten",
       "schedule": [
@@ -610,6 +615,10 @@
       {
         "question": "Is er parkeerruimte bij de locatie?",
         "answer": "Ja, er is gratis parkeren beschikbaar bij de locatie."
+      },
+      {
+        "question": "Hoe laat moeten we donderdag uitchecken?",
+        "answer": "Families die in de Chambre verblijven, moeten donderdag om 14:00 uur uitchecken. Indien nodig kunnen jullie bagage tot 18:00 uur in het hoofdgebouw van het chateau bewaren. Gasten die in het hoofdgebouw verblijven, moeten hun kamer donderdag om 18:00 uur verlaten."
       }
     ]
   }

@@ -56,6 +56,18 @@ describe('speech-document-content', () => {
     }
   })
 
+  it.each([
+    ['PasswordException', 'PDF is password-protected. Remove the password and resend it.'],
+    ['InvalidPDFException', 'PDF file is damaged or has an invalid structure. Re-export it and resend it.'],
+  ])('returns an actionable error for %s', async (name, expectedError) => {
+    mockPdfParse.mockRejectedValueOnce(Object.assign(new Error('private parser detail'), { name }))
+
+    const { extractSpeechTextFromPdfBytes } = await import('../speech-document-content')
+    const result = await extractSpeechTextFromPdfBytes(new Uint8Array([1, 2, 3]))
+
+    expect(result).toEqual({ ok: false, error: expectedError })
+  })
+
   it('extracts an embedded PDF preview from an Apple Pages package', async () => {
     mockPdfParse.mockResolvedValueOnce({ text: 'Thank you all for being here with us today.' })
     const archive = new JSZip()

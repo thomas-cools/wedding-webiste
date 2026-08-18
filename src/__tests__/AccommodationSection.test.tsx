@@ -15,6 +15,9 @@ jest.mock('react-i18next', () => ({
         'travel.amenities.title': 'Amenities:',
         'travel.amenities.imageAlt': 'Pool lounge illustration',
         'travel.houseNote': 'Please clean up after yourself to ensure a pleasant experience for all families and friends.',
+        'travel.checkout.title': 'Thursday Checkout',
+        'travel.checkout.chambre': 'Families staying in the Chambre must check out by 2:00 PM on Thursday. You may store your belongings in the main building of the chateau until 6:00 PM if needed.',
+        'travel.checkout.mainHouse': 'Guests staying in the main building must check out of their rooms by 6:00 PM on Thursday.',
         'travel.food.title': 'Food',
         'travel.food.note': 'If you need anything while at the venue, here is the closest place to visit.',
         'travel.food.iconAlt': 'Fries icon',
@@ -110,6 +113,15 @@ describe('AccommodationSection', () => {
     it('renders the intro paragraph content', () => {
       render(<AccommodationSection enabled={true} />)
       expect(screen.getByText(/Our goal is to make your experience as comfortable as possible/)).toBeInTheDocument()
+    })
+
+    it('renders Thursday checkout details for both buildings', () => {
+      render(<AccommodationSection enabled={true} />)
+
+      expect(screen.getByRole('heading', { level: 3, name: 'Thursday Checkout' })).toBeInTheDocument()
+      expect(screen.getByText(/Chambre must check out by 2:00 PM/)).toBeInTheDocument()
+      expect(screen.getByText(/store your belongings in the main building.*until 6:00 PM/i)).toBeInTheDocument()
+      expect(screen.getByText(/main building must check out of their rooms by 6:00 PM/i)).toBeInTheDocument()
     })
   })
 

@@ -452,6 +452,11 @@
       ]
     },
     "houseNote": "The chateau operates as an Airbnb, so no cleaning services are provided during your stay. Please clean up after yourself to ensure a pleasant experience for all families and friends. As an old building, we ask that you be careful to prevent damage and help us preserve this beautiful historical site.",
+    "checkout": {
+      "title": "Thursday Checkout",
+      "chambre": "Families staying in the Chambre must check out by 2:00 PM on Thursday. You may store your belongings in the main building of the chateau until 6:00 PM if needed.",
+      "mainHouse": "Guests staying in the main building must check out of their rooms by 6:00 PM on Thursday."
+    },
     "food": {
       "title": "Food",
       "schedule": [
@@ -609,6 +614,10 @@
       {
         "question": "Is there parking at the venue?",
         "answer": "Yes, there is free parking available at the venue."
+      },
+      {
+        "question": "What time is checkout on Thursday?",
+        "answer": "Families staying in the Chambre must check out by 2:00 PM on Thursday. You may store your belongings in the main building of the chateau until 6:00 PM if needed. Guests staying in the main building must check out of their rooms by 6:00 PM on Thursday."
       }
     ]
   }

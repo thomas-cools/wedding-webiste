@@ -182,6 +182,21 @@ export const AccommodationSection: React.FC<AccommodationSectionProps> = ({ enab
             </Text>
           </GridItem>
 
+          {/* ── Checkout details ── */}
+          <GridItem {...full}>
+            <VStack spacing={3} align="stretch">
+              <Heading as="h3" fontSize={["md", "lg"]} color="secondary.navy">
+                {t('travel.checkout.title')}
+              </Heading>
+              <Text fontSize={["sm", "md"]} color="neutral.dark" lineHeight="1.8" textAlign="justify">
+                {t('travel.checkout.chambre')}
+              </Text>
+              <Text fontSize={["sm", "md"]} color="neutral.dark" lineHeight="1.8" textAlign="justify">
+                {t('travel.checkout.mainHouse')}
+              </Text>
+            </VStack>
+          </GridItem>
+
           {/* ── Food section: title + text ── */}
           <GridItem {...full}>
             <VStack spacing={[4, 5, 6]} align="stretch">
