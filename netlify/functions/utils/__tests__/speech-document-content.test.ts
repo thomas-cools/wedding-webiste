@@ -6,17 +6,22 @@ import JSZip from 'jszip'
 import snappy from 'snappyjs'
 
 const mockPdfParse = jest.fn()
+const mockPdfParseSetWorker = jest.fn()
 const mockMammothExtractRawText = jest.fn()
 const mockFetch = jest.fn()
 
 global.fetch = mockFetch as typeof fetch
 
 jest.mock('pdf-parse', () => ({
-  PDFParse: jest.fn().mockImplementation(() => ({
-    getText: (...args: unknown[]) => mockPdfParse(...args),
-    destroy: jest.fn().mockResolvedValue(undefined),
-  })),
+  PDFParse: Object.assign(
+    jest.fn().mockImplementation(() => ({
+      getText: (...args: unknown[]) => mockPdfParse(...args),
+      destroy: jest.fn().mockResolvedValue(undefined),
+    })),
+    { setWorker: (...args: unknown[]) => mockPdfParseSetWorker(...args) }
+  ),
 }))
+jest.mock('pdf-parse/worker', () => ({ getData: () => 'embedded-worker' }))
 jest.mock('mammoth', () => ({
   extractRawText: (...args: unknown[]) => mockMammothExtractRawText(...args),
 }))
